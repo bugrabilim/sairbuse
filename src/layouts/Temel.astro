@@ -8,6 +8,7 @@ import '@fontsource/cormorant-garamond/latin-ext-500.css';
 import '@fontsource/cormorant-garamond/latin-500-italic.css';
 import '@fontsource/cormorant-garamond/latin-ext-500-italic.css';
 import '../styles/global.css';
+import AltBilgi from '../components/AltBilgi.astro';
 import { SITE } from '../data/site';
 import { duyguStili, type Duygu } from '../data/duygular';
 
@@ -61,6 +62,7 @@ const temaRengi = duygu ? duygu.zeminGece : '#0b1220';
     <meta name="twitter:card" content="summary_large_image" />
 
     <script is:inline>
+      document.documentElement.classList.add('js');
       try {
         var t = localStorage.getItem('tema');
         if (t === 'gece' || t === 'gunduz') document.documentElement.dataset.theme = t;
@@ -96,15 +98,7 @@ const temaRengi = duygu ? duygu.zeminGece : '#0b1220';
       <slot />
     </main>
 
-    <footer class="alt">
-      <p>© {SITE.yil} {SITE.sair}. Tüm hakları saklıdır.</p>
-      {/* Bumba Group imzası (bugrabilim/bumba, docs/MARKA_MIMARISI.md §6); temaya göre açık ya da koyu rozet */}
-      <a class="bumba-imza" href="https://bumbagroup.com/life" rel="noopener" title="Bumba Life, bir Bumba Group kolu">
-        <img class="rozet-gece" src="https://bumbagroup.com/rozet/life-koyu.svg" width="164" height="28" alt="Bir Bumba Life ürünü" loading="lazy" />
-        <img class="rozet-gunduz" src="https://bumbagroup.com/rozet/life.svg" width="164" height="28" alt="Bir Bumba Life ürünü" loading="lazy" />
-      </a>
-      <p><a href="/hakkinda/">{SITE.ad}</a></p>
-    </footer>
+    <AltBilgi menu={menu} />
 
     <script>
       const dugme = document.querySelector<HTMLButtonElement>('.tema-dugmesi');

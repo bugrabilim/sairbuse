@@ -1,16 +1,16 @@
 ---
-baslik: "karantinagünleri1"
+baslik: "Karantina Günleri 1"
 tarih: "2020-03-29"
 duygular: ["yalnizlik"]
 kaynak: "karantina.txt"
 ---
-bugünsıradanibirgünhergüngibi
-eskisevgililerlekonuşulabilir 17yaşındagibi hissedilebilir
-nehissedileblirse ya da
-gidip büüyk bir tur satın al ne biliyorsan o
-umrumda değilsin
-çok aç değilim
-sadeceanlamsızcakaraköyde olmak istiyorum
-ve kafam güzel,
-özlemediklerimi ama düşünürsem özleyeceklerimi özlüyorum
-gereksiz yere harcadım kendimi hadi hayırlısı sushi =)
+Bugün sıradan bir gün her gün gibi
+Eski sevgililerle konuşulabilir 17 yaşında gibi hissedilebilir
+Ne hissedilebilirse ya da
+Gidip büyük bir tur satın al ne biliyorsan o
+Umurumda değilsin
+Çok aç değilim
+Sadece anlamsızca Karaköy’de olmak istiyorum
+Ve kafam güzel,
+Özlemediklerimi ama düşünürsem özleyeceklerimi özlüyorum
+Gereksiz yere harcadım kendimi hadi hayırlısı suşi =)

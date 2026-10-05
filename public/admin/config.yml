@@ -87,6 +87,15 @@ collections:
         required: false
         accept: audio/*
         hint: Şiirin şairin sesiyle okunmuş kaydı (mp3 ya da m4a).
+      - label: Diğer okumalar
+        name: sesler
+        widget: list
+        required: false
+        hint: Başka okumalar (ör. örnek yapay sesler). Her biri ayrı bir düğme olarak görünür.
+        fields:
+          - { label: Dosya, name: dosya, widget: file, accept: audio/* }
+          - { label: Düğme yazısı, name: etiket, widget: string, hint: 'ör. "Kadın sesi · örnek, yapay ses"' }
+          - { label: Örnek okuma, name: ornek, widget: boolean, required: false, default: false, hint: İşaretliyse sayfada "örnek okumalar yapay sesle üretildi" notu çıkar. }
       - label: Kaynak dosya
         name: kaynak
         widget: string

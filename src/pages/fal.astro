@@ -66,6 +66,8 @@ const veri = {
 </script>
 
 <script>
+  import { satirSatir } from '../scripts/acilis';
+
   interface SiirVerisi {
     id: string;
     ad: string;
@@ -103,6 +105,7 @@ const veri = {
     if (!sonuc) return;
     const d = veri.duygular[s.duygu];
     const body = document.body;
+    body.dataset.duygu = s.duygu;
     body.classList.add('duygulu');
     body.classList.toggle('hep-gece', Boolean(d.hepGece));
     body.style.setProperty('--d-gece', d.gece);
@@ -120,9 +123,14 @@ const veri = {
       bas.append(el('h2', 'gorunmez', s.ad), el('p', 'imza', 'tarihsiz'));
     }
     const govde = el('div', 'govde');
+    let sira = 0;
     for (const kita of s.kitalar) {
       const p = el('p', 'kita');
-      for (const m of kita) p.append(el('span', 'misra', m));
+      for (const m of kita) {
+        const misra = el('span', 'misra', m);
+        misra.style.setProperty('--i', String(sira++));
+        p.append(misra);
+      }
       govde.append(p);
     }
     const alt = el('p', 'fal-alt');
@@ -135,6 +143,7 @@ const veri = {
     alt.append(a, duyguA);
 
     sonuc.replaceChildren(bas, govde, alt);
+    satirSatir(govde);
     sonuc.hidden = false;
     sonuc.classList.remove('acil');
     void sonuc.offsetWidth;
@@ -349,7 +358,7 @@ const veri = {
     outline: none;
   }
   .fal-sonuc:global(.acil) {
-    animation: acil 1.6s ease both;
+    animation: acil 0.6s ease both;
   }
   .fal-sonuc :global(.fal-alt) {
     display: flex;
@@ -361,11 +370,6 @@ const veri = {
   @keyframes acil {
     from {
       opacity: 0;
-      filter: blur(6px);
-    }
-    to {
-      opacity: 1;
-      filter: none;
     }
   }
 </style>

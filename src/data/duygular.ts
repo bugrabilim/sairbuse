@@ -109,7 +109,7 @@ export const DUYGULAR: Duygu[] = [
     zeminGece: '#160e21',
     zeminGunduz: '#efe6f7',
     nokta: '#a77ade',
-    misra: ['parmaklarım var, mor mosmor'],
+    misra: ['Parmaklarım var, mor mosmor'],
     kaynak: '2011-10-24-antigoni',
   },
   {

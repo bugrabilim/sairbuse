@@ -26,7 +26,7 @@ Görünme diye
 Sesimi kaybettim
 Konuşmadım, şarkı söylemedim bir daha
 Bu kadar sevdim diye
-Seni budenli sevdim diye
+Seni bu denli sevdim diye
 Söküp attım ne varsa sana dair içimde
 Öldürdüm seni
 Cinayetse

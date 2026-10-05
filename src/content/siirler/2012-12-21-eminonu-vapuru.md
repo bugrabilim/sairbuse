@@ -14,9 +14,9 @@ Yüzerken kimileri
 Turuncu bir gemide olsam şimdi
 Kim bilir belki de sen turuncu bir gemidesin
 Belki de, sen turuncu bir gemidesin
-Teğet uçsa kuşlar, üzerimden, sağımdan, solumdan, .
+Teğet uçsa kuşlar, üzerimden, sağımdan, solumdan.
 Sadece uçsalar.
-korkmadan özgürce
+Korkmadan özgürce
 Hep olmak istediğim gibi
 Bırakıp gidebilseler, rahatça
 Arkalarına bakmadan

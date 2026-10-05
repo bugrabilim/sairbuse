@@ -286,12 +286,18 @@ Kargayla
 - [x] Şiir Falı
 - [x] Duygu × Yer çarkı (fal sayfasında)
 - [x] "Bugün yazılmış şiir"
-- [x] Yavaş okuma modu
+- [x] Satır satır açılış: dokununca hepsi, "Baştan oku" ile yeniden
 - [x] Duygulara özel geçiş hareketleri
 - [x] Mısra paylaş kartı (1080×1920, tarayıcıda çizilir)
 - [x] Şairin sesiyle okuma altyapısı *(kayıtlar bekleniyor)*
 - [x] Ortam sesleri: deniz, yağmur (Web Audio ile üretilir, dosya yok)
 - [x] Sveltia CMS paneli `/admin/` (GitHub erişim anahtarıyla giriş)
+
+### Faz 2.5 — Atmosfer (öneri, §10)
+- [ ] Mum ışığı modu
+- [ ] Duygunun makamında üretken fon müziği
+- [ ] Şairin sesiyle kayıtlar *(örnek okumalar hazır)*
+- [ ] Yağmurlu cam, vapur salınımı gibi küçük dokunuşlar
 
 ### Faz 3 — Okurla bağ (isteğe bağlı)
 - [ ] Okurun bir şiire renk ya da kelime bırakması (moderasyonlu)
@@ -303,29 +309,26 @@ Kargayla
 
 ---
 
-## 8. Şairin onayını bekleyen yazım notları
+## 8. Yazım düzeni (TDK)
 
-Bazıları bilinçli bir üslup tercihi olabilir (küçük harf, bitişik yazım). **Hiçbiri sorulmadan değiştirilmeyecek.**
+**Karar (Ekim 2026):** Şiirler TDK Yazım Kılavuzu'na göre düzeltildi. Bilgisayara geçirirken oluşan harf hataları da giderildi. Özgün hâlleri `kaynak/` klasöründe aynen duruyor.
 
-| Şiir | Şu an | Öneri |
-|---|---|---|
-| 24.02.2017 Sirkeci | "Ben **araların** olamam" | "aralarında" (şiirin devamında öyle geçiyor) |
-| 24.02.2017 Sirkeci | "Ama **onlarda** çilek sevmez" | "onlar da" |
-| 19.04.2020 Sarı | "Ne hikmetse artık **onlarda** sizi özlüyor" | "onlar da" |
-| 24.10.2011 Antigoni | "Diye **birses** duyuyorum" | "bir ses" |
-| 08.10.2015 | "**birbir** dökülecekse derilerim?" | "bir bir" |
-| 23.06.2009 Cihangir | "**Bıçalar** işlemez oluyor" | "Bıçaklar" |
-| 23.06.2009 Cihangir | "**Uların** içi kanlanıyor" | ? (belirsiz, şair bilir) |
-| 05.04.2009 Baba! | "Belli **edemememi yanıyorum** yoksa" | "edemememe mi yanıyorum"? |
-| 07.10.2017 karga | "Saat on olur-**onbir** sonra **onik**" | "on bir … on iki" |
-| 07.10.2017 karga | "Sabah **lur**" / "Akşam, **yazgelir**" | "Sabah olur" / "yaz gelir" |
-| 21.12.2019 Feneryolu | "Seni **budenli** sevdim diye" | "bu denli" |
-| 04.12.2020 | "Hani sen **değimliydin**" | "değil miydin" |
-| 21.05.2012 İzmir | "Aman”gece”" | "Aman “gece”" |
-| 21.12.2012 Eminönü | "…sağımdan, solumdan, **.**" | fazla noktalama |
-| 24.06.2021 Söğüt | "Her şeye rağmen **,** bulutlara rağmen…" | boşluk |
-| aklımda.txt | "yalnızkalmam gereksadece" | bitişik yazım bilinçli mi? |
-| karantina.txt | "bugünsıradanibirgünhergüngibi…", "büüyk" | bitişik yazım bilinçli mi? "büüyk" → "büyük"? |
+| Ne yapıldı | Örnekler |
+|---|---|
+| Harf hataları | Sabah ~~lur~~ olur · ~~Bıçalar~~ Bıçaklar · ~~büüyk~~ büyük · ne ~~hissedileblirse~~ hissedilebilirse · ~~araların~~ aralarında |
+| Ayrı / bitişik yazım | ~~birses~~ bir ses · ~~birbir~~ bir bir · ~~onbir~~ on bir · ~~onik~~ on iki · ~~yazgelir~~ yaz gelir · ~~budenli~~ bu denli · ~~oysa ki~~ oysaki · ~~baş parmağında~~ başparmağında · ~~Göz yaşlarım~~ Gözyaşlarım · ~~yalnızkalmam gereksadece~~ yalnız kalmam gerek sadece |
+| de/da bağlacı, mi soru eki | onlar da (2 yerde) · ~~değimliydin~~ değil miydin · ~~edemememi~~ edemememe mi |
+| Düzeltme işareti | hikâye · rüzgâr (2 yerde) · hâlâ · hâle |
+| Özel adlar | Kalamış’a · Burgaz’a · Antigoni’de · Karaköy’de |
+| İkilemeler | ~~Senli-sensiz~~ Senli sensiz · ~~yaz-kış~~ yaz kış |
+| Noktalama ve boşluk | Aman “gece” · solumdan~~, .~~ · rağmen~~ ,~~ |
+| Sözlük yazımı | ~~umrumda~~ umurumda · ~~sushi~~ suşi · 8. ~~Harikam~~ harikam |
+| Dize başı büyük harf | "Dizeler büyük harfle başlar." kuralı 10 şiirde 97 dizeye uygulandı. Noktalamayla başlayan devam dizelerine (…orada., -bırakmam seni-) dokunulmadı. |
+| Karantina Günleri 1 | Bitişik yazılmış dizeler kelimelerine ayrıldı ("Bugün sıradan bir gün her gün gibi"). Bitişik yazım bilinçli bir üsluptuysa söyleyin, geri alınır. |
+
+**Açık kalan tek nokta:** 23.06.2009 Cihangir şiirindeki "**Uların** içi kanlanıyor" dizesi. Hangi kelimenin kastedildiği anlaşılamadı, olduğu gibi bırakıldı.
+
+Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", "Karanlık-sürekli") şairin noktalama üslubu sayıldı ve korundu.
 
 ---
 
@@ -333,15 +336,65 @@ Bazıları bilinçli bir üslup tercihi olabilir (küçük harf, bitişik yazım
 
 | Soru | Karar |
 |---|---|
-| Şair adı | *Antigoni* mahlası önerildi: Burgazada'nın eski adı, "İçimdeki savaş" orada yazıldı. Değiştirmek için `src/data/site.ts` dosyasında tek satır. |
+| Şair adı | *Antigoni* (şimdilik böyle kalıyor). Burgazada'nın eski adı, "İçimdeki savaş" orada yazıldı. Değiştirmek için `src/data/site.ts` dosyasında tek satır. |
 | Başlıklar | Ad, tarih, yer. Adı olmayan şiirde başlık yerine şairin kendi "tarih – yer" imzası duruyor. |
 | Yayından çıkacaklar | Aşk metni çıkarıldı. `bus.txt` yayında. |
 | Adres | `duygularinpesinde.bumba.tr` |
 | Lisans | Tüm hakları saklıdır. |
 | Ağır şiirler | Uyarı notu yok. |
-| **Açık:** Ses | Şair şiirlerini kendi sesiyle okuyacak mı? |
+| **Açık:** Ses kayıtları | Şairin kendi sesiyle kayıtlar bekleniyor. Örnek olarak açılış şiiri yapay bir kadın ve bir erkek sesiyle okutuldu (§10). |
 | **Açık:** İmza | Sayfanın altına "bir Bumba Life projesidir" satırı olsun mu? |
-| **Açık:** Yazım | §8'deki düzeltmeler onaylanmadı, şiirler yazıldığı gibi duruyor. |
+| Yazım | TDK'ya göre düzeltildi (§8). Açık kalan tek nokta: "Uların". |
+
+---
+
+## 10. Atmosfer katmanı: fon müziği, mum ışığı ve ses
+
+Ortam sesi (deniz, yağmur) ilk adımdı. Bu katmanın ilkeleri şunlar:
+- Hepsi isteğe bağlı ve varsayılan olarak kapalı.
+- Şiirin önüne geçmiyor, dosya yükünü artırmıyor.
+- Telif riski taşımıyor.
+
+### 10.1 Fon müziği
+
+| Seçenek | Nasıl | Artısı | Eksisi |
+|---|---|---|---|
+| **A. Duygunun makamı** *(önerilen ilk adım)* | Ortam sesi gibi tarayıcıda üretilir. Her duygu kendi makamında, yavaş ve tekrarsız bir ezgi ya da uzun sesler çalar: hüzün → Hicaz, özlem → Uşşak, aşk → Hüzzam, özgürlük → Rast, karanlık → Saba, ayrılık → Kürdi, yalnızlık → tek bir ney gibi uzun ses. Web Audio koma aralıklarını da çalabildiği için makamın Türk müziği rengi korunur. | Dosya yok, telif yok, her açılışta farklı. Ortam sesiyle birlikte karışabilir. | Gerçek bir çalgı sıcaklığında olmaz; ses tasarımına zaman ister. |
+| B. Telifsiz kayıtlar | Kamu malı ya da CC0/CC BY lisanslı piyano, ney, kanun kayıtları (ör. Musopen'daki kamu malı icralar). | Gerçek çalgı sesi. | Lisanslar tek tek doğrulanmalı. Parça başına 3–5 MB, mobil veriye yük. Herkes aynı parçayı duyar. |
+| C. Özgün müzik | Bir müzisyen arkadaşın şiirlere özel kısa doğaçlamaları (ney, viyolonsel, piyano). | Sitenin ruhuna en uygunu; şiir ve müzik birlikte bir eser olur. | Emek ve izin gerekir. Haklar yazılı olarak netleştirilmeli. |
+
+Arayüz önerisi: "ortam sesi" düğmesinin yanında bir "müzik" düğmesi. İkisi birlikte açıldığında ses dengesi otomatik ayarlanır. Sayfa değişince müzik, ortam sesi gibi ilk dokunuşta kaldığı yerden sürer. Şairin sesiyle okuma başlarsa müzik kısılır.
+
+### 10.2 Mum ışığı
+
+- **Mum modu:** Ekran kararır. Şiir, ortada ya da parmağın veya imlecin durduğu yerde titreyen sıcak bir ışık halkası içinde okunur. CSS'teki radyal geçişli maskeyle yapılır; ek dosya gerekmez.
+- **Telefonda eğince ışık kayar** (cihaz yönü sensörü; iPhone'da izin ister, isteğe bağlı).
+- **"Mumu üfle":** Şiir bitince ya da ışığa dokununca mum söner, zemin tamamen kararır, yalnızca imza kalır. Mikrofonla gerçekten üflemek mümkün ama izin istediği için önerilmez.
+- **Gece yarısı:** 00:00'dan sonra açılan sayfalarda küçük bir "mum yakalım mı?" önerisi çıkar.
+- **Erişilebilirlik:** Hareketi azaltma açıksa titreme olmaz. Işık halkası okumaya yetecek kadar geniş tutulur. Tek dokunuşla kapanır.
+
+### 10.3 Diğer küçük dokunuşlar
+
+- **Yağmurlu cam:** Yağmur sesi açıkken ekranda ince damla izleri (canvas).
+- **Vapur salınımı:** Vapurda yazılmış şiirlerde ("Eminönü vapuru", "Beşiktaş vapurundayız") metin çok hafif sallanır.
+- **Daktilo sesi:** Satır satır açılırken her mısrada kısık bir daktilo tuşu (isteğe bağlı).
+- **Günün saati:** Zemin sabah, akşam ve gece hafifçe ton değiştirir.
+- **El yazısı:** Şairin el yazısıyla taranmış imzalar ya da başlıklar varsa şiir sayfalarına eklenebilir.
+
+### 10.4 Ses kayıtları
+
+Asıl hedef, şiirlerin şairin kendi sesiyle okunması; bu iş **açık** duruyor. Kayıtlar panelden ya da `public/ses/` klasöründen eklenebilir.
+
+Fikir vermesi için açılış şiiri ("Şiir kitabım ağlıyor!", 18.07.2011 – Moda) iki yapay sesle okutuldu, bir kadın ve bir erkek. Şiir sayfasında "örnek · yapay ses" diye açıkça etiketli duruyorlar. Gerçek kayıtlar gelince silinmeleri yeterli.
+
+| Ses | Nasıl üretildi | Lisans |
+|---|---|---|
+| Kadın | Chatterbox Multilingual (Resemble AI), Türkçe, hazır ses | MIT |
+| Erkek | Chatterbox Multilingual; ses rengi Piper'ın `tr_TR-dfki-medium` sesinden alındı | MIT / CC BY-NC-SA 4.0 (ticari olmayan kullanım, atıf) |
+
+Her mısra birkaç kez üretildi. Türkçe konuşma tanıma modeli Whisper'ın en doğru duyduğu seçildi; kadın sesi ortalama ~170 Hz, erkek sesi ~105 Hz. Dosyalar `public/ses/2011-07-18-moda-ornek-*.mp3` (mono, 96 kbps, ~23 sn, ~280 KB).
+
+Kayıt ipuçları: sessiz bir oda, telefon ağızdan bir karış uzakta, mısralar arasında nefes payı. Dosyalar mp3, 96–128 kbps yeterli.
 
 ---
 

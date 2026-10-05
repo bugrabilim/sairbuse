@@ -1,0 +1,97 @@
+---
+// Şiirin sesli okumaları. Şairin kendi kaydı ya da açıkça "örnek" diye etiketli yapay sesler.
+interface Kayit {
+  dosya: string;
+  etiket: string;
+  ornek?: boolean;
+}
+interface Props {
+  kayitlar: Kayit[];
+}
+const { kayitlar } = Astro.props;
+const ornekVar = kayitlar.some((k) => k.ornek);
+---
+
+<div class="sesler">
+  <div class="ses-dugmeleri">
+    {
+      kayitlar.map((k, i) => (
+        <button class="dugme ses-dugmesi" type="button" data-i={i} aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true">
+            <path class="oynat" d="M7 4l13 8-13 8z" />
+            <path class="durdur" d="M6 4h4v16H6zM14 4h4v16h-4z" />
+          </svg>
+          <span>{k.etiket}</span>
+        </button>
+      ))
+    }
+  </div>
+  <span class="ses-cizgi" aria-hidden="true"><span id="ses-ilerleme"></span></span>
+  {ornekVar && <p class="ses-notu">Örnek okumalar yapay sesle üretildi (Chatterbox, Piper/DFKI); şairin kendi sesi yakında.</p>}
+  {kayitlar.map((k, i) => <audio preload="none" src={k.dosya} data-i={i} />)}
+</div>
+
+<script>
+  const dugmeler = Array.from(document.querySelectorAll<HTMLButtonElement>('.ses-dugmesi'));
+  const sesler = Array.from(document.querySelectorAll<HTMLAudioElement>('.sesler audio'));
+  const ilerleme = document.getElementById('ses-ilerleme');
+
+  for (const d of dugmeler) {
+    const ses = sesler.find((s) => s.dataset.i === d.dataset.i);
+    if (!ses) continue;
+    d.addEventListener('click', () => {
+      if (!ses.paused) {
+        ses.pause();
+        return;
+      }
+      sesler.forEach((s) => s !== ses && s.pause()); // aynı anda tek okuma
+      ses.play();
+    });
+    ses.addEventListener('play', () => d.setAttribute('aria-pressed', 'true'));
+    ses.addEventListener('pause', () => d.setAttribute('aria-pressed', 'false'));
+    ses.addEventListener('timeupdate', () => {
+      if (ilerleme && ses.duration) ilerleme.style.width = `${(ses.currentTime / ses.duration) * 100}%`;
+    });
+  }
+</script>
+
+<style>
+  .sesler {
+    margin: 0 0 2rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .ses-dugmeleri {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .ses-dugmesi .durdur,
+  .ses-dugmesi[aria-pressed='true'] .oynat {
+    display: none;
+  }
+  .ses-dugmesi[aria-pressed='true'] .durdur {
+    display: inline;
+  }
+  .ses-cizgi {
+    display: block;
+    max-width: 16rem;
+    height: 2px;
+    background: var(--cizgi);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .ses-cizgi span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--vurgu);
+    transition: width 0.25s linear;
+  }
+  .ses-notu {
+    margin: 0;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--soluk);
+  }
+</style>

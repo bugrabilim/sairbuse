@@ -20,6 +20,10 @@ const siirler = defineCollection({
     duygular: z.array(z.enum(DUYGU_SLUGLARI)).min(1),
     /** Şairin sesiyle okuma: public/ses/ altındaki dosyanın yolu, ör. "/ses/sari.mp3" */
     ses: z.string().optional(),
+    /** Birden çok okuma (ör. örnek yapay sesler). ornek: true olanlar sayfada "örnek" diye belirtilir. */
+    sesler: z
+      .array(z.object({ dosya: z.string(), etiket: z.string(), ornek: z.boolean().optional() }))
+      .optional(),
     /** Şiirin geldiği özgün dosya (kaynak/ klasöründe). */
     kaynak: z.string().optional(),
   }),
