@@ -81,9 +81,7 @@ const d = anaDuygu(siir);
   }
 
   function secimiAc() {
-    const yavas = document.getElementById('yavas-oku');
-    if (govde?.classList.contains('yavas')) yavas?.click();
-    govde?.classList.add('secim');
+    govde?.classList.add('hepsi', 'secim');
     dugme?.setAttribute('aria-pressed', 'true');
     if (durum) durum.textContent = 'Karta koymak istediğin mısralara dokun.';
     for (const m of misralar) {

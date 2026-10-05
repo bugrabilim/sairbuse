@@ -19,7 +19,7 @@ Veyahut yalnızca renklere
 Özlenebilir aklınıza ne gelirse
 Uzun uzadıya düşünmenize gerek yok
 Özlenecek şeyler bolca
-Ne hikmetse artık onlarda sizi özlüyor
+Ne hikmetse artık onlar da sizi özlüyor
 İçiniz rahat olsun
 Ölümler, ölüler
 Üzerimizden bulutlar değil

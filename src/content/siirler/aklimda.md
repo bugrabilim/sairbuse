@@ -4,13 +4,13 @@ duygular: ["ozlem"]
 kaynak: "aklımda.txt"
 ---
 Aklımda
-yalnızkalmam gereksadece
-merak etme
+Yalnız kalmam gerek sadece
+Merak etme
 Aklımda
 Cerrahpaşa
 Çamlıca
-ve boza
-söylediğin her şarkı
-ezberlettiğin her şiir
+Ve boza
+Söylediğin her şarkı
+Ezberlettiğin her şiir
 Aklımda
-unutmam asla
+Unutmam asla

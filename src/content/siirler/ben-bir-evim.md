@@ -2,30 +2,30 @@
 duygular: ["karanlik"]
 kaynak: "bus.txt"
 ---
-ben bir evim
-içim karanlık
-bilincim yalnız bir ışık
-rüzgarda bir mum.
-titreşen bir alev.
-bazen burada, bazen orada.
-geri kalan her şey gölgede.
-geri kalan her şey bilinçaltında.
-ama onlar orada.
-diğer odalar.
-girintiler, koridorlar, merdivenler ve kapılar.
-her an.
-ve içinizde yaşayan, dolaşan her şey...
+Ben bir evim
+İçim karanlık
+Bilincim yalnız bir ışık
+Rüzgârda bir mum.
+Titreşen bir alev.
+Bazen burada, bazen orada.
+Geri kalan her şey gölgede.
+Geri kalan her şey bilinçaltında.
+Ama onlar orada.
+Diğer odalar.
+Girintiler, koridorlar, merdivenler ve kapılar.
+Her an.
+Ve içinizde yaşayan, dolaşan her şey...
 ...orada.
-çalışıyor ve yaşıyor.
-evin içinde, o ev de benim.
-içgüdü, eros ve tabular.
-yasak düşünceler.
-yasak arzular.
-ışıkta görmek istemediğimiz anılar.
-ışıktan çektiğimiz anılar.
-karanlıkta, etrafımızda dans ediyorlar.
-bize işkence ediyorlar, bizi dürtüyorlar.
-musallat oluyorlar, fısıldıyorlar.
-bizi korkutuyorlar.
-bizi hasta ediyorlar.
-histerik hale getiriyorlar.
+Çalışıyor ve yaşıyor.
+Evin içinde, o ev de benim.
+İçgüdü, eros ve tabular.
+Yasak düşünceler.
+Yasak arzular.
+Işıkta görmek istemediğimiz anılar.
+Işıktan çektiğimiz anılar.
+Karanlıkta, etrafımızda dans ediyorlar.
+Bize işkence ediyorlar, bizi dürtüyorlar.
+Musallat oluyorlar, fısıldıyorlar.
+Bizi korkutuyorlar.
+Bizi hasta ediyorlar.
+Histerik hâle getiriyorlar.

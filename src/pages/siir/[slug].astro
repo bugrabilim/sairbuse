@@ -4,7 +4,7 @@ import SiirBasligi from '../../components/SiirBasligi.astro';
 import SiirGovde from '../../components/SiirGovde.astro';
 import MisraKarti from '../../components/MisraKarti.astro';
 import OrtamSesi from '../../components/OrtamSesi.astro';
-import SairinSesi from '../../components/SairinSesi.astro';
+import Sesler from '../../components/Sesler.astro';
 import {
   ad,
   anaDuygu,
@@ -38,16 +38,22 @@ const d = anaDuygu(siir);
 const im = imza(siir);
 const sayfaBasligi = basliksiz(siir) ? `${ilkMisra(siir)}…` : ad(siir);
 const aciklama = [ilkMisra(siir), im].filter(Boolean).join(' — ');
+// Şairin kendi kaydı en başta, varsa örnekler arkada
+const kayitlar = [
+  ...(siir.data.ses ? [{ dosya: siir.data.ses, etiket: 'Şairin sesinden dinle' }] : []),
+  ...(siir.data.sesler ?? []),
+];
 ---
 
 <Temel baslik={sayfaBasligi} aciklama={aciklama} gorsel={`/og/${siir.id}.png`} duygu={d}>
   <article class="sayfa siir tek">
     <SiirBasligi siir={siir} />
-    {siir.data.ses && <SairinSesi ses={siir.data.ses} />}
-    <SiirGovde siir={siir} id="govde" />
+    {kayitlar.length > 0 && <Sesler kayitlar={kayitlar} />}
+    <p class="ipucu" id="ipucu" aria-hidden="true">Hepsi için şiire dokun.</p>
+    <SiirGovde siir={siir} id="govde" acilis="hemen" />
 
     <div class="arac">
-      <button class="dugme" type="button" id="yavas-oku" aria-pressed="false">Yavaş oku</button>
+      <button class="dugme" type="button" id="bastan-oku">Baştan oku</button>
       <button class="dugme" type="button" id="kart-dugme" aria-pressed="false">Mısra kartı</button>
       <button class="dugme" type="button" id="paylas" data-baslik={sayfaBasligi}>Paylaş</button>
       <OrtamSesi />
@@ -91,50 +97,38 @@ const aciklama = [ilkMisra(siir), im].filter(Boolean).join(' — ');
 </Temel>
 
 <script>
+  import { acilisSuresi, bastanOku, hepsiniGoster, satirSatir } from '../../scripts/acilis';
+
   const govde = document.getElementById('govde');
-  const yavas = document.getElementById('yavas-oku');
+  const ipucu = document.getElementById('ipucu');
   const durum = document.getElementById('durum');
-  const misralar = govde ? Array.from(govde.querySelectorAll<HTMLElement>('.misra')) : [];
   let sayac: number | undefined;
-  let sira = 0;
 
-  function bitir() {
+  function ipucunuZamanla() {
     window.clearTimeout(sayac);
-    govde?.classList.remove('yavas');
-    misralar.forEach((m) => m.classList.remove('acik'));
-    yavas?.setAttribute('aria-pressed', 'false');
-    if (yavas) yavas.textContent = 'Yavaş oku';
+    ipucu?.classList.remove('bitti');
+    if (govde) sayac = window.setTimeout(() => ipucu?.classList.add('bitti'), acilisSuresi(govde));
   }
 
-  function sonrakiMisra() {
-    window.clearTimeout(sayac);
-    if (sira >= misralar.length) {
-      sayac = window.setTimeout(bitir, 2500);
-      return;
-    }
-    const m = misralar[sira++];
-    m.classList.add('acik');
-    const bekle = 900 + (m.textContent?.length ?? 0) * 40;
-    sayac = window.setTimeout(sonrakiMisra, bekle);
+  if (govde) {
+    satirSatir(govde);
+    ipucunuZamanla();
+    govde.addEventListener('hepsi', () => {
+      window.clearTimeout(sayac);
+      ipucu?.classList.add('bitti');
+    });
+    document.getElementById('bastan-oku')?.addEventListener('click', () => {
+      bastanOku(govde);
+      ipucunuZamanla();
+      govde.closest('article')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    // Klavyeyle okuyan için: herhangi bir tuş hepsini getirir (bir düğmedeyken değil)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab' || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (document.activeElement && document.activeElement !== document.body) return;
+      hepsiniGoster(govde);
+    });
   }
-
-  yavas?.addEventListener('click', () => {
-    if (govde?.classList.contains('yavas')) {
-      bitir();
-      return;
-    }
-    sira = 0;
-    govde?.classList.add('yavas');
-    yavas.setAttribute('aria-pressed', 'true');
-    yavas.textContent = 'Hepsini göster';
-    govde?.closest('article')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    sayac = window.setTimeout(sonrakiMisra, 700);
-  });
-
-  // Yavaş okurken dokunmak bir sonraki mısrayı hemen açar
-  govde?.addEventListener('click', () => {
-    if (govde.classList.contains('yavas')) sonrakiMisra();
-  });
 
   const paylas = document.getElementById('paylas');
   paylas?.addEventListener('click', async () => {

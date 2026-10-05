@@ -1,0 +1,124 @@
+---
+// Sitenin alt bilgisi. Telif yılı ilk şiirin yılından başlar.
+import { SITE } from '../data/site';
+import { DUYGULAR } from '../data/duygular';
+import { siirYolu, tumSiirler, uzunTarih } from '../lib/siirler';
+
+interface Props {
+  menu: { href: string; ad: string }[];
+}
+
+const { menu } = Astro.props;
+const tum = await tumSiirler();
+const ilk = tum.find((s) => s.data.tarih);
+const ilkYil = ilk?.data.tarih?.slice(0, 4);
+const buYil = String(new Date().getFullYear());
+const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
+---
+
+<footer class="alt">
+  <div class="alt-ust">
+    <div class="alt-kimlik">
+      <a class="logo" href="/">{SITE.ad}</a>
+      <p>{tum.length} şiir; duygu, yer ve zaman üzerinden okunmak için.</p>
+      {
+        ilk && (
+          <p>
+            İlk şiir: <a href={siirYolu(ilk)}>{uzunTarih(ilk.data.tarih!)}</a>
+          </p>
+        )
+      }
+    </div>
+    <nav class="alt-menu" aria-label="Alt menü">
+      {menu.map((m) => <a href={m.href}>{m.ad}</a>)}
+    </nav>
+    <ul class="alt-duygular" aria-label="Duygular">
+      {
+        DUYGULAR.map((d) => (
+          <li>
+            <a href={`/duygu/${d.slug}/`} style={`--nokta:${d.nokta}`}>
+              <span class="nokta" aria-hidden="true" />
+              {d.ad.toLocaleLowerCase('tr')}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="alt-cizgi">
+    <p>© {yillar} {SITE.sair}. Tüm hakları saklıdır.</p>
+    <p><a href="/hakkinda/#haklar">Haklar</a></p>
+  </div>
+</footer>
+
+<style>
+  .alt {
+    margin-top: 3rem;
+    padding: 2.5rem var(--kenar) 2rem;
+    border-top: 1px solid var(--cizgi);
+    color: var(--soluk);
+    font-size: 0.95rem;
+  }
+  .alt p {
+    margin: 0;
+  }
+  .alt-ust {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: 1.75rem 2rem;
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+  .alt-kimlik {
+    display: grid;
+    gap: 0.35rem;
+    align-content: start;
+  }
+  .alt-kimlik .logo {
+    color: var(--yazi);
+    margin-bottom: 0.25rem;
+  }
+  .alt-menu,
+  .alt-duygular {
+    display: grid;
+    gap: 0.3rem;
+    align-content: start;
+  }
+  .alt-duygular {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    grid-template-columns: repeat(2, max-content);
+    column-gap: 1.25rem;
+  }
+  .alt a {
+    color: var(--soluk);
+    text-decoration: none;
+  }
+  .alt a:hover {
+    color: var(--yazi);
+  }
+  .alt-duygular a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .alt-cizgi {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    max-width: 64rem;
+    margin: 2rem auto 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--cizgi);
+  }
+  @media (max-width: 44rem) {
+    .alt-ust {
+      grid-template-columns: 1fr 1fr;
+    }
+    .alt-kimlik {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

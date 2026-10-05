@@ -2,24 +2,24 @@
 duygular: ["ask"]
 kaynak: "buz.txt"
 ---
-sana bakarken
-en güzel deniz
-en parlak yıldız
-ve en anlamlı kelime
-neredeyim
-neden daha önce gelmedim
-binlerce soru belirir kafamda
-cevapsız
-sana bakarken
-en uzak köy
-en zor yol
-en karmaşık soru
-görünür gözümde
-ve korkar insan
-adım atmaya -başlamaya-
-ve fakat bilir, değeceğini
-işte böyle bir şey
-sana bakarken.
-dünyanın her yerindeyim
-en şahane melodiyim.
-iyi ki seninleyim.
+Sana bakarken
+En güzel deniz
+En parlak yıldız
+Ve en anlamlı kelime
+Neredeyim
+Neden daha önce gelmedim
+Binlerce soru belirir kafamda
+Cevapsız
+Sana bakarken
+En uzak köy
+En zor yol
+En karmaşık soru
+Görünür gözümde
+Ve korkar insan
+Adım atmaya -başlamaya-
+Ve fakat bilir, değeceğini
+İşte böyle bir şey
+Sana bakarken.
+Dünyanın her yerindeyim
+En şahane melodiyim.
+İyi ki seninleyim.

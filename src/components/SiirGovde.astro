@@ -4,13 +4,16 @@ import { kitalar, type Siir } from '../lib/siirler';
 interface Props {
   siir: Siir;
   id?: string;
+  /** 'hemen': sayfa açılınca satır satır; 'gec': ekrana girince; yoksa düz */
+  acilis?: 'hemen' | 'gec';
 }
 
-const { siir, id } = Astro.props;
+const { siir, id, acilis } = Astro.props;
+const sinif = ['govde', acilis === 'hemen' && 'satir-satir', acilis === 'gec' && 'gec'].filter(Boolean).join(' ');
 let sira = 0;
 ---
 
-<div class="govde" id={id}>
+<div class={sinif} id={id}>
   {
     kitalar(siir).map((kita) => (
       <p class="kita">

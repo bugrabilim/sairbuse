@@ -11,8 +11,8 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | Sayfa | Ne yapıyor |
 |---|---|
 | `/` | Açılışta *"Şiir kitabım ağlıyor!"* mısraı ve "Bugün neyin peşindesin?" sorusu, altında 7 duygu. Bugünün tarihinde yazılmış bir şiir varsa o da gösterilir. |
-| `/duygu/…` | Bir duygunun bütün şiirleri. Sayfa o duygunun rengine boyanır. Ayrılık sayfası gündüz temasında da siyah kalır. |
-| `/siir/…` | Tek bir şiir. Mısralar duygunun kendi hareketiyle gelir: hüzün buğulu, ayrılık kesilerek, özlem soldan süzülerek. "Yavaş oku", "Mısra kartı", "Paylaş" ve ortam sesi (deniz, yağmur) düğmeleri var. Kayıt varsa şairin sesinden dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
+| `/duygu/…` | Bir duygunun bütün şiirleri. Her şiir ekrana girince satır satır açılır. Sayfa o duygunun rengine boyanır; ayrılık sayfası gündüz temasında da siyah kalır. |
+| `/siir/…` | Tek bir şiir. Mısralar satır satır, duygunun kendi hareketiyle açılır: hüzün buğulu, ayrılık kesilerek, özlem soldan süzülerek. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" ve ortam sesi (deniz, yağmur) düğmeleri var. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
 | `/siirler/` | Bütün şiirlerin listesi, duyguya göre süzülebilir. |
 | `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. |
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |
@@ -35,7 +35,9 @@ Ortam sesleri bir ses dosyası değil, tarayıcıda Web Audio ile anında üreti
    - Permissions → Contents: **Read and write**
 4. Şiirleri listeden açıp düzenleyin ya da **Yeni** ile ekleyin. Kaydettiğiniz her değişiklik `main` dalına bir commit olarak gider ve site kendiliğinden yeniden yayınlanır.
 
-Şairin sesiyle yapılmış bir kayıt varsa şiirin **Şairin sesi** alanından yüklenebilir. Dosya `public/ses/` klasörüne gider ve şiir sayfasında "Şairin sesinden dinle" düğmesi belirir.
+Şairin sesiyle yapılmış bir kayıt varsa şiirin **Şairin sesi** alanından yüklenebilir. Dosya `public/ses/` klasörüne gider ve şiir sayfasında "Şairin sesinden dinle" düğmesi belirir. Başka okumalar (ör. farklı sesler) **Diğer okumalar** listesine eklenir; her biri ayrı bir düğme olur.
+
+Açılış şiirinde ("Şiir kitabım ağlıyor!") şu an iki **örnek** okuma var: biri kadın, biri erkek sesi. İkisi de yapay sesle üretildi ve sayfada öyle etiketli. Şairin kendi kaydı gelince silinmeleri yeterli. Ayrıntılar `PLAN.md` §10.4'te.
 
 ### Dosyayı doğrudan düzenleyerek
 
@@ -49,6 +51,8 @@ yer: "Feneryolu"          # isteğe bağlı, şairin yazdığı gibi
 yerGrubu: "Burgazada"     # isteğe bağlı; "Antigoni" gibi farklı adlar aynı yer sayılsın diye
 duygular: ["huzun"]       # en az bir; ilki şiirin rengini belirler
 ses: "/ses/sari.mp3"      # isteğe bağlı, şairin sesiyle okuma
+sesler:                   # isteğe bağlı, başka okumalar
+  - { dosya: "/ses/sari-ornek.mp3", etiket: "Kadın sesi · örnek", ornek: true }
 ---
 Şimdi sakince beynimizi uyuşturuyoruz
 Kahveyle
@@ -111,8 +115,8 @@ python3 scripts/harita.py <klasör>/simplified_land_polygons.shp   # src/data/ha
 
 `kaynak/` klasöründe Google Drive'daki özgün dosyalar duruyor: `şiirler.docx`, `şiirlerim.docx` (aynı içerik) ve beş `.txt`. Türkçe karakterler bozulmasın diye `.txt` dosyaları UTF-8'e çevrildi; içerikleri aynen korundu. Kişisel yazışma olan aşk metni bilinçli olarak eklenmedi.
 
-Şiirler bu dosyalardan birebir aktarıldı. Yazım düzeltmeleri şairin onayını bekliyor (bkz. [PLAN.md §8](PLAN.md)).
+Şiirler bu dosyalardan aktarıldı ve yazımları TDK Yazım Kılavuzu'na göre düzeltildi. Yapılan düzeltmelerin listesi [PLAN.md §8](PLAN.md)'de.
 
 ## Haklar
 
-© 2026 Antigoni. Bu depodaki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz.
+© 2008–2026 Antigoni. Bu depodaki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz.
