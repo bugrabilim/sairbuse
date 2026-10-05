@@ -205,6 +205,20 @@ h3 {
   display: none;
 }
 
+/* Bumba Life rozeti (alt bilgide) */
+.bumba-imza {
+  line-height: 0;
+}
+/* Gece temasında ve hep gece kalan sayfalarda koyu rozet, gündüzde açık rozet */
+:root[data-theme='gece'] .bumba-imza .rozet-gunduz,
+:root[data-theme='gunduz'] .bumba-imza .rozet-gece,
+:root[data-theme='gunduz'] body.hep-gece .bumba-imza .rozet-gunduz {
+  display: none;
+}
+:root[data-theme='gunduz'] body.hep-gece .bumba-imza .rozet-gece {
+  display: inline;
+}
+
 /* ---------- Ortak bloklar ---------- */
 
 .sayfa {

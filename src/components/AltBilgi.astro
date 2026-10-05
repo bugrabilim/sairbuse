@@ -47,7 +47,14 @@ const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
   </div>
   <div class="alt-cizgi">
     <p>© {yillar} {SITE.sair}. Tüm hakları saklıdır.</p>
-    <p><a href="/hakkinda/#haklar">Haklar</a></p>
+    <div class="alt-sag">
+      <a href="/hakkinda/#haklar">Haklar</a>
+      {/* Bumba Group imzası (bugrabilim/bumba, docs/MARKA_MIMARISI.md §6); temaya göre açık ya da koyu rozet */}
+      <a class="bumba-imza" href="https://bumbagroup.com/life" rel="noopener" title="Bumba Life, bir Bumba Group kolu">
+        <img class="rozet-gece" src="https://bumbagroup.com/rozet/life-koyu.svg" width="164" height="28" alt="Bir Bumba Life ürünü" loading="lazy" />
+        <img class="rozet-gunduz" src="https://bumbagroup.com/rozet/life.svg" width="164" height="28" alt="Bir Bumba Life ürünü" loading="lazy" />
+      </a>
+    </div>
   </div>
 </footer>
 
@@ -103,9 +110,15 @@ const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
     align-items: center;
     gap: 0.45rem;
   }
+  .alt-sag {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
   .alt-cizgi {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
     gap: 0.25rem 1rem;
     max-width: 64rem;
