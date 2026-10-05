@@ -1,0 +1,25 @@
+---
+duygular: ["ask"]
+kaynak: "buz.txt"
+---
+sana bakarken
+en güzel deniz
+en parlak yıldız
+ve en anlamlı kelime
+neredeyim
+neden daha önce gelmedim
+binlerce soru belirir kafamda
+cevapsız
+sana bakarken
+en uzak köy
+en zor yol
+en karmaşık soru
+görünür gözümde
+ve korkar insan
+adım atmaya -başlamaya-
+ve fakat bilir, değeceğini
+işte böyle bir şey
+sana bakarken.
+dünyanın her yerindeyim
+en şahane melodiyim.
+iyi ki seninleyim.

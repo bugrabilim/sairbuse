@@ -17,6 +17,7 @@ Basılamayan kitap, kendi ilk şiirinde zaten ağlıyor. Bu site o kitabı yaşa
 | **Teknik** | Astro (statik site), GitHub ve Cloudflare Pages. Adres: `duygularinpesinde.bumba.tr` |
 | **Maliyet** | Neredeyse sıfır: alan adı, barındırma ve analitik ücretsiz. |
 | **Yasal yük** | Yayınevi, ISBN, bandrol ve matbaa gerekmiyor. Kişisel ve ticari olmayan bir sitenin yükü çok düşük (bkz. §6). |
+| **Durum** | Faz 1 kuruldu; Faz 2'den zaman şeridi, şiir falı, "bugün yazılmış şiir" ve yavaş okuma da hazır. Yayına alma adımları `README.md`'de. |
 
 ---
 
@@ -32,8 +33,8 @@ Kaynak: `drive.google.com/drive/folders/1J3rA5YSF-pquwNZE3n_5n14shxXrv144` (8 do
 | `aklımda.txt` | "Aklımda" — Cerrahpaşa, Çamlıca, boza. Tarihsiz | Yeni şiir. Tarih ve yer eklenebilir mi? |
 | `buz.txt` | "sana bakarken" — tarihsiz aşk şiiri | Yeni şiir. Tarih ve yer? |
 | `karantina.txt` | "karantina günleri 1", 29.03.20, bitişik yazımla | Bitişik yazım bilinçli mi? Dosyada "karantinagünleri2" başlığı var ama metni yok. **2. bölüm nerede?** |
-| `bus.txt` | "ben bir evim / içim karanlık / bilincim yalnız bir ışık…" | Üslubu diğerlerinden farklı ("içinizde", "bizi"). Çeviri metne benziyor. İnternette kaynağını bulamadım ama **başka bir eserden çeviriyse yayınlamayalım** (telif). Size aitse sorun yok. |
-| `sevgimiz percinlensin-aşkmetni.txt` | Kişisel bir mesajlaşma | Şiir değil, özel yazışma. **Yayınlanmamasını öneririm.** |
+| `bus.txt` | "ben bir evim / içim karanlık / bilincim yalnız bir ışık…" | **Yayında.** Bütün metinler size ait (karar: Ekim 2026). |
+| `sevgimiz percinlensin-aşkmetni.txt` | Kişisel bir mesajlaşma | **Yayına alınmadı, repoya da eklenmedi** (karar: şiir değil). |
 
 > Not: Drive klasörü "bağlantıya sahip herkes" ayarında, özel yazışma da içinde. Siteye taşıdıktan sonra klasörü kısıtlamak iyi olur.
 
@@ -183,6 +184,8 @@ Duygu sayfasına girildiğinde zemin bu renge doğru yavaşça kayar. Paletin hi
 
 Online edebiyat dergilerinde yaygın bir uygulama. Şiiri sansürlemez, okuru korur.
 
+> **Karar (Ekim 2026):** Not yok. Şiirler olduğu gibi duruyor.
+
 ---
 
 ## 5. Teknik mimari
@@ -259,29 +262,32 @@ Kargayla
 ## 7. Yol haritası
 
 ### Faz 0 — Hazırlık (şair ve editör)
-- [ ] Son hâller: `sarı.txt` mi docx mi? Karantina 2 nerede?
+- [x] Son hâller: "Sarı" için docx'teki hâl kullanıldı. *(Karantina 2 hâlâ bulunamadı.)*
 - [ ] Yazım düzeltmelerini onaylamak (§8)
-- [ ] Başlıklar: ilk mısra mı, tarih–yer mi, yeni başlık mı?
-- [ ] Her şiire 1–2 duygu etiketi
-- [ ] Yayından çıkacaklar: aşk metni (öneri). `bus.txt` için kaynak teyidi.
+- [x] Başlıklar: ad, tarih ve yer. Adı olmayan şiirlerde başlık yerine "tarih – yer" duruyor, listelerde ilk mısra kullanılıyor.
+- [x] Her şiire 1–2 duygu etiketi (§1.1'deki öneriler; şair değiştirebilir)
+- [x] Yayından çıkacaklar: aşk metni çıkarıldı, `bus.txt` yayında.
 - [ ] Tarihsiz üç şiire tarih ve yer (biliniyorsa)
-- [ ] Şair adı ya da mahlası, "Hakkında" metni, lisans tercihi
-- [ ] Alt alan adı seçimi
+- [x] Mahlas: *Antigoni* (öneri, `src/data/site.ts`). "Hakkında" metni yazıldı. Lisans: tüm hakları saklıdır.
+- [x] Alt alan adı: `duygularinpesinde.bumba.tr`
 
 ### Faz 1 — İlk yayın (MVP)
-- [ ] Astro iskeleti, tasarım dili (renk paleti, yazı tipi, koyu/açık tema)
-- [ ] 29 şiirin Markdown'a aktarılması (mısra kırılımları birebir)
-- [ ] Giriş ("Şiir kitabım ağlıyor!" ve duygu seçimi), duygu sayfaları, şiir sayfası, tam liste, Hakkında
-- [ ] Şiir sayfasında 3 kapı (aynı duygu / yer / yıl)
-- [ ] Paylaşım önizleme görselleri
-- [ ] Cloudflare Pages, alan adı, Umami
-- [ ] Telefonda test, erişilebilirlik kontrolü (kontrast, ekran okuyucu, hareket azaltma)
+- [x] Astro iskeleti, tasarım dili (renk paleti, yazı tipi, koyu/açık tema)
+- [x] 30 şiirin Markdown'a aktarılması (mısra kırılımları birebir)
+- [x] Giriş ("Şiir kitabım ağlıyor!" ve duygu seçimi), duygu sayfaları, şiir sayfası, tam liste, Hakkında
+- [x] Şiir sayfasında 3 kapı (aynı duygu / yer / yıl)
+- [x] Paylaşım önizleme görselleri (her şiir için ayrı)
+- [ ] Cloudflare Pages, alan adı, Umami *(kod hazır; panel adımları README'de)*
+- [x] Telefonda test, erişilebilirlik kontrolü (kontrast ≥ 4.5:1, hareket azaltma, yatay taşma yok)
 
 ### Faz 2 — Deneyim
-- [ ] Harita, zaman şeridi
-- [ ] Şiir Falı, Duygu × Yer çarkı
-- [ ] "Bugün yazılmış şiir"
-- [ ] Yavaş okuma modu, duygulara özel geçiş hareketleri
+- [ ] Harita
+- [x] Zaman şeridi
+- [x] Şiir Falı
+- [ ] Duygu × Yer çarkı
+- [x] "Bugün yazılmış şiir"
+- [x] Yavaş okuma modu
+- [ ] Duygulara özel geçiş hareketleri
 - [ ] Mısra paylaş kartı
 - [ ] Şairin sesiyle okumalar, ortam sesleri
 - [ ] Sveltia CMS paneli (şair kendi şiirini ekleyebilsin)
@@ -322,16 +328,19 @@ Bazıları bilinçli bir üslup tercihi olabilir (küçük harf, bitişik yazım
 
 ---
 
-## 9. Karar bekleyen sorular
+## 9. Kararlar
 
-1. **Şair adı:** Sitede hangi ad ya da mahlas görünecek?
-2. **Başlıklar:** İlk mısra mı, "tarih — yer" mi, yeni başlıklar mı?
-3. **Yayından çıkacaklar:** aşk metni, `bus.txt`?
-4. **Adres:** `duygularinpesinde.bumba.tr` mi, `duygular.bumba.tr` mi?
-5. **Lisans:** "Tüm hakları saklıdır" mı, CC BY-NC-ND mi?
-6. **Ses:** Şair şiirlerini kendi sesiyle okuyacak mı?
-7. **İmza:** Bumba Group'un ürün imzası kuralına uygun olarak sayfanın altında tek bir sessiz satır olsun mu? (*"Duyguların Peşinde bir Bumba Life projesidir."*) Yoksa tamamen kişisel mi kalsın?
-8. **Ağır şiirler:** §4.5'teki seçeneklerden hangisi?
+| Soru | Karar |
+|---|---|
+| Şair adı | *Antigoni* mahlası önerildi: Burgazada'nın eski adı, "İçimdeki savaş" orada yazıldı. Değiştirmek için `src/data/site.ts` dosyasında tek satır. |
+| Başlıklar | Ad, tarih, yer. Adı olmayan şiirde başlık yerine şairin kendi "tarih – yer" imzası duruyor. |
+| Yayından çıkacaklar | Aşk metni çıkarıldı. `bus.txt` yayında. |
+| Adres | `duygularinpesinde.bumba.tr` |
+| Lisans | Tüm hakları saklıdır. |
+| Ağır şiirler | Uyarı notu yok. |
+| **Açık:** Ses | Şair şiirlerini kendi sesiyle okuyacak mı? |
+| **Açık:** İmza | Sayfanın altına "bir Bumba Life projesidir" satırı olsun mu? |
+| **Açık:** Yazım | §8'deki düzeltmeler onaylanmadı, şiirler yazıldığı gibi duruyor. |
 
 ---
 

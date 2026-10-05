@@ -1,0 +1,269 @@
+---
+import Temel from '../layouts/Temel.astro';
+import { DUYGULAR } from '../data/duygular';
+import { OZEL_GUNLER, ad, anaDuygu, bulunma, gunAy, siirYolu, tumSiirler } from '../lib/siirler';
+
+const tum = await tumSiirler();
+const acilis = tum.find((s) => s.id === '2011-07-18-moda');
+const sayilar = Object.fromEntries(DUYGULAR.map((d) => [d.slug, tum.filter((s) => s.data.duygular.includes(d.slug)).length]));
+
+// "Bugün yazılmış şiir" için tarihli şiirlerin gün-ay bilgisi (tarayıcıda bugünle karşılaştırılır)
+const takvim = tum
+  .filter((s) => s.data.tarih)
+  .map((s) => ({
+    gun: s.data.tarih!.slice(5),
+    yil: s.data.tarih!.slice(0, 4),
+    gunAy: gunAy(s.data.tarih!),
+    ad: ad(s),
+    yer: s.data.yerGrubu ?? s.data.yer ?? null,
+    yerde: s.data.yer ? bulunma(s.data.yerGrubu ?? s.data.yer) : null,
+    href: siirYolu(s),
+    renk: anaDuygu(s).nokta,
+  }));
+
+// Kelimeler bir şiirin mısraları gibi, farklı girintilerle dizilir
+const girintiler = ['4%', '34%', '14%', '48%', '22%', '0%', '38%'];
+---
+
+<Temel>
+  <script is:inline>
+    // Açılış sahnesi oturum başına bir kez yavaş oynar
+    try {
+      if (sessionStorage.getItem('acilis')) document.documentElement.classList.add('hizli');
+      sessionStorage.setItem('acilis', '1');
+    } catch (e) {}
+  </script>
+  <section class="acilis" aria-label="Açılış">
+    <p class="acilis-misra bir">Şiir kitabım ağlıyor!</p>
+    <p class="acilis-misra iki">Gözyaşlarını tutamamış öyle söyledi.</p>
+    {acilis && <a class="acilis-imza" href={siirYolu(acilis)}>18.07.2011 – Moda</a>}
+  </section>
+
+  <aside class="bugun" id="bugun" hidden aria-live="polite"></aside>
+
+  <section class="soru" aria-labelledby="soru-baslik">
+    <h1 id="soru-baslik" class="soru-baslik">Bugün neyin peşindesin?</h1>
+    <ul class="duygu-kelimeleri">
+      {
+        DUYGULAR.map((d, i) => (
+          <li style={`--i:${i};--girinti:${girintiler[i]};--d-gece:${d.gece};--d-gunduz:${d.gunduz}`}>
+            <a href={`/duygu/${d.slug}/`} data-umami-event="duygu-sec" data-umami-event-duygu={d.slug}>
+              {d.ilgi}
+              <span class="gorunmez">
+                ({d.ad}, {sayilar[d.slug]} şiir)
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="ya-da">
+      ya da <a href="/fal/">niyet tut, bir şiir çek</a> · <a href="/siirler/">bütün şiirler</a>
+    </p>
+  </section>
+
+</Temel>
+
+<script is:inline define:vars={{ takvim, ozel: OZEL_GUNLER }}>
+  window.__takvim = takvim;
+  window.__ozel = ozel;
+</script>
+
+<script>
+  interface Gun {
+    gun: string;
+    yil: string;
+    gunAy: string;
+    ad: string;
+    yer: string | null;
+    yerde: string | null;
+    href: string;
+    renk: string;
+  }
+  const { __takvim: takvim, __ozel: ozel } = window as unknown as { __takvim: Gun[]; __ozel: Record<string, string> };
+  const simdi = new Date();
+  const bugun = `${String(simdi.getMonth() + 1).padStart(2, '0')}-${String(simdi.getDate()).padStart(2, '0')}`;
+  const eslesen = takvim.filter((t) => t.gun === bugun);
+  const kutu = document.getElementById('bugun');
+
+  if (kutu && eslesen.length) {
+    const baslik = document.createElement('p');
+    baslik.className = 'ust-etiket';
+    baslik.textContent = `Bugün, ${eslesen[0].gunAy}`;
+    const not = document.createElement('p');
+    not.className = 'bugun-not';
+    const ayniYer = eslesen.length > 1 && eslesen.every((t) => t.yer && t.yer === eslesen[0].yer);
+    if (ayniYer) {
+      const fark = Number(eslesen[eslesen.length - 1].yil) - Number(eslesen[0].yil);
+      not.textContent = `Bu ${eslesen.length} şiir bugün, ${eslesen[0].yerde}, ${fark} yıl arayla yazıldı.`;
+    } else if (eslesen.length > 1) {
+      const onEk = ozel[bugun] ? `${ozel[bugun][0].toLocaleUpperCase('tr')}${ozel[bugun].slice(1)}. ` : '';
+      not.textContent = `${onEk}Bu tarihte, farklı yıllarda yazılmış ${eslesen.length} şiir var.`;
+    } else {
+      not.textContent = `Bu şiir ${eslesen[0].yil} yılında bugün yazıldı.`;
+    }
+    const liste = document.createElement('ul');
+    liste.className = 'cipler';
+    for (const t of eslesen) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.className = 'cip';
+      a.href = t.href;
+      a.style.setProperty('--nokta', t.renk);
+      const nokta = document.createElement('span');
+      nokta.className = 'nokta';
+      a.append(nokta, `${t.ad} · ${t.yil}`);
+      li.append(a);
+      liste.append(li);
+    }
+    kutu.append(baslik, not, liste);
+    kutu.hidden = false;
+  }
+
+  document.addEventListener('keydown', () => document.documentElement.classList.add('hizli'), { once: true });
+</script>
+
+<style>
+  .acilis {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 14vh, 9rem) var(--kenar) 0;
+  }
+  .acilis-misra {
+    margin: 0;
+    font-family: var(--serif-baslik);
+    font-style: italic;
+    font-weight: 500;
+  }
+  .acilis-misra.bir {
+    font-size: clamp(2.2rem, 1.4rem + 4vw, 4.2rem);
+    line-height: 1.1;
+  }
+  .acilis-misra.iki {
+    font-size: clamp(1.3rem, 1rem + 1.4vw, 1.9rem);
+    color: var(--soluk);
+    margin-top: 0.6rem;
+  }
+  .acilis-imza {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    color: var(--soluk);
+    text-decoration: none;
+  }
+
+  .soru {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 10vh, 6rem) var(--kenar) 2rem;
+  }
+  .soru-baslik {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.15rem, 1rem + 0.6vw, 1.35rem);
+    color: var(--soluk);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .duygu-kelimeleri {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .duygu-kelimeleri li {
+    padding-left: var(--girinti);
+  }
+  .duygu-kelimeleri a {
+    display: inline-block;
+    font-family: var(--serif-baslik);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(2rem, 1.3rem + 3vw, 3.2rem);
+    line-height: 1.15;
+    color: var(--d-gece);
+    text-decoration: none;
+    padding: 0.1rem 0;
+    transition:
+      transform 0.6s ease,
+      letter-spacing 0.6s ease;
+  }
+  :global(:root[data-theme='gunduz']) .duygu-kelimeleri a {
+    color: var(--d-gunduz);
+  }
+  .duygu-kelimeleri a:hover,
+  .duygu-kelimeleri a:focus-visible {
+    letter-spacing: 0.04em;
+    transform: translateX(0.4rem);
+  }
+  .ya-da {
+    margin-top: 2.5rem;
+    color: var(--soluk);
+  }
+  .ya-da a {
+    color: var(--yazi);
+  }
+
+  .bugun {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 2.5rem var(--kenar) 0;
+    animation: dogus 1.6s ease 3.4s both;
+  }
+  :global(html.hizli) .bugun {
+    animation-delay: 0s;
+    animation-duration: 0.8s;
+  }
+  .bugun :global(.bugun-not) {
+    margin: 0 0 0.9rem;
+    font-style: italic;
+  }
+
+  /* Açılış sahnesi */
+  .acilis-misra,
+  .acilis-imza,
+  .soru-baslik,
+  .duygu-kelimeleri li,
+  .ya-da {
+    animation: dogus 1.6s ease both;
+  }
+  .acilis-misra.bir {
+    animation-delay: 0.3s;
+    animation-duration: 2.2s;
+  }
+  .acilis-misra.iki {
+    animation-delay: 1.9s;
+  }
+  .acilis-imza {
+    animation-delay: 3s;
+  }
+  .soru-baslik {
+    animation-delay: 3.8s;
+  }
+  .duygu-kelimeleri li {
+    animation-delay: calc(4.4s + var(--i) * 0.22s);
+  }
+  .ya-da {
+    animation-delay: 6.2s;
+  }
+  :global(html.hizli) .acilis-misra,
+  :global(html.hizli) .acilis-imza,
+  :global(html.hizli) .soru-baslik,
+  :global(html.hizli) .duygu-kelimeleri li,
+  :global(html.hizli) .ya-da {
+    animation-delay: 0s;
+    animation-duration: 0.8s;
+  }
+  @keyframes dogus {
+    from {
+      opacity: 0;
+      filter: blur(6px);
+      transform: translateY(0.4rem);
+    }
+    to {
+      opacity: 1;
+      filter: none;
+      transform: none;
+    }
+  }
+</style>

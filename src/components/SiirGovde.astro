@@ -1,0 +1,22 @@
+---
+import { kitalar, type Siir } from '../lib/siirler';
+
+interface Props {
+  siir: Siir;
+  id?: string;
+}
+
+const { siir, id } = Astro.props;
+---
+
+<div class="govde" id={id}>
+  {
+    kitalar(siir).map((kita) => (
+      <p class="kita">
+        {kita.map((m) => (
+          <span class="misra">{m}</span>
+        ))}
+      </p>
+    ))
+  }
+</div>

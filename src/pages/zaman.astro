@@ -1,0 +1,255 @@
+---
+import Temel from '../layouts/Temel.astro';
+import SiirListesi from '../components/SiirListesi.astro';
+import { OZEL_GUNLER, ad, anaDuygu, basliksiz, bulunma, gunAy, imza, siirYolu, tumSiirler, yerGrubu, yil } from '../lib/siirler';
+
+const tum = await tumSiirler();
+const tarihli = tum.filter((s) => s.data.tarih);
+const tarihsiz = tum.filter((s) => !s.data.tarih);
+const ilkYil = Number(yil(tarihli[0]));
+const sonYil = Number(yil(tarihli[tarihli.length - 1]));
+const yillar = Array.from({ length: sonYil - ilkYil + 1 }, (_, i) => String(ilkYil + i));
+
+// Sessiz yılları ardışık gruplar hâlinde göster: "2010", "2013"
+const satirlar: ({ tur: 'yil'; yil: string } | { tur: 'sessiz'; yillar: string[] })[] = [];
+for (const y of yillar) {
+  if (tarihli.some((s) => yil(s) === y)) satirlar.push({ tur: 'yil', yil: y });
+  else {
+    const son = satirlar[satirlar.length - 1];
+    if (son?.tur === 'sessiz') son.yillar.push(y);
+    else satirlar.push({ tur: 'sessiz', yillar: [y] });
+  }
+}
+
+const gunler = new Map<string, typeof tarihli>();
+for (const s of tarihli) {
+  const g = s.data.tarih!.slice(5);
+  gunler.set(g, [...(gunler.get(g) ?? []), s]);
+}
+const kesismeler = [...gunler.entries()]
+  .filter(([, l]) => l.length > 1)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([g, l]) => {
+    const yer = yerGrubu(l[0]);
+    const ayniYer = yer && l.every((s) => yerGrubu(s) === yer);
+    const fark = Number(yil(l[l.length - 1])) - Number(yil(l[0]));
+    const not = ayniYer ? `ikisi de ${bulunma(yer!)}, ${fark} yıl arayla` : OZEL_GUNLER[g];
+    return { gunAy: gunAy(l[0].data.tarih!), siirler: l, not };
+  });
+---
+
+<Temel baslik="Zaman" aciklama={`${ilkYil}'den ${sonYil}'e, ${tarihli.length} tarihli şiir.`}>
+  <section class="sayfa">
+    <p class="ust-etiket">{ilkYil} – {sonYil}</p>
+    <h1 class="sayfa-baslik">Zaman</h1>
+    <p class="giris-metni">
+      {sonYil - ilkYil} yıl, {tarihli.length} tarihli şiir. Her çizgi bir şiir, rengi o şiirin duygusu.
+    </p>
+
+    <nav class="tayf" aria-label="Duygu tayfı">
+      {
+        tarihli.map((s) => (
+          <a
+            href={siirYolu(s)}
+            style={`--nokta:${anaDuygu(s).nokta}`}
+            title={`${ad(s)} · ${imza(s)}`}
+            aria-label={`${ad(s)}, ${imza(s)}, ${anaDuygu(s).ad}`}
+          />
+        ))
+      }
+    </nav>
+    <div class="tayf-uclar" aria-hidden="true">
+      <span>{ilkYil}</span><span>{sonYil}</span>
+    </div>
+
+    <ol class="yillar">
+      {
+        satirlar.map((r) =>
+          r.tur === 'sessiz' ? (
+            <li class="sessiz">
+              <span class="yil-no">{r.yillar.join(', ')}</span>
+              <span class="sessiz-not">sessiz</span>
+            </li>
+          ) : (
+            <li class="yil">
+              <h2 class="yil-no">{r.yil}</h2>
+              <ul class="yil-siirleri">
+                {tarihli
+                  .filter((s) => yil(s) === r.yil)
+                  .map((s) => (
+                    <li>
+                      <a href={siirYolu(s)} style={`--nokta:${anaDuygu(s).nokta}`}>
+                        <span class="nokta" aria-hidden="true" />
+                        <span class={basliksiz(s) ? 'ad ilk' : 'ad'}>{ad(s)}</span>
+                        <span class="yer">{gunAy(s.data.tarih!)}{s.data.yer ? ` · ${s.data.yer}` : ''}</span>
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </li>
+          )
+        )
+      }
+    </ol>
+
+    {
+      kesismeler.length > 0 && (
+        <section class="kesisme" aria-labelledby="kesisme-baslik">
+          <h2 id="kesisme-baslik" class="ust-etiket">
+            Takvimde kesişmeler
+          </h2>
+          <ul>
+            {kesismeler.map((k) => (
+              <li>
+                <span class="kesisme-gun">{k.gunAy}</span>
+                {k.not && <span class="kesisme-not">{k.not}</span>}
+                <span class="kesisme-siirler">
+                  {k.siirler.map((s, i) => (
+                    <>
+                      {i > 0 && ' · '}
+                      <a href={siirYolu(s)}>
+                        {yil(s)}
+                        {s.data.yer ? `, ${s.data.yer}` : ''}
+                      </a>
+                    </>
+                  ))}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      tarihsiz.length > 0 && (
+        <section class="tarihsiz" aria-labelledby="tarihsiz-baslik">
+          <h2 id="tarihsiz-baslik" class="ust-etiket">
+            Tarihsiz
+          </h2>
+          <SiirListesi siirler={tarihsiz} />
+        </section>
+      )
+    }
+  </section>
+</Temel>
+
+<style>
+  .tayf {
+    display: flex;
+    height: 4.5rem;
+    margin: 2.5rem 0 0.4rem;
+    gap: 2px;
+  }
+  .tayf a {
+    flex: 1;
+    background: var(--nokta);
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px var(--cizgi);
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s;
+    transform-origin: bottom;
+  }
+  .tayf:hover a {
+    opacity: 0.55;
+  }
+  .tayf a:hover,
+  .tayf a:focus-visible {
+    opacity: 1;
+    transform: scaleY(1.15);
+  }
+  .tayf-uclar {
+    display: flex;
+    justify-content: space-between;
+    color: var(--soluk);
+    font-size: 0.9rem;
+  }
+
+  .yillar {
+    list-style: none;
+    padding: 0;
+    margin: 3rem 0 0;
+  }
+  .yillar > li {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 0 1.25rem;
+    border-top: 1px solid var(--cizgi);
+    padding: 1rem 0;
+  }
+  .yil-no {
+    font-family: var(--serif-baslik);
+    font-size: 1.6rem;
+    font-weight: 500;
+    font-variant-numeric: lining-nums;
+    line-height: 1.2;
+  }
+  .sessiz {
+    color: var(--soluk);
+    align-items: baseline;
+  }
+  .sessiz .yil-no {
+    font-size: 1.1rem;
+  }
+  .sessiz-not {
+    font-style: italic;
+  }
+  .yil-siirleri {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .yil-siirleri a {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.7rem;
+    align-items: baseline;
+    text-decoration: none;
+  }
+  .yil-siirleri .ad {
+    font-size: 1.15rem;
+  }
+  .yil-siirleri .ad.ilk {
+    font-style: italic;
+  }
+  .yil-siirleri .yer {
+    grid-column: 2;
+    color: var(--soluk);
+    font-size: 0.92rem;
+  }
+  .yil-siirleri a:hover .ad {
+    color: var(--nokta);
+  }
+
+  .kesisme,
+  .tarihsiz {
+    margin-top: 3.5rem;
+  }
+  .kesisme ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .kesisme li {
+    display: grid;
+    gap: 0.1rem;
+  }
+  .kesisme-gun {
+    font-family: var(--serif-baslik);
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 500;
+  }
+  .kesisme-not {
+    color: var(--soluk);
+    font-style: italic;
+  }
+  .kesisme-siirler a {
+    text-decoration-color: var(--cizgi);
+  }
+</style>
