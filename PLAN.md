@@ -387,10 +387,12 @@ Asıl hedef, şiirlerin şairin kendi sesiyle okunması; bu iş **açık** duruy
 
 Fikir vermesi için açılış şiiri ("Şiir kitabım ağlıyor!", 18.07.2011 – Moda) iki yapay sesle okutuldu, bir kadın ve bir erkek. Şiir sayfasında "örnek · yapay ses" diye açıkça etiketli duruyorlar. Gerçek kayıtlar gelince silinmeleri yeterli.
 
-| Ses | Model | Lisans |
+| Ses | Nasıl üretildi | Lisans |
 |---|---|---|
 | Kadın | Chatterbox Multilingual (Resemble AI), Türkçe, hazır ses | MIT |
-| Erkek | Piper, `tr_TR-dfki-medium` | CC BY-NC-SA 4.0 (ticari olmayan kullanım, atıf) |
+| Erkek | Chatterbox Multilingual; ses rengi Piper'ın `tr_TR-dfki-medium` sesinden alındı | MIT / CC BY-NC-SA 4.0 (ticari olmayan kullanım, atıf) |
+
+Her mısra birkaç kez üretildi. Türkçe konuşma tanıma modeli Whisper'ın en doğru duyduğu seçildi; kadın sesi ortalama ~170 Hz, erkek sesi ~105 Hz. Dosyalar `public/ses/2011-07-18-moda-ornek-*.mp3` (mono, 96 kbps, ~23 sn, ~280 KB).
 
 Kayıt ipuçları: sessiz bir oda, telefon ağızdan bir karış uzakta, mısralar arasında nefes payı. Dosyalar mp3, 96–128 kbps yeterli.
 

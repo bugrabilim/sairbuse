@@ -27,7 +27,7 @@ const ornekVar = kayitlar.some((k) => k.ornek);
     }
   </div>
   <span class="ses-cizgi" aria-hidden="true"><span id="ses-ilerleme"></span></span>
-  {ornekVar && <p class="ses-notu">Örnek okumalar yapay sesle üretildi; şairin kendi sesi yakında.</p>}
+  {ornekVar && <p class="ses-notu">Örnek okumalar yapay sesle üretildi (Chatterbox, Piper/DFKI); şairin kendi sesi yakında.</p>}
   {kayitlar.map((k, i) => <audio preload="none" src={k.dosya} data-i={i} />)}
 </div>
 
