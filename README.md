@@ -37,7 +37,7 @@ Ortam sesleri bir ses dosyası değil, tarayıcıda Web Audio ile anında üreti
 
 Şairin sesiyle yapılmış bir kayıt varsa şiirin **Şairin sesi** alanından yüklenebilir. Dosya `public/ses/` klasörüne gider ve şiir sayfasında "Şairin sesinden dinle" düğmesi belirir. Başka okumalar (ör. farklı sesler) **Diğer okumalar** listesine eklenir; her biri ayrı bir düğme olur.
 
-Açılış şiirinde ("Şiir kitabım ağlıyor!") şu an iki **örnek** okuma var: biri kadın, biri erkek sesi. İkisi de yapay sesle üretildi ve sayfada öyle etiketli. Şairin kendi kaydı gelince silinmeleri yeterli. Ayrıntılar `PLAN.md` §10.4'te.
+Şu an sitede kayıt yok. Yapay sesle denenen örnekler şiiri düz okuduğu için kaldırıldı; kayıtların insan sesiyle yapılması bekleniyor (bkz. `PLAN.md` §10.4).
 
 ### Dosyayı doğrudan düzenleyerek
 
