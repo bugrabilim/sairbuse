@@ -135,6 +135,12 @@ const takvim = tum
           if (k === i) o.setAttribute('data-secili', '');
           else o.removeAttribute('data-secili');
         });
+        // Seçilen fotoğraf beklemeden ve öncelikle insin (diğerleri hiç inmez)
+        var img = ogeler[i].querySelector('img');
+        if (img) {
+          img.setAttribute('fetchpriority', 'high');
+          img.loading = 'eager';
+        }
       })();
     </script>
   </section>
@@ -453,6 +459,7 @@ const takvim = tum
     gap: 1rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--kenar);
     scrollbar-width: thin;
   }
   .yer-seridi li {

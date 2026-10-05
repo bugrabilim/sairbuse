@@ -1,5 +1,6 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import { getImage } from 'astro:assets';
 import { DUYGULAR } from '../data/duygular';
 import { istemciVerisi, tumSiirler } from '../lib/siirler';
@@ -20,11 +21,11 @@ const veri = {
 };
 ---
 
-<Temel baslik="Şiir falı" aciklama="Bir niyet tut: fincanı kapat ya da duygu ve yer çarkını çevir, bir şiir çıksın.">
+<Temel baslik="Şiir falı" aciklama="Bir niyet tut: fincanı kapat ya da duygu ve yer çarkını çevir, bir şiir çıksın." sahne>
+  <SayfaSahnesi foto="sayfa-fal" duygu="ozlem" etiket="Hafız falından, kahve falından" baslik="Şiir falı">
+    Bir niyet tut. Sonra fincanı kapat ya da çarkı çevir; bir şiir çıksın.
+  </SayfaSahnesi>
   <section class="sayfa fal">
-    <p class="ust-etiket">Hafız falından, kahve falından</p>
-    <h1 class="sayfa-baslik">Şiir falı</h1>
-    <p class="giris-metni">Bir niyet tut. Sonra fincanı kapat ya da çarkı çevir; bir şiir çıksın.</p>
 
     <div class="mod" role="group" aria-label="Fal türü" hidden>
       <button class="dugme" type="button" data-mod="fincan" aria-pressed="true">fincan</button>

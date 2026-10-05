@@ -1,6 +1,7 @@
 ---
 import Temel from '../layouts/Temel.astro';
 import SiirListesi from '../components/SiirListesi.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import harita from '../data/harita.json';
 import { HARITA_YERLERI, UZAK_YERLER, yerSlug } from '../data/yerler';
 import { anaDuygu, ad, tumSiirler, yerGrubu, yerYolu, type Siir } from '../lib/siirler';
@@ -37,11 +38,15 @@ const uzaklar = [...yerdekiler.keys()].filter((y) => !haritadakiler.includes(y))
 const ARA = 16; // aynı yerdeki noktalar arası
 ---
 
-<Temel baslik="Harita" aciklama="Şiirlerin yazıldığı yerler: Moda, Kalkedon, Cihangir, Eminönü vapuru, adalar…">
+<Temel baslik="Harita" aciklama="Şiirlerin yazıldığı yerler: Moda, Kalkedon, Cihangir, Eminönü vapuru, adalar…" sahne>
+  <SayfaSahnesi
+    foto="sayfa-harita"
+    etiket={`${haritadakiler.length} yer, ${isaretler.reduce((t, i) => t + i.siirler.length, 0)} şiir`}
+    baslik="Harita"
+  >
+    Şiirlerin çoğu İstanbul'da, suya yakın yazılmış. Her nokta bir şiir, rengi o şiirin duygusu.
+  </SayfaSahnesi>
   <section class="sayfa">
-    <p class="ust-etiket">{haritadakiler.length} yer, {isaretler.reduce((t, i) => t + i.siirler.length, 0)} şiir</p>
-    <h1 class="sayfa-baslik">Harita</h1>
-    <p class="giris-metni">Şiirlerin çoğu İstanbul'da, suya yakın yazılmış. Her nokta bir şiir, rengi o şiirin duygusu.</p>
 
     <figure class="harita">
       <svg viewBox={`0 0 ${harita.genislik} ${harita.yukseklik}`} role="group" aria-label="İstanbul haritası">

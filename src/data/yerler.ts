@@ -17,10 +17,10 @@ export const HARITA_YERLERI: Record<string, HaritaYeri> = {
   'Eminönü vapuru': { enlem: 41.006, boylam: 29.0, yon: 'sol', etiket: 'vapurda' },
   Altunizade: { enlem: 41.0215, boylam: 29.044, yon: 'sag' },
   Kalkedon: { enlem: 40.9915, boylam: 29.024, yon: 'sol' },
-  'Walters Cafe, Kadıköy': { enlem: 40.9858, boylam: 29.0268, yon: 'sag', etiket: 'Walters Cafe', etiketY: 22 },
+  'Walters Cafe, Kadıköy': { enlem: 40.9858, boylam: 29.0268, yon: 'sag', etiket: 'Walters Cafe', etiketY: 12 },
   Karga: { enlem: 40.9874, boylam: 29.0291, yon: 'sag', etiket: 'Karga', etiketY: -6 },
   Moda: { enlem: 40.98, boylam: 29.026, yon: 'sol' },
-  Feneryolu: { enlem: 40.9795, boylam: 29.0535, yon: 'sag' },
+  Feneryolu: { enlem: 40.9795, boylam: 29.0535, yon: 'sag', etiketY: 30 },
   Burgazada: { enlem: 40.88, boylam: 29.067, yon: 'sol', etiket: 'Burgazada · Antigoni' },
   Büyükada: { enlem: 40.858, boylam: 29.12, yon: 'sol' },
 };
