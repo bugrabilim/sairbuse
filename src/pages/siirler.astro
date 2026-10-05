@@ -1,17 +1,18 @@
 ---
 import Temel from '../layouts/Temel.astro';
 import SiirListesi from '../components/SiirListesi.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import { DUYGULAR } from '../data/duygular';
 import { tumSiirler } from '../lib/siirler';
 
 const tum = await tumSiirler();
 ---
 
-<Temel baslik="Bütün şiirler" aciklama={`${tum.length} şiir, yazıldıkları sırayla.`}>
+<Temel baslik="Bütün şiirler" aciklama={`${tum.length} şiir, yazıldıkları sırayla.`} sahne>
+  <SayfaSahnesi foto="sayfa-siirler" duygu="ozgurluk" etiket={`${tum.length} şiir`} baslik="Bütün şiirler">
+    Yazıldıkları sırayla. Adı olmayan şiirler ilk mısralarıyla anılıyor.
+  </SayfaSahnesi>
   <section class="sayfa">
-    <p class="ust-etiket">{tum.length} şiir</p>
-    <h1 class="sayfa-baslik">Bütün şiirler</h1>
-    <p class="giris-metni">Yazıldıkları sırayla. Adı olmayan şiirler ilk mısralarıyla anılıyor.</p>
 
     <div class="suzgec" role="group" aria-label="Duyguya göre süz" hidden>
       <button class="dugme" type="button" data-duygu="" aria-pressed="true">hepsi</button>

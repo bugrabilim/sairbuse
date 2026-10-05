@@ -16,6 +16,8 @@ export interface Fotograf {
   odak?: string;
   /** Yerin değil, şiirdeki bir imgenin fotoğrafı (yeri belli olmayan şiirler için) */
   imge?: boolean;
+  /** Bir şiirin değil, sitenin bir sayfasının başında duruyorsa o sayfa */
+  sayfa?: { ad: string; yol: string };
 }
 
 export const FOTOGRAFLAR: Fotograf[] = [
@@ -273,6 +275,52 @@ export const FOTOGRAFLAR: Fotograf[] = [
     lisansUrl: "https://creativecommons.org/licenses/by-sa/4.0",
     kaynak: "https://commons.wikimedia.org/wiki/File:Clear_sky_in_%C4%B0stanbul.jpg",
     imge: true,
+  },
+  {
+    id: "sayfa-fal",
+    aciklama: "İki fincan Türk kahvesi, dibinde telve",
+    yazar: "Satirdan kahraman",
+    lisans: "CC0",
+    lisansUrl: "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    kaynak: "https://commons.wikimedia.org/wiki/File:%C4%B0ki_fincan_T%C3%BCrk_kahvesi_02.jpg",
+    odak: "26% 55%",
+    sayfa: {"ad":"Şiir falı","yol":"/fal/"},
+  },
+  {
+    id: "sayfa-harita",
+    aciklama: "İstanbul ve Boğaz, uzaydan",
+    yazar: "NASA, Uluslararası Uzay İstasyonu",
+    lisans: "Public domain",
+    lisansUrl: "https://commons.wikimedia.org/wiki/Commons:Licensing",
+    kaynak: "https://commons.wikimedia.org/wiki/File:Istanbul_and_Bosporus_big.jpg",
+    sayfa: {"ad":"Harita","yol":"/harita/"},
+  },
+  {
+    id: "sayfa-zaman",
+    aciklama: "Tophane'de Nusretiye Camii ve saat kulesi, 1862",
+    yazar: "Francis Bedford",
+    lisans: "Public domain",
+    lisansUrl: "https://commons.wikimedia.org/wiki/Commons:Licensing",
+    kaynak: "https://commons.wikimedia.org/wiki/File:%C4%B0stanbul,_Nusretiye_Camii,_Tophane_(Nusretiye)_Saat_Kulesi_21_May_1862.jpg",
+    sayfa: {"ad":"Zaman","yol":"/zaman/"},
+  },
+  {
+    id: "sayfa-siirler",
+    aciklama: "Kadıköy İskelesi'nde bir Şehir Hatları vapuru",
+    yazar: "Yigitylnz",
+    lisans: "CC BY-SA 4.0",
+    lisansUrl: "https://creativecommons.org/licenses/by-sa/4.0",
+    kaynak: "https://commons.wikimedia.org/wiki/File:An_istanbul_city_lines_ferry_in_10th_of_november_at_Kad%C4%B1k%C3%B6y_Pier.jpg",
+    sayfa: {"ad":"Bütün şiirler","yol":"/siirler/"},
+  },
+  {
+    id: "sayfa-hakkinda",
+    aciklama: "Burgazada, eski adıyla Antigoni",
+    yazar: "Darwinek",
+    lisans: "CC BY-SA 3.0",
+    lisansUrl: "https://creativecommons.org/licenses/by-sa/3.0",
+    kaynak: "https://commons.wikimedia.org/wiki/File:Adalar_6964.jpg",
+    sayfa: {"ad":"Hakkında","yol":"/hakkinda/"},
   },
 ];
 

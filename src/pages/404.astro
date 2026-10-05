@@ -1,15 +1,15 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import { siirYolu, tumSiirler } from '../lib/siirler';
 
 const tum = await tumSiirler();
 const siir = tum.find((s) => s.id === '2012-01-22-kalkedon');
 ---
 
-<Temel baslik="Bulunamadı">
+<Temel baslik="Bulunamadı" sahne>
+  <SayfaSahnesi foto="imge-sisli-agac" duygu="yalnizlik" etiket="404 · yer yok" baslik="Bu sayfa burada değil." />
   <section class="sayfa yok">
-    <p class="ust-etiket">404</p>
-    <h1 class="sayfa-baslik">Bu sayfa burada değil.</h1>
     <blockquote>
       <p>Ne kadar zaman olmuş?<br />…<br />Unutmuşum</p>
       {siir && <cite><a href={siirYolu(siir)}>22.01.2012 – Kalkedon</a></cite>}
@@ -19,9 +19,6 @@ const siir = tum.find((s) => s.id === '2012-01-22-kalkedon');
 </Temel>
 
 <style>
-  .yok {
-    padding-top: clamp(3rem, 12vh, 8rem);
-  }
   blockquote {
     margin: 2rem 0;
     font-style: italic;

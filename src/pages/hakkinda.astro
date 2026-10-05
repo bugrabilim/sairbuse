@@ -1,10 +1,11 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import { SITE } from '../data/site';
 import { DUYGULAR } from '../data/duygular';
 import { FOTOGRAFLAR } from '../data/fotograflar';
 import { ad, imza, siirYolu, tumSiirler } from '../lib/siirler';
-import { siirFotografi } from '../lib/foto';
+import { lisansAdi, siirFotografi } from '../lib/foto';
 
 const tum = await tumSiirler();
 const acilis = tum.find((s) => s.id === '2011-07-18-moda');
@@ -12,14 +13,13 @@ const antigoni = tum.find((s) => s.id === '2011-10-24-antigoni');
 const renkler = DUYGULAR.map((d) => ({ d, kaynak: tum.find((s) => s.id === d.kaynak) }));
 // Her fotoğraf ve onu kullanan şiirler
 const fotolar = FOTOGRAFLAR.map((f) => ({ f, siirler: tum.filter((s) => siirFotografi(s)?.id === f.id) })).filter(
-  (x) => x.siirler.length,
+  (x) => x.siirler.length || x.f.sayfa,
 );
 ---
 
-<Temel baslik="Hakkında">
+<Temel baslik="Hakkında" sahne>
+  <SayfaSahnesi foto="sayfa-hakkinda" duygu="karanlik" etiket={SITE.ad} baslik="Hakkında" />
   <article class="sayfa hakkinda">
-    <p class="ust-etiket">{SITE.ad}</p>
-    <h1 class="sayfa-baslik">Hakkında</h1>
 
     <p>
       Bu şiirler 2008’den 2021’e kadar yazıldı: Moda’da, Kalkedon’da, Cihangir’de, adalarda, Eminönü vapurunda, bir erik
@@ -70,7 +70,9 @@ const fotolar = FOTOGRAFLAR.map((f) => ({ f, siirler: tum.filter((s) => siirFoto
     <p>
       Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi gerçek; başka insanların çekip Wikimedia
       Commons'ta özgür lisansla paylaştığı fotoğraflar. Sitede siyah beyaza çevrilip şiirin duygusunun rengine
-      boyandılar. Yeri belli olmayan birkaç şiirde fotoğraf yeri değil, şiirdeki bir imgeyi gösteriyor.
+      boyandılar. Yeri belli olmayan birkaç şiirde fotoğraf yeri değil, şiirdeki bir imgeyi gösteriyor. Sayfaların
+      başındaki fotoğraflar da aynı yoldan geldi: Kadıköy'de bir vapur, uzaydan İstanbul, 1862'de Tophane'deki saat kulesi,
+      iki fincan kahve ve Antigoni adının geldiği Burgazada.
     </p>
     <ul class="kunyeler">
       {
@@ -78,9 +80,11 @@ const fotolar = FOTOGRAFLAR.map((f) => ({ f, siirler: tum.filter((s) => siirFoto
           <li>
             <span class="kunye-aciklama">{f.aciklama}</span>
             <span class="kunye-kim">
-              <a href={f.kaynak} rel="noopener">{f.yazar}</a> · <a href={f.lisansUrl} rel="noopener">{f.lisans}</a> · renkleri değiştirildi
+              <a href={f.kaynak} rel="noopener">{f.yazar}</a> · <a href={f.lisansUrl} rel="noopener">{lisansAdi(f)}</a> · renkleri değiştirildi
             </span>
             <span class="kunye-siir">
+              {f.sayfa && <a href={f.sayfa.yol}>{f.sayfa.ad} sayfası</a>}
+              {f.sayfa && siirler.length > 0 && ', '}
               {siirler.map((s, i) => (
                 <>
                   {i > 0 && ', '}

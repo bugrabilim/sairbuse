@@ -408,6 +408,22 @@ h3 {
   color: var(--yazi);
 }
 
+/* Şiir dışı sayfaların fotoğraflı başı; yazı aşağıdaki içerikle aynı hizada */
+.sayfa-sahne {
+  min-height: min(64svh, 36rem);
+}
+.sayfa-sahne .sahne-ic {
+  max-width: 46rem;
+  padding-bottom: 2.8rem;
+}
+.sayfa-sahne .sayfa-baslik {
+  margin: 0.5rem 0 0.8rem;
+}
+.sayfa-sahne .giris-metni {
+  color: color-mix(in srgb, var(--yazi) 80%, transparent);
+  margin: 0;
+}
+
 /* Fotoğrafı olmayan şiirler: duygunun renginde bulanık bir ışık */
 .isik-alani {
   position: absolute;

@@ -1,5 +1,6 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import SiirListesi from '../components/SiirListesi.astro';
 import { OZEL_GUNLER, ad, anaDuygu, basliksiz, bulunma, gunAy, imza, siirYolu, tumSiirler, yerGrubu, yil } from '../lib/siirler';
 
@@ -38,13 +39,11 @@ const kesismeler = [...gunler.entries()]
   });
 ---
 
-<Temel baslik="Zaman" aciklama={`${ilkYil}'den ${sonYil}'e, ${tarihli.length} tarihli şiir.`}>
+<Temel baslik="Zaman" aciklama={`${ilkYil}'den ${sonYil}'e, ${tarihli.length} tarihli şiir.`} sahne>
+  <SayfaSahnesi foto="sayfa-zaman" duygu="ayrilik" etiket={`${ilkYil} – ${sonYil}`} baslik="Zaman">
+    {sonYil - ilkYil} yıl, {tarihli.length} tarihli şiir. Her çizgi bir şiir, rengi o şiirin duygusu.
+  </SayfaSahnesi>
   <section class="sayfa">
-    <p class="ust-etiket">{ilkYil} – {sonYil}</p>
-    <h1 class="sayfa-baslik">Zaman</h1>
-    <p class="giris-metni">
-      {sonYil - ilkYil} yıl, {tarihli.length} tarihli şiir. Her çizgi bir şiir, rengi o şiirin duygusu.
-    </p>
 
     <nav class="tayf" aria-label="Duygu tayfı">
       {

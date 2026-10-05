@@ -25,7 +25,12 @@ export function siirFotografi(s: Siir): Fotograf | undefined {
   return id ? fotograf(id) : undefined;
 }
 
+/** Lisansın sitede yazılacak adı: "CC BY-SA 4.0", "CC0", "kamu malı" */
+export function lisansAdi(f: Fotograf): string {
+  return /^public domain$/i.test(f.lisans) ? 'kamu malı' : f.lisans;
+}
+
 /** Künye satırı: "Fotoğraf: Ad Soyad · CC BY-SA 4.0" */
 export function kunye(f: Fotograf): string {
-  return `Fotoğraf: ${f.yazar} · ${f.lisans}`;
+  return `Fotoğraf: ${f.yazar} · ${lisansAdi(f)}`;
 }

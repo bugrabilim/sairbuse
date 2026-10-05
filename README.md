@@ -31,6 +31,7 @@ Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi 
 - Künyeler (açıklama, fotoğrafçı, lisans, kaynak, isteğe bağlı odak noktası): `src/data/fotograflar.ts`
 - Bir şiirin fotoğrafı: şiir dosyasındaki `foto:` alanı. Yoksa yazıldığı yerin fotoğrafı (`YER_FOTOGRAFLARI`), o da yoksa duygunun renginde bir ışık.
 - Künyeler şiir sayfasında fotoğrafın köşesinde ve Hakkında sayfasının "Fotoğraflar" bölümünde listeleniyor.
+- Şiir dışı sayfalar da (Bütün şiirler, Harita, Zaman, Fal, Hakkında, 404) bir fotoğrafla açılıyor; bunların künyesinde `sayfa` alanı var.
 
 Kendi fotoğrafınızı koymak için dosyayı aynı kimlikle `src/assets/foto/` klasörüne koyup `fotograflar.ts`'de yazarı ve lisansı güncellemeniz yeterli.
 

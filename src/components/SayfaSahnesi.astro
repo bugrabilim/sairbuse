@@ -1,0 +1,36 @@
+---
+// Şiir dışı sayfaların (şiirler, harita, zaman, fal, hakkında, 404) fotoğraflı başı.
+// Fotoğraf src/data/fotograflar.ts'den; renk verilirse o duygunun renginde, yoksa sepya.
+import Foto from './Foto.astro';
+import { duygu as duyguBul, type DuyguSlug } from '../data/duygular';
+import { fotograf, kunye } from '../lib/foto';
+
+interface Props {
+  foto: string;
+  duygu?: DuyguSlug;
+  etiket: string;
+  baslik: string;
+  sinif?: string;
+}
+
+const { foto: id, duygu, etiket, baslik, sinif } = Astro.props;
+const f = fotograf(id);
+const d = duygu ? duyguBul(duygu) : undefined;
+const giris = Astro.slots.has('default');
+---
+
+<header class:list={['sahne sayfa-sahne', sinif]}>
+  <Foto foto={f} duygu={d} oncelik />
+  <div class="sahne-ic">
+    <p class="etiket">{etiket}</p>
+    <h1 class="sayfa-baslik">{baslik}</h1>
+    {
+      giris && (
+        <div class="giris-metni">
+          <slot />
+        </div>
+      )
+    }
+  </div>
+  <a class="sahne-kunye" href={f.kaynak} rel="noopener" title={f.aciklama}>{kunye(f)}</a>
+</header>
