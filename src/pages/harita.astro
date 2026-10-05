@@ -46,7 +46,7 @@ const disIsaretler = Object.entries(DIS_YERLER)
   .map(([yerAdi, y]) => ({ yerAdi, ...y, ...izdusGenis(y.boylam, y.enlem), siirler: yerdekiler.get(yerAdi)! }));
 const denizler = [
   { ad: 'Karadeniz', yasla: 'end', ...izdusGenis(32.3, 43.4) },
-  { ad: 'Ege', yasla: 'middle', ...izdusGenis(24.2, 37.6) },
+  { ad: 'Ege', yasla: 'middle', ...izdusGenis(25.0, 39.5) },
   { ad: 'Akdeniz', yasla: 'middle', ...izdusGenis(15.5, 35.9) },
 ];
 const uzaklar = [...yerdekiler.keys()].filter((y) => !haritadakiler.includes(y));
