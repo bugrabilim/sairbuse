@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { siir, id } = Astro.props;
+let sira = 0;
 ---
 
 <div class="govde" id={id}>
@@ -14,7 +15,9 @@ const { siir, id } = Astro.props;
     kitalar(siir).map((kita) => (
       <p class="kita">
         {kita.map((m) => (
-          <span class="misra">{m}</span>
+          <span class="misra" style={`--i:${sira++}`}>
+            {m}
+          </span>
         ))}
       </p>
     ))

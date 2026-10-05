@@ -1,0 +1,81 @@
+---
+// Ortam sesi düğmesi: sessiz → deniz → yağmur. Tercih sekme boyunca hatırlanır;
+// sayfa değişince tarayıcı kuralları gereği ilk dokunuşta yeniden başlar.
+---
+
+<button class="dugme ortam-dugmesi" type="button" id="ortam" aria-pressed="false" data-durum="sessiz">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+    <path d="M2 14c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"></path>
+    <path d="M2 19c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3" opacity=".5"></path>
+  </svg>
+  <span class="ortam-yazi">ortam sesi</span>
+</button>
+
+<script>
+  import { baslat, bitir, type Ortam } from '../scripts/ortam';
+
+  const dugme = document.getElementById('ortam') as HTMLButtonElement | null;
+  const yazi = dugme?.querySelector('.ortam-yazi');
+  const SIRA = ['sessiz', 'deniz', 'yagmur'] as const;
+  const AD: Record<string, string> = { sessiz: 'ortam sesi', deniz: 'deniz', yagmur: 'yağmur' };
+  type Durum = (typeof SIRA)[number];
+
+  function goster(d: Durum) {
+    if (!dugme || !yazi) return;
+    dugme.dataset.durum = d;
+    dugme.setAttribute('aria-pressed', String(d !== 'sessiz'));
+    dugme.setAttribute('aria-label', d === 'sessiz' ? 'Ortam sesi kapalı; açmak için bas' : `Ortam sesi: ${AD[d]}. Değiştirmek için bas`);
+    yazi.textContent = AD[d];
+  }
+
+  function kaydet(d: Durum) {
+    try {
+      sessionStorage.setItem('ortam', d);
+    } catch {
+      /* hatırlanmaz */
+    }
+  }
+
+  async function uygula(d: Durum) {
+    goster(d);
+    kaydet(d);
+    if (d === 'sessiz') bitir();
+    else await baslat(d as Ortam);
+  }
+
+  dugme?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const simdiki = (dugme.dataset.durum ?? 'sessiz') as Durum;
+    uygula(SIRA[(SIRA.indexOf(simdiki) + 1) % SIRA.length]);
+  });
+
+  // Önceki sayfada açıksa: düğme açık görünür, ses ilk dokunuşta geri gelir
+  let kayitli: Durum = 'sessiz';
+  try {
+    kayitli = (sessionStorage.getItem('ortam') as Durum) ?? 'sessiz';
+  } catch {
+    /* yok */
+  }
+  if (kayitli !== 'sessiz' && SIRA.includes(kayitli)) {
+    goster(kayitli);
+    const devam = () => {
+      if (dugme?.dataset.durum === kayitli) baslat(kayitli as Ortam);
+    };
+    window.addEventListener('pointerdown', devam, { once: true });
+    window.addEventListener('keydown', devam, { once: true });
+  }
+</script>
+
+<style>
+  .ortam-dugmesi svg {
+    flex: none;
+  }
+  .ortam-dugmesi[aria-pressed='true'] svg {
+    animation: dalga 3s ease-in-out infinite;
+  }
+  @keyframes dalga {
+    50% {
+      transform: translateX(2px);
+    }
+  }
+</style>

@@ -17,7 +17,7 @@ Basılamayan kitap, kendi ilk şiirinde zaten ağlıyor. Bu site o kitabı yaşa
 | **Teknik** | Astro (statik site), GitHub ve Cloudflare Pages. Adres: `duygularinpesinde.bumba.tr` |
 | **Maliyet** | Neredeyse sıfır: alan adı, barındırma ve analitik ücretsiz. |
 | **Yasal yük** | Yayınevi, ISBN, bandrol ve matbaa gerekmiyor. Kişisel ve ticari olmayan bir sitenin yükü çok düşük (bkz. §6). |
-| **Durum** | Faz 1 kuruldu; Faz 2'den zaman şeridi, şiir falı, "bugün yazılmış şiir" ve yavaş okuma da hazır. Yayına alma adımları `README.md`'de. |
+| **Durum** | Faz 1 ve Faz 2 tamam. Yayına alma (Coolify ya da Cloudflare Pages) ve Faz 3 kaldı. Adımlar `README.md`'de. |
 
 ---
 
@@ -277,20 +277,21 @@ Kargayla
 - [x] Giriş ("Şiir kitabım ağlıyor!" ve duygu seçimi), duygu sayfaları, şiir sayfası, tam liste, Hakkında
 - [x] Şiir sayfasında 3 kapı (aynı duygu / yer / yıl)
 - [x] Paylaşım önizleme görselleri (her şiir için ayrı)
-- [ ] Cloudflare Pages, alan adı, Umami *(kod hazır; panel adımları README'de)*
+- [ ] Yayın: Coolify ya da Cloudflare Pages, alan adı, Umami *(Dockerfile, nginx ve adımlar hazır; panelde bağlanması kaldı)*
 - [x] Telefonda test, erişilebilirlik kontrolü (kontrast ≥ 4.5:1, hareket azaltma, yatay taşma yok)
 
 ### Faz 2 — Deneyim
-- [ ] Harita
+- [x] Harita (OpenStreetMap kıyı şeridi, duygu renkli noktalar)
 - [x] Zaman şeridi
 - [x] Şiir Falı
-- [ ] Duygu × Yer çarkı
+- [x] Duygu × Yer çarkı (fal sayfasında)
 - [x] "Bugün yazılmış şiir"
 - [x] Yavaş okuma modu
-- [ ] Duygulara özel geçiş hareketleri
-- [ ] Mısra paylaş kartı
-- [ ] Şairin sesiyle okumalar, ortam sesleri
-- [ ] Sveltia CMS paneli (şair kendi şiirini ekleyebilsin)
+- [x] Duygulara özel geçiş hareketleri
+- [x] Mısra paylaş kartı (1080×1920, tarayıcıda çizilir)
+- [x] Şairin sesiyle okuma altyapısı *(kayıtlar bekleniyor)*
+- [x] Ortam sesleri: deniz, yağmur (Web Audio ile üretilir, dosya yok)
+- [x] Sveltia CMS paneli `/admin/` (GitHub erişim anahtarıyla giriş)
 
 ### Faz 3 — Okurla bağ (isteğe bağlı)
 - [ ] Okurun bir şiire renk ya da kelime bırakması (moderasyonlu)

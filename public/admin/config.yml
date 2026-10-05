@@ -1,0 +1,98 @@
+# Şiir paneli (Sveltia CMS) — https://duygularinpesinde.bumba.tr/admin/
+# Giriş: "Erişim token'ı kullanarak giriş yap" ve bu repoya içerik okuma/yazma izni olan
+# bir GitHub erişim anahtarı (fine-grained personal access token, Contents: Read and write).
+# Kaydedilen her değişiklik GitHub'a bir commit olarak gider; site kendiliğinden yeniden yayınlanır.
+
+backend:
+  name: github
+  repo: bugrabilim/sairbuse
+  branch: main
+  commit_messages:
+    create: 'Şiir ekle: {{slug}}'
+    update: 'Şiiri düzenle: {{slug}}'
+    delete: 'Şiiri sil: {{slug}}'
+    uploadMedia: 'Ses dosyası ekle: {{path}}'
+    deleteMedia: 'Ses dosyasını sil: {{path}}'
+
+site_url: https://duygularinpesinde.bumba.tr
+logo_url: /favicon.svg
+
+# Şairin sesiyle okumalar buraya yüklenir
+media_folder: public/ses
+public_folder: /ses
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+output:
+  omit_empty_optional_fields: true
+
+collections:
+  - name: siirler
+    label: Şiirler
+    label_singular: Şiir
+    description: Her şiir ayrı bir dosya. Mısralar yazıldığı gibi kalır; her mısra ayrı satırda, kıtalar arasında bir boş satır.
+    folder: src/content/siirler
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    identifier_field: baslik
+    summary: '{{tarih}} · {{yer}} · {{baslik}}'
+    sortable_fields: [tarih, yer, baslik]
+    slug:
+      template: '{{tarih}}-{{yer}}'
+      editable: true
+    fields:
+      - label: Ad
+        name: baslik
+        widget: string
+        required: false
+        hint: Şiirin adı varsa. Yoksa başlık yerine "tarih – yer" görünür, listelerde ilk mısra kullanılır.
+      - label: Tarih
+        name: tarih
+        widget: datetime
+        required: false
+        format: YYYY-MM-DD
+        time_format: false
+      - label: Yer
+        name: yer
+        widget: string
+        required: false
+        hint: Şairin yazdığı gibi, ör. "Moda", "Eminönü vapuru", "yer yok".
+      - label: Yer grubu
+        name: yerGrubu
+        widget: string
+        required: false
+        hint: Farklı adlarla anılan aynı yer için ortak ad (ör. "Antigoni" yazıldıysa "Burgazada"). Haritadaki yerler src/data/yerler.ts dosyasında.
+      - label: Duygular
+        name: duygular
+        widget: select
+        multiple: true
+        min: 1
+        max: 3
+        hint: İlk seçilen şiirin rengini belirler.
+        options:
+          - { label: Aşk (pembe), value: ask }
+          - { label: Özlem (kayısı), value: ozlem }
+          - { label: Hüzün (sarı), value: huzun }
+          - { label: Yalnızlık (gri), value: yalnizlik }
+          - { label: Ayrılık (siyah), value: ayrilik }
+          - { label: Karanlık (mor), value: karanlik }
+          - { label: Özgürlük (turuncu), value: ozgurluk }
+      - label: Şairin sesi
+        name: ses
+        widget: file
+        required: false
+        accept: audio/*
+        hint: Şiirin şairin sesiyle okunmuş kaydı (mp3 ya da m4a).
+      - label: Kaynak dosya
+        name: kaynak
+        widget: string
+        required: false
+        hint: Şiirin geldiği özgün dosya (kaynak/ klasöründe). Yeni şiirlerde boş bırakılabilir.
+      - label: Şiir
+        name: body
+        widget: text
+        hint: Her mısra ayrı satırda. Kıtalar arasında bir boş satır.

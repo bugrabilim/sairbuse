@@ -2,6 +2,9 @@
 import Temel from '../../layouts/Temel.astro';
 import SiirBasligi from '../../components/SiirBasligi.astro';
 import SiirGovde from '../../components/SiirGovde.astro';
+import MisraKarti from '../../components/MisraKarti.astro';
+import OrtamSesi from '../../components/OrtamSesi.astro';
+import SairinSesi from '../../components/SairinSesi.astro';
 import {
   ad,
   anaDuygu,
@@ -40,13 +43,17 @@ const aciklama = [ilkMisra(siir), im].filter(Boolean).join(' — ');
 <Temel baslik={sayfaBasligi} aciklama={aciklama} gorsel={`/og/${siir.id}.png`} duygu={d}>
   <article class="sayfa siir tek">
     <SiirBasligi siir={siir} />
+    {siir.data.ses && <SairinSesi ses={siir.data.ses} />}
     <SiirGovde siir={siir} id="govde" />
 
     <div class="arac">
       <button class="dugme" type="button" id="yavas-oku" aria-pressed="false">Yavaş oku</button>
+      <button class="dugme" type="button" id="kart-dugme" aria-pressed="false">Mısra kartı</button>
       <button class="dugme" type="button" id="paylas" data-baslik={sayfaBasligi}>Paylaş</button>
-      <span class="durum" id="durum" role="status" aria-live="polite"></span>
+      <OrtamSesi />
+      <button class="dugme vurgulu" type="button" id="kart-olustur" hidden>Kartı oluştur</button>
     </div>
+    <p class="durum" id="durum" role="status" aria-live="polite"></p>
 
     <ul class="cipler siir-duygulari" aria-label="Duygular">
       {
@@ -80,6 +87,7 @@ const aciklama = [ilkMisra(siir), im].filter(Boolean).join(' — ');
       {sonraki && <a class="sonraki" href={siirYolu(sonraki)}>{ad(sonraki)} →</a>}
     </nav>
   </article>
+  <MisraKarti siir={siir} />
 </Temel>
 
 <script>

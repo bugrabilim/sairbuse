@@ -27,6 +27,7 @@ const umami = import.meta.env.PUBLIC_UMAMI_ID;
 const yol = Astro.url.pathname;
 const menu = [
   { href: '/siirler/', ad: 'şiirler' },
+  { href: '/harita/', ad: 'harita' },
   { href: '/zaman/', ad: 'zaman' },
   { href: '/fal/', ad: 'fal' },
   { href: '/hakkinda/', ad: 'hakkında' },
@@ -67,7 +68,7 @@ const temaRengi = duygu ? duygu.zeminGece : '#0b1220';
     </script>
     {umami && <script defer src="https://istatistik.bumba.tr/script.js" data-website-id={umami} />}
   </head>
-  <body class={govdeSinifi} style={duygu ? duyguStili(duygu) : undefined}>
+  <body class={govdeSinifi} style={duygu ? duyguStili(duygu) : undefined} data-duygu={duygu?.slug}>
     <a class="atla" href="#icerik">İçeriğe geç</a>
     <header class="ust">
       <a class="logo" href="/">{SITE.ad}</a>

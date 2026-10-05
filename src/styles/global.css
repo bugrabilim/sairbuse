@@ -327,6 +327,19 @@ h3 {
   cursor: pointer;
 }
 
+/* Mısra kartı için seçim */
+.govde.secim .misra {
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.25s;
+}
+.govde.secim .misra:hover {
+  background: color-mix(in srgb, var(--vurgu) 10%, transparent);
+}
+.govde.secim .misra.secili {
+  background: color-mix(in srgb, var(--vurgu) 24%, transparent);
+}
+
 .arac {
   display: flex;
   flex-wrap: wrap;
@@ -363,7 +376,16 @@ h3 {
 .durum {
   color: var(--soluk);
   font-size: 0.95rem;
-  align-self: center;
+  min-height: 1.5em;
+  margin: 0.6rem 0 0;
+}
+
+.dugme.vurgulu {
+  border-color: var(--vurgu);
+  background: color-mix(in srgb, var(--vurgu) 18%, transparent);
+}
+.dugme[hidden] {
+  display: none;
 }
 
 .cipler {
@@ -504,5 +526,107 @@ h3 {
   }
   @view-transition {
     navigation: none;
+  }
+}
+
+/* ---------- Her duygunun kendi hareketi ----------
+   Şiir sayfası açılırken mısralar o duygunun diliyle gelir (Atlas of Emotions'tan esinle).
+   Hareketi azalt ayarı açıksa yukarıdaki kural hepsini kapatır. */
+
+.siir.tek .govde .misra {
+  animation-duration: 1.4s;
+  animation-timing-function: ease;
+  animation-fill-mode: both;
+  animation-delay: min(calc(var(--i, 0) * 70ms), 1.6s);
+}
+body .siir.tek .govde.yavas .misra,
+body .siir.tek .govde.secim .misra {
+  animation: none !important;
+}
+
+/* aşk: ılık bir açılış */
+body[data-duygu='ask'] .siir.tek .govde .misra {
+  animation-name: d-ask;
+  transform-origin: left center;
+}
+@keyframes d-ask {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+/* özlem: geçmişten, soldan süzülür */
+body[data-duygu='ozlem'] .siir.tek .govde .misra {
+  animation-name: d-ozlem;
+  animation-duration: 1.8s;
+}
+@keyframes d-ozlem {
+  from {
+    opacity: 0;
+    transform: translateX(-0.9rem);
+  }
+}
+/* hüzün: buğulu gelir, yavaşça netleşir */
+body[data-duygu='huzun'] .siir.tek .govde .misra {
+  animation-name: d-huzun;
+  animation-duration: 2.2s;
+}
+@keyframes d-huzun {
+  from {
+    opacity: 0;
+    filter: blur(5px);
+  }
+}
+/* yalnızlık: harfler birbirinden uzak başlar */
+body[data-duygu='yalnizlik'] .siir.tek .govde .misra {
+  animation-name: d-yalnizlik;
+  animation-duration: 2s;
+}
+@keyframes d-yalnizlik {
+  from {
+    opacity: 0;
+    letter-spacing: 0.12em;
+  }
+}
+/* ayrılık: geçiş yok, kesilerek */
+body[data-duygu='ayrilik'] .siir.tek .govde .misra {
+  animation-name: d-ayrilik;
+  animation-duration: 0.01s;
+  animation-timing-function: steps(1, end);
+  animation-delay: min(calc(var(--i, 0) * 110ms), 2.4s);
+}
+@keyframes d-ayrilik {
+  from {
+    opacity: 0;
+  }
+}
+/* karanlık: karanlıktan ağır ağır */
+body[data-duygu='karanlik'] .siir.tek .govde .misra {
+  animation-name: d-karanlik;
+  animation-duration: 2.6s;
+}
+@keyframes d-karanlik {
+  from {
+    opacity: 0;
+    filter: brightness(0.2);
+  }
+}
+/* özgürlük: aşağıdan yukarı, hafifçe */
+body[data-duygu='ozgurluk'] .siir.tek .govde .misra {
+  animation-name: d-ozgurluk;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes d-ozgurluk {
+  from {
+    opacity: 0;
+    transform: translateY(0.9rem);
+  }
+}
+
+/* Çok dar ekranlarda menü tek satırda kalsın */
+@media (max-width: 22rem) {
+  .menu {
+    gap: 0.25rem 0.7rem;
+    font-size: 0.9rem;
   }
 }

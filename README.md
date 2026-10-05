@@ -12,17 +12,34 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 |---|---|
 | `/` | Açılışta *"Şiir kitabım ağlıyor!"* mısraı ve "Bugün neyin peşindesin?" sorusu, altında 7 duygu. Bugünün tarihinde yazılmış bir şiir varsa o da gösterilir. |
 | `/duygu/…` | Bir duygunun bütün şiirleri. Sayfa o duygunun rengine boyanır. Ayrılık sayfası gündüz temasında da siyah kalır. |
-| `/siir/…` | Tek bir şiir. "Yavaş oku" ve "Paylaş" düğmeleri var. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
+| `/siir/…` | Tek bir şiir. Mısralar duygunun kendi hareketiyle gelir: hüzün buğulu, ayrılık kesilerek, özlem soldan süzülerek. "Yavaş oku", "Mısra kartı", "Paylaş" ve ortam sesi (deniz, yağmur) düğmeleri var. Kayıt varsa şairin sesinden dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
 | `/siirler/` | Bütün şiirlerin listesi, duyguya göre süzülebilir. |
+| `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. |
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |
-| `/fal/` | Şiir falı: niyet tut, fincanı kapat, soğuyunca rastgele bir şiir çıkar. |
+| `/fal/` | Şiir falı: fincanı kapat ya da duygu × yer çarkını çevir, bir şiir çıksın. |
 | `/hakkinda/` | Kitabın hikâyesi, renklerin şiirlerdeki kaynağı, imza ve haklar. |
+| `/admin/` | Şiir paneli: kod bilmeden şiir ekleme ve düzenleme (aşağıda). |
 
-Her şiirin WhatsApp ve Instagram'da paylaşıldığında görünen önizleme görseli derleme sırasında otomatik üretilir (`/og/<şiir>.png`).
+Derleme sırasında her şiir için WhatsApp ve Instagram'da görünen bir önizleme görseli otomatik üretilir (`/og/<şiir>.png`). Mısra kartı ise okurun tarayıcısında çizilir; okur seçtiği mısraları hikâye boyutunda bir görsel olarak indirir ya da paylaşır.
+
+Ortam sesleri bir ses dosyası değil, tarayıcıda Web Audio ile anında üretiliyor: telif sorunu ve ek ağ trafiği yok. Varsayılan olarak kapalı.
 
 ## Şiir eklemek ya da düzeltmek
 
-Şiirler `src/content/siirler/` klasöründe, her biri ayrı bir `.md` dosyası olarak duruyor. Dosyayı GitHub'ın web arayüzünden de ekleyip düzenleyebilirsiniz. Kaydedince site kendiliğinden yeniden yayınlanır.
+### Şiir paneliyle (önerilen)
+
+1. https://duygularinpesinde.bumba.tr/admin/ adresine girin.
+2. **"Erişim token'ı kullanarak giriş yap"** seçeneğini seçin.
+3. Anahtarı GitHub'da oluşturun: **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
+   - Repository access: yalnızca `bugrabilim/sairbuse`
+   - Permissions → Contents: **Read and write**
+4. Şiirleri listeden açıp düzenleyin ya da **Yeni** ile ekleyin. Kaydettiğiniz her değişiklik `main` dalına bir commit olarak gider ve site kendiliğinden yeniden yayınlanır.
+
+Şairin sesiyle yapılmış bir kayıt varsa şiirin **Şairin sesi** alanından yüklenebilir. Dosya `public/ses/` klasörüne gider ve şiir sayfasında "Şairin sesinden dinle" düğmesi belirir.
+
+### Dosyayı doğrudan düzenleyerek
+
+Şiirler `src/content/siirler/` klasöründe, her biri ayrı bir `.md` dosyası olarak duruyor:
 
 ```md
 ---
@@ -31,6 +48,7 @@ tarih: "2020-04-19"       # isteğe bağlı, YYYY-AA-GG
 yer: "Feneryolu"          # isteğe bağlı, şairin yazdığı gibi
 yerGrubu: "Burgazada"     # isteğe bağlı; "Antigoni" gibi farklı adlar aynı yer sayılsın diye
 duygular: ["huzun"]       # en az bir; ilki şiirin rengini belirler
+ses: "/ses/sari.mp3"      # isteğe bağlı, şairin sesiyle okuma
 ---
 Şimdi sakince beynimizi uyuşturuyoruz
 Kahveyle
@@ -41,6 +59,7 @@ Rakıyla
 - Kıtaları ayırmak için bir boş satır bırakılır.
 - Geçerli duygular: `ask`, `ozlem`, `huzun`, `yalnizlik`, `ayrilik`, `karanlik`, `ozgurluk`. Renkleri ve kaynak mısraları `src/data/duygular.ts` dosyasında.
 - Dosyanın adı şiirin adresi olur: `sari.md` dosyası `/siir/sari/` adresinde yayınlanır.
+- Yeni bir yer haritada görünsün isterseniz konumunu `src/data/yerler.ts` dosyasına ekleyin.
 
 Şairin imzası (şu an *Antigoni*) `src/data/site.ts` dosyasında tek satırda tanımlı.
 
@@ -55,21 +74,38 @@ npm run build      # dist/ klasörüne statik site
 npx astro check    # tip denetimi
 ```
 
-## Yayına almak (Cloudflare Pages)
+`main` dalına yapılan her push'ta ve her pull request'te GitHub Actions bu denetimleri kendisi çalıştırır (`.github/workflows/denetim.yml`).
 
-`bumba.tr` alan adı zaten Cloudflare'de olduğu için en kısa yol bu:
+## Yayına almak
 
-1. Cloudflare panelinde **Workers & Pages → Create → Pages → Connect to Git** adımlarını izleyip `bugrabilim/sairbuse` reposunu seçin.
-2. Derleme ayarları:
-   - Production branch: şimdilik `claude/charming-goldberg-chy691` (repodaki tek dal; bir `main` dalı açılınca onunla değiştirin)
-   - Framework preset: **Astro**
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Node sürümü `.nvmrc` dosyasından okunur (22).
-3. İsteğe bağlı ziyaretçi sayacı: `istatistik.bumba.tr` (Umami) üzerinde yeni bir site oluşturun. Website ID'sini Pages projesinin ortam değişkenlerine `PUBLIC_UMAMI_ID` adıyla ekleyin. Çerezsiz olduğu için çerez bandı gerekmez. Değişken boşsa sayaç hiç yüklenmez.
-4. **Custom domains** bölümüne `duygularinpesinde.bumba.tr` adresini ekleyin. DNS kaydı otomatik oluşur. `*.bumba.tr` joker kaydı olsa da belirli kayıt ondan önce gelir.
+Yayın dalı `main`. Aşağıdaki iki yoldan biri yeterli.
 
-Alternatif olarak `dist/` klasörü herhangi bir statik sunucudan da yayınlanabilir. `public/_headers` dosyası Cloudflare'e özel önbellek ve güvenlik başlıklarını içerir.
+### A. Coolify (bumba.tr sunucusu)
+
+`*.bumba.tr` için joker DNS kaydı zaten Bumba'nın sunucusunu gösteriyor. Bu yüzden DNS'e dokunmak gerekmez.
+
+1. Coolify'da **New Resource → Public/Private Repository** ile `bugrabilim/sairbuse` reposunu seçin, dal olarak `main`.
+2. Build pack: **Dockerfile**. Repodaki `Dockerfile` siteyi derler ve `nginx.conf` ile 80 numaralı porttan sunar.
+3. Domain: `https://duygularinpesinde.bumba.tr`. Sertifikayı Coolify kendisi alır.
+4. İsteğe bağlı: ziyaretçi sayacı için **Build Variable** olarak `PUBLIC_UMAMI_ID` ekleyin. Değeri, `istatistik.bumba.tr`'de bu site için oluşturulan Website ID'dir.
+5. Otomatik yayın için Coolify'ın GitHub entegrasyonunu ya da webhook'unu açın.
+
+### B. Cloudflare Pages
+
+1. **Workers & Pages → Create → Pages → Connect to Git** adımlarını izleyip `bugrabilim/sairbuse` reposunu seçin. Production branch `main` olsun.
+2. Framework preset **Astro**, build command `npm run build`, output `dist`. Node sürümü `.nvmrc`'den okunur.
+3. İsteğe bağlı: `PUBLIC_UMAMI_ID` ortam değişkeni.
+4. **Custom domains** bölümüne `duygularinpesinde.bumba.tr` ekleyin. Belirli kayıt, `*.bumba.tr` joker kaydının önüne geçer. `public/_headers` Cloudflare'e özel önbellek ve güvenlik başlıklarını içerir.
+
+## Harita verisi
+
+Kıyı şeridi OpenStreetMap'in sadeleştirilmiş kara poligonlarından üretildi (© OpenStreetMap katkıcıları, ODbL); kaynak sayfada da belirtiliyor. Yeniden üretmek için:
+
+```sh
+pip install pyshp shapely
+# https://osmdata.openstreetmap.de/download/simplified-land-polygons-complete-3857.zip indirip açın
+python3 scripts/harita.py <klasör>/simplified_land_polygons.shp   # src/data/harita.json yazar
+```
 
 ## Kaynak dosyalar
 

@@ -1,0 +1,301 @@
+---
+// Seçilen mısralardan Instagram/WhatsApp hikâyesi boyutunda (1080×1920) bir kart üretir.
+// Kart tarayıcıda, sitenin kendi yazı tipleriyle çizilir; hiçbir veri dışarı gönderilmez.
+import { SITE } from '../data/site';
+import { ad, anaDuygu, basliksiz, imza, type Siir } from '../lib/siirler';
+
+interface Props {
+  siir: Siir;
+}
+
+const { siir } = Astro.props;
+const d = anaDuygu(siir);
+---
+
+<div
+  id="kart-verisi"
+  hidden
+  data-zemin={d.zeminGece}
+  data-renk={d.gece}
+  data-duygu={d.ad.toLocaleUpperCase('tr')}
+  data-baslik={basliksiz(siir) ? '' : ad(siir)}
+  data-imza={imza(siir) || 'tarihsiz'}
+  data-sair={SITE.sair}
+  data-site={SITE.ad}
+  data-adres={`duygularinpesinde.bumba.tr/siir/${siir.id}/`}
+  data-dosya={`${siir.id}-misra.png`}
+>
+</div>
+
+<dialog class="kart-pencere" id="kart-pencere" aria-labelledby="kart-baslik">
+  <h2 id="kart-baslik" class="gorunmez">Mısra kartı</h2>
+  <img id="kart-gorsel" alt="Seçtiğin mısralarla hazırlanan kart" width="1080" height="1920" />
+  <div class="kart-araclar">
+    <button class="dugme" type="button" id="kart-paylas" hidden>Paylaş</button>
+    <a class="dugme" id="kart-indir" href="#" download>İndir</a>
+    <button class="dugme" type="button" id="kart-kapat">Kapat</button>
+  </div>
+</dialog>
+
+<script>
+  const W = 1080;
+  const H = 1920;
+  const YAZI = '#ece5d8';
+  const SOLUK = '#98a1b3';
+  const EN_COK = 8;
+
+  const veri = document.getElementById('kart-verisi')?.dataset ?? {};
+  const govde = document.getElementById('govde');
+  const dugme = document.getElementById('kart-dugme');
+  const olustur = document.getElementById('kart-olustur') as HTMLButtonElement | null;
+  const durum = document.getElementById('durum');
+  const pencere = document.getElementById('kart-pencere') as HTMLDialogElement | null;
+  const gorsel = document.getElementById('kart-gorsel') as HTMLImageElement | null;
+  const indir = document.getElementById('kart-indir') as HTMLAnchorElement | null;
+  const paylasBtn = document.getElementById('kart-paylas') as HTMLButtonElement | null;
+  const misralar = govde ? Array.from(govde.querySelectorAll<HTMLElement>('.misra')) : [];
+  let dosya: File | null = null;
+  let adres = '';
+
+  function secililer() {
+    return misralar.filter((m) => m.classList.contains('secili'));
+  }
+
+  function guncelle() {
+    const n = secililer().length;
+    if (olustur) {
+      olustur.hidden = n === 0;
+      olustur.textContent = `Kartı oluştur (${n})`;
+    }
+  }
+
+  function sec(m: HTMLElement) {
+    const secili = m.classList.contains('secili');
+    if (!secili && secililer().length >= EN_COK) {
+      if (durum) durum.textContent = `Bir karta en fazla ${EN_COK} mısra sığıyor.`;
+      return;
+    }
+    m.classList.toggle('secili', !secili);
+    m.setAttribute('aria-checked', String(!secili));
+    guncelle();
+  }
+
+  function secimiAc() {
+    const yavas = document.getElementById('yavas-oku');
+    if (govde?.classList.contains('yavas')) yavas?.click();
+    govde?.classList.add('secim');
+    dugme?.setAttribute('aria-pressed', 'true');
+    if (durum) durum.textContent = 'Karta koymak istediğin mısralara dokun.';
+    for (const m of misralar) {
+      m.tabIndex = 0;
+      m.setAttribute('role', 'checkbox');
+      m.setAttribute('aria-checked', String(m.classList.contains('secili')));
+    }
+    guncelle();
+  }
+
+  function secimiKapat() {
+    govde?.classList.remove('secim');
+    dugme?.setAttribute('aria-pressed', 'false');
+    if (olustur) olustur.hidden = true;
+    if (durum) durum.textContent = '';
+    for (const m of misralar) {
+      m.classList.remove('secili');
+      m.removeAttribute('tabindex');
+      m.removeAttribute('role');
+      m.removeAttribute('aria-checked');
+    }
+  }
+
+  dugme?.addEventListener('click', () => (govde?.classList.contains('secim') ? secimiKapat() : secimiAc()));
+
+  for (const m of misralar) {
+    m.addEventListener('click', () => {
+      if (govde?.classList.contains('secim')) sec(m);
+    });
+    m.addEventListener('keydown', (e) => {
+      if (!govde?.classList.contains('secim')) return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        sec(m);
+      }
+    });
+  }
+
+  /** Genişliğe sığmayan mısrayı kelime kelime alt satıra böler */
+  function sar(x: CanvasRenderingContext2D, satirlar: string[], genislik: number): string[] {
+    const sonuc: string[] = [];
+    for (const satir of satirlar) {
+      if (x.measureText(satir).width <= genislik) {
+        sonuc.push(satir);
+        continue;
+      }
+      let simdiki = '';
+      for (const k of satir.split(' ')) {
+        const dene = simdiki ? `${simdiki} ${k}` : k;
+        if (x.measureText(dene).width > genislik && simdiki) {
+          sonuc.push(simdiki);
+          simdiki = `  ${k}`;
+        } else simdiki = dene;
+      }
+      if (simdiki) sonuc.push(simdiki);
+    }
+    return sonuc;
+  }
+
+  async function ciz(satirlar: string[]): Promise<Blob> {
+    const tumMetin = satirlar.join(' ') + (veri.baslik ?? '') + (veri.sair ?? '') + (veri.site ?? '');
+    await Promise.all([
+      document.fonts.load('italic 500 80px "Cormorant Garamond"', tumMetin),
+      document.fonts.load('500 80px "Cormorant Garamond"', tumMetin),
+      document.fonts.load('400 40px "EB Garamond"', `${veri.imza} ${veri.adres} ${veri.duygu}`),
+    ]);
+    const tuval = document.createElement('canvas');
+    tuval.width = W;
+    tuval.height = H;
+    const x = tuval.getContext('2d')!;
+    const renk = veri.renk ?? YAZI;
+
+    x.fillStyle = veri.zemin ?? '#0b1220';
+    x.fillRect(0, 0, W, H);
+    const isik = x.createRadialGradient(W * 0.25, H * 0.4, 0, W * 0.25, H * 0.4, W);
+    isik.addColorStop(0, `${renk}26`);
+    isik.addColorStop(1, `${renk}00`);
+    x.fillStyle = isik;
+    x.fillRect(0, 0, W, H);
+
+    const SOL = 110;
+    x.textBaseline = 'alphabetic';
+    x.fillStyle = SOLUK;
+    x.font = 'italic 500 46px "Cormorant Garamond"';
+    x.fillText(veri.site ?? '', SOL, 200);
+    x.font = '400 32px "EB Garamond"';
+    x.textAlign = 'right';
+    x.fillStyle = renk;
+    x.fillText((veri.duygu ?? '').split('').join(' '), W - SOL, 200);
+    x.textAlign = 'left';
+
+    // Mısralar: sığana kadar küçülen yazı
+    const genislik = W - SOL * 2 - 50;
+    let boyut = 88;
+    let satir: string[] = [];
+    for (; boyut >= 44; boyut -= 4) {
+      x.font = `italic 500 ${boyut}px "Cormorant Garamond"`;
+      satir = sar(x, satirlar, genislik);
+      // önce küçülterek sığdırmayı dene; mısrayı bölmek son çare
+      const bolunmedi = satir.length === satirlar.length || boyut <= 56;
+      if (bolunmedi && satir.length * boyut * 1.3 <= 1050) break;
+    }
+    const aralik = boyut * 1.3;
+    const baslikYuk = veri.baslik ? 90 : 0;
+    const blok = baslikYuk + satir.length * aralik;
+    let y = (H - blok) / 2 + boyut * 0.9;
+    x.fillStyle = renk;
+    x.fillRect(SOL, (H - blok) / 2 - 10, 5, blok + 10);
+    if (veri.baslik) {
+      x.font = '500 54px "Cormorant Garamond"';
+      x.fillText(veri.baslik, SOL + 46, y - boyut * 0.9 + 54);
+      y += baslikYuk;
+    }
+    x.fillStyle = YAZI;
+    x.font = `italic 500 ${boyut}px "Cormorant Garamond"`;
+    for (const s of satir) {
+      x.fillText(s, SOL + 46, y);
+      y += aralik;
+    }
+
+    x.fillStyle = SOLUK;
+    x.font = '400 40px "EB Garamond"';
+    x.fillText(veri.imza ?? '', SOL, H - 290);
+    x.fillStyle = YAZI;
+    x.font = 'italic 500 56px "Cormorant Garamond"';
+    x.fillText(veri.sair ?? '', SOL, H - 215);
+    x.fillStyle = SOLUK;
+    x.font = '400 34px "EB Garamond"';
+    x.fillText(veri.adres ?? '', SOL, H - 130);
+
+    return new Promise((coz, red) => tuval.toBlob((b) => (b ? coz(b) : red(new Error('kart çizilemedi'))), 'image/png'));
+  }
+
+  olustur?.addEventListener('click', async () => {
+    const satirlar = secililer().map((m) => m.textContent ?? '');
+    if (!satirlar.length || !pencere || !gorsel || !indir) return;
+    olustur.disabled = true;
+    if (durum) durum.textContent = 'Kart hazırlanıyor…';
+    try {
+      const blob = await ciz(satirlar);
+      if (adres) URL.revokeObjectURL(adres);
+      adres = URL.createObjectURL(blob);
+      dosya = new File([blob], veri.dosya ?? 'misra.png', { type: 'image/png' });
+      gorsel.src = adres;
+      indir.href = adres;
+      indir.download = veri.dosya ?? 'misra.png';
+      if (paylasBtn) paylasBtn.hidden = !(navigator.canShare && navigator.canShare({ files: [dosya] }));
+      if (durum) durum.textContent = '';
+      pencere.showModal();
+    } catch {
+      if (durum) durum.textContent = 'Kart hazırlanamadı.';
+    } finally {
+      olustur.disabled = false;
+    }
+  });
+
+  paylasBtn?.addEventListener('click', async () => {
+    if (!dosya) return;
+    try {
+      await navigator.share({ files: [dosya], text: `https://${veri.adres}` });
+    } catch {
+      /* vazgeçildi */
+    }
+  });
+
+  document.getElementById('kart-kapat')?.addEventListener('click', () => pencere?.close());
+  pencere?.addEventListener('click', (e) => {
+    if (e.target === pencere) pencere.close();
+  });
+</script>
+
+<style>
+  .kart-pencere {
+    border: 1px solid var(--cizgi);
+    border-radius: 12px;
+    background: var(--zemin);
+    color: var(--yazi);
+    padding: 1rem;
+    max-width: min(92vw, 24rem);
+    max-height: 94vh;
+  }
+  .kart-pencere::backdrop {
+    background: rgba(0, 0, 0, 0.72);
+  }
+  .kart-pencere img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 72vh;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+  .kart-araclar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 0.9rem;
+  }
+  .kart-araclar [hidden] {
+    display: none;
+  }
+  /* Seçim sırasında düğme hep elin altında dursun */
+  :global(#kart-olustur) {
+    position: fixed;
+    left: 50%;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    z-index: 5;
+    background: color-mix(in srgb, var(--vurgu) 22%, var(--zemin));
+    box-shadow: 0 6px 24px var(--golge);
+    font-size: 1.05rem;
+    padding: 0.6rem 1.4rem;
+  }
+</style>

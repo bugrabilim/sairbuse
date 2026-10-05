@@ -1,0 +1,208 @@
+---
+import Temel from '../layouts/Temel.astro';
+import SiirListesi from '../components/SiirListesi.astro';
+import harita from '../data/harita.json';
+import { HARITA_YERLERI, UZAK_YERLER, yerSlug } from '../data/yerler';
+import { anaDuygu, ad, tumSiirler, yerGrubu, type Siir } from '../lib/siirler';
+
+const tum = await tumSiirler();
+const yerdekiler = new Map<string, Siir[]>();
+for (const s of tum) {
+  const y = yerGrubu(s);
+  if (y) yerdekiler.set(y, [...(yerdekiler.get(y) ?? []), s]);
+}
+
+// Haritanın Merkator izdüşümü (scripts/harita.py ile aynı)
+const merkator = (lon: number, lat: number) => [
+  (lon * 20037508.34) / 180,
+  (Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) * 20037508.34) / Math.PI,
+];
+const [x0] = merkator(harita.sinir.bati, harita.sinir.guney);
+const [x1, y1] = merkator(harita.sinir.dogu, harita.sinir.kuzey);
+const olcek = harita.genislik / (x1 - x0);
+const izdus = (lon: number, lat: number) => {
+  const [x, y] = merkator(lon, lat);
+  return { x: (x - x0) * olcek, y: (y1 - y) * olcek };
+};
+
+const isaretler = Object.entries(HARITA_YERLERI)
+  .filter(([ad]) => yerdekiler.has(ad))
+  .map(([yerAdi, y]) => {
+    const siirler = yerdekiler.get(yerAdi)!;
+    return { yerAdi, ...y, ...izdus(y.boylam, y.enlem), siirler };
+  });
+
+const haritadakiler = isaretler.map((i) => i.yerAdi);
+const uzaklar = [...yerdekiler.keys()].filter((y) => !haritadakiler.includes(y));
+const ARA = 16; // aynı yerdeki noktalar arası
+---
+
+<Temel baslik="Harita" aciklama="Şiirlerin yazıldığı yerler: Moda, Kalkedon, Cihangir, Eminönü vapuru, adalar…">
+  <section class="sayfa">
+    <p class="ust-etiket">{haritadakiler.length} yer, {isaretler.reduce((t, i) => t + i.siirler.length, 0)} şiir</p>
+    <h1 class="sayfa-baslik">Harita</h1>
+    <p class="giris-metni">Şiirlerin çoğu İstanbul'da, suya yakın yazılmış. Her nokta bir şiir, rengi o şiirin duygusu.</p>
+
+    <figure class="harita">
+      <svg viewBox={`0 0 ${harita.genislik} ${harita.yukseklik}`} role="group" aria-label="İstanbul haritası">
+        <g class="kara" aria-hidden="true">
+          {harita.kara.map((d) => <path d={d} />)}
+        </g>
+        <text class="deniz-adi" x="250" y="560" aria-hidden="true">Marmara</text>
+        <text class="deniz-adi bogaz" x="424" y="84" text-anchor="middle" aria-hidden="true" transform="rotate(-50 424 84)">Boğaz</text>
+        {
+          isaretler.map((i) => {
+            const n = i.siirler.length;
+            const bas = i.yon === 'sag' ? 0 : -(n - 1) * ARA;
+            const etiketX = i.yon === 'sag' ? (n - 1) * ARA + 15 : -(n - 1) * ARA - 15;
+            return (
+              <a href={`#${yerSlug(i.yerAdi)}`} class="isaret">
+                <g transform={`translate(${i.x.toFixed(1)} ${i.y.toFixed(1)})`}>
+                <title>{`${i.yerAdi}: ${i.siirler.map(ad).join(' · ')}`}</title>
+                <circle class="hale" r={14 + (n - 1) * ARA * 0.6} cx={bas + ((n - 1) * ARA) / 2} />
+                {i.siirler.map((s, k) => (
+                  <circle class={anaDuygu(s).hepGece ? 'nokta-svg siyah' : 'nokta-svg'} cx={bas + k * ARA} r="7" fill={anaDuygu(s).nokta} />
+                ))}
+                <text x={etiketX} y="8" text-anchor={i.yon === 'sag' ? 'start' : 'end'}>
+                  {i.etiket ?? i.yerAdi}
+                </text>
+                </g>
+              </a>
+            );
+          })
+        }
+      </svg>
+      <figcaption>Kıyı şeridi: {harita.kaynak}</figcaption>
+    </figure>
+
+    {
+      isaretler.map((i) => (
+        <section class="yer" id={yerSlug(i.yerAdi)} aria-labelledby={`b-${yerSlug(i.yerAdi)}`}>
+          <h2 id={`b-${yerSlug(i.yerAdi)}`} class="yer-adi">
+            {i.yerAdi}
+          </h2>
+          <SiirListesi siirler={i.siirler} />
+        </section>
+      ))
+    }
+
+    {
+      uzaklar.length > 0 && (
+        <section class="yer uzak" aria-labelledby="uzak-baslik">
+          <h2 id="uzak-baslik" class="ust-etiket">
+            Haritanın dışında
+          </h2>
+          {uzaklar.map((y) => (
+            <section class="uzak-yer" id={yerSlug(y)}>
+              <h3 class="yer-adi kucuk">
+                {y}
+                {UZAK_YERLER[y] && <span class="uzak-not"> · {UZAK_YERLER[y]}</span>}
+              </h3>
+              <SiirListesi siirler={yerdekiler.get(y)!} />
+            </section>
+          ))}
+        </section>
+      )
+    }
+  </section>
+</Temel>
+
+<style>
+  .harita {
+    margin: 2rem auto 1rem;
+    max-width: 40rem;
+  }
+  .harita svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .kara path {
+    fill: color-mix(in srgb, var(--yazi) 7%, var(--zemin));
+    stroke: color-mix(in srgb, var(--soluk) 60%, transparent);
+    stroke-width: 1.2;
+    stroke-linejoin: round;
+  }
+  .deniz-adi {
+    font-family: var(--serif-baslik);
+    font-style: italic;
+    font-size: 30px;
+    letter-spacing: 0.3em;
+    fill: color-mix(in srgb, var(--soluk) 55%, transparent);
+  }
+  .isaret text {
+    font-family: var(--serif-baslik);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 25px;
+    fill: var(--yazi);
+    paint-order: stroke;
+    stroke: var(--zemin);
+    stroke-width: 5px;
+    stroke-linejoin: round;
+  }
+  .bogaz {
+    font-size: 22px;
+    letter-spacing: 0.25em;
+  }
+  @media (max-width: 40rem) {
+    .isaret text {
+      font-size: 31px;
+    }
+    .deniz-adi {
+      font-size: 34px;
+    }
+    .bogaz {
+      font-size: 26px;
+    }
+  }
+  .nokta-svg {
+    stroke: var(--zemin);
+    stroke-width: 2;
+  }
+  .nokta-svg.siyah {
+    stroke: var(--soluk);
+    stroke-width: 1.5;
+  }
+  .hale {
+    fill: transparent;
+  }
+  .isaret:hover .hale,
+  .isaret:focus-visible .hale {
+    fill: color-mix(in srgb, var(--yazi) 12%, transparent);
+  }
+  .isaret:hover text,
+  .isaret:focus-visible text {
+    text-decoration: underline;
+  }
+  .harita figcaption {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--soluk);
+    text-align: right;
+  }
+  .yer {
+    margin-top: 2.75rem;
+    scroll-margin-top: 1rem;
+  }
+  .yer-adi {
+    font-size: 1.9rem;
+    font-style: italic;
+    margin-bottom: 0.4rem;
+  }
+  .yer-adi.kucuk {
+    font-size: 1.5rem;
+  }
+  .uzak-yer {
+    margin-top: 1.5rem;
+    scroll-margin-top: 1rem;
+  }
+  .uzak-not {
+    color: var(--soluk);
+    font-size: 1.05rem;
+  }
+  .yer:target .yer-adi,
+  .uzak-yer:target .yer-adi {
+    color: var(--vurgu);
+  }
+</style>

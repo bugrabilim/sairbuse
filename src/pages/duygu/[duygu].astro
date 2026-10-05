@@ -2,6 +2,7 @@
 import Temel from '../../layouts/Temel.astro';
 import SiirBasligi from '../../components/SiirBasligi.astro';
 import SiirGovde from '../../components/SiirGovde.astro';
+import OrtamSesi from '../../components/OrtamSesi.astro';
 import { DUYGULAR, type Duygu } from '../../data/duygular';
 import { imza, siirYolu, tumSiirler, type Siir } from '../../lib/siirler';
 
@@ -45,6 +46,7 @@ const digerleri = DUYGULAR.filter((x) => x.slug !== d.slug);
       {kaynak && <cite><a href={siirYolu(kaynak)}>{imza(kaynak)}</a></cite>}
     </blockquote>
     <p class="giris-metni">{siirler.length} şiir. Aşağı doğru, yazıldıkları sırayla.</p>
+    <div class="arac"><OrtamSesi /></div>
   </section>
 
   {

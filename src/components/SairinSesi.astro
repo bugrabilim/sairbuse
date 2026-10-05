@@ -1,0 +1,63 @@
+---
+// Şairin kendi sesiyle okuması. Kayıt varsa görünür (public/ses/ altına konur).
+interface Props {
+  ses: string;
+}
+const { ses } = Astro.props;
+---
+
+<div class="sairin-sesi">
+  <button class="dugme" type="button" id="sesli-oku" aria-pressed="false">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path class="oynat" d="M7 4l13 8-13 8z"></path></svg>
+    <span>Şairin sesinden dinle</span>
+  </button>
+  <span class="ses-cizgi" aria-hidden="true"><span id="ses-ilerleme"></span></span>
+  <audio id="ses" preload="none" src={ses}></audio>
+</div>
+
+<script>
+  const dugme = document.getElementById('sesli-oku');
+  const ses = document.getElementById('ses') as HTMLAudioElement | null;
+  const ilerleme = document.getElementById('ses-ilerleme');
+  const yazi = dugme?.querySelector('span');
+  dugme?.addEventListener('click', () => {
+    if (!ses) return;
+    if (ses.paused) ses.play();
+    else ses.pause();
+  });
+  ses?.addEventListener('play', () => {
+    dugme?.setAttribute('aria-pressed', 'true');
+    if (yazi) yazi.textContent = 'Duraklat';
+  });
+  ses?.addEventListener('pause', () => {
+    dugme?.setAttribute('aria-pressed', 'false');
+    if (yazi) yazi.textContent = ses.ended ? 'Bir daha dinle' : 'Sürdür';
+  });
+  ses?.addEventListener('timeupdate', () => {
+    if (ilerleme && ses.duration) ilerleme.style.width = `${(ses.currentTime / ses.duration) * 100}%`;
+  });
+</script>
+
+<style>
+  .sairin-sesi {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin: 0 0 2rem;
+  }
+  .ses-cizgi {
+    flex: 1;
+    max-width: 12rem;
+    height: 2px;
+    background: var(--cizgi);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .ses-cizgi span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--vurgu);
+    transition: width 0.25s linear;
+  }
+</style>

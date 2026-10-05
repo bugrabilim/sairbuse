@@ -1,0 +1,21 @@
+name: Denetim
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  derle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Tip denetimi
+        run: npx astro check
+      - name: Derleme
+        run: npm run build

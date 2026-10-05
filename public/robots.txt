@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
 
 Sitemap: https://duygularinpesinde.bumba.tr/sitemap-index.xml
