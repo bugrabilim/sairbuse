@@ -125,7 +125,7 @@ Her şiir sayfasının altında üç kapı olur: **"aynı duygudan bir şiir"**,
 2. **Bir ekran, bir şiir:** Bol boşluk, büyük ve okunaklı yazı, mısra kırılımları aynen korunur.
 3. **Yavaşlık isteğe bağlı:** "Yavaş oku" modunda mısralar tek tek gelir. Varsayılanda şiirin tamamı görünür (erişilebilirlik), cihazında "hareketi azalt" ayarı açık olana animasyon yok.
 4. **Önce telefon:** Okurların çoğu Instagram ve WhatsApp'tan telefonla gelecek.
-5. **Gece gibi:** Koyu zemin varsayılan, gündüz için açık tema seçeneği.
+5. **Gece gibi:** Site tek, koyu bir temada. Her şiir yazıldığı yerin fotoğrafıyla açılıyor (§11).
 
 ---
 
@@ -299,6 +299,14 @@ Kargayla
 - [ ] Şairin ya da bir insanın sesiyle kayıtlar *(yapay ses denendi, düz okuduğu için kaldırıldı; §10.4)*
 - [ ] Yağmurlu cam, vapur salınımı gibi küçük dokunuşlar
 
+### Faz 2.6 — Yeni tasarım: "Vapur" (§11)
+- [x] Tasarım araştırması, dört yön, şairin seçimi: B "Vapur"
+- [x] Her şiir yazıldığı yerin gerçek fotoğrafıyla açılıyor (siyah beyaz + duygu rengi + film greni)
+- [x] Ana sayfa: her ziyarette bir "renk mısrası" kendi şiirinin fotoğrafıyla; yedi duygu şeridi; yerler
+- [x] Yer sayfaları (`/yer/…`)
+- [x] Mısra kartı ve paylaşım önizlemeleri şiirin fotoğrafıyla
+- [ ] Şairin kendi fotoğrafları gelirse Commons fotoğraflarının yerine konması
+
 ### Faz 3 — Okurla bağ (isteğe bağlı)
 - [ ] Okurun bir şiire renk ya da kelime bırakması (moderasyonlu)
 - [ ] Haftanın şiiri bülteni
@@ -342,8 +350,10 @@ Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", 
 | Adres | `duygularinpesinde.bumba.tr` |
 | Lisans | Tüm hakları saklıdır. |
 | Ağır şiirler | Uyarı notu yok. |
-| **Açık:** Ses kayıtları | Şairin kendi sesiyle kayıtlar bekleniyor. Örnek olarak açılış şiiri yapay bir kadın ve bir erkek sesiyle okutuldu (§10). |
-| **Açık:** İmza | Sayfanın altına "bir Bumba Life projesidir" satırı olsun mu? |
+| **Açık:** Ses kayıtları | Şairin kendi sesiyle kayıtlar bekleniyor. Yapay sesle denenen örnekler düz okuduğu için kaldırıldı (§10.4). |
+| İmza | Alt bilgide Bumba Life rozeti var. |
+| Tasarım | B "Vapur": yer fotoğrafları, tek koyu tema (§11). Gece/gündüz düğmesi kaldırıldı. |
+| Fotoğraflar | Gerçek fotoğraflar, Wikimedia Commons'tan özgür lisanslı; fotoğrafçı adı ve lisans her şiirde ve Hakkında sayfasında. |
 | Yazım | TDK'ya göre düzeltildi (§8). Açık kalan tek nokta: "Uların". |
 
 ---
@@ -406,6 +416,24 @@ Asıl hedef, şiirlerin şairin kendi sesiyle okunması; bu iş **açık** duruy
 Her mısra birkaç kez üretildi. Türkçe konuşma tanıma modeli Whisper'ın en doğru duyduğu seçildi; kadın sesi ortalama ~170 Hz, erkek sesi ~105 Hz. Dosyalar `public/ses/2011-07-18-moda-ornek-*.mp3` (mono, 96 kbps, ~23 sn, ~280 KB).
 
 Kayıt ipuçları: sessiz bir oda, telefon ağızdan bir karış uzakta, mısralar arasında nefes payı. Dosyalar mp3, 96–128 kbps yeterli.
+
+---
+
+## 11. Tasarım: "Vapur"
+
+Ekim 2026'da ilk tasarım (düz lacivert zemin, renkli italik kelimeler) beğenilmedi. 35 şiir ve edebiyat sitesi incelendi, dört yön telefonda aynı şiirle çizildi: Kâğıt, Vapur, Afiş, Hâle. Seçilen **Vapur**:
+
+- **Fotoğraf:** Her şiir yazıldığı yerin fotoğrafıyla açılır. Fotoğraf siyah beyaza çekilir; ışıkları şiirin ana duygusunun rengine (`src/data/duygular.ts` → `isik`), gölgeleri o duygunun koyu tonuna (`golge`) boyanır, üstüne film greni biner. Böylece farklı fotoğrafçıların farklı makinelerle çektiği fotoğraflar tek bir kitabın sayfaları gibi durur.
+- **Yazı:** Başlıklar Fraunces (ince, iri), şiir Newsreader, küçük etiketler Inter (büyük harf, aralıklı).
+- **Düzen:** Telefonda fotoğraf üstte, şiir altta koyu zeminde. Bilgisayarda fotoğraf solda sabit durur, şiir sağda akar.
+- **Ana sayfa:** Her ziyarette başka bir "renk mısrası" (pembe küpe çiçeği, sarı kediler, turuncu gemi…) kendi şiirinin yerinde açılır. Altında duygular, yedi fotoğraflı şerit ve yerler.
+- **Fotoğrafsız şiir:** Fotoğrafı olmayan şiirde duygunun renginde bulanık bir ışık durur.
+
+### 11.1 Fotoğraflar
+
+Hepsi gerçek fotoğraf; Wikimedia Commons'ta özgür lisansla (CC BY, CC BY-SA, CC0) paylaşılmış. Yer, Commons kategorisinden ve açıklamasından doğrulandı (ör. Söğüt fotoğrafları "Söğütköy, Marmaris" kategorisinde, Karga'nın sokağı açıklamada "Kadife Sok."). Yapay zekâ ile üretilmiş görünen görseller (ör. 1344×1004 PNG) elendi. Yeri belli olmayan dokuz şiirde fotoğraf yeri değil, şiirdeki bir imgeyi gösteriyor (sisteki ağaç, kırağı, boza, boş İstiklal…).
+
+Künyeler `src/data/fotograflar.ts` dosyasında; her şiirin fotoğrafı şiirin dosyasındaki `foto:` alanında. Şairin kendi fotoğrafları gelirse aynı kimlikle `src/assets/foto/` klasörüne konması yeterli; künyede yazar ve lisans güncellenir.
 
 ---
 

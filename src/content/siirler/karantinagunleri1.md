@@ -2,6 +2,7 @@
 baslik: "Karantina Günleri 1"
 tarih: "2020-03-29"
 duygular: ["yalnizlik"]
+foto: "imge-istiklal-2020"
 kaynak: "karantina.txt"
 ---
 Bugün sıradan bir gün her gün gibi

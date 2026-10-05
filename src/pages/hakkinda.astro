@@ -2,12 +2,18 @@
 import Temel from '../layouts/Temel.astro';
 import { SITE } from '../data/site';
 import { DUYGULAR } from '../data/duygular';
-import { imza, siirYolu, tumSiirler } from '../lib/siirler';
+import { FOTOGRAFLAR } from '../data/fotograflar';
+import { ad, imza, siirYolu, tumSiirler } from '../lib/siirler';
+import { siirFotografi } from '../lib/foto';
 
 const tum = await tumSiirler();
 const acilis = tum.find((s) => s.id === '2011-07-18-moda');
 const antigoni = tum.find((s) => s.id === '2011-10-24-antigoni');
 const renkler = DUYGULAR.map((d) => ({ d, kaynak: tum.find((s) => s.id === d.kaynak) }));
+// Her fotoğraf ve onu kullanan şiirler
+const fotolar = FOTOGRAFLAR.map((f) => ({ f, siirler: tum.filter((s) => siirFotografi(s)?.id === f.id) })).filter(
+  (x) => x.siirler.length,
+);
 ---
 
 <Temel baslik="Hakkında">
@@ -60,11 +66,39 @@ const renkler = DUYGULAR.map((d) => ({ d, kaynak: tum.find((s) => s.id === d.kay
       }
     </p>
 
+    <h2 id="fotograflar">Fotoğraflar</h2>
+    <p>
+      Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi gerçek; başka insanların çekip Wikimedia
+      Commons'ta özgür lisansla paylaştığı fotoğraflar. Sitede siyah beyaza çevrilip şiirin duygusunun rengine
+      boyandılar. Yeri belli olmayan birkaç şiirde fotoğraf yeri değil, şiirdeki bir imgeyi gösteriyor.
+    </p>
+    <ul class="kunyeler">
+      {
+        fotolar.map(({ f, siirler }) => (
+          <li>
+            <span class="kunye-aciklama">{f.aciklama}</span>
+            <span class="kunye-kim">
+              <a href={f.kaynak} rel="noopener">{f.yazar}</a> · <a href={f.lisansUrl} rel="noopener">{f.lisans}</a> · renkleri değiştirildi
+            </span>
+            <span class="kunye-siir">
+              {siirler.map((s, i) => (
+                <>
+                  {i > 0 && ', '}
+                  <a href={siirYolu(s)}>{ad(s)}</a>
+                </>
+              ))}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+
     <h2 id="haklar">Haklar</h2>
     <p>
       Bu sitedeki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde
       yayımlanamaz. Bir şiiri sevdiysen bağlantısını paylaşabilirsin.
     </p>
+    <p>Fotoğraflar bu kapsamda değil; her biri yukarıda adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.</p>
   </article>
 </Temel>
 
@@ -73,7 +107,7 @@ const renkler = DUYGULAR.map((d) => ({ d, kaynak: tum.find((s) => s.id === d.kay
     max-width: 38rem;
   }
   .hakkinda h2 {
-    font-size: 1.9rem;
+    font-size: 2.2rem;
     font-style: italic;
     margin: 3rem 0 0.75rem;
   }
@@ -113,7 +147,7 @@ const renkler = DUYGULAR.map((d) => ({ d, kaynak: tum.find((s) => s.id === d.kay
   .renk-ad a {
     font-family: var(--serif-baslik);
     font-size: 1.3rem;
-    font-weight: 500;
+    font-weight: 300;
     text-decoration: none;
   }
   .renk-ad {
@@ -126,5 +160,27 @@ const renkler = DUYGULAR.map((d) => ({ d, kaynak: tum.find((s) => s.id === d.kay
   }
   .renk-misra a {
     font-style: normal;
+  }
+  .kunyeler {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 1rem;
+    font-size: 0.98rem;
+  }
+  .kunyeler li {
+    display: grid;
+    gap: 0.1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--cizgi);
+  }
+  .kunye-aciklama {
+    font-style: italic;
+  }
+  .kunye-kim,
+  .kunye-siir {
+    color: var(--soluk);
+    font-size: 0.92rem;
   }
 </style>

@@ -1,6 +1,6 @@
 # Duyguların Peşinde
 
-Basılı kitap olarak çıkamayan bir şiir kitabının web hâli. Kitap gibi sayfa sayfa okunmuyor; her şiir tek bir ekranda duruyor ve okur ona duygu, yer ya da zaman üzerinden ulaşıyor.
+Basılı kitap olarak çıkamayan bir şiir kitabının web hâli. Kitap gibi sayfa sayfa okunmuyor; her şiir tek bir ekranda, yazıldığı yerin fotoğrafıyla açılıyor ve okur ona duygu, yer ya da zaman üzerinden ulaşıyor.
 
 Adres: **https://duygularinpesinde.bumba.tr**
 
@@ -10,9 +10,10 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 
 | Sayfa | Ne yapıyor |
 |---|---|
-| `/` | Açılışta *"Şiir kitabım ağlıyor!"* mısraı ve "Bugün neyin peşindesin?" sorusu, altında 7 duygu. Bugünün tarihinde yazılmış bir şiir varsa o da gösterilir. |
-| `/duygu/…` | Bir duygunun bütün şiirleri. Her şiir ekrana girince satır satır açılır. Sayfa o duygunun rengine boyanır; ayrılık sayfası gündüz temasında da siyah kalır. |
-| `/siir/…` | Tek bir şiir. Mısralar satır satır, duygunun kendi hareketiyle açılır: hüzün buğulu, ayrılık kesilerek, özlem soldan süzülerek. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" ve ortam sesi (deniz, yağmur) düğmeleri var. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
+| `/` | Her ziyarette başka bir "renk mısrası" (*Turuncu bir gemide olsam şimdi*, *Üstünde kaldı sarı kediler*…) kendi şiirinin fotoğrafıyla açılır. Altında "Bugün neyin peşindesin?" ve 7 duygu, fotoğraflı duygu şeritleri, şiirlerin yazıldığı yerler. Bugünün tarihinde yazılmış bir şiir varsa o da gösterilir. |
+| `/duygu/…` | Bir duygunun bütün şiirleri, her biri kendi fotoğrafıyla. Her şiir ekrana girince satır satır açılır. |
+| `/yer/…` | Bir yerde (Moda, Burgazada, Söğüt…) yazılmış şiirler. |
+| `/siir/…` | Tek bir şiir. Yazıldığı yerin fotoğrafıyla açılır (bilgisayarda fotoğraf solda sabit durur). Mısralar satır satır, duygunun kendi hareketiyle açılır: hüzün buğulu, ayrılık kesilerek, özlem soldan süzülerek. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" ve ortam sesi (deniz, yağmur) düğmeleri var. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
 | `/siirler/` | Bütün şiirlerin listesi, duyguya göre süzülebilir. |
 | `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. |
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |
@@ -20,7 +21,18 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | `/hakkinda/` | Kitabın hikâyesi, renklerin şiirlerdeki kaynağı, imza ve haklar. |
 | `/admin/` | Şiir paneli: kod bilmeden şiir ekleme ve düzenleme (aşağıda). |
 
-Derleme sırasında her şiir için WhatsApp ve Instagram'da görünen bir önizleme görseli otomatik üretilir (`/og/<şiir>.png`). Mısra kartı ise okurun tarayıcısında çizilir; okur seçtiği mısraları hikâye boyutunda bir görsel olarak indirir ya da paylaşır.
+Derleme sırasında her şiir için WhatsApp ve Instagram'da görünen bir önizleme görseli, şiirin fotoğrafıyla otomatik üretilir (`/og/<şiir>.jpg`). Mısra kartı ise okurun tarayıcısında çizilir; okur seçtiği mısraları şiirin fotoğrafının üstünde, hikâye boyutunda bir görsel olarak indirir ya da paylaşır.
+
+## Fotoğraflar
+
+Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi gerçek; Wikimedia Commons'ta özgür lisansla (CC BY, CC BY-SA, CC0) paylaşılmış ve fotoğrafçısının adıyla kullanılıyor. Sitede siyah beyaza çekilip şiirin duygusunun rengine boyanıyorlar; bu renk değişikliği künyelerde belirtiliyor. Yeri belli olmayan şiirlerde fotoğraf, şiirdeki bir imgeyi gösteriyor.
+
+- Dosyalar: `src/assets/foto/<kimlik>.jpg` (uzun kenarı en çok 2000 px)
+- Künyeler (açıklama, fotoğrafçı, lisans, kaynak, isteğe bağlı odak noktası): `src/data/fotograflar.ts`
+- Bir şiirin fotoğrafı: şiir dosyasındaki `foto:` alanı. Yoksa yazıldığı yerin fotoğrafı (`YER_FOTOGRAFLARI`), o da yoksa duygunun renginde bir ışık.
+- Künyeler şiir sayfasında fotoğrafın köşesinde ve Hakkında sayfasının "Fotoğraflar" bölümünde listeleniyor.
+
+Kendi fotoğrafınızı koymak için dosyayı aynı kimlikle `src/assets/foto/` klasörüne koyup `fotograflar.ts`'de yazarı ve lisansı güncellemeniz yeterli.
 
 Ortam sesleri bir ses dosyası değil, tarayıcıda Web Audio ile anında üretiliyor: telif sorunu ve ek ağ trafiği yok. Varsayılan olarak kapalı.
 
@@ -50,6 +62,7 @@ tarih: "2020-04-19"       # isteğe bağlı, YYYY-AA-GG
 yer: "Feneryolu"          # isteğe bağlı, şairin yazdığı gibi
 yerGrubu: "Burgazada"     # isteğe bağlı; "Antigoni" gibi farklı adlar aynı yer sayılsın diye
 duygular: ["huzun"]       # en az bir; ilki şiirin rengini belirler
+foto: "feneryolu-kediler" # isteğe bağlı; src/data/fotograflar.ts'deki kimlik
 ses: "/ses/sari.mp3"      # isteğe bağlı, şairin sesiyle okuma
 sesler:                   # isteğe bağlı, başka okumalar
   - { dosya: "/ses/sari-ornek.mp3", etiket: "Kadın sesi · örnek", ornek: true }
@@ -63,7 +76,7 @@ Rakıyla
 - Kıtaları ayırmak için bir boş satır bırakılır.
 - Geçerli duygular: `ask`, `ozlem`, `huzun`, `yalnizlik`, `ayrilik`, `karanlik`, `ozgurluk`. Renkleri ve kaynak mısraları `src/data/duygular.ts` dosyasında.
 - Dosyanın adı şiirin adresi olur: `sari.md` dosyası `/siir/sari/` adresinde yayınlanır.
-- Yeni bir yer haritada görünsün isterseniz konumunu `src/data/yerler.ts` dosyasına ekleyin.
+- Yeni bir yer haritada görünsün isterseniz konumunu `src/data/yerler.ts` dosyasına ekleyin; o yerin varsayılan fotoğrafı `src/data/fotograflar.ts` → `YER_FOTOGRAFLARI`.
 
 Şairin imzası (şu an *Antigoni*) `src/data/site.ts` dosyasında tek satırda tanımlı.
 
@@ -120,3 +133,5 @@ python3 scripts/harita.py <klasör>/simplified_land_polygons.shp   # src/data/ha
 ## Haklar
 
 © 2008–2026 Antigoni. Bu depodaki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz.
+
+`src/assets/foto/` klasöründeki fotoğraflar bu kapsamda değildir; her biri `src/data/fotograflar.ts`'de adı geçen fotoğrafçıya aittir ve kendi lisansıyla (CC BY, CC BY-SA ya da CC0) kullanılmaktadır.

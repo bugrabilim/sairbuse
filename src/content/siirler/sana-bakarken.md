@@ -1,5 +1,6 @@
 ---
 duygular: ["ask"]
+foto: "imge-istanbul-gogu"
 kaynak: "buz.txt"
 ---
 Sana bakarken

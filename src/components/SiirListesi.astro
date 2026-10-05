@@ -1,4 +1,5 @@
 ---
+import SiirFotosu from './SiirFotosu.astro';
 import { ad, basliksiz, imza, siirDuygulari, siirYolu, type Siir } from '../lib/siirler';
 
 interface Props {
@@ -13,13 +14,16 @@ const { siirler } = Astro.props;
     siirler.map((s) => (
       <li class="liste-oge" data-duygular={s.data.duygular.join(' ')}>
         <a href={siirYolu(s)}>
-          <span class="liste-noktalar" aria-hidden="true">
-            {siirDuygulari(s).map((d) => (
-              <span class="nokta" style={`--nokta:${d.nokta}`} title={d.ad} />
-            ))}
-          </span>
+          <SiirFotosu siir={s} sinif="liste-foto" sizes="72px" genislikler={[160]} />
           <span class={basliksiz(s) ? 'liste-ad ilk' : 'liste-ad'}>{ad(s)}</span>
-          <span class="liste-imza">{imza(s) || 'tarihsiz'}</span>
+          <span class="liste-imza">
+            <span class="liste-noktalar" aria-hidden="true">
+              {siirDuygulari(s).map((d) => (
+                <span class="nokta" style={`--nokta:${d.nokta}`} title={d.ad} />
+              ))}
+            </span>
+            {imza(s) || 'tarihsiz'}
+          </span>
         </a>
       </li>
     ))

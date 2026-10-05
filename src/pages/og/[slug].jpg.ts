@@ -9,5 +9,5 @@ export const getStaticPaths = (async () => {
 
 export const GET: APIRoute = async ({ props }) => {
   const govde = await siirGorseli((props as { siir: Siir }).siir);
-  return new Response(govde as BodyInit, { headers: { 'Content-Type': 'image/png' } });
+  return new Response(govde as BodyInit, { headers: { 'Content-Type': 'image/jpeg' } });
 };

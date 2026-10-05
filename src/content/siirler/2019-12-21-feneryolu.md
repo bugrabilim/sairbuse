@@ -3,6 +3,7 @@ tarih: "2019-12-21"
 yer: "Feneryolu, ev"
 yerGrubu: "Feneryolu"
 duygular: ["ayrilik"]
+foto: "feneryolu-kis"
 kaynak: "şiirler.docx"
 ---
 Sevgimi başka bir sevgiyle sevdim

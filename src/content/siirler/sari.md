@@ -3,6 +3,7 @@ baslik: "Sarı"
 tarih: "2020-04-19"
 yer: "Feneryolu"
 duygular: ["huzun"]
+foto: "feneryolu-kediler"
 kaynak: "şiirler.docx"
 ---
 Şimdi sakince beynimizi uyuşturuyoruz

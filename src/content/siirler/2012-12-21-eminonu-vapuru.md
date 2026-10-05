@@ -2,6 +2,7 @@
 tarih: "2012-12-21"
 yer: "Eminönü vapuru"
 duygular: ["ozgurluk", "ozlem"]
+foto: "eminonu-marti"
 kaynak: "şiirler.docx"
 ---
 Kar soğuğu

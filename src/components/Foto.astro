@@ -1,0 +1,38 @@
+---
+// Fotoğraf siyah beyaza çekilir; ışıkları --ton-ust/--ton-alt, gölgeleri --ton-golge rengine boyanır.
+// Renkler bir duygudan gelir: ya sayfanın gövdesinden (duyguStili) ya da duygu verilirse burada.
+import { Picture } from 'astro:assets';
+import { duyguStili, type Duygu } from '../data/duygular';
+import { gorsel } from '../lib/foto';
+import type { Fotograf } from '../data/fotograflar';
+
+interface Props {
+  foto: Fotograf;
+  duygu?: Duygu;
+  sinif?: string;
+  /** Sayfanın ilk görseli: hemen ve öncelikle yüklenir */
+  oncelik?: boolean;
+  sizes?: string;
+  genislikler?: number[];
+  /** Ekran okuyucular için; boş bırakılırsa süs sayılır */
+  alt?: string;
+}
+
+const { foto, duygu, sinif, oncelik = false, sizes = '100vw', genislikler = [480, 800, 1200, 1800], alt = '' } = Astro.props;
+const stil = [duygu ? duyguStili(duygu) : '', foto.odak ? `--odak:${foto.odak}` : ''].filter(Boolean).join(';');
+---
+
+<div class:list={['foto', sinif]} style={stil || undefined}>
+  <Picture
+    src={gorsel(foto)}
+    formats={['webp']}
+    fallbackFormat="webp"
+    widths={genislikler}
+    sizes={sizes}
+    alt={alt}
+    loading={oncelik ? 'eager' : 'lazy'}
+    fetchpriority={oncelik ? 'high' : 'auto'}
+    decoding="async"
+  />
+  <span class="gren" aria-hidden="true"></span>
+</div>

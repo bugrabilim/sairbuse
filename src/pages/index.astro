@@ -1,11 +1,61 @@
 ---
 import Temel from '../layouts/Temel.astro';
-import { DUYGULAR } from '../data/duygular';
-import { OZEL_GUNLER, ad, anaDuygu, bulunma, gunAy, siirYolu, tumSiirler } from '../lib/siirler';
+import SiirFotosu from '../components/SiirFotosu.astro';
+import { DUYGULAR, type Duygu } from '../data/duygular';
+import { SITE } from '../data/site';
+import { UZAK_YERLER } from '../data/yerler';
+import {
+  OZEL_GUNLER,
+  ad,
+  anaDuygu,
+  bulunma,
+  gunAy,
+  siirYolu,
+  tumSiirler,
+  uzunTarih,
+  yerler,
+  yerYolu,
+  type Siir,
+} from '../lib/siirler';
+import { kunye, siirFotografi } from '../lib/foto';
 
 const tum = await tumSiirler();
-const acilis = tum.find((s) => s.id === '2011-07-18-moda');
+const bul = (id: string) => tum.find((s) => s.id === id);
 const sayilar = Object.fromEntries(DUYGULAR.map((d) => [d.slug, tum.filter((s) => s.data.duygular.includes(d.slug)).length]));
+
+// Vitrin: kitabın ilk mısrası ve her duygunun renginin geçtiği mısra, kendi şiirinin yerinde.
+// Her ziyarette biri seçilir.
+interface Vitrin {
+  siir: Siir;
+  misralar: string[];
+  duygu: Duygu;
+  /** Mısrada duygunun renginde yazılacak kelime */
+  renk?: string;
+}
+const vitrinler: Vitrin[] = [];
+const acilis = bul('2011-07-18-moda');
+if (acilis) vitrinler.push({ siir: acilis, misralar: ['Şiir kitabım ağlıyor!'], duygu: anaDuygu(acilis) });
+for (const d of DUYGULAR) {
+  const s = bul(d.kaynak);
+  if (s) vitrinler.push({ siir: s, misralar: d.misra, duygu: d, renk: d.renkAdi });
+}
+
+/** Mısrayı renk kelimesinin geçtiği yerden böler: ["Üstünde kaldı ", "sarı", " kediler"] */
+function parcala(misra: string, renk?: string): { metin: string; renkli: boolean }[] {
+  if (!renk) return [{ metin: misra, renkli: false }];
+  const i = misra.toLocaleLowerCase('tr').indexOf(renk.toLocaleLowerCase('tr'));
+  if (i < 0) return [{ metin: misra, renkli: false }];
+  // kelimenin sonuna kadar renklendir ("Kayısılarım", "mosmor" gibi)
+  let son = i + renk.length;
+  while (son < misra.length && /[\p{L}]/u.test(misra[son])) son++;
+  return [
+    { metin: misra.slice(0, i), renkli: false },
+    { metin: misra.slice(i, son), renkli: true },
+    { metin: misra.slice(son), renkli: false },
+  ].filter((p) => p.metin);
+}
+
+const yerListesi = yerler(tum);
 
 // "Bugün yazılmış şiir" için tarihli şiirlerin gün-ay bilgisi (tarayıcıda bugünle karşılaştırılır)
 const takvim = tum
@@ -20,48 +70,147 @@ const takvim = tum
     href: siirYolu(s),
     renk: anaDuygu(s).nokta,
   }));
-
-// Kelimeler bir şiirin mısraları gibi, farklı girintilerle dizilir
-const girintiler = ['4%', '34%', '14%', '48%', '22%', '0%', '38%'];
 ---
 
-<Temel>
-  <script is:inline>
-    // Açılış sahnesi oturum başına bir kez yavaş oynar
-    try {
-      if (sessionStorage.getItem('acilis')) document.documentElement.classList.add('hizli');
-      sessionStorage.setItem('acilis', '1');
-    } catch (e) {}
-  </script>
-  <section class="acilis" aria-label="Açılış">
-    <p class="acilis-misra bir">Şiir kitabım ağlıyor!</p>
-    <p class="acilis-misra iki">Gözyaşlarını tutamamış öyle söyledi.</p>
-    {acilis && <a class="acilis-imza" href={siirYolu(acilis)}>18.07.2011 – Moda</a>}
+<Temel sahne>
+  <h1 class="gorunmez">{SITE.ad}</h1>
+
+  <section class="sahne vitrin" aria-label="Bir mısra">
+    {
+      vitrinler.map((v, i) => {
+        const foto = siirFotografi(v.siir);
+        return (
+          <div class="vitrin-oge" data-i={i} data-secili={i === 0 ? '' : undefined} style={`--vurgu:${v.duygu.gece}`}>
+            <SiirFotosu siir={v.siir} duygu={v.duygu} sizes="100vw" />
+            <div class="sahne-ic vitrin-ic">
+              <p class="etiket vitrin-etiket">
+                {v.renk ? `${v.duygu.ad} · ${v.duygu.renkAdi}` : 'Kitabın ilk mısrası'}
+              </p>
+              <p class="vitrin-misra">
+                {v.misralar.map((m, k) => (
+                  <>
+                    {k > 0 && <br />}
+                    {parcala(m, v.renk).map((p) => (p.renkli ? <em>{p.metin}</em> : p.metin))}
+                  </>
+                ))}
+              </p>
+              <p class="vitrin-imza">
+                {v.siir.data.tarih && <b>{uzunTarih(v.siir.data.tarih)}</b>}
+                {v.siir.data.yer && (
+                  <span>
+                    {' '}
+                    · {v.siir.data.yer}
+                    {v.siir.data.yerGrubu && v.siir.data.yerGrubu !== v.siir.data.yer && ` (${v.siir.data.yerGrubu})`}
+                  </span>
+                )}
+              </p>
+              <a class="dugme vitrin-oku" href={siirYolu(v.siir)}>
+                Şiiri oku →
+              </a>
+            </div>
+            {foto && (
+              <a class="sahne-kunye" href={foto.kaynak} rel="noopener">
+                {kunye(foto)}
+              </a>
+            )}
+          </div>
+        );
+      })
+    }
+    <script is:inline>
+      // Her ziyarette başka bir mısra; aynı oturumda sırayla ilerler
+      (function () {
+        var ogeler = document.querySelectorAll('.vitrin-oge');
+        var n = ogeler.length;
+        if (!n) return;
+        var i;
+        try {
+          var onceki = sessionStorage.getItem('vitrin');
+          i = onceki === null ? Math.floor(Math.random() * n) : (Number(onceki) + 1) % n;
+          sessionStorage.setItem('vitrin', String(i));
+        } catch (e) {
+          i = Math.floor(Math.random() * n);
+        }
+        ogeler.forEach(function (o, k) {
+          if (k === i) o.setAttribute('data-secili', '');
+          else o.removeAttribute('data-secili');
+        });
+      })();
+    </script>
+  </section>
+
+  <section class="soru" aria-labelledby="soru-baslik">
+    <h2 id="soru-baslik" class="etiket">Bugün neyin peşindesin?</h2>
+    <ul class="cipler soru-cipleri">
+      {
+        DUYGULAR.map((d) => (
+          <li>
+            <a class="cip" href={`/duygu/${d.slug}/`} style={`--nokta:${d.nokta}`} data-umami-event="duygu-sec" data-umami-event-duygu={d.slug}>
+              <span class="nokta" aria-hidden="true" />
+              {d.ilgi}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 
   <aside class="bugun" id="bugun" hidden aria-live="polite"></aside>
 
-  <section class="soru" aria-labelledby="soru-baslik">
-    <h1 id="soru-baslik" class="soru-baslik">Bugün neyin peşindesin?</h1>
-    <ul class="duygu-kelimeleri">
+  <section class="duygular" aria-labelledby="duygular-baslik">
+    <div class="bolum-bas">
+      <h2 id="duygular-baslik">Yedi duygu, yedi renk</h2>
+      <p>Her rengin adı şiirlerin içinden: pembe küpe çiçeği, sarı kediler, turuncu bir gemi.</p>
+    </div>
+    <ul class="seritler">
       {
-        DUYGULAR.map((d, i) => (
-          <li style={`--i:${i};--girinti:${girintiler[i]};--d-gece:${d.gece};--d-gunduz:${d.gunduz}`}>
-            <a href={`/duygu/${d.slug}/`} data-umami-event="duygu-sec" data-umami-event-duygu={d.slug}>
-              {d.ilgi}
-              <span class="gorunmez">
-                ({d.ad}, {sayilar[d.slug]} şiir)
+        DUYGULAR.map((d) => {
+          const s = bul(d.kaynak);
+          return (
+            <li>
+              <a class="serit" href={`/duygu/${d.slug}/`} style={`--vurgu:${d.gece}`}>
+                {s && <SiirFotosu siir={s} duygu={d} sinif="serit-foto" sizes="(min-width: 72rem) 72rem, 100vw" genislikler={[600, 1000, 1500]} />}
+                <span class="serit-ad">{d.ad}</span>
+                <span class="serit-bilgi">
+                  {sayilar[d.slug]} şiir
+                  <br />
+                  {d.renkAdi}
+                </span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+
+  <section class="yerler" aria-labelledby="yerler-baslik">
+    <div class="bolum-bas">
+      <h2 id="yerler-baslik">Yazıldıkları yerler</h2>
+      <p>
+        Moda'dan Burgazada'ya, bir Eminönü vapurundan Eyfel Kulesi'nin altına. <a href="/harita/">Haritada gör →</a>
+      </p>
+    </div>
+    <ul class="yer-seridi">
+      {
+        yerListesi.map((y) => (
+          <li>
+            <a class="yer-karti" href={yerYolu(y.ad)}>
+              <SiirFotosu siir={y.siirler[0]} sinif="yer-foto" sizes="12rem" genislikler={[320, 480]} />
+              <span class="yer-ad">{y.ad}</span>
+              <span class="yer-bilgi">
+                {y.siirler.length} şiir{UZAK_YERLER[y.ad] ? ` · ${UZAK_YERLER[y.ad]}` : ''}
               </span>
             </a>
           </li>
         ))
       }
     </ul>
-    <p class="ya-da">
-      ya da <a href="/fal/">niyet tut, bir şiir çek</a> · <a href="/siirler/">bütün şiirler</a>
-    </p>
   </section>
 
+  <p class="ya-da">
+    ya da <a href="/fal/">niyet tut, bir şiir çek</a> · <a href="/siirler/">bütün şiirler</a>
+  </p>
 </Temel>
 
 <script is:inline define:vars={{ takvim, ozel: OZEL_GUNLER }}>
@@ -88,7 +237,7 @@ const girintiler = ['4%', '34%', '14%', '48%', '22%', '0%', '38%'];
 
   if (kutu && eslesen.length) {
     const baslik = document.createElement('p');
-    baslik.className = 'ust-etiket';
+    baslik.className = 'etiket';
     baslik.textContent = `Bugün, ${eslesen[0].gunAy}`;
     const not = document.createElement('p');
     not.className = 'bugun-not';
@@ -119,151 +268,228 @@ const girintiler = ['4%', '34%', '14%', '48%', '22%', '0%', '38%'];
     kutu.append(baslik, not, liste);
     kutu.hidden = false;
   }
-
-  document.addEventListener('keydown', () => document.documentElement.classList.add('hizli'), { once: true });
 </script>
 
 <style>
-  .acilis {
-    max-width: 46rem;
-    margin: 0 auto;
-    padding: clamp(3rem, 14vh, 9rem) var(--kenar) 0;
+  /* ---------- Vitrin ---------- */
+  .vitrin {
+    min-height: min(100svh, 60rem);
+    display: block;
   }
-  .acilis-misra {
-    margin: 0;
+  .vitrin::after {
+    display: none;
+  }
+  .vitrin-oge {
+    display: none;
+    position: relative;
+    min-height: inherit;
+  }
+  .vitrin-oge[data-secili] {
+    display: grid;
+    align-items: end;
+  }
+  .vitrin-oge > :global(.foto) {
+    position: absolute;
+    inset: 0;
+  }
+  .vitrin-oge::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.35) 0%,
+      transparent 20%,
+      transparent 40%,
+      color-mix(in srgb, var(--zemin) 82%, transparent) 74%,
+      var(--zemin) 100%
+    );
+    pointer-events: none;
+  }
+  .vitrin-ic {
+    padding-bottom: 3rem;
+  }
+  .vitrin-etiket {
+    color: var(--vurgu);
+  }
+  .vitrin-misra {
     font-family: var(--serif-baslik);
     font-style: italic;
+    font-weight: 300;
+    font-size: clamp(2.6rem, 1.6rem + 5vw, 5.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0.9rem 0 1.1rem;
+    max-width: 15ch;
+    text-wrap: balance;
+  }
+  .vitrin-misra em {
+    color: var(--vurgu);
+  }
+  .vitrin-imza {
+    margin: 0;
+    font-family: var(--etiket);
+    font-size: 0.82rem;
+    color: color-mix(in srgb, var(--yazi) 70%, transparent);
+  }
+  .vitrin-imza b {
     font-weight: 500;
+    color: var(--yazi);
   }
-  .acilis-misra.bir {
-    font-size: clamp(2.2rem, 1.4rem + 4vw, 4.2rem);
-    line-height: 1.1;
-  }
-  .acilis-misra.iki {
-    font-size: clamp(1.3rem, 1rem + 1.4vw, 1.9rem);
-    color: var(--soluk);
-    margin-top: 0.6rem;
-  }
-  .acilis-imza {
-    display: inline-block;
-    margin-top: 0.9rem;
-    font-size: 0.95rem;
-    letter-spacing: 0.06em;
-    color: var(--soluk);
-    text-decoration: none;
+  .vitrin-oku {
+    margin-top: 0.4rem;
+    color: var(--yazi);
   }
 
+  /* ---------- Soru ---------- */
   .soru {
-    max-width: 46rem;
+    max-width: 72rem;
     margin: 0 auto;
-    padding: clamp(3rem, 10vh, 6rem) var(--kenar) 2rem;
+    padding: 1rem var(--kenar) 0;
   }
-  .soru-baslik {
-    font-family: var(--serif);
-    font-weight: 400;
-    font-size: clamp(1.15rem, 1rem + 0.6vw, 1.35rem);
-    color: var(--soluk);
-    letter-spacing: 0.02em;
-    margin-bottom: 1.5rem;
+  .soru h2 {
+    margin-bottom: 1rem;
   }
-  .duygu-kelimeleri {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+
+  .bugun {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 3rem var(--kenar) 0;
   }
-  .duygu-kelimeleri li {
-    padding-left: var(--girinti);
-  }
-  .duygu-kelimeleri a {
-    display: inline-block;
+  .bugun :global(.bugun-not) {
+    margin: 0.4rem 0 1rem;
     font-family: var(--serif-baslik);
     font-style: italic;
-    font-weight: 500;
-    font-size: clamp(2rem, 1.3rem + 3vw, 3.2rem);
-    line-height: 1.15;
-    color: var(--d-gece);
+    font-weight: 300;
+    font-size: 1.5rem;
+  }
+
+  .bolum-bas {
+    display: grid;
+    gap: 0.6rem;
+    margin-bottom: 1.75rem;
+    max-width: 40rem;
+  }
+  .bolum-bas h2 {
+    font-size: clamp(2.2rem, 1.6rem + 2.6vw, 3.6rem);
+  }
+  .bolum-bas p {
+    margin: 0;
+    color: var(--soluk);
+  }
+
+  /* ---------- Yedi duygu: fotoğraflı şeritler ---------- */
+  .duygular,
+  .yerler {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 6rem var(--kenar) 0;
+  }
+  .seritler {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+  }
+  .serit {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    height: clamp(6.5rem, 4rem + 9vw, 11rem);
+    padding: 0 1.1rem 0.9rem;
+    overflow: hidden;
     text-decoration: none;
-    padding: 0.1rem 0;
-    transition:
-      transform 0.6s ease,
-      letter-spacing 0.6s ease;
   }
-  :global(:root[data-theme='gunduz']) .duygu-kelimeleri a {
-    color: var(--d-gunduz);
+  .serit > :global(.foto) {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    transition: transform 1.2s ease;
   }
-  .duygu-kelimeleri a:hover,
-  .duygu-kelimeleri a:focus-visible {
-    letter-spacing: 0.04em;
-    transform: translateX(0.4rem);
+  .serit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 55%, rgba(0, 0, 0, 0.5));
   }
+  .serit:hover > :global(.foto) {
+    transform: scale(1.04);
+  }
+  .serit-ad {
+    position: relative;
+    z-index: 1;
+    font-family: var(--serif-baslik);
+    font-weight: 300;
+    font-size: clamp(2.6rem, 1.8rem + 4vw, 5.4rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+  .serit-bilgi {
+    position: relative;
+    z-index: 1;
+    font-family: var(--etiket);
+    font-weight: 600;
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.6;
+    color: var(--vurgu);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  /* ---------- Yerler: yana kayan kartlar ---------- */
+  .yer-seridi {
+    list-style: none;
+    margin: 0 calc(var(--kenar) * -1);
+    padding: 0 var(--kenar) 1rem;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 11.5rem;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+  .yer-seridi li {
+    scroll-snap-align: start;
+  }
+  .yer-karti {
+    display: grid;
+    gap: 0.35rem;
+    text-decoration: none;
+  }
+  .yer-karti :global(.yer-foto) {
+    aspect-ratio: 3 / 4;
+    border-radius: 2px;
+  }
+  .yer-ad {
+    font-family: var(--serif-baslik);
+    font-weight: 300;
+    font-size: 1.4rem;
+    line-height: 1.15;
+    margin-top: 0.4rem;
+  }
+  .yer-bilgi {
+    font-family: var(--etiket);
+    font-size: 0.75rem;
+    color: var(--soluk);
+  }
+  .yer-karti:hover .yer-ad {
+    color: var(--vurgu);
+  }
+
   .ya-da {
-    margin-top: 2.5rem;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 4rem var(--kenar) 1rem;
     color: var(--soluk);
   }
   .ya-da a {
     color: var(--yazi);
-  }
-
-  .bugun {
-    max-width: 46rem;
-    margin: 0 auto;
-    padding: 2.5rem var(--kenar) 0;
-    animation: dogus 1.6s ease 3.4s both;
-  }
-  :global(html.hizli) .bugun {
-    animation-delay: 0s;
-    animation-duration: 0.8s;
-  }
-  .bugun :global(.bugun-not) {
-    margin: 0 0 0.9rem;
-    font-style: italic;
-  }
-
-  /* Açılış sahnesi */
-  .acilis-misra,
-  .acilis-imza,
-  .soru-baslik,
-  .duygu-kelimeleri li,
-  .ya-da {
-    animation: dogus 1.6s ease both;
-  }
-  .acilis-misra.bir {
-    animation-delay: 0.3s;
-    animation-duration: 2.2s;
-  }
-  .acilis-misra.iki {
-    animation-delay: 1.9s;
-  }
-  .acilis-imza {
-    animation-delay: 3s;
-  }
-  .soru-baslik {
-    animation-delay: 3.8s;
-  }
-  .duygu-kelimeleri li {
-    animation-delay: calc(4.4s + var(--i) * 0.22s);
-  }
-  .ya-da {
-    animation-delay: 6.2s;
-  }
-  :global(html.hizli) .acilis-misra,
-  :global(html.hizli) .acilis-imza,
-  :global(html.hizli) .soru-baslik,
-  :global(html.hizli) .duygu-kelimeleri li,
-  :global(html.hizli) .ya-da {
-    animation-delay: 0s;
-    animation-duration: 0.8s;
-  }
-  @keyframes dogus {
-    from {
-      opacity: 0;
-      filter: blur(6px);
-      transform: translateY(0.4rem);
-    }
-    to {
-      opacity: 1;
-      filter: none;
-      transform: none;
-    }
   }
 </style>

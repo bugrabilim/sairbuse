@@ -27,6 +27,10 @@ export interface Duygu {
   nokta: string;
   /** Gündüz temasında da sayfayı karanlıkta tut */
   hepGece?: boolean;
+  /** Fotoğrafın ışıkları bu iki renk arasında boyanır (üstten alta) */
+  isik: [string, string];
+  /** Fotoğrafın gölgeleri en az bu kadar aydınlık kalır */
+  golge: string;
   misra: string[];
   /** Mısranın geçtiği şiir */
   kaynak: string;
@@ -43,6 +47,8 @@ export const DUYGULAR: Duygu[] = [
     zeminGece: '#21111a',
     zeminGunduz: '#f7e8ee',
     nokta: '#e891b2',
+    isik: ['#f8d6e2', '#ea8db0'],
+    golge: '#2a0e1a',
     misra: ['Koklamaya kıyamadığım pembe küpe çiçeğim'],
     kaynak: '2021-06-23-sogut',
   },
@@ -56,6 +62,8 @@ export const DUYGULAR: Duygu[] = [
     zeminGece: '#21160e',
     zeminGunduz: '#f8ecde',
     nokta: '#f2a766',
+    isik: ['#f9e0c6', '#f0a25f'],
+    golge: '#2b1608',
     misra: ['Kayısılarım', 'Çocukluğum kayıp'],
     kaynak: '2018-08-18-buyukada',
   },
@@ -69,6 +77,8 @@ export const DUYGULAR: Duygu[] = [
     zeminGece: '#1f1b0b',
     zeminGunduz: '#f7f0d4',
     nokta: '#ebcb52',
+    isik: ['#f7e6a8', '#efc444'],
+    golge: '#2a1d06',
     misra: ['Üstünde kaldı sarı kediler'],
     kaynak: 'sari',
   },
@@ -82,6 +92,8 @@ export const DUYGULAR: Duygu[] = [
     zeminGece: '#16181b',
     zeminGunduz: '#ebebe9',
     nokta: '#9aa1a9',
+    isik: ['#e3e6ea', '#a5adb6'],
+    golge: '#111418',
     misra: ['Gri bir kahve içerim.'],
     kaynak: '2017-11-24-kadikoy',
   },
@@ -96,6 +108,8 @@ export const DUYGULAR: Duygu[] = [
     zeminGunduz: '#030303',
     nokta: '#050505',
     hepGece: true,
+    isik: ['#d9d4cc', '#8f8981'],
+    golge: '#000000',
     misra: ['Sensizliğin rengi “siyah”'],
     kaynak: '2012-06-03-eyfel',
   },
@@ -109,6 +123,8 @@ export const DUYGULAR: Duygu[] = [
     zeminGece: '#160e21',
     zeminGunduz: '#efe6f7',
     nokta: '#a77ade',
+    isik: ['#e2d2f6', '#9c70d8'],
+    golge: '#160a25',
     misra: ['Parmaklarım var, mor mosmor'],
     kaynak: '2011-10-24-antigoni',
   },
@@ -122,6 +138,8 @@ export const DUYGULAR: Duygu[] = [
     zeminGece: '#22110a',
     zeminGunduz: '#fbe8dc',
     nokta: '#f4874f',
+    isik: ['#ffdcc2', '#ff8c45'],
+    golge: '#2b1206',
     misra: ['Turuncu bir gemide olsam şimdi'],
     kaynak: '2012-12-21-eminonu-vapuru',
   },
@@ -141,5 +159,8 @@ export function duyguStili(d: Duygu): string {
     `--z-gece:${d.zeminGece}`,
     `--z-gunduz:${d.zeminGunduz}`,
     `--nokta:${d.nokta}`,
+    `--ton-ust:${d.isik[0]}`,
+    `--ton-alt:${d.isik[1]}`,
+    `--ton-golge:${d.golge}`,
   ].join(';');
 }

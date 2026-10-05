@@ -2,6 +2,7 @@
 tarih: "2017-05-24"
 yer: "Altunizade"
 duygular: ["huzun", "yalnizlik"]
+foto: "altunizade-bahce"
 kaynak: "şiirler.docx"
 ---
 Erik ağacının
