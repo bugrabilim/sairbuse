@@ -25,6 +25,16 @@ export const HARITA_YERLERI: Record<string, HaritaYeri> = {
   Büyükada: { enlem: 40.858, boylam: 29.12, yon: 'sol' },
 };
 
+/** İstanbul'un dışındaki yerler: geniş haritada (Paris'ten Marmaris'e) gösterilir */
+export const DIS_YERLER: Record<string, HaritaYeri> = {
+  İzmir: { enlem: 38.42, boylam: 27.14, yon: 'sol' },
+  Söğüt: { enlem: 36.66, boylam: 28.09, yon: 'sol', etiket: 'Söğüt · Marmaris' },
+  "Eyfel Kulesi'nin altı": { enlem: 48.858, boylam: 2.294, yon: 'sag', etiket: 'Eyfel Kulesi · Paris' },
+};
+
+/** Geniş haritada İstanbul'un bütün yerleri tek bir işaret */
+export const ISTANBUL: HaritaYeri = { enlem: 41.01, boylam: 28.98, yon: 'sol', etiket: 'İstanbul' };
+
 /** Haritanın dışında kalan yerler için kısa açıklama */
 export const UZAK_YERLER: Record<string, string> = {
   Söğüt: 'Marmaris',

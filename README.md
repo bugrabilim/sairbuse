@@ -15,7 +15,7 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | `/yer/…` | Bir yerde (Moda, Burgazada, Söğüt…) yazılmış şiirler. |
 | `/siir/…` | Tek bir şiir. Yazıldığı yerin fotoğrafıyla açılır (bilgisayarda fotoğraf solda sabit durur). Mısralar satır satır, duygunun kendi hareketiyle açılır: hüzün buğulu, ayrılık kesilerek, özlem soldan süzülerek. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" ve ortam sesi (deniz, yağmur) düğmeleri var. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
 | `/siirler/` | Bütün şiirlerin listesi, duyguya göre süzülebilir. |
-| `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. |
+| `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. Altında İstanbul'un dışındaki yerler (İzmir, Marmaris Söğüt, Paris) için Paris'ten Marmaris'e uzanan ikinci bir harita. |
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |
 | `/fal/` | Şiir falı: fincanı kapat ya da duygu × yer çarkını çevir, bir şiir çıksın. |
 | `/hakkinda/` | Kitabın hikâyesi, renklerin şiirlerdeki kaynağı, imza ve haklar. |
@@ -122,7 +122,8 @@ Kıyı şeridi OpenStreetMap'in sadeleştirilmiş kara poligonlarından üretild
 ```sh
 pip install pyshp shapely
 # https://osmdata.openstreetmap.de/download/simplified-land-polygons-complete-3857.zip indirip açın
-python3 scripts/harita.py <klasör>/simplified_land_polygons.shp   # src/data/harita.json yazar
+python3 scripts/harita.py <klasör>/simplified_land_polygons.shp           # İstanbul: src/data/harita.json
+python3 scripts/harita.py <klasör>/simplified_land_polygons.shp --genis   # Paris–Marmaris: src/data/harita-genis.json
 ```
 
 ## Kaynak dosyalar

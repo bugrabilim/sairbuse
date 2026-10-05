@@ -1,11 +1,13 @@
-"""İstanbul kıyı şeridini src/data/harita.json olarak üretir.
+"""Haritaların kıyı şeridini üretir: İstanbul (src/data/harita.json) ve
+İstanbul'un dışındaki yerler için geniş harita (src/data/harita-genis.json).
 
 Veri: OpenStreetMap "simplified land polygons" (© OpenStreetMap katkıcıları, ODbL)
   https://osmdata.openstreetmap.de/download/simplified-land-polygons-complete-3857.zip
 
 Kullanım:
   pip install pyshp shapely
-  python3 scripts/harita.py <simplified_land_polygons.shp yolu>
+  python3 scripts/harita.py <simplified_land_polygons.shp yolu>            # İstanbul
+  python3 scripts/harita.py <simplified_land_polygons.shp yolu> --genis    # Paris'ten Marmaris'e
 """
 import json
 import math
@@ -15,8 +17,22 @@ import shapefile
 from shapely.geometry import box, shape
 from shapely.ops import unary_union
 
-# Haritanın kapsadığı alan (boylam, enlem): Cihangir'den Büyükada'ya
-BATI, GUNEY, DOGU, KUZEY = 28.90, 40.835, 29.17, 41.075
+HARITALAR = {
+    # Cihangir'den Büyükada'ya
+    'istanbul': {
+        'sinir': (28.90, 40.835, 29.17, 41.075),
+        'cikti': 'src/data/harita.json',
+        'sadelestir': 0,  # piksel
+        'en_kucuk': 0,  # piksel kare
+    },
+    # Paris'ten Marmaris'e: Eyfel, İstanbul, İzmir, Söğüt
+    'genis': {
+        'sinir': (-1.5, 35.4, 32.5, 50.8),
+        'cikti': 'src/data/harita-genis.json',
+        'sadelestir': 1.2,
+        'en_kucuk': 6,
+    },
+}
 GENISLIK = 800  # SVG birimi
 
 
@@ -36,9 +52,11 @@ def chaikin(noktalar, tur=2):
     return noktalar
 
 
-def main(yol):
-    x0, y0 = merkator(BATI, GUNEY)
-    x1, y1 = merkator(DOGU, KUZEY)
+def main(yol, ad):
+    h = HARITALAR[ad]
+    bati, guney, dogu, kuzey = h['sinir']
+    x0, y0 = merkator(bati, guney)
+    x1, y1 = merkator(dogu, kuzey)
     olcek = GENISLIK / (x1 - x0)
     yukseklik = round((y1 - y0) * olcek)
     # kırpma kutusu biraz geniş tutulur ki kenarlarda yumuşatma kesik görünmesin
@@ -55,9 +73,13 @@ def main(yol):
         if not k.is_empty:
             parcalar.append(k)
     kara = unary_union(parcalar)
+    if h['sadelestir']:
+        kara = kara.simplify(h['sadelestir'] / olcek, preserve_topology=True)
 
     yollar = []
     for p in sorted(getattr(kara, 'geoms', [kara]), key=lambda g: -g.area):
+        if p.area * olcek * olcek < h['en_kucuk']:
+            continue
         halka = [((x - x0) * olcek, (y1 - y) * olcek) for x, y in list(p.exterior.coords)[:-1]]
         halka = chaikin(halka, 2 if len(halka) > 12 else 3)
         yollar.append('M' + 'L'.join(f'{x:.1f} {y:.1f}' for x, y in halka) + 'Z')
@@ -66,13 +88,13 @@ def main(yol):
         'kaynak': '© OpenStreetMap katkıcıları (ODbL)',
         'genislik': GENISLIK,
         'yukseklik': yukseklik,
-        'sinir': {'bati': BATI, 'guney': GUNEY, 'dogu': DOGU, 'kuzey': KUZEY},
+        'sinir': {'bati': bati, 'guney': guney, 'dogu': dogu, 'kuzey': kuzey},
         'kara': yollar,
     }
-    with open('src/data/harita.json', 'w', encoding='utf-8') as f:
+    with open(h['cikti'], 'w', encoding='utf-8') as f:
         json.dump(veri, f, ensure_ascii=False)
-    print(f'{len(yollar)} kara parçası, {GENISLIK}×{yukseklik}')
+    print(f"{h['cikti']}: {len(yollar)} kara parçası, {GENISLIK}×{yukseklik}")
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1], 'genis' if '--genis' in sys.argv[2:] else 'istanbul')
