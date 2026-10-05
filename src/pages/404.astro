@@ -1,0 +1,38 @@
+---
+import Temel from '../layouts/Temel.astro';
+import { siirYolu, tumSiirler } from '../lib/siirler';
+
+const tum = await tumSiirler();
+const siir = tum.find((s) => s.id === '2012-01-22-kalkedon');
+---
+
+<Temel baslik="Bulunamadı">
+  <section class="sayfa yok">
+    <p class="ust-etiket">404</p>
+    <h1 class="sayfa-baslik">Bu sayfa burada değil.</h1>
+    <blockquote>
+      <p>Ne kadar zaman olmuş?<br />…<br />Unutmuşum</p>
+      {siir && <cite><a href={siirYolu(siir)}>22.01.2012 – Kalkedon</a></cite>}
+    </blockquote>
+    <p><a href="/">Başa dön</a> ya da <a href="/fal/">bir şiir çek</a>.</p>
+  </section>
+</Temel>
+
+<style>
+  .yok {
+    padding-top: clamp(3rem, 12vh, 8rem);
+  }
+  blockquote {
+    margin: 2rem 0;
+    font-style: italic;
+    font-size: 1.3rem;
+  }
+  blockquote p {
+    margin: 0 0 0.3rem;
+  }
+  cite {
+    font-style: normal;
+    font-size: 0.95rem;
+    color: var(--soluk);
+  }
+</style>

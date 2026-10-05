@@ -1,0 +1,27 @@
+---
+import { ad, basliksiz, imza, siirDuygulari, siirYolu, type Siir } from '../lib/siirler';
+
+interface Props {
+  siirler: Siir[];
+}
+
+const { siirler } = Astro.props;
+---
+
+<ul class="liste">
+  {
+    siirler.map((s) => (
+      <li class="liste-oge" data-duygular={s.data.duygular.join(' ')}>
+        <a href={siirYolu(s)}>
+          <span class="liste-noktalar" aria-hidden="true">
+            {siirDuygulari(s).map((d) => (
+              <span class="nokta" style={`--nokta:${d.nokta}`} title={d.ad} />
+            ))}
+          </span>
+          <span class={basliksiz(s) ? 'liste-ad ilk' : 'liste-ad'}>{ad(s)}</span>
+          <span class="liste-imza">{imza(s) || 'tarihsiz'}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

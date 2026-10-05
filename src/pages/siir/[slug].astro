@@ -1,0 +1,158 @@
+---
+import Temel from '../../layouts/Temel.astro';
+import SiirBasligi from '../../components/SiirBasligi.astro';
+import SiirGovde from '../../components/SiirGovde.astro';
+import MisraKarti from '../../components/MisraKarti.astro';
+import OrtamSesi from '../../components/OrtamSesi.astro';
+import SairinSesi from '../../components/SairinSesi.astro';
+import {
+  ad,
+  anaDuygu,
+  basliksiz,
+  ilkMisra,
+  imza,
+  kapilar,
+  siirDuygulari,
+  siirYolu,
+  tumSiirler,
+  type Siir,
+} from '../../lib/siirler';
+
+export async function getStaticPaths() {
+  const tum = await tumSiirler();
+  return tum.map((siir, i) => ({
+    params: { slug: siir.id },
+    props: { siir, onceki: tum[i - 1], sonraki: tum[i + 1], tum },
+  }));
+}
+
+interface Props {
+  siir: Siir;
+  onceki?: Siir;
+  sonraki?: Siir;
+  tum: Siir[];
+}
+
+const { siir, onceki, sonraki, tum } = Astro.props;
+const d = anaDuygu(siir);
+const im = imza(siir);
+const sayfaBasligi = basliksiz(siir) ? `${ilkMisra(siir)}…` : ad(siir);
+const aciklama = [ilkMisra(siir), im].filter(Boolean).join(' — ');
+---
+
+<Temel baslik={sayfaBasligi} aciklama={aciklama} gorsel={`/og/${siir.id}.png`} duygu={d}>
+  <article class="sayfa siir tek">
+    <SiirBasligi siir={siir} />
+    {siir.data.ses && <SairinSesi ses={siir.data.ses} />}
+    <SiirGovde siir={siir} id="govde" />
+
+    <div class="arac">
+      <button class="dugme" type="button" id="yavas-oku" aria-pressed="false">Yavaş oku</button>
+      <button class="dugme" type="button" id="kart-dugme" aria-pressed="false">Mısra kartı</button>
+      <button class="dugme" type="button" id="paylas" data-baslik={sayfaBasligi}>Paylaş</button>
+      <OrtamSesi />
+      <button class="dugme vurgulu" type="button" id="kart-olustur" hidden>Kartı oluştur</button>
+    </div>
+    <p class="durum" id="durum" role="status" aria-live="polite"></p>
+
+    <ul class="cipler siir-duygulari" aria-label="Duygular">
+      {
+        siirDuygulari(siir).map((x) => (
+          <li>
+            <a class="cip" href={`/duygu/${x.slug}/`} style={`--nokta:${x.nokta}`}>
+              <span class="nokta" aria-hidden="true" />
+              {x.ad.toLocaleLowerCase('tr')}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <nav class="kapilar" aria-label="Buradan nereye">
+      {
+        kapilar(siir, tum).map((k) => (
+          <a class="kapi" href={siirYolu(k.siir)}>
+            <span class="kapi-etiket">
+              {k.etiket} · {k.deger}
+            </span>
+            <span class={basliksiz(k.siir) ? 'kapi-ad ilk' : 'kapi-ad'}>{ad(k.siir)}</span>
+            <span class="kapi-ok">{imza(k.siir) || 'tarihsiz'} →</span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <nav class="sira" aria-label="Sıradaki şiirler">
+      {onceki && <a href={siirYolu(onceki)}>← {ad(onceki)}</a>}
+      {sonraki && <a class="sonraki" href={siirYolu(sonraki)}>{ad(sonraki)} →</a>}
+    </nav>
+  </article>
+  <MisraKarti siir={siir} />
+</Temel>
+
+<script>
+  const govde = document.getElementById('govde');
+  const yavas = document.getElementById('yavas-oku');
+  const durum = document.getElementById('durum');
+  const misralar = govde ? Array.from(govde.querySelectorAll<HTMLElement>('.misra')) : [];
+  let sayac: number | undefined;
+  let sira = 0;
+
+  function bitir() {
+    window.clearTimeout(sayac);
+    govde?.classList.remove('yavas');
+    misralar.forEach((m) => m.classList.remove('acik'));
+    yavas?.setAttribute('aria-pressed', 'false');
+    if (yavas) yavas.textContent = 'Yavaş oku';
+  }
+
+  function sonrakiMisra() {
+    window.clearTimeout(sayac);
+    if (sira >= misralar.length) {
+      sayac = window.setTimeout(bitir, 2500);
+      return;
+    }
+    const m = misralar[sira++];
+    m.classList.add('acik');
+    const bekle = 900 + (m.textContent?.length ?? 0) * 40;
+    sayac = window.setTimeout(sonrakiMisra, bekle);
+  }
+
+  yavas?.addEventListener('click', () => {
+    if (govde?.classList.contains('yavas')) {
+      bitir();
+      return;
+    }
+    sira = 0;
+    govde?.classList.add('yavas');
+    yavas.setAttribute('aria-pressed', 'true');
+    yavas.textContent = 'Hepsini göster';
+    govde?.closest('article')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    sayac = window.setTimeout(sonrakiMisra, 700);
+  });
+
+  // Yavaş okurken dokunmak bir sonraki mısrayı hemen açar
+  govde?.addEventListener('click', () => {
+    if (govde.classList.contains('yavas')) sonrakiMisra();
+  });
+
+  const paylas = document.getElementById('paylas');
+  paylas?.addEventListener('click', async () => {
+    const url = location.href;
+    const title = paylas.dataset.baslik ?? document.title;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+      } catch {
+        /* vazgeçildi */
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      if (durum) durum.textContent = 'Bağlantı kopyalandı.';
+    } catch {
+      if (durum) durum.textContent = url;
+    }
+  });
+</script>

@@ -1,0 +1,134 @@
+---
+import Temel from '../../layouts/Temel.astro';
+import SiirBasligi from '../../components/SiirBasligi.astro';
+import SiirGovde from '../../components/SiirGovde.astro';
+import OrtamSesi from '../../components/OrtamSesi.astro';
+import { DUYGULAR, type Duygu } from '../../data/duygular';
+import { imza, siirYolu, tumSiirler, type Siir } from '../../lib/siirler';
+
+export async function getStaticPaths() {
+  const tum = await tumSiirler();
+  return DUYGULAR.map((d) => ({
+    params: { duygu: d.slug },
+    props: {
+      d,
+      siirler: tum.filter((s) => s.data.duygular.includes(d.slug)),
+      kaynak: tum.find((s) => s.id === d.kaynak),
+    },
+  }));
+}
+
+interface Props {
+  d: Duygu;
+  siirler: Siir[];
+  kaynak?: Siir;
+}
+
+const { d, siirler, kaynak } = Astro.props;
+const digerleri = DUYGULAR.filter((x) => x.slug !== d.slug);
+---
+
+<Temel baslik={d.ad} aciklama={`${d.ad} üzerine ${siirler.length} şiir. Rengi ${d.renkAdi}; şiirlerin içinden: ${d.misra.join(' / ')}`} duygu={d}>
+  <section class="sayfa duygu-bas">
+    <p class="ust-etiket">duygu · {d.renkAdi}</p>
+    <h1 class="sayfa-baslik duygu-ad">{d.ad}</h1>
+    <blockquote class="renk-misrasi">
+      <p>
+        {
+          d.misra.map((m, i) => (
+            <>
+              {i > 0 && <br />}
+              {m}
+            </>
+          ))
+        }
+      </p>
+      {kaynak && <cite><a href={siirYolu(kaynak)}>{imza(kaynak)}</a></cite>}
+    </blockquote>
+    <p class="giris-metni">{siirler.length} şiir. Aşağı doğru, yazıldıkları sırayla.</p>
+    <div class="arac"><OrtamSesi /></div>
+  </section>
+
+  {
+    siirler.map((s, i) => (
+      <>
+        {i > 0 && (
+          <p class="sus" aria-hidden="true">
+            · · ·
+          </p>
+        )}
+        <article class="sayfa siir belir" id={s.id}>
+          <SiirBasligi siir={s} seviye="h2" bagli />
+          <SiirGovde siir={s} />
+        </article>
+      </>
+    ))
+  }
+
+  <nav class="sayfa diger" aria-labelledby="diger-baslik">
+    <h2 id="diger-baslik" class="ust-etiket">Başka bir duygunun peşine düş</h2>
+    <ul class="cipler">
+      {
+        digerleri.map((x) => (
+          <li>
+            <a class="cip" href={`/duygu/${x.slug}/`} style={`--nokta:${x.nokta}`} data-umami-event="duygu-sec" data-umami-event-duygu={x.slug}>
+              <span class="nokta" aria-hidden="true" />
+              {x.ad.toLocaleLowerCase('tr')}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</Temel>
+
+<style>
+  .duygu-bas {
+    padding-top: clamp(2rem, 8vh, 6rem);
+    padding-bottom: 1rem;
+  }
+  .duygu-ad {
+    color: var(--vurgu);
+    font-size: clamp(3.2rem, 2rem + 6vw, 6rem);
+  }
+  .renk-misrasi {
+    margin: 1.5rem 0 2rem;
+    padding-left: 1.1rem;
+    border-left: 2px solid var(--vurgu);
+    font-style: italic;
+    font-size: 1.25rem;
+  }
+  .renk-misrasi p {
+    margin: 0 0 0.3rem;
+  }
+  .renk-misrasi cite {
+    font-style: normal;
+    font-size: 0.95rem;
+    color: var(--soluk);
+  }
+  .renk-misrasi cite a {
+    text-decoration: none;
+  }
+  .siir :global(.siir-ad a),
+  .siir :global(.imza-buyuk a) {
+    text-decoration: none;
+  }
+  .belir {
+    animation: belir 1.4s ease both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+  @keyframes belir {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .diger {
+    padding-top: 4rem;
+  }
+</style>
