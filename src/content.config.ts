@@ -24,6 +24,8 @@ const siirler = defineCollection({
     sesler: z
       .array(z.object({ dosya: z.string(), etiket: z.string(), ornek: z.boolean().optional() }))
       .optional(),
+    /** src/data/fotograflar.ts'deki bir fotoğrafın kimliği. Yoksa yazıldığı yerin fotoğrafı kullanılır. */
+    foto: z.string().optional(),
     /** Şiirin geldiği özgün dosya (kaynak/ klasöründe). */
     kaynak: z.string().optional(),
   }),

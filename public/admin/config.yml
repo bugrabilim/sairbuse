@@ -81,6 +81,11 @@ collections:
           - { label: Ayrılık (siyah), value: ayrilik }
           - { label: Karanlık (mor), value: karanlik }
           - { label: Özgürlük (turuncu), value: ozgurluk }
+      - label: Fotoğraf
+        name: foto
+        widget: string
+        required: false
+        hint: Şiirin açılış fotoğrafı; src/data/fotograflar.ts'deki kimlik, ör. "moda-iskele". Boş bırakılırsa yazıldığı yerin fotoğrafı, o da yoksa duygunun renginde bir ışık kullanılır.
       - label: Şairin sesi
         name: ses
         widget: file

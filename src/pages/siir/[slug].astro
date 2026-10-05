@@ -1,10 +1,12 @@
 ---
 import Temel from '../../layouts/Temel.astro';
-import SiirBasligi from '../../components/SiirBasligi.astro';
+import SiirSahnesi from '../../components/SiirSahnesi.astro';
+import SiirFotosu from '../../components/SiirFotosu.astro';
 import SiirGovde from '../../components/SiirGovde.astro';
 import MisraKarti from '../../components/MisraKarti.astro';
 import OrtamSesi from '../../components/OrtamSesi.astro';
 import Sesler from '../../components/Sesler.astro';
+import { SITE } from '../../data/site';
 import {
   ad,
   anaDuygu,
@@ -34,6 +36,7 @@ interface Props {
 }
 
 const { siir, onceki, sonraki, tum } = Astro.props;
+const sira = tum.findIndex((x) => x.id === siir.id) + 1;
 const d = anaDuygu(siir);
 const im = imza(siir);
 const sayfaBasligi = basliksiz(siir) ? `${ilkMisra(siir)}…` : ad(siir);
@@ -45,54 +48,62 @@ const kayitlar = [
 ];
 ---
 
-<Temel baslik={sayfaBasligi} aciklama={aciklama} gorsel={`/og/${siir.id}.png`} duygu={d}>
-  <article class="sayfa siir tek">
-    <SiirBasligi siir={siir} />
-    {kayitlar.length > 0 && <Sesler kayitlar={kayitlar} />}
-    <p class="ipucu" id="ipucu" aria-hidden="true">Hepsi için şiire dokun.</p>
-    <SiirGovde siir={siir} id="govde" acilis="hemen" />
+<Temel baslik={sayfaBasligi} aciklama={aciklama} gorsel={`/og/${siir.id}.jpg`} duygu={d} sahne>
+  <div class="siir-duzen">
+    <SiirSahnesi siir={siir} etiket={`${d.ad} · ${sira} / ${tum.length}`} oncelik sizes="(min-width: 64rem) 52vw, 100vw" />
 
-    <div class="arac">
-      <button class="dugme" type="button" id="bastan-oku">Baştan oku</button>
-      <button class="dugme" type="button" id="kart-dugme" aria-pressed="false">Mısra kartı</button>
-      <button class="dugme" type="button" id="paylas" data-baslik={sayfaBasligi}>Paylaş</button>
-      <OrtamSesi />
-      <button class="dugme vurgulu" type="button" id="kart-olustur" hidden>Kartı oluştur</button>
-    </div>
-    <p class="durum" id="durum" role="status" aria-live="polite"></p>
+    <article class="sayfa siir tek">
+      {kayitlar.length > 0 && <Sesler kayitlar={kayitlar} />}
+      <p class="ipucu" id="ipucu" aria-hidden="true">Hepsi için şiire dokun</p>
+      <SiirGovde siir={siir} id="govde" acilis="hemen" />
+      <p class="imza-satiri">— {SITE.sair}</p>
 
-    <ul class="cipler siir-duygulari" aria-label="Duygular">
-      {
-        siirDuygulari(siir).map((x) => (
-          <li>
-            <a class="cip" href={`/duygu/${x.slug}/`} style={`--nokta:${x.nokta}`}>
-              <span class="nokta" aria-hidden="true" />
-              {x.ad.toLocaleLowerCase('tr')}
+      <div class="arac">
+        <button class="dugme" type="button" id="bastan-oku">Baştan oku</button>
+        <button class="dugme" type="button" id="kart-dugme" aria-pressed="false">Mısra kartı</button>
+        <button class="dugme" type="button" id="paylas" data-baslik={sayfaBasligi}>Paylaş</button>
+        <OrtamSesi />
+        <button class="dugme vurgulu" type="button" id="kart-olustur" hidden>Kartı oluştur</button>
+      </div>
+      <p class="durum" id="durum" role="status" aria-live="polite"></p>
+
+      <ul class="cipler siir-duygulari" aria-label="Duygular">
+        {
+          siirDuygulari(siir).map((x) => (
+            <li>
+              <a class="cip" href={`/duygu/${x.slug}/`} style={`--nokta:${x.nokta}`}>
+                <span class="nokta" aria-hidden="true" />
+                {x.ad.toLocaleLowerCase('tr')}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <nav class="kapilar" aria-labelledby="kapilar-baslik">
+        <p class="etiket" id="kapilar-baslik">Buradan nereye</p>
+        {
+          kapilar(siir, tum).map((k) => (
+            <a class="kapi" href={siirYolu(k.siir)}>
+              <SiirFotosu siir={k.siir} sinif="kapi-foto" sizes="88px" genislikler={[200]} />
+              <span class="kapi-metin">
+                <span class="kapi-etiket">
+                  {k.etiket} · {k.deger}
+                </span>
+                <span class={basliksiz(k.siir) ? 'kapi-ad ilk' : 'kapi-ad'}>{ad(k.siir)}</span>
+                <span class="kapi-ok">{imza(k.siir) || 'tarihsiz'} →</span>
+              </span>
             </a>
-          </li>
-        ))
-      }
-    </ul>
+          ))
+        }
+      </nav>
 
-    <nav class="kapilar" aria-label="Buradan nereye">
-      {
-        kapilar(siir, tum).map((k) => (
-          <a class="kapi" href={siirYolu(k.siir)}>
-            <span class="kapi-etiket">
-              {k.etiket} · {k.deger}
-            </span>
-            <span class={basliksiz(k.siir) ? 'kapi-ad ilk' : 'kapi-ad'}>{ad(k.siir)}</span>
-            <span class="kapi-ok">{imza(k.siir) || 'tarihsiz'} →</span>
-          </a>
-        ))
-      }
-    </nav>
-
-    <nav class="sira" aria-label="Sıradaki şiirler">
-      {onceki && <a href={siirYolu(onceki)}>← {ad(onceki)}</a>}
-      {sonraki && <a class="sonraki" href={siirYolu(sonraki)}>{ad(sonraki)} →</a>}
-    </nav>
-  </article>
+      <nav class="sira" aria-label="Sıradaki şiirler">
+        {onceki && <a href={siirYolu(onceki)}>← {ad(onceki)}</a>}
+        {sonraki && <a class="sonraki" href={siirYolu(sonraki)}>{ad(sonraki)} →</a>}
+      </nav>
+    </article>
+  </div>
   <MisraKarti siir={siir} />
 </Temel>
 
@@ -150,3 +161,25 @@ const kayitlar = [
     }
   });
 </script>
+
+<style>
+  /* Bilgisayarda fotoğraf solda sabit durur, şiir sağda akar */
+  @media (min-width: 64rem) {
+    .siir-duzen {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      align-items: start;
+    }
+    .siir-duzen > :global(.siir-sahne) {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      min-height: 0;
+    }
+    .siir-duzen > .siir {
+      margin: 0;
+      padding: 8rem clamp(2rem, 4vw, 4rem) 4rem;
+      max-width: 42rem;
+    }
+  }
+</style>

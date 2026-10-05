@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { duygu, type Duygu } from '../data/duygular';
+import { gercekYer, yerSlug } from '../data/yerler';
 
 export type Siir = CollectionEntry<'siirler'>;
 
@@ -68,6 +69,23 @@ export function imza(s: Siir): string {
   return p.join(' – ');
 }
 
+export interface SahneBasligi {
+  baslik: string;
+  alt: string;
+  /** ad: şiirin kendi adı; yer: yazıldığı yer; tarih: yalnız tarih; ilk: ilk mısra */
+  tur: 'ad' | 'yer' | 'tarih' | 'ilk';
+}
+
+/** Fotoğrafın üstündeki büyük başlık: adı, yoksa yeri, yoksa tarihi, o da yoksa ilk mısrası. */
+export function sahneBasligi(s: Siir): SahneBasligi {
+  const { baslik, yer, tarih } = s.data;
+  const t = tarih ? uzunTarih(tarih) : '';
+  if (baslik) return { baslik, alt: [yer, t].filter(Boolean).join(' · '), tur: 'ad' };
+  if (yer) return { baslik: yer, alt: t || 'tarihsiz', tur: 'yer' };
+  if (t) return { baslik: t, alt: '', tur: 'tarih' };
+  return { baslik: ad(s), alt: 'tarihsiz', tur: 'ilk' };
+}
+
 export function yil(s: Siir): string | undefined {
   return s.data.tarih?.slice(0, 4);
 }
@@ -133,6 +151,7 @@ export function istemciVerisi(s: Siir) {
     yer: yerGrubu(s) ?? null,
     duygu: anaDuygu(s).slug,
     kitalar: kitalar(s),
+    sahne: sahneBasligi(s),
   };
 }
 
@@ -149,4 +168,27 @@ export function bulunma(yer: string): string {
   const kalin = 'aıou'.includes(unlu);
   const sert = /[çfhkpsştÇFHKPSŞT]$/.test(son);
   return `${yer}'${sert ? 't' : 'd'}${kalin ? 'a' : 'e'}`;
+}
+
+export interface Yer {
+  ad: string;
+  slug: string;
+  siirler: Siir[];
+}
+
+/** Şiirlerin yazıldığı gerçek yerler ("evde", "yer yok" hariç), en çok şiir yazılandan başlayarak */
+export function yerler(tum: Siir[]): Yer[] {
+  const harita = new Map<string, Siir[]>();
+  for (const s of tum) {
+    const y = yerGrubu(s);
+    if (!gercekYer(y)) continue;
+    harita.set(y, [...(harita.get(y) ?? []), s]);
+  }
+  return [...harita.entries()]
+    .map(([ad, siirler]) => ({ ad, slug: yerSlug(ad), siirler }))
+    .sort((a, b) => b.siirler.length - a.siirler.length || a.ad.localeCompare(b.ad, 'tr'));
+}
+
+export function yerYolu(ad: string): string {
+  return `/yer/${yerSlug(ad)}/`;
 }

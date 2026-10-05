@@ -1,6 +1,7 @@
 ---
 baslik: "Aklımda"
 duygular: ["ozlem"]
+foto: "imge-boza"
 kaynak: "aklımda.txt"
 ---
 Aklımda

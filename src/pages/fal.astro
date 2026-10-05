@@ -1,11 +1,21 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import { getImage } from 'astro:assets';
 import { DUYGULAR } from '../data/duygular';
 import { istemciVerisi, tumSiirler } from '../lib/siirler';
+import { gorsel, kunye, siirFotografi } from '../lib/foto';
 
 const tum = await tumSiirler();
+// Çıkan şiir kendi fotoğrafıyla açılsın diye her şiirin küçük bir fotoğrafı
+const siirler = await Promise.all(
+  tum.map(async (s) => {
+    const f = siirFotografi(s);
+    const g = f ? await getImage({ src: gorsel(f), width: 960, format: 'webp' }) : undefined;
+    return { ...istemciVerisi(s), foto: g?.src ?? null, odak: f?.odak ?? null, kunye: f ? kunye(f) : null };
+  }),
+);
 const veri = {
-  siirler: tum.map(istemciVerisi),
+  siirler,
   duygular: Object.fromEntries(DUYGULAR.map((d) => [d.slug, d])),
 };
 ---
@@ -76,15 +86,18 @@ const veri = {
     duygu: string;
     yer: string | null;
     kitalar: string[][];
+    sahne: { baslik: string; alt: string; tur: string };
+    foto: string | null;
+    odak: string | null;
+    kunye: string | null;
   }
   interface DuyguVerisi {
+    isik: [string, string];
+    golge: string;
     ad: string;
     gece: string;
-    gunduz: string;
     zeminGece: string;
-    zeminGunduz: string;
     nokta: string;
-    hepGece?: boolean;
   }
   const veri = (window as unknown as { __fal: { siirler: SiirVerisi[]; duygular: Record<string, DuyguVerisi> } }).__fal;
   const dugme = document.getElementById('kapat') as HTMLButtonElement | null;
@@ -107,21 +120,36 @@ const veri = {
     const body = document.body;
     body.dataset.duygu = s.duygu;
     body.classList.add('duygulu');
-    body.classList.toggle('hep-gece', Boolean(d.hepGece));
     body.style.setProperty('--d-gece', d.gece);
-    body.style.setProperty('--d-gunduz', d.gunduz);
     body.style.setProperty('--z-gece', d.zeminGece);
-    body.style.setProperty('--z-gunduz', d.zeminGunduz);
 
-    const bas = el('header', 'siir-bas');
-    if (!s.basliksiz) {
-      bas.append(el('h2', 'siir-ad', s.ad));
-      if (s.imza) bas.append(el('p', 'imza', s.imza));
-    } else if (s.imza) {
-      bas.append(el('h2', 'imza-buyuk', s.imza));
+    body.style.setProperty('--ton-ust', d.isik[0]);
+    body.style.setProperty('--ton-alt', d.isik[1]);
+    body.style.setProperty('--ton-golge', d.golge);
+
+    // Fotoğraflı açılış: sitedeki şiir sayfasının küçüğü
+    const bas = el('header', 'sahne fal-sahne');
+    const foto = el('div', 'foto');
+    if (s.foto) {
+      const img = el('img');
+      img.src = s.foto;
+      img.alt = '';
+      img.decoding = 'async';
+      if (s.odak) foto.style.setProperty('--odak', s.odak);
+      foto.append(img);
     } else {
-      bas.append(el('h2', 'gorunmez', s.ad), el('p', 'imza', 'tarihsiz'));
+      foto.append(el('div', 'isik-alani'));
     }
+    foto.append(el('span', 'gren'));
+    const ic = el('div', 'sahne-ic');
+    const uzun = s.sahne.baslik.length > 13 && s.sahne.tur !== 'ilk';
+    ic.append(
+      el('p', 'etiket', d.ad),
+      el('h2', `siir-baslik${s.sahne.tur === 'ilk' ? ' ilk' : uzun ? ' uzun' : ''}`, s.sahne.baslik),
+    );
+    if (s.sahne.alt) ic.append(el('p', 'siir-alt', s.sahne.alt));
+    bas.append(foto, ic);
+    if (s.kunye) bas.append(el('span', 'sahne-kunye', s.kunye));
     const govde = el('div', 'govde');
     let sira = 0;
     for (const kita of s.kitalar) {
@@ -199,8 +227,7 @@ const veri = {
 
   function duyguKelimesi(slug: string) {
     const d = veri.duygular[slug];
-    const tema = document.documentElement.dataset.theme === 'gunduz' && !d.hepGece ? d.gunduz : d.gece;
-    return { metin: d.ad.toLocaleLowerCase('tr'), renk: tema };
+    return { metin: d.ad.toLocaleLowerCase('tr'), renk: d.gece };
   }
 
   // Makaralar ilk açılışta boş durmasın
@@ -312,7 +339,7 @@ const veri = {
     text-align: center;
     font-family: var(--serif-baslik);
     font-style: italic;
-    font-weight: 500;
+    font-weight: 300;
     font-size: clamp(1.4rem, 1rem + 2vw, 2rem);
     white-space: nowrap;
     overflow: hidden;
@@ -354,8 +381,14 @@ const veri = {
   }
   .fal-sonuc {
     padding-top: 2rem;
-    border-top: 1px solid var(--cizgi);
     outline: none;
+  }
+  .fal-sonuc :global(.fal-sahne) {
+    min-height: min(56svh, 30rem);
+    margin: 0 calc(var(--kenar) * -1) 2rem;
+  }
+  .fal-sonuc :global(.fal-sahne .sahne-ic) {
+    padding-top: 4rem;
   }
   .fal-sonuc:global(.acil) {
     animation: acil 0.6s ease both;

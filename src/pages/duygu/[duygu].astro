@@ -1,10 +1,12 @@
 ---
 import Temel from '../../layouts/Temel.astro';
-import SiirBasligi from '../../components/SiirBasligi.astro';
+import SiirSahnesi from '../../components/SiirSahnesi.astro';
+import SiirFotosu from '../../components/SiirFotosu.astro';
 import SiirGovde from '../../components/SiirGovde.astro';
 import OrtamSesi from '../../components/OrtamSesi.astro';
 import { DUYGULAR, type Duygu } from '../../data/duygular';
 import { imza, siirYolu, tumSiirler, type Siir } from '../../lib/siirler';
+import { kunye, siirFotografi } from '../../lib/foto';
 
 export async function getStaticPaths() {
   const tum = await tumSiirler();
@@ -26,42 +28,52 @@ interface Props {
 
 const { d, siirler, kaynak } = Astro.props;
 const digerleri = DUYGULAR.filter((x) => x.slug !== d.slug);
+// Sayfa, rengin geçtiği şiirin fotoğrafıyla açılır
+const acilis = kaynak ?? siirler[0];
+const acilisFotosu = siirFotografi(acilis);
 ---
 
-<Temel baslik={d.ad} aciklama={`${d.ad} üzerine ${siirler.length} şiir. Rengi ${d.renkAdi}; şiirlerin içinden: ${d.misra.join(' / ')}`} duygu={d}>
-  <section class="sayfa duygu-bas">
-    <p class="ust-etiket">duygu · {d.renkAdi}</p>
-    <h1 class="sayfa-baslik duygu-ad">{d.ad}</h1>
-    <blockquote class="renk-misrasi">
-      <p>
-        {
-          d.misra.map((m, i) => (
-            <>
-              {i > 0 && <br />}
-              {m}
-            </>
-          ))
-        }
-      </p>
-      {kaynak && <cite><a href={siirYolu(kaynak)}>{imza(kaynak)}</a></cite>}
-    </blockquote>
-    <p class="giris-metni">{siirler.length} şiir. Aşağı doğru, yazıldıkları sırayla.</p>
-    <div class="arac"><OrtamSesi /></div>
-  </section>
+<Temel baslik={d.ad} aciklama={`${d.ad} üzerine ${siirler.length} şiir. Rengi ${d.renkAdi}; şiirlerin içinden: ${d.misra.join(' / ')}`} duygu={d} sahne>
+  <header class="sahne duygu-sahne">
+    <SiirFotosu siir={acilis} oncelik />
+    <div class="sahne-ic">
+      <p class="etiket">duygu · {d.renkAdi} · {siirler.length} şiir</p>
+      <h1 class="duygu-ad">{d.ad}</h1>
+      <blockquote class="renk-misrasi">
+        <p>
+          {
+            d.misra.map((m, i) => (
+              <>
+                {i > 0 && <br />}
+                {m}
+              </>
+            ))
+          }
+        </p>
+        {kaynak && <cite><a href={siirYolu(kaynak)}>{imza(kaynak)}</a></cite>}
+      </blockquote>
+      <div class="arac duygu-arac"><OrtamSesi /></div>
+    </div>
+    {
+      acilisFotosu && (
+        <a class="sahne-kunye" href={acilisFotosu.kaynak} rel="noopener">
+          {kunye(acilisFotosu)}
+        </a>
+      )
+    }
+  </header>
 
   {
-    siirler.map((s, i) => (
-      <>
-        {i > 0 && (
-          <p class="sus" aria-hidden="true">
-            · · ·
-          </p>
-        )}
-        <article class="sayfa siir" id={s.id}>
-          <SiirBasligi siir={s} seviye="h2" bagli />
+    siirler.map((s) => (
+      <section class="duygu-siiri" id={s.id} aria-label={imza(s) || 'tarihsiz şiir'}>
+        <SiirSahnesi siir={s} seviye="h2" bagli etiket={imza(s) || 'tarihsiz'} sinif="kisa" />
+        <article class="sayfa siir">
           <SiirGovde siir={s} acilis="gec" />
+          <a class="devami" href={siirYolu(s)}>
+            Şiirin sayfası →
+          </a>
         </article>
-      </>
+      </section>
     ))
   }
 
@@ -88,35 +100,66 @@ const digerleri = DUYGULAR.filter((x) => x.slug !== d.slug);
 </script>
 
 <style>
-  .duygu-bas {
-    padding-top: clamp(2rem, 8vh, 6rem);
-    padding-bottom: 1rem;
+  .duygu-sahne {
+    min-height: min(100svh, 52rem);
   }
   .duygu-ad {
     color: var(--vurgu);
-    font-size: clamp(3.2rem, 2rem + 6vw, 6rem);
+    font-size: clamp(4.2rem, 2.4rem + 9vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin: 0.6rem 0 1.4rem;
+  }
+  .duygu-sahne .etiket {
+    color: var(--yazi);
   }
   .renk-misrasi {
-    margin: 1.5rem 0 2rem;
-    padding-left: 1.1rem;
-    border-left: 2px solid var(--vurgu);
+    margin: 0;
+    font-family: var(--serif-baslik);
     font-style: italic;
-    font-size: 1.25rem;
+    font-weight: 300;
+    font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+    line-height: 1.25;
+    max-width: 30rem;
   }
   .renk-misrasi p {
-    margin: 0 0 0.3rem;
+    margin: 0 0 0.5rem;
   }
   .renk-misrasi cite {
+    font-family: var(--etiket);
     font-style: normal;
-    font-size: 0.95rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
     color: var(--soluk);
   }
   .renk-misrasi cite a {
     text-decoration: none;
   }
-  .siir :global(.siir-ad a),
-  .siir :global(.imza-buyuk a) {
+  .duygu-arac {
+    border: 0;
+    margin-top: 1.5rem;
+  }
+  .duygu-siiri {
+    margin-top: 2rem;
+  }
+  .duygu-siiri :global(.kisa) {
+    min-height: min(62svh, 34rem);
+  }
+  .duygu-siiri :global(.siir-baslik a) {
     text-decoration: none;
+  }
+  .devami {
+    font-family: var(--etiket);
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--soluk);
+    text-decoration: none;
+  }
+  .devami:hover {
+    color: var(--yazi);
   }
   .diger {
     padding-top: 4rem;

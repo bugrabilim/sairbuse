@@ -1,5 +1,6 @@
 ---
 duygular: ["karanlik"]
+foto: "imge-mum"
 kaynak: "bus.txt"
 ---
 Ben bir evim

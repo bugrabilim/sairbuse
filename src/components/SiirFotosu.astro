@@ -1,0 +1,34 @@
+---
+// Bir şiirin küçük ya da büyük fotoğrafı, şiirin ana duygusunun renginde.
+// Fotoğrafı yoksa o duygunun renginde bulanık bir ışık.
+import Foto from './Foto.astro';
+import { duyguStili, type Duygu } from '../data/duygular';
+import { anaDuygu, type Siir } from '../lib/siirler';
+import { siirFotografi } from '../lib/foto';
+
+interface Props {
+  siir: Siir;
+  sinif?: string;
+  sizes?: string;
+  genislikler?: number[];
+  oncelik?: boolean;
+  alt?: string;
+  /** Şiirin ana duygusu yerine başka bir duygunun renginde göster */
+  duygu?: Duygu;
+}
+
+const { siir, sinif, sizes, genislikler, oncelik, alt, duygu } = Astro.props;
+const d = duygu ?? anaDuygu(siir);
+const foto = siirFotografi(siir);
+---
+
+{
+  foto ? (
+    <Foto foto={foto} duygu={d} sinif={sinif} sizes={sizes} genislikler={genislikler} oncelik={oncelik} alt={alt} />
+  ) : (
+    <div class:list={['foto', sinif]} style={duyguStili(d)} aria-hidden="true">
+      <div class="isik-alani" />
+      <span class="gren" />
+    </div>
+  )
+}

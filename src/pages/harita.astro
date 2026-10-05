@@ -3,7 +3,7 @@ import Temel from '../layouts/Temel.astro';
 import SiirListesi from '../components/SiirListesi.astro';
 import harita from '../data/harita.json';
 import { HARITA_YERLERI, UZAK_YERLER, yerSlug } from '../data/yerler';
-import { anaDuygu, ad, tumSiirler, yerGrubu, type Siir } from '../lib/siirler';
+import { anaDuygu, ad, tumSiirler, yerGrubu, yerYolu, type Siir } from '../lib/siirler';
 
 const tum = await tumSiirler();
 const yerdekiler = new Map<string, Siir[]>();
@@ -63,7 +63,7 @@ const ARA = 16; // aynı yerdeki noktalar arası
                 {i.siirler.map((s, k) => (
                   <circle class={anaDuygu(s).hepGece ? 'nokta-svg siyah' : 'nokta-svg'} cx={bas + k * ARA} r="7" fill={anaDuygu(s).nokta} />
                 ))}
-                <text x={etiketX} y="8" text-anchor={i.yon === 'sag' ? 'start' : 'end'}>
+                <text x={etiketX} y={i.etiketY ?? 8} text-anchor={i.yon === 'sag' ? 'start' : 'end'}>
                   {i.etiket ?? i.yerAdi}
                 </text>
                 </g>
@@ -79,7 +79,7 @@ const ARA = 16; // aynı yerdeki noktalar arası
       isaretler.map((i) => (
         <section class="yer" id={yerSlug(i.yerAdi)} aria-labelledby={`b-${yerSlug(i.yerAdi)}`}>
           <h2 id={`b-${yerSlug(i.yerAdi)}`} class="yer-adi">
-            {i.yerAdi}
+            <a href={yerYolu(i.yerAdi)}>{i.yerAdi} →</a>
           </h2>
           <SiirListesi siirler={i.siirler} />
         </section>
@@ -133,7 +133,7 @@ const ARA = 16; // aynı yerdeki noktalar arası
   .isaret text {
     font-family: var(--serif-baslik);
     font-style: italic;
-    font-weight: 500;
+    font-weight: 300;
     font-size: 25px;
     fill: var(--yazi);
     paint-order: stroke;
@@ -189,6 +189,12 @@ const ARA = 16; // aynı yerdeki noktalar arası
     font-size: 1.9rem;
     font-style: italic;
     margin-bottom: 0.4rem;
+  }
+  .yer-adi a {
+    text-decoration: none;
+  }
+  .yer-adi a:hover {
+    color: var(--vurgu);
   }
   .yer-adi.kucuk {
     font-size: 1.5rem;

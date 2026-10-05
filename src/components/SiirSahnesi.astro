@@ -1,0 +1,43 @@
+---
+// Şiirin açılışı: yazıldığı yerin fotoğrafı ve üstünde büyük başlık.
+import SiirFotosu from './SiirFotosu.astro';
+import { anaDuygu, sahneBasligi, siirYolu, type Siir } from '../lib/siirler';
+import { kunye, siirFotografi } from '../lib/foto';
+
+interface Props {
+  siir: Siir;
+  seviye?: 'h1' | 'h2';
+  /** Başlık şiirin sayfasına bağlansın mı (duygu ve yer sayfalarında) */
+  bagli?: boolean;
+  /** Üstteki küçük etiket, ör. "Hüzün · 4 / 30" */
+  etiket?: string;
+  oncelik?: boolean;
+  sinif?: string;
+  sizes?: string;
+}
+
+const { siir, seviye = 'h1', bagli = false, etiket, oncelik = false, sinif, sizes = '100vw' } = Astro.props;
+const Baslik = seviye;
+const b = sahneBasligi(siir);
+const foto = siirFotografi(siir);
+const href = bagli ? siirYolu(siir) : undefined;
+const ust = etiket ?? anaDuygu(siir).ad;
+---
+
+<header class:list={['sahne siir-sahne', sinif]}>
+  <SiirFotosu siir={siir} oncelik={oncelik} sizes={sizes} />
+  <div class="sahne-ic">
+    <p class="etiket">{ust}</p>
+    <Baslik class:list={['siir-baslik', { uzun: b.baslik.length > 13 && b.tur !== 'ilk', ilk: b.tur === 'ilk' }]}>
+      {href ? <a href={href}>{b.baslik}</a> : b.baslik}
+    </Baslik>
+    {b.alt && <p class="siir-alt">{b.alt}</p>}
+  </div>
+  {
+    foto && (
+      <a class="sahne-kunye" href={foto.kaynak} rel="noopener" title={foto.aciklama}>
+        {kunye(foto)}
+      </a>
+    )
+  }
+</header>

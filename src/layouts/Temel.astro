@@ -1,16 +1,24 @@
 ---
-import '@fontsource/eb-garamond/latin-400.css';
-import '@fontsource/eb-garamond/latin-ext-400.css';
-import '@fontsource/eb-garamond/latin-400-italic.css';
-import '@fontsource/eb-garamond/latin-ext-400-italic.css';
-import '@fontsource/cormorant-garamond/latin-500.css';
-import '@fontsource/cormorant-garamond/latin-ext-500.css';
-import '@fontsource/cormorant-garamond/latin-500-italic.css';
-import '@fontsource/cormorant-garamond/latin-ext-500-italic.css';
+import '@fontsource/fraunces/latin-300.css';
+import '@fontsource/fraunces/latin-ext-300.css';
+import '@fontsource/fraunces/latin-300-italic.css';
+import '@fontsource/fraunces/latin-ext-300-italic.css';
+import '@fontsource/fraunces/latin-400.css';
+import '@fontsource/fraunces/latin-ext-400.css';
+import '@fontsource/fraunces/latin-400-italic.css';
+import '@fontsource/fraunces/latin-ext-400-italic.css';
+import '@fontsource/newsreader/latin-400.css';
+import '@fontsource/newsreader/latin-ext-400.css';
+import '@fontsource/newsreader/latin-400-italic.css';
+import '@fontsource/newsreader/latin-ext-400-italic.css';
+import '@fontsource/inter/latin-500.css';
+import '@fontsource/inter/latin-ext-500.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/inter/latin-ext-600.css';
 import '../styles/global.css';
 import AltBilgi from '../components/AltBilgi.astro';
 import { SITE } from '../data/site';
-import { duyguStili, type Duygu } from '../data/duygular';
+import { DUYGULAR, duyguStili, type Duygu } from '../data/duygular';
 
 interface Props {
   baslik?: string;
@@ -18,9 +26,11 @@ interface Props {
   gorsel?: string;
   duygu?: Duygu;
   sinif?: string;
+  /** Sayfa ekranı kaplayan bir fotoğrafla açılıyorsa üst şerit fotoğrafın üstünde durur */
+  sahne?: boolean;
 }
 
-const { baslik, aciklama = SITE.aciklama, gorsel = '/og/site.png', duygu, sinif = '' } = Astro.props;
+const { baslik, aciklama = SITE.aciklama, gorsel = '/og/site.jpg', duygu, sinif = '', sahne = false } = Astro.props;
 const tamBaslik = baslik ? `${baslik} — ${SITE.ad}` : SITE.ad;
 const kanonik = new URL(Astro.url.pathname, Astro.site);
 const gorselUrl = new URL(gorsel, Astro.site);
@@ -33,15 +43,15 @@ const menu = [
   { href: '/fal/', ad: 'fal' },
   { href: '/hakkinda/', ad: 'hakkında' },
 ];
-const govdeSinifi = [duygu ? 'duygulu' : '', duygu?.hepGece ? 'hep-gece' : '', sinif].filter(Boolean).join(' ');
-const temaRengi = duygu ? duygu.zeminGece : '#0b1220';
+const govdeSinifi = [duygu ? 'duygulu' : '', sahne ? 'sahneli' : '', sinif].filter(Boolean).join(' ');
+const temaRengi = duygu ? duygu.zeminGece : '#0d0c0b';
 ---
 
 <!doctype html>
 <html lang="tr" data-theme="gece">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{tamBaslik}</title>
     <meta name="description" content={aciklama} />
     <link rel="canonical" href={kanonik} />
@@ -63,10 +73,6 @@ const temaRengi = duygu ? duygu.zeminGece : '#0b1220';
 
     <script is:inline>
       document.documentElement.classList.add('js');
-      try {
-        var t = localStorage.getItem('tema');
-        if (t === 'gece' || t === 'gunduz') document.documentElement.dataset.theme = t;
-      } catch (e) {}
     </script>
     {umami && <script defer src="https://istatistik.bumba.tr/script.js" data-website-id={umami} />}
   </head>
@@ -74,23 +80,34 @@ const temaRengi = duygu ? duygu.zeminGece : '#0b1220';
     <a class="atla" href="#icerik">İçeriğe geç</a>
     <header class="ust">
       <a class="logo" href="/">{SITE.ad}</a>
-      <nav class="menu" aria-label="Ana menü">
-        {
-          menu.map((m) => (
-            <a href={m.href} aria-current={yol.startsWith(m.href) ? 'page' : undefined}>
-              {m.ad}
-            </a>
-          ))
-        }
-        <button class="tema-dugmesi" type="button" aria-label="Gece ve gündüz arasında geç" title="Gece / gündüz">
-          <svg class="ay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path>
-          </svg>
-          <svg class="gunes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
-          </svg>
-        </button>
+      <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="menu">
+        <span class="gorunmez">Menü</span>
+        <span class="cubuk" aria-hidden="true"></span>
+      </button>
+      <nav class="menu" id="menu" aria-label="Ana menü">
+        <ul class="menu-yollar">
+          {
+            menu.map((m) => (
+              <li>
+                <a href={m.href} aria-current={yol.startsWith(m.href) ? 'page' : undefined}>
+                  {m.ad}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="menu-duygular" aria-label="Duygular">
+          {
+            DUYGULAR.map((d) => (
+              <li>
+                <a href={`/duygu/${d.slug}/`} style={`--nokta:${d.nokta}`}>
+                  <span class="nokta" aria-hidden="true" />
+                  {d.ad.toLocaleLowerCase('tr')}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </nav>
     </header>
 
@@ -101,17 +118,23 @@ const temaRengi = duygu ? duygu.zeminGece : '#0b1220';
     <AltBilgi menu={menu} />
 
     <script>
-      const dugme = document.querySelector<HTMLButtonElement>('.tema-dugmesi');
+      const dugme = document.querySelector<HTMLButtonElement>('.menu-dugmesi');
+      const kok = document.documentElement;
+      function kapat() {
+        kok.classList.remove('menu-acik');
+        dugme?.setAttribute('aria-expanded', 'false');
+      }
       dugme?.addEventListener('click', () => {
-        const kok = document.documentElement;
-        const yeni = kok.dataset.theme === 'gunduz' ? 'gece' : 'gunduz';
-        kok.dataset.theme = yeni;
-        try {
-          localStorage.setItem('tema', yeni);
-        } catch {
-          /* gizli sekme: tercih hatırlanmaz */
+        const acik = kok.classList.toggle('menu-acik');
+        dugme.setAttribute('aria-expanded', String(acik));
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && kok.classList.contains('menu-acik')) {
+          kapat();
+          dugme?.focus();
         }
       });
+      document.querySelectorAll('.menu a').forEach((a) => a.addEventListener('click', kapat));
     </script>
   </body>
 </html>
