@@ -296,7 +296,7 @@ Kargayla
 ### Faz 2.5 — Atmosfer (öneri, §10)
 - [ ] Mum ışığı modu
 - [ ] Duygunun makamında üretken fon müziği
-- [ ] Şairin sesiyle kayıtlar *(örnek okumalar hazır)*
+- [ ] Şairin ya da bir insanın sesiyle kayıtlar *(yapay ses denendi, düz okuduğu için kaldırıldı; §10.4)*
 - [ ] Yağmurlu cam, vapur salınımı gibi küçük dokunuşlar
 
 ### Faz 3 — Okurla bağ (isteğe bağlı)
@@ -383,12 +383,23 @@ Arayüz önerisi: "ortam sesi" düğmesinin yanında bir "müzik" düğmesi. İk
 
 ### 10.4 Ses kayıtları
 
-Asıl hedef, şiirlerin şairin kendi sesiyle okunması; bu iş **açık** duruyor. Kayıtlar panelden ya da `public/ses/` klasöründen eklenebilir.
+Asıl hedef, şiirlerin şairin kendi sesiyle okunması; bu iş **açık** duruyor. Kayıtlar panelden ("Şairin sesi" ya da "Diğer okumalar") veya `public/ses/` klasöründen eklenebilir. Oynatıcı hazır.
 
-Fikir vermesi için açılış şiiri ("Şiir kitabım ağlıyor!", 18.07.2011 – Moda) iki yapay sesle okutuldu, bir kadın ve bir erkek. Şiir sayfasında "örnek · yapay ses" diye açıkça etiketli duruyorlar. Gerçek kayıtlar gelince silinmeleri yeterli.
+**Yapay ses denendi, kaldırıldı (Ekim 2026).** Açılış şiiri açık kaynak Türkçe ses modelleriyle (Chatterbox Multilingual, Piper `tr_TR-dfki`) bir kadın ve bir erkek sesiyle okutuldu. Kelimeler doğru çıktı (Whisper ile denetlendi), ama okuma düz ve vurgusuzdu; şiir böyle okunmaz. Bu modellerle duygulu bir şiir okuması elde edilemiyor, o yüzden örnekler siteden kaldırıldı. Kayıtların bir insan sesiyle yapılması gerekiyor.
 
-| Ses | Nasıl üretildi | Lisans |
-|---|---|---|
+**Kim okuyabilir:**
+- Şairin kendisi (en anlamlısı).
+- Sesi güzel, şiir okumayı seven bir kadın ve bir erkek arkadaş. İki sesli okuma isteniyorsa bu en doğal yol.
+- Seslendirme sanatçısı ya da tiyatrocu bir tanıdık. Bu durumda kayıtların sitede kullanım izni yazılı olarak alınmalı.
+
+**Kayıt ipuçları:**
+- Sessiz, eşyalı bir oda (yankı yapmasın); telefon ağızdan bir karış uzakta, sabit dursun.
+- Önce şiiri birkaç kez sesli okuyun, hangi kelimeye yaslanacağınıza karar verin.
+- Mısra sonlarında nefes payı bırakın, acele etmeyin. Kıta aralarında daha uzun durun.
+- Her şiiri iki üç kez okuyun, en içteninin seçilmesi yeterli. Kusursuz değil, sahici olsun.
+- Dosyalar mp3 ya da m4a; 96–128 kbps yeterli.
+
+---|---|---|
 | Kadın | Chatterbox Multilingual (Resemble AI), Türkçe, hazır ses | MIT |
 | Erkek | Chatterbox Multilingual; ses rengi Piper'ın `tr_TR-dfki-medium` sesinden alındı | MIT / CC BY-NC-SA 4.0 (ticari olmayan kullanım, atıf) |
 
