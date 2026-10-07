@@ -24,7 +24,7 @@ const bul = (id: string) => tum.find((s) => s.id === id);
 const sayilar = Object.fromEntries(DUYGULAR.map((d) => [d.slug, tum.filter((s) => s.data.duygular.includes(d.slug)).length]));
 
 // Vitrin: kitabın ilk mısrası ve her duygunun renginin geçtiği mısra, kendi şiirinin yerinde.
-// Her ziyarette biri seçilir.
+// Her ziyarette biri seçilir; sayfa açıkken yavaşça birbirine geçerler.
 interface Vitrin {
   siir: Siir;
   misralar: string[];
@@ -117,30 +117,138 @@ const takvim = tum
         );
       })
     }
+    <button class="dugme vitrin-dur" type="button" hidden>Durdur</button>
     <script is:inline>
-      // Her ziyarette başka bir mısra; aynı oturumda sırayla ilerler
+      // Her ziyarette başka bir mısra; aynı oturumda sırayla ilerler.
+      // Sayfa açıkken mısralar yavaşça birbirine geçer.
       (function () {
-        var ogeler = document.querySelectorAll('.vitrin-oge');
+        var vitrin = document.querySelector('.vitrin');
+        var ogeler = vitrin.querySelectorAll('.vitrin-oge');
         var n = ogeler.length;
         if (!n) return;
         var i;
+        function sakla() {
+          try {
+            sessionStorage.setItem('vitrin', String(i));
+          } catch (e) {}
+        }
         try {
           var onceki = sessionStorage.getItem('vitrin');
           i = onceki === null ? Math.floor(Math.random() * n) : (Number(onceki) + 1) % n;
-          sessionStorage.setItem('vitrin', String(i));
         } catch (e) {
           i = Math.floor(Math.random() * n);
         }
+        sakla();
         ogeler.forEach(function (o, k) {
           if (k === i) o.setAttribute('data-secili', '');
           else o.removeAttribute('data-secili');
         });
-        // Seçilen fotoğraf beklemeden ve öncelikle insin (diğerleri hiç inmez)
+        // Seçilen fotoğraf beklemeden ve öncelikle insin; diğerleri sırası gelince
         var img = ogeler[i].querySelector('img');
         if (img) {
           img.setAttribute('fetchpriority', 'high');
           img.loading = 'eager';
         }
+
+        if (n < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        var SURE = 9000; // her mısra ekranda kalır
+        var GECIS = 2400; // fotoğrafların birbirine geçişi
+        var dugme = vitrin.querySelector('.vitrin-dur');
+        var durduruldu = false;
+        var gorunur = true;
+        var odak = false;
+        var zamanlayici = null;
+        var bekliyor = false;
+
+        function calisiyor() {
+          return !durduruldu && gorunur && !odak && !document.hidden;
+        }
+        function kur() {
+          clearTimeout(zamanlayici);
+          zamanlayici = calisiyor() ? setTimeout(gec, SURE) : null;
+        }
+        // Sıradakini görünmez hâlde hazırla ki fotoğrafı önceden insin
+        function hazirla(k) {
+          var o = ogeler[k];
+          o.setAttribute('data-sonraki', '');
+          var r = o.querySelector('img');
+          if (r) r.loading = 'eager';
+        }
+        function yuklendi(o, sonra) {
+          var r = o.querySelector('img');
+          if (!r || (r.complete && r.naturalWidth)) return sonra();
+          bekliyor = true;
+          function bitti() {
+            bekliyor = false;
+            sonra();
+          }
+          r.addEventListener('load', bitti, { once: true });
+          r.addEventListener('error', bitti, { once: true });
+        }
+        function gec() {
+          zamanlayici = null;
+          if (bekliyor || !calisiyor()) return;
+          var j = (i + 1) % n;
+          var eski = ogeler[i];
+          var yeni = ogeler[j];
+          if (!yeni.hasAttribute('data-sonraki')) hazirla(j);
+          yuklendi(yeni, function () {
+            if (!calisiyor()) return;
+            vitrin.setAttribute('data-akis', '');
+            eski.removeAttribute('data-secili');
+            eski.setAttribute('data-onceki', '');
+            eski.inert = true;
+            yeni.removeAttribute('data-sonraki');
+            yeni.setAttribute('data-secili', '');
+            i = j;
+            sakla();
+            setTimeout(function () {
+              eski.removeAttribute('data-onceki');
+              eski.inert = false;
+              hazirla((i + 1) % n);
+            }, GECIS + 200);
+            kur();
+          });
+        }
+
+        dugme.hidden = false;
+        dugme.addEventListener('click', function () {
+          durduruldu = !durduruldu;
+          dugme.textContent = durduruldu ? 'Sürdür' : 'Durdur';
+          kur();
+        });
+        // Klavyeyle mısraya gelen okurun önünden mısra kaçmasın
+        vitrin.addEventListener('focusin', function (e) {
+          var t = e.target;
+          try {
+            odak = t !== dugme && t.matches(':focus-visible');
+          } catch (h) {
+            odak = t !== dugme;
+          }
+          kur();
+        });
+        vitrin.addEventListener('focusout', function (e) {
+          if (!vitrin.contains(e.relatedTarget)) {
+            odak = false;
+            kur();
+          }
+        });
+        document.addEventListener('visibilitychange', kur);
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(
+            function (g) {
+              gorunur = g[0].isIntersecting;
+              kur();
+            },
+            { threshold: 0.3 },
+          ).observe(vitrin);
+        }
+        // İlk fotoğraf indikten sonra sıradakini hazırla
+        window.addEventListener('load', function () {
+          hazirla((i + 1) % n);
+        });
+        kur();
       })();
     </script>
   </section>
@@ -280,19 +388,70 @@ const takvim = tum
   /* ---------- Vitrin ---------- */
   .vitrin {
     min-height: min(100svh, 60rem);
-    display: block;
+    align-items: stretch;
   }
   .vitrin::after {
     display: none;
   }
+  /* Mısralar üst üste durur; görünen (secili), az önce görünen (onceki) ve sıradaki (sonraki) */
   .vitrin-oge {
     display: none;
+    grid-area: 1 / 1;
     position: relative;
     min-height: inherit;
   }
-  .vitrin-oge[data-secili] {
+  .vitrin-oge[data-secili],
+  .vitrin-oge[data-onceki],
+  .vitrin-oge[data-sonraki] {
     display: grid;
     align-items: end;
+  }
+  .vitrin-oge[data-secili] {
+    z-index: 2;
+  }
+  .vitrin-oge[data-onceki] {
+    z-index: 1;
+  }
+  .vitrin-oge[data-sonraki] {
+    opacity: 0;
+    visibility: hidden;
+  }
+  /* Yeni fotoğraf eskisinin üstünde yavaşça belirir; yazı önce söner, sonra yenisi gelir */
+  .vitrin[data-akis] .vitrin-oge[data-secili] {
+    animation: vitrin-belir 2.4s ease-in-out both;
+  }
+  .vitrin[data-akis] .vitrin-oge[data-secili] > .vitrin-ic,
+  .vitrin[data-akis] .vitrin-oge[data-secili] > .sahne-kunye {
+    animation: vitrin-yazi 1.4s 1.3s ease-out both;
+  }
+  .vitrin-oge[data-onceki] > .vitrin-ic,
+  .vitrin-oge[data-onceki] > .sahne-kunye {
+    animation: vitrin-sil 0.7s ease-in both;
+  }
+  @keyframes vitrin-belir {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes vitrin-yazi {
+    from {
+      opacity: 0;
+      transform: translateY(0.6rem);
+    }
+  }
+  @keyframes vitrin-sil {
+    to {
+      opacity: 0;
+    }
+  }
+  .vitrin-dur {
+    position: absolute;
+    z-index: 3;
+    right: var(--kenar);
+    bottom: 2.2rem;
+    padding: 0.4rem 0;
+    font-size: 0.6rem;
+    color: color-mix(in srgb, var(--yazi) 45%, transparent);
   }
   .vitrin-oge > :global(.foto) {
     position: absolute;
