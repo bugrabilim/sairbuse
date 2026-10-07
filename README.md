@@ -10,7 +10,7 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 
 | Sayfa | Ne yapıyor |
 |---|---|
-| `/` | Her ziyarette başka bir "renk mısrası" (*Turuncu bir gemide olsam şimdi*, *Üstünde kaldı sarı kediler*…) kendi şiirinin fotoğrafıyla açılır. Altında "Bugün neyin peşindesin?" ve 7 duygu, fotoğraflı duygu şeritleri, şiirlerin yazıldığı yerler. Bugünün tarihinde yazılmış bir şiir varsa o da gösterilir. |
+| `/` | Her ziyarette başka bir "renk mısrası" (*Turuncu bir gemide olsam şimdi*, *Üstünde kaldı sarı kediler*…) kendi şiirinin fotoğrafıyla açılır; sayfa açıkken mısralar 9 saniyede bir yavaşça birbirine geçer ("Durdur" ile durur, hareketi azaltılmış cihazlarda geçiş yok). Altında "Bugün neyin peşindesin?" ve 7 duygu, fotoğraflı duygu şeritleri, şiirlerin yazıldığı yerler. Bugünün tarihinde yazılmış bir şiir varsa o da gösterilir. |
 | `/duygu/…` | Bir duygunun bütün şiirleri, her biri kendi fotoğrafıyla. Her şiir ekrana girince satır satır açılır. |
 | `/yer/…` | Bir yerde (Moda, Burgazada, Söğüt…) yazılmış şiirler. |
 | `/siir/…` | Tek bir şiir. Yazıldığı yerin fotoğrafıyla açılır (bilgisayarda fotoğraf solda sabit durur). Mısralar satır satır, duygunun kendi hareketiyle açılır: hüzün buğulu, ayrılık kesilerek, özlem soldan süzülerek. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" ve ortam sesi (deniz, yağmur) düğmeleri var. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |

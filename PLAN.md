@@ -303,6 +303,7 @@ Kargayla
 - [x] Tasarım araştırması, dört yön, şairin seçimi: B "Vapur"
 - [x] Her şiir yazıldığı yerin gerçek fotoğrafıyla açılıyor (siyah beyaz + duygu rengi + film greni)
 - [x] Ana sayfa: her ziyarette bir "renk mısrası" kendi şiirinin fotoğrafıyla; yedi duygu şeridi; yerler
+- [x] Ana sayfa vitrini: sayfa açıkken mısralar yavaşça birbirine geçer; durdurulabilir
 - [x] Yer sayfaları (`/yer/…`)
 - [x] Mısra kartı ve paylaşım önizlemeleri şiirin fotoğrafıyla
 - [ ] Şairin kendi fotoğrafları gelirse Commons fotoğraflarının yerine konması
@@ -426,7 +427,7 @@ Ekim 2026'da ilk tasarım (düz lacivert zemin, renkli italik kelimeler) beğeni
 - **Fotoğraf:** Her şiir yazıldığı yerin fotoğrafıyla açılır. Fotoğraf siyah beyaza çekilir; ışıkları şiirin ana duygusunun rengine (`src/data/duygular.ts` → `isik`), gölgeleri o duygunun koyu tonuna (`golge`) boyanır, üstüne film greni biner. Böylece farklı fotoğrafçıların farklı makinelerle çektiği fotoğraflar tek bir kitabın sayfaları gibi durur.
 - **Yazı:** Başlıklar Fraunces (ince, iri), şiir Newsreader, küçük etiketler Inter (büyük harf, aralıklı).
 - **Düzen:** Telefonda fotoğraf üstte, şiir altta koyu zeminde. Bilgisayarda fotoğraf solda sabit durur, şiir sağda akar.
-- **Ana sayfa:** Her ziyarette başka bir "renk mısrası" (pembe küpe çiçeği, sarı kediler, turuncu gemi…) kendi şiirinin yerinde açılır. Altında duygular, yedi fotoğraflı şerit ve yerler.
+- **Ana sayfa:** Her ziyarette başka bir "renk mısrası" (pembe küpe çiçeği, sarı kediler, turuncu gemi…) kendi şiirinin yerinde açılır; sayfa açık kaldıkça mısralar yavaşça birbirine geçer. Altında duygular, yedi fotoğraflı şerit ve yerler.
 - **Fotoğrafsız şiir:** Fotoğrafı olmayan şiirde duygunun renginde bulanık bir ışık durur.
 
 ### 11.1 Fotoğraflar
