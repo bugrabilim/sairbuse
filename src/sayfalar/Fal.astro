@@ -1,0 +1,432 @@
+---
+import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+import { getImage } from 'astro:assets';
+import { DUYGULAR, duyguAdi } from '../data/duygular';
+import { dilBul, duyguYolu, kucuk, metin, sayfaYolu } from '../i18n';
+import { istemciVerisi, tumSiirler } from '../lib/siirler';
+import { gorsel, kunye, siirFotografi } from '../lib/foto';
+
+const dil = dilBul(Astro.url);
+const m = metin(dil).fal;
+const tum = await tumSiirler();
+// Çıkan şiir kendi fotoğrafıyla açılsın diye her şiirin küçük bir fotoğrafı
+const siirler = await Promise.all(
+  tum.map(async (s) => {
+    const f = siirFotografi(s);
+    const g = f ? await getImage({ src: gorsel(f), width: 960, format: 'webp' }) : undefined;
+    return { ...istemciVerisi(s, dil), foto: g?.src ?? null, odak: f?.odak ?? null, kunye: f ? kunye(f, dil) : null };
+  }),
+);
+const veri = {
+  siirler,
+  duygular: Object.fromEntries(DUYGULAR.map((d) => [d.slug, { ...d, ad: duyguAdi(d, dil), kucuk: kucuk(duyguAdi(d, dil), dil), href: duyguYolu(d.slug, dil) }])),
+  metin: {
+    siirinSayfasi: metin(dil).genel.siirinSayfasi,
+    donuyor: m.donuyor,
+    soguyor: m.soguyor,
+    birDahaCevir: m.birDahaCevir,
+    birDahaKapat: m.birDahaKapat,
+  },
+};
+const [jsOnce, jsSonra] = m.jsYok.split('{siirler}');
+---
+
+<Temel baslik={m.baslik} aciklama={m.aciklama} sahne>
+  <SayfaSahnesi foto="sayfa-fal" duygu="ozlem" etiket={m.etiket} baslik={m.baslik}>
+    {m.giris} {metin(dil).genel.siirlerTurkce}
+  </SayfaSahnesi>
+  <section class="sayfa fal">
+
+    <div class="mod" role="group" aria-label={m.tur} hidden>
+      <button class="dugme" type="button" data-mod="fincan" aria-pressed="true">{m.fincan}</button>
+      <button class="dugme" type="button" data-mod="cark" aria-pressed="false">{m.cark}</button>
+    </div>
+
+    <div class="fincan-alani" id="fincan-alani">
+      <svg class="fincan" viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <g class="fincan-govde">
+          <path d="M34 30h52l-5 38c-1.5 9-7 13-15 13H54c-8 0-13.5-4-15-13Z"></path>
+          <ellipse cx="60" cy="30" rx="26" ry="4.5"></ellipse>
+          <path d="M37 44h46" opacity=".55"></path>
+          <path d="M36.5 48h47" opacity=".35"></path>
+          <path d="M85 38c11-1 14 4 12.5 10-1.5 6-7 9-15 8"></path>
+        </g>
+        <ellipse cx="60" cy="86" rx="44" ry="6.5"></ellipse>
+        <ellipse cx="60" cy="85" rx="22" ry="2.6" opacity=".45"></ellipse>
+      </svg>
+      <button class="dugme kapat" type="button" id="kapat">{m.fincaniKapat}</button>
+    </div>
+
+    <div class="cark-alani" id="cark-alani" hidden>
+      <div class="makaralar">
+        <div class="makara-kutu">
+          <span class="makara-etiket">{m.duygu}</span>
+          <div class="makara" id="makara-duygu" aria-hidden="true"><div class="serit"></div></div>
+        </div>
+        <span class="carpi" aria-hidden="true">×</span>
+        <div class="makara-kutu">
+          <span class="makara-etiket">{m.yer}</span>
+          <div class="makara" id="makara-yer" aria-hidden="true"><div class="serit"></div></div>
+        </div>
+      </div>
+      <button class="dugme kapat" type="button" id="cevir">{m.carkiCevir}</button>
+    </div>
+
+    <p class="durum" id="fal-durum" role="status" aria-live="polite"></p>
+
+    <article class="siir fal-sonuc" id="sonuc" hidden tabindex="-1"></article>
+
+    <noscript>
+      <p class="giris-metni">{jsOnce}<a href={sayfaYolu('siirler', dil)}>{m.jsYokBag}</a>{jsSonra}</p>
+    </noscript>
+  </section>
+</Temel>
+
+<script is:inline define:vars={{ veri }}>
+  window.__fal = veri;
+</script>
+
+<script>
+  import { satirSatir } from '../scripts/acilis';
+
+  interface SiirVerisi {
+    id: string;
+    ad: string;
+    basliksiz: boolean;
+    imza: string;
+    duygu: string;
+    yer: string | null;
+    kitalar: string[][];
+    sahne: { baslik: string; alt: string; tur: string };
+    href: string;
+    foto: string | null;
+    odak: string | null;
+    kunye: string | null;
+  }
+  interface DuyguVerisi {
+    isik: [string, string];
+    golge: string;
+    ad: string;
+    kucuk: string;
+    href: string;
+    gece: string;
+    gunduz: string;
+    zeminGece: string;
+    zeminGunduz: string;
+    nokta: string;
+  }
+  const veri = (
+    window as unknown as {
+      __fal: { siirler: SiirVerisi[]; duygular: Record<string, DuyguVerisi>; metin: Record<string, string> };
+    }
+  ).__fal;
+  const M = veri.metin;
+  const dugme = document.getElementById('kapat') as HTMLButtonElement | null;
+  const durum = document.getElementById('fal-durum');
+  const sonuc = document.getElementById('sonuc');
+  const fincan = document.querySelector('.fincan');
+  const hareketsiz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let sonId = '';
+
+  function el<K extends keyof HTMLElementTagNameMap>(etiket: K, sinif?: string, metin?: string) {
+    const e = document.createElement(etiket);
+    if (sinif) e.className = sinif;
+    if (metin) e.textContent = metin;
+    return e;
+  }
+
+  function goster(s: SiirVerisi) {
+    if (!sonuc) return;
+    const d = veri.duygular[s.duygu];
+    const body = document.body;
+    body.dataset.duygu = s.duygu;
+    body.classList.add('duygulu');
+    body.style.setProperty('--d-gece', d.gece);
+    body.style.setProperty('--z-gece', d.zeminGece);
+    body.style.setProperty('--d-gunduz', d.gunduz);
+    body.style.setProperty('--z-gunduz', d.zeminGunduz);
+
+    body.style.setProperty('--ton-ust', d.isik[0]);
+    body.style.setProperty('--ton-alt', d.isik[1]);
+    body.style.setProperty('--ton-golge', d.golge);
+
+    // Fotoğraflı açılış: sitedeki şiir sayfasının küçüğü
+    const bas = el('header', 'sahne fal-sahne');
+    const foto = el('div', 'foto');
+    if (s.foto) {
+      const img = el('img');
+      img.src = s.foto;
+      img.alt = '';
+      img.decoding = 'async';
+      if (s.odak) foto.style.setProperty('--odak', s.odak);
+      foto.append(img);
+    } else {
+      foto.append(el('div', 'isik-alani'));
+    }
+    foto.append(el('span', 'gren'));
+    const ic = el('div', 'sahne-ic');
+    const uzun = s.sahne.baslik.length > 13 && s.sahne.tur !== 'ilk';
+    ic.append(
+      el('p', 'etiket', d.ad),
+      el('h2', `siir-baslik${s.sahne.tur === 'ilk' ? ' ilk' : uzun ? ' uzun' : ''}`, s.sahne.baslik),
+    );
+    if (s.sahne.alt) ic.append(el('p', 'siir-alt', s.sahne.alt));
+    bas.append(foto, ic);
+    if (s.kunye) bas.append(el('span', 'sahne-kunye', s.kunye));
+    const govde = el('div', 'govde');
+    let sira = 0;
+    for (const kita of s.kitalar) {
+      const p = el('p', 'kita');
+      for (const m of kita) {
+        const misra = el('span', 'misra', m);
+        misra.style.setProperty('--i', String(sira++));
+        p.append(misra);
+      }
+      govde.append(p);
+    }
+    const alt = el('p', 'fal-alt');
+    const a = el('a', 'dugme', M.siirinSayfasi);
+    a.href = s.href;
+    const duyguA = el('a', 'cip', d.kucuk);
+    duyguA.href = d.href;
+    duyguA.style.setProperty('--nokta', d.nokta);
+    duyguA.prepend(el('span', 'nokta'));
+    alt.append(a, duyguA);
+
+    sonuc.replaceChildren(bas, govde, alt);
+    satirSatir(govde);
+    sonuc.hidden = false;
+    sonuc.classList.remove('acil');
+    void sonuc.offsetWidth;
+    sonuc.classList.add('acil');
+    sonuc.focus({ preventScroll: true });
+    sonuc.scrollIntoView({ behavior: hareketsiz ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  function rastgele<T>(liste: T[]): T {
+    return liste[Math.floor(Math.random() * liste.length)];
+  }
+
+  // --- Fal türü seçimi
+  const modDugmeleri = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-mod]'));
+  const fincanAlani = document.getElementById('fincan-alani');
+  const carkAlani = document.getElementById('cark-alani');
+  const modKutusu = document.querySelector<HTMLElement>('.mod');
+  if (modKutusu) modKutusu.hidden = false;
+  for (const b of modDugmeleri) {
+    b.addEventListener('click', () => {
+      const m = b.dataset.mod;
+      modDugmeleri.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      if (fincanAlani) fincanAlani.hidden = m !== 'fincan';
+      if (carkAlani) carkAlani.hidden = m !== 'cark';
+      if (durum) durum.textContent = '';
+    });
+  }
+
+  // --- Duygu × Yer çarkı
+  const cevir = document.getElementById('cevir') as HTMLButtonElement | null;
+  const yerliler = veri.siirler.filter((s) => s.yer);
+  const yerler = [...new Set(yerliler.map((s) => s.yer!))];
+  const duyguSluglari = Object.keys(veri.duygular);
+
+  function makaraKur(id: string, kelimeler: { metin: string; renk?: string }[], hedef: { metin: string; renk?: string }, sure: number) {
+    const serit = document.querySelector<HTMLElement>(`#${id} .serit`);
+    if (!serit) return;
+    const dizi = [...Array.from({ length: 16 }, () => rastgele(kelimeler)), hedef, rastgele(kelimeler)];
+    serit.replaceChildren(
+      ...dizi.map((k) => {
+        const e = el('span', 'makara-kelime', k.metin);
+        if (k.renk) e.style.color = k.renk;
+        return e;
+      })
+    );
+    serit.style.transition = 'none';
+    serit.style.transform = 'translateY(0)';
+    void serit.offsetWidth;
+    // hedef ortadaki satıra gelsin (pencere 3 satır gösterir)
+    serit.style.transition = hareketsiz ? 'none' : `transform ${sure}ms cubic-bezier(0.12, 0.65, 0.18, 1)`;
+    serit.style.transform = `translateY(calc(var(--satir) * -${dizi.length - 3}))`;
+  }
+
+  function duyguKelimesi(slug: string) {
+    const d = veri.duygular[slug];
+    return { metin: d.kucuk, renk: d.gece };
+  }
+
+  // Makaralar ilk açılışta boş durmasın
+  function makaraHazirla(id: string, kelimeler: { metin: string; renk?: string }[]) {
+    const serit = document.querySelector<HTMLElement>(`#${id} .serit`);
+    if (!serit || serit.childElementCount) return;
+    serit.replaceChildren(
+      ...[0, 1, 2].map(() => {
+        const k = rastgele(kelimeler);
+        const e = el('span', 'makara-kelime', k.metin);
+        if (k.renk) e.style.color = k.renk;
+        return e;
+      })
+    );
+  }
+  makaraHazirla('makara-duygu', duyguSluglari.map(duyguKelimesi));
+  makaraHazirla('makara-yer', yerler.map((y) => ({ metin: y })));
+
+  cevir?.addEventListener('click', () => {
+    cevir.disabled = true;
+    if (durum) durum.textContent = M.donuyor;
+    const adaylar = yerliler.filter((s) => s.id !== sonId);
+    const secilen = rastgele(adaylar);
+    sonId = secilen.id;
+    makaraKur('makara-duygu', duyguSluglari.map(duyguKelimesi), duyguKelimesi(secilen.duygu), 2200);
+    makaraKur('makara-yer', yerler.map((y) => ({ metin: y })), { metin: secilen.yer! }, 2900);
+    window.setTimeout(
+      () => {
+        if (durum) durum.textContent = `${veri.duygular[secilen.duygu].ad} × ${secilen.yer}`;
+        goster(secilen);
+        cevir.textContent = M.birDahaCevir;
+        cevir.disabled = false;
+      },
+      hareketsiz ? 300 : 3300
+    );
+  });
+
+  dugme?.addEventListener('click', () => {
+    dugme.disabled = true;
+    fincan?.classList.add('kapali');
+    if (durum) durum.textContent = M.soguyor;
+    const adaylar = veri.siirler.filter((s) => s.id !== sonId);
+    const secilen = adaylar[Math.floor(Math.random() * adaylar.length)];
+    sonId = secilen.id;
+    window.setTimeout(
+      () => {
+        if (durum) durum.textContent = '';
+        fincan?.classList.remove('kapali');
+        goster(secilen);
+        dugme.textContent = M.birDahaKapat;
+        dugme.disabled = false;
+      },
+      hareketsiz ? 400 : 2800
+    );
+  });
+</script>
+
+<style>
+  .mod {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+  }
+  .fincan-alani,
+  .cark-alani {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0 0.5rem;
+  }
+  .mod[hidden],
+  .fincan-alani[hidden],
+  .cark-alani[hidden] {
+    display: none;
+  }
+  .makaralar {
+    --satir: 3.4rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 30rem;
+  }
+  .makara-kutu {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .makara-etiket {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--soluk);
+    text-align: center;
+  }
+  .makara {
+    height: calc(var(--satir) * 3);
+    overflow: hidden;
+    border-top: 1px solid var(--cizgi);
+    border-bottom: 1px solid var(--cizgi);
+    mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+    -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+  }
+  .makara :global(.makara-kelime) {
+    display: block;
+    height: var(--satir);
+    line-height: var(--satir);
+    text-align: center;
+    font-family: var(--serif-baslik);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.4rem, 1rem + 2vw, 2rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .carpi {
+    font-family: var(--serif-baslik);
+    font-size: 1.8rem;
+    color: var(--soluk);
+    height: calc(var(--satir) * 3);
+    line-height: calc(var(--satir) * 3);
+  }
+  .fincan {
+    width: min(13rem, 60vw);
+    height: auto;
+    color: var(--vurgu);
+  }
+  .fincan-govde {
+    transform-box: view-box;
+    transform-origin: 60px 57px; /* ağız (y=30) dönünce tabağa (y≈84) oturur */
+    transition: transform 1.2s cubic-bezier(0.6, 0, 0.3, 1);
+  }
+  .fincan.kapali .fincan-govde {
+    transform: rotate(180deg);
+  }
+  .kapat {
+    font-size: 1.1rem;
+    padding: 0.5rem 1.4rem;
+  }
+  .kapat:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+  .fal :global(.durum) {
+    min-height: 1.6em;
+    margin: 0 0 2rem;
+    font-style: italic;
+    text-align: center;
+  }
+  .fal-sonuc {
+    padding-top: 2rem;
+    outline: none;
+  }
+  .fal-sonuc :global(.fal-sahne) {
+    min-height: min(56svh, 30rem);
+    margin: 0 calc(var(--kenar) * -1) 2rem;
+  }
+  .fal-sonuc :global(.fal-sahne .sahne-ic) {
+    padding-top: 4rem;
+  }
+  .fal-sonuc:global(.acil) {
+    animation: acil 0.6s ease both;
+  }
+  .fal-sonuc :global(.fal-alt) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  @keyframes acil {
+    from {
+      opacity: 0;
+    }
+  }
+</style>

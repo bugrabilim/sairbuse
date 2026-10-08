@@ -5,7 +5,8 @@ import { join } from 'node:path';
 import satori from 'satori';
 import sharp from 'sharp';
 import { SITE } from '../data/site';
-import type { Duygu } from '../data/duygular';
+import { duyguAdi, type Duygu } from '../data/duygular';
+import { buyuk, type Dil } from '../i18n';
 import { anaDuygu, kitalar, sahneBasligi, type Siir } from './siirler';
 import { kunye, siirFotografi } from './foto';
 
@@ -107,10 +108,10 @@ function etiket(metin: string, renk = YAZI): Dugum {
   return h('div', { display: 'flex', fontFamily: INTER, fontWeight: 600, fontSize: 20, letterSpacing: 5, color: renk }, metin);
 }
 
-export async function siirGorseli(s: Siir): Promise<Uint8Array> {
+export async function siirGorseli(s: Siir, dil: Dil = 'tr'): Promise<Uint8Array> {
   const d = anaDuygu(s);
   const foto = siirFotografi(s);
-  const b = sahneBasligi(s);
+  const b = sahneBasligi(s, dil);
   const misralar = secilenMisralar(s);
   const devami = misralar.length < kitalar(s).flat().length;
   const baslikBoyu = b.baslik.length > 22 ? 58 : b.baslik.length > 12 ? 78 : 104;
@@ -131,7 +132,7 @@ export async function siirGorseli(s: Siir): Promise<Uint8Array> {
         h('div', { display: 'flex', alignItems: 'center' }, [
           etiket(SITE.ad.toLocaleUpperCase('tr')),
           h('div', { display: 'flex', width: 12, height: 12, borderRadius: 6, background: d.nokta, margin: '0 16px', border: `1px solid ${YAZI}55` }),
-          etiket(d.ad.toLocaleUpperCase('tr')),
+          etiket(buyuk(duyguAdi(d, dil), dil)),
         ]),
         h('div', { display: 'flex', flexDirection: 'column', maxWidth: 760 }, [
           h(
@@ -165,7 +166,7 @@ export async function siirGorseli(s: Siir): Promise<Uint8Array> {
         h('div', { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }, [
           h('div', { display: 'flex', fontFamily: FRAUNCES, fontStyle: 'italic', fontSize: 30, color: SOLUK }, `— ${SITE.sair}`),
           // Fotoğrafın künyesi (CC lisansları fotoğrafçının adını istiyor)
-          ...(foto ? [h('div', { display: 'flex', fontFamily: INTER, fontWeight: 600, fontSize: 14, color: SOLUK }, `${kunye(foto)} · Wikimedia Commons`)] : []),
+          ...(foto ? [h('div', { display: 'flex', fontFamily: INTER, fontWeight: 600, fontSize: 14, color: SOLUK }, `${kunye(foto, dil)} · Wikimedia Commons`)] : []),
         ]),
       ],
     ),
@@ -174,7 +175,7 @@ export async function siirGorseli(s: Siir): Promise<Uint8Array> {
   );
 }
 
-export async function siteGorseli(acilis?: Siir): Promise<Uint8Array> {
+export async function siteGorseli(acilis?: Siir, dil: Dil = 'tr'): Promise<Uint8Array> {
   const d = acilis ? anaDuygu(acilis) : undefined;
   const acilisFotosu = acilis ? siirFotografi(acilis) : undefined;
   return png(
@@ -204,7 +205,7 @@ export async function siteGorseli(acilis?: Siir): Promise<Uint8Array> {
         h('div', { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }, [
           etiket('DUYGULARINPESINDE.BUMBA.TR', SOLUK),
           ...(acilisFotosu
-            ? [h('div', { display: 'flex', fontFamily: INTER, fontWeight: 600, fontSize: 14, color: SOLUK }, `${kunye(acilisFotosu)} · Wikimedia Commons`)]
+            ? [h('div', { display: 'flex', fontFamily: INTER, fontWeight: 600, fontSize: 14, color: SOLUK }, `${kunye(acilisFotosu, dil)} · Wikimedia Commons`)]
             : []),
         ]),
       ],

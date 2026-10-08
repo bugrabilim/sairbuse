@@ -1,35 +1,5 @@
 ---
-import Temel from '../layouts/Temel.astro';
-import SayfaSahnesi from '../components/SayfaSahnesi.astro';
-import { siirYolu, tumSiirler } from '../lib/siirler';
-
-const tum = await tumSiirler();
-const siir = tum.find((s) => s.id === '2012-01-22-kalkedon');
+import Sayfa from '../sayfalar/Yok.astro';
 ---
 
-<Temel baslik="Bulunamadı" sahne noindex>
-  <SayfaSahnesi foto="imge-sisli-agac" duygu="yalnizlik" etiket="404 · yer yok" baslik="Bu sayfa burada değil." />
-  <section class="sayfa yok">
-    <blockquote>
-      <p>Ne kadar zaman olmuş?<br />…<br />Unutmuşum</p>
-      {siir && <cite><a href={siirYolu(siir)}>22.01.2012 – Kalkedon</a></cite>}
-    </blockquote>
-    <p><a href="/">Başa dön</a> ya da <a href="/fal/">bir şiir çek</a>.</p>
-  </section>
-</Temel>
-
-<style>
-  blockquote {
-    margin: 2rem 0;
-    font-style: italic;
-    font-size: 1.3rem;
-  }
-  blockquote p {
-    margin: 0 0 0.3rem;
-  }
-  cite {
-    font-style: normal;
-    font-size: 0.95rem;
-    color: var(--soluk);
-  }
-</style>
+<Sayfa />

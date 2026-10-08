@@ -1,14 +1,12 @@
 ---
 // Sitenin alt bilgisi. Telif yılı ilk şiirin yılından başlar.
 import { SITE } from '../data/site';
-import { DUYGULAR } from '../data/duygular';
-import { siirYolu, tumSiirler, uzunTarih } from '../lib/siirler';
+import ListeFormu from './ListeFormu.astro';
+import { tumSiirler } from '../lib/siirler';
+import { dilBul, metin, sayfaYolu } from '../i18n';
 
-interface Props {
-  menu: { href: string; ad: string }[];
-}
-
-const { menu } = Astro.props;
+const dil = dilBul(Astro.url);
+const m = metin(dil).alt;
 const tum = await tumSiirler();
 const ilk = tum.find((s) => s.data.tarih);
 const ilkYil = ilk?.data.tarih?.slice(0, 4);
@@ -17,42 +15,15 @@ const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
 ---
 
 <footer class="alt">
-  <div class="alt-ust">
-    <div class="alt-kimlik">
-      <a class="logo" href="/">{SITE.ad}</a>
-      <p>{tum.length} şiir; duygu, yer ve zaman üzerinden okunmak için.</p>
-      {
-        ilk && (
-          <p>
-            İlk şiir: <a href={siirYolu(ilk)}>{uzunTarih(ilk.data.tarih!)}</a>
-          </p>
-        )
-      }
-    </div>
-    <nav class="alt-menu" aria-label="Alt menü">
-      {menu.map((m) => <a href={m.href}>{m.ad}</a>)}
-    </nav>
-    <ul class="alt-duygular" aria-label="Duygular">
-      {
-        DUYGULAR.map((d) => (
-          <li>
-            <a href={`/duygu/${d.slug}/`} style={`--nokta:${d.nokta}`}>
-              <span class="nokta" aria-hidden="true" />
-              {d.ad.toLocaleLowerCase('tr')}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
+  <ListeFormu />
   <div class="alt-cizgi">
-    <p>© {yillar} {SITE.sair}. Şiirlerin tüm hakları saklıdır. Fotoğraflar kendi lisanslarıyla kullanılıyor; <a href="/hakkinda/#fotograflar">künyeler</a>.</p>
+    <p>{m.telif(yillar, SITE.sair)} {m.fotoNot} <a href={`${sayfaYolu('hakkinda', dil)}#fotograflar`}>{m.kunyeler}</a>.</p>
     <div class="alt-sag">
-      <a href="/hakkinda/#haklar">Haklar</a>
+      <a href={sayfaYolu('gizlilik', dil)}>{m.gizlilik}</a>
       {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}
-      <a class="bumba-imza" href="https://bumbagroup.com/life" rel="noopener" title="Bumba Life, bir Bumba Group kolu">
-        <img class="rozet-acik" src="https://bumbagroup.com/rozet/life.svg" width="164" height="28" alt="Bir Bumba Life ürünü" loading="lazy" />
-        <img class="rozet-koyu" src="https://bumbagroup.com/rozet/life-koyu.svg" width="164" height="28" alt="Bir Bumba Life ürünü" loading="lazy" />
+      <a class="bumba-imza" href="https://bumbagroup.com/life" rel="noopener" title={m.rozetBaslik}>
+        <img class="rozet-acik" src="https://bumbagroup.com/rozet/life.svg" width="164" height="28" alt={m.rozetAlt} loading="lazy" />
+        <img class="rozet-koyu" src="https://bumbagroup.com/rozet/life-koyu.svg" width="164" height="28" alt={m.rozetAlt} loading="lazy" />
       </a>
     </div>
   </div>
@@ -69,46 +40,12 @@ const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
   .alt p {
     margin: 0;
   }
-  .alt-ust {
-    display: grid;
-    grid-template-columns: 1.6fr 1fr 1fr;
-    gap: 1.75rem 2rem;
-    max-width: 64rem;
-    margin: 0 auto;
-  }
-  .alt-kimlik {
-    display: grid;
-    gap: 0.35rem;
-    align-content: start;
-  }
-  .alt-kimlik .logo {
-    color: var(--yazi);
-    margin-bottom: 0.5rem;
-  }
-  .alt-menu,
-  .alt-duygular {
-    display: grid;
-    gap: 0.3rem;
-    align-content: start;
-  }
-  .alt-duygular {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    grid-template-columns: repeat(2, max-content);
-    column-gap: 1.25rem;
-  }
   .alt a {
     color: var(--soluk);
     text-decoration: none;
   }
   .alt a:hover {
     color: var(--yazi);
-  }
-  .alt-duygular a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
   }
   .bumba-imza {
     display: inline-flex;
@@ -137,16 +74,6 @@ const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
     justify-content: space-between;
     gap: 0.25rem 1rem;
     max-width: 64rem;
-    margin: 2rem auto 0;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--cizgi);
-  }
-  @media (max-width: 44rem) {
-    .alt-ust {
-      grid-template-columns: 1fr 1fr;
-    }
-    .alt-kimlik {
-      grid-column: 1 / -1;
-    }
+    margin: 0 auto;
   }
 </style>

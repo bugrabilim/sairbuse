@@ -1,0 +1,11 @@
+---
+import Sayfa from '../../../sayfalar/Yer.astro';
+import { tumSiirler, yerler } from '../../../lib/siirler';
+
+export async function getStaticPaths() {
+  const liste = yerler(await tumSiirler());
+  return liste.map((y) => ({ params: { yer: y.slug }, props: { y, digerleri: liste.filter((x) => x.slug !== y.slug) } }));
+}
+---
+
+<Sayfa {...Astro.props} />

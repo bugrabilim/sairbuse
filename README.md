@@ -11,9 +11,9 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | Sayfa | Ne yapıyor |
 |---|---|
 | `/` | Her ziyarette başka bir "renk mısrası" (*Turuncu bir gemide olsam şimdi*, *Üstünde kaldı sarı kediler*…) kendi şiirinin fotoğrafıyla açılır; sayfa açıkken mısralar 9 saniyede bir yavaşça birbirine geçer ("Durdur" ile durur, hareketi azaltılmış cihazlarda geçiş yok). Altında "Bugün neyin peşindesin?" ve 7 duygu, fotoğraflı duygu şeritleri, şiirlerin yazıldığı yerler. Bugünün tarihinde yazılmış bir şiir varsa o da gösterilir. |
-| `/duygu/…` | Bir duygunun bütün şiirleri, her biri kendi fotoğrafıyla. Her şiir ekrana girince satır satır açılır. |
+| `/duygu/…` | Bir duygunun bütün şiirleri, her biri kendi fotoğrafıyla. Her şiir ekrana girince harf harf yazılır. |
 | `/yer/…` | Bir yerde (Moda, Burgazada, Söğüt…) yazılmış şiirler. |
-| `/siir/…` | Tek bir şiir. Yazıldığı yerin fotoğrafıyla açılır (bilgisayarda fotoğraf solda sabit durur). Mısralar satır satır, duygunun kendi hareketiyle açılır: hüzün buğulu, ayrılık kesilerek, özlem soldan süzülerek. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" ve ortam sesi (deniz, yağmur) düğmeleri var. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
+| `/siir/…` | Tek bir şiir. Yazıldığı yerin fotoğrafıyla açılır (bilgisayarda fotoğraf solda sabit durur). Şiir yazılıyormuş gibi harf harf belirir; hız ve beliriş duyguya göre değişir: hüzün buğulu ve yavaş, ayrılık kesik, özgürlük akıcı. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" ve ortam sesi (deniz, yağmur) düğmeleri var. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
 | `/siirler/` | Bütün şiirlerin listesi, duyguya göre süzülebilir. |
 | `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. Altında İstanbul'un dışındaki yerler (İzmir, Marmaris Söğüt, Paris) için Paris'ten Marmaris'e uzanan ikinci bir harita. |
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |

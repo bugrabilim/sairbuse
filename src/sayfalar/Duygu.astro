@@ -1,0 +1,159 @@
+---
+import Temel from '../layouts/Temel.astro';
+import SiirSahnesi from '../components/SiirSahnesi.astro';
+import SiirFotosu from '../components/SiirFotosu.astro';
+import SiirGovde from '../components/SiirGovde.astro';
+import OrtamSesi from '../components/OrtamSesi.astro';
+import { DUYGULAR, duyguAdi, renkAdi, type Duygu } from '../data/duygular';
+import { dilBul, duyguYolu, kucuk, metin, siirSayisi } from '../i18n';
+import { imza, siirYolu, type Siir } from '../lib/siirler';
+import { kunye, siirFotografi } from '../lib/foto';
+
+interface Props {
+  d: Duygu;
+  siirler: Siir[];
+  kaynak?: Siir;
+}
+
+const { d, siirler, kaynak } = Astro.props;
+const dil = dilBul(Astro.url);
+const m = metin(dil);
+const dAd = duyguAdi(d, dil);
+const digerleri = DUYGULAR.filter((x) => x.slug !== d.slug);
+// Sayfa, rengin geçtiği şiirin fotoğrafıyla açılır
+const acilis = kaynak ?? siirler[0];
+const acilisFotosu = siirFotografi(acilis);
+---
+
+<Temel baslik={dAd} aciklama={m.duygu.aciklama(dAd, siirler.length, renkAdi(d, dil), d.misra.join(' / '))} duygu={d} sahne>
+  <header class="sahne duygu-sahne">
+    <SiirFotosu siir={acilis} oncelik />
+    <div class="sahne-ic">
+      <p class="etiket">{m.duygu.etiket(renkAdi(d, dil), siirler.length)}</p>
+      <h1 class="duygu-ad">{dAd}</h1>
+      <blockquote class="renk-misrasi" lang="tr">
+        <p>
+          {
+            d.misra.map((m, i) => (
+              <>
+                {i > 0 && <br />}
+                {m}
+              </>
+            ))
+          }
+        </p>
+        {kaynak && <cite><a href={siirYolu(kaynak, dil)}>{imza(kaynak, dil)}</a></cite>}
+      </blockquote>
+      <div class="arac duygu-arac"><OrtamSesi /></div>
+    </div>
+    {
+      acilisFotosu && (
+        <a class="sahne-kunye" href={acilisFotosu.kaynak} rel="noopener">
+          {kunye(acilisFotosu, dil)}
+        </a>
+      )
+    }
+  </header>
+
+  {
+    siirler.map((s) => (
+      <section class="duygu-siiri" id={s.id} aria-label={imza(s, dil) || m.genel.tarihsizSiir}>
+        <SiirSahnesi siir={s} seviye="h2" bagli etiket={imza(s, dil) || m.genel.tarihsiz} sinif="kisa" />
+        <article class="sayfa siir">
+          <SiirGovde siir={s} acilis="gec" />
+          <a class="devami" href={siirYolu(s, dil)}>
+            {m.genel.siirinSayfasi}
+          </a>
+        </article>
+      </section>
+    ))
+  }
+
+  <nav class="sayfa diger" aria-labelledby="diger-baslik">
+    <h2 id="diger-baslik" class="ust-etiket">{m.duygu.digerBaslik}</h2>
+    <ul class="cipler">
+      {
+        digerleri.map((x) => (
+          <li>
+            <a class="cip" href={duyguYolu(x.slug, dil)} style={`--nokta:${x.nokta}`} data-umami-event="duygu-sec" data-umami-event-duygu={x.slug}>
+              <span class="nokta" aria-hidden="true" />
+              {kucuk(duyguAdi(x, dil), dil)}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</Temel>
+
+<script>
+  import { gorununceAc } from '../scripts/acilis';
+  gorununceAc(Array.from(document.querySelectorAll<HTMLElement>('.govde.gec')));
+</script>
+
+<style>
+  .duygu-sahne {
+    min-height: min(100svh, 52rem);
+  }
+  .duygu-ad {
+    color: var(--vurgu);
+    font-size: clamp(4.2rem, 2.4rem + 9vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin: 0.6rem 0 1.4rem;
+  }
+  .duygu-sahne .etiket {
+    color: var(--yazi);
+  }
+  .renk-misrasi {
+    margin: 0;
+    font-family: var(--serif-baslik);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+    line-height: 1.25;
+    max-width: 30rem;
+  }
+  .renk-misrasi p {
+    margin: 0 0 0.5rem;
+  }
+  .renk-misrasi cite {
+    font-family: var(--etiket);
+    font-style: normal;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--soluk);
+  }
+  .renk-misrasi cite a {
+    text-decoration: none;
+  }
+  .duygu-arac {
+    border: 0;
+    margin-top: 1.5rem;
+  }
+  .duygu-siiri {
+    margin-top: 2rem;
+  }
+  .duygu-siiri :global(.kisa) {
+    min-height: min(62svh, 34rem);
+  }
+  .duygu-siiri :global(.siir-baslik a) {
+    text-decoration: none;
+  }
+  .devami {
+    font-family: var(--etiket);
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--soluk);
+    text-decoration: none;
+  }
+  .devami:hover {
+    color: var(--yazi);
+  }
+  .diger {
+    padding-top: 4rem;
+  }
+</style>

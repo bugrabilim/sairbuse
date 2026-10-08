@@ -5,12 +5,18 @@ import { getImage } from 'astro:assets';
 import { SITE } from '../data/site';
 import { ad, anaDuygu, basliksiz, imza, type Siir } from '../lib/siirler';
 import { gorsel, kunye, siirFotografi } from '../lib/foto';
+import { duyguAdi } from '../data/duygular';
+import { buyuk, dilBul, metin, siirYoluDil } from '../i18n';
 
 interface Props {
   siir: Siir;
 }
 
 const { siir } = Astro.props;
+const dil = dilBul(Astro.url);
+const m = metin(dil);
+const k = m.kart;
+const yazilar = { olustur: k.olustur(0).replace('0', '{n}'), enCok: k.enCok(8).replace('8', '{n}'), dokun: k.dokun, hazirlaniyor: k.hazirlaniyor, hazirlanamadi: k.hazirlanamadi };
 const d = anaDuygu(siir);
 const foto = siirFotografi(siir);
 const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, format: 'jpeg' }) : undefined;
@@ -22,28 +28,29 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
   data-zemin={d.zeminGece}
   data-renk={d.gece}
   data-foto={kartFotosu?.src}
-  data-kunye={foto ? `${kunye(foto)} · Wikimedia Commons` : undefined}
+  data-kunye={foto ? `${kunye(foto, dil)} · Wikimedia Commons` : undefined}
   data-odak={foto?.odak}
   data-ton-ust={d.isik[0]}
   data-ton-alt={d.isik[1]}
   data-ton-golge={d.golge}
-  data-duygu={d.ad.toLocaleUpperCase('tr')}
+  data-duygu={buyuk(duyguAdi(d, dil), dil)}
   data-baslik={basliksiz(siir) ? '' : ad(siir)}
-  data-imza={imza(siir) || 'tarihsiz'}
+  data-imza={imza(siir, dil) || m.genel.tarihsiz}
   data-sair={SITE.sair}
   data-site={SITE.ad}
-  data-adres={`duygularinpesinde.bumba.tr/siir/${siir.id}/`}
+  data-adres={`duygularinpesinde.bumba.tr${siirYoluDil(siir.id, dil)}`}
+  data-metin={JSON.stringify(yazilar)}
   data-dosya={`${siir.id}-misra.png`}
 >
 </div>
 
 <dialog class="kart-pencere" id="kart-pencere" aria-labelledby="kart-baslik">
-  <h2 id="kart-baslik" class="gorunmez">Mısra kartı</h2>
-  <img id="kart-gorsel" alt="Seçtiğin mısralarla hazırlanan kart" width="1080" height="1920" />
+  <h2 id="kart-baslik" class="gorunmez">{k.baslik}</h2>
+  <img id="kart-gorsel" alt={k.gorselAlt} width="1080" height="1920" />
   <div class="kart-araclar">
-    <button class="dugme" type="button" id="kart-paylas" hidden>Paylaş</button>
-    <a class="dugme" id="kart-indir" href="#" download>İndir</a>
-    <button class="dugme" type="button" id="kart-kapat">Kapat</button>
+    <button class="dugme" type="button" id="kart-paylas" hidden>{k.paylas}</button>
+    <a class="dugme" id="kart-indir" href="#" download>{k.indir}</a>
+    <button class="dugme" type="button" id="kart-kapat">{k.kapat}</button>
   </div>
 </dialog>
 
@@ -55,6 +62,7 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
   const EN_COK = 8;
 
   const veri = document.getElementById('kart-verisi')?.dataset ?? {};
+  const M: Record<string, string> = JSON.parse(veri.metin ?? '{}');
   const govde = document.getElementById('govde');
   const dugme = document.getElementById('kart-dugme');
   const olustur = document.getElementById('kart-olustur') as HTMLButtonElement | null;
@@ -75,14 +83,14 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
     const n = secililer().length;
     if (olustur) {
       olustur.hidden = n === 0;
-      olustur.textContent = `Kartı oluştur (${n})`;
+      olustur.textContent = M.olustur.replace('{n}', String(n));
     }
   }
 
   function sec(m: HTMLElement) {
     const secili = m.classList.contains('secili');
     if (!secili && secililer().length >= EN_COK) {
-      if (durum) durum.textContent = `Bir karta en fazla ${EN_COK} mısra sığıyor.`;
+      if (durum) durum.textContent = M.enCok.replace('{n}', String(EN_COK));
       return;
     }
     m.classList.toggle('secili', !secili);
@@ -93,7 +101,7 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
   function secimiAc() {
     govde?.classList.add('hepsi', 'secim');
     dugme?.setAttribute('aria-pressed', 'true');
-    if (durum) durum.textContent = 'Karta koymak istediğin mısralara dokun.';
+    if (durum) durum.textContent = M.dokun;
     for (const m of misralar) {
       m.tabIndex = 0;
       m.setAttribute('role', 'checkbox');
@@ -271,7 +279,7 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
     const satirlar = secililer().map((m) => m.textContent ?? '');
     if (!satirlar.length || !pencere || !gorsel || !indir) return;
     olustur.disabled = true;
-    if (durum) durum.textContent = 'Kart hazırlanıyor…';
+    if (durum) durum.textContent = M.hazirlaniyor;
     try {
       const blob = await ciz(satirlar);
       if (adres) URL.revokeObjectURL(adres);
@@ -284,7 +292,7 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
       if (durum) durum.textContent = '';
       pencere.showModal();
     } catch {
-      if (durum) durum.textContent = 'Kart hazırlanamadı.';
+      if (durum) durum.textContent = M.hazirlanamadi;
     } finally {
       olustur.disabled = false;
     }

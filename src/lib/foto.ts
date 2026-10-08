@@ -2,6 +2,8 @@
 import type { ImageMetadata } from 'astro';
 import { FOTOGRAFLAR, YER_FOTOGRAFLARI, type Fotograf } from '../data/fotograflar';
 import { yerGrubu, type Siir } from './siirler';
+import { metin, type Dil } from '../i18n';
+import { FOTO_EN } from '../i18n/fotograflar-en';
 
 const dosyalar = import.meta.glob<{ default: ImageMetadata }>('../assets/foto/*.jpg', { eager: true });
 
@@ -26,11 +28,16 @@ export function siirFotografi(s: Siir): Fotograf | undefined {
 }
 
 /** Lisansın sitede yazılacak adı: "CC BY-SA 4.0", "CC0", "kamu malı" */
-export function lisansAdi(f: Fotograf): string {
-  return /^public domain$/i.test(f.lisans) ? 'kamu malı' : f.lisans;
+export function lisansAdi(f: Fotograf, dil: Dil = 'tr'): string {
+  return /^public domain$/i.test(f.lisans) ? metin(dil).foto.kamuMali : f.lisans;
 }
 
-/** Künye satırı: "Fotoğraf: Ad Soyad · CC BY-SA 4.0" */
-export function kunye(f: Fotograf): string {
-  return `Fotoğraf: ${f.yazar} · ${lisansAdi(f)}`;
+/** Künye satırı: "Fotoğraf: Ad Soyad · CC BY-SA 4.0" / "Photo: …" */
+export function kunye(f: Fotograf, dil: Dil = 'tr'): string {
+  return `${metin(dil).foto.onEk}: ${f.yazar} · ${lisansAdi(f, dil)}`;
+}
+
+/** Fotoğrafın o dildeki açıklaması (alt metin) */
+export function fotoAciklama(f: Fotograf, dil: Dil = 'tr'): string {
+  return dil === 'en' ? (FOTO_EN[f.id] ?? f.aciklama) : f.aciklama;
 }

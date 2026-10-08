@@ -1,0 +1,60 @@
+---
+import Temel from '../layouts/Temel.astro';
+import SiirListesi from '../components/SiirListesi.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+import { DUYGULAR, duyguAdi } from '../data/duygular';
+import { dilBul, kucuk, metin, siirSayisi } from '../i18n';
+import { tumSiirler } from '../lib/siirler';
+
+const dil = dilBul(Astro.url);
+const m = metin(dil);
+const tum = await tumSiirler();
+---
+
+<Temel baslik={m.siirler.baslik} aciklama={m.siirler.aciklama(tum.length)} sahne>
+  <SayfaSahnesi foto="sayfa-siirler" duygu="ozgurluk" etiket={siirSayisi(tum.length, dil)} baslik={m.siirler.baslik}>
+    {m.siirler.giris} {m.genel.siirlerTurkce}
+  </SayfaSahnesi>
+  <section class="sayfa">
+
+    <div class="suzgec" role="group" aria-label={m.siirler.suzgec} hidden>
+      <button class="dugme" type="button" data-duygu="" aria-pressed="true">{m.siirler.hepsi}</button>
+      {
+        DUYGULAR.map((d) => (
+          <button class="dugme" type="button" data-duygu={d.slug} aria-pressed="false">
+            <span class="nokta" style={`--nokta:${d.nokta}`} aria-hidden="true" />
+            {kucuk(duyguAdi(d, dil), dil)}
+          </button>
+        ))
+      }
+    </div>
+
+    <SiirListesi siirler={tum} />
+  </section>
+</Temel>
+
+<script>
+  const suzgec = document.querySelector<HTMLElement>('.suzgec');
+  const dugmeler = Array.from(document.querySelectorAll<HTMLButtonElement>('.suzgec button'));
+  const ogeler = Array.from(document.querySelectorAll<HTMLElement>('.liste-oge'));
+  if (suzgec) suzgec.hidden = false;
+  for (const b of dugmeler) {
+    b.addEventListener('click', () => {
+      const secilen = b.dataset.duygu ?? '';
+      dugmeler.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      for (const o of ogeler) {
+        const duygular = (o.dataset.duygular ?? '').split(' ');
+        o.hidden = secilen !== '' && !duygular.includes(secilen);
+      }
+    });
+  }
+</script>
+
+<style>
+  .suzgec {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 2rem 0 1.5rem;
+  }
+</style>

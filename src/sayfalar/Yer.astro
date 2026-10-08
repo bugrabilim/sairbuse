@@ -1,0 +1,149 @@
+---
+import Temel from '../layouts/Temel.astro';
+import SiirSahnesi from '../components/SiirSahnesi.astro';
+import SiirFotosu from '../components/SiirFotosu.astro';
+import SiirGovde from '../components/SiirGovde.astro';
+import { UZAK_YERLER } from '../data/yerler';
+import { anaDuygu, imza, siirYolu, yerYolu, yil, type Yer } from '../lib/siirler';
+import { dilBul, metin, sayfaYolu, siirSayisi, yerAdi, yerde } from '../i18n';
+import { kunye, siirFotografi } from '../lib/foto';
+
+interface Props {
+  y: Yer;
+  digerleri: Yer[];
+}
+
+const { y, digerleri } = Astro.props;
+const dil = dilBul(Astro.url);
+const m = metin(dil);
+const yAd = yerAdi(y.ad, dil);
+const burada = yerde(y.ad, dil);
+const ilk = y.siirler[0];
+const foto = siirFotografi(ilk);
+const yillar = [...new Set(y.siirler.map(yil).filter(Boolean))];
+const aralik = yillar.length > 1 ? `${yillar[0]}–${yillar[yillar.length - 1]}` : (yillar[0] ?? '');
+const n = y.siirler.length;
+---
+
+<Temel baslik={yAd} aciklama={m.yer.aciklama(burada, n)} duygu={anaDuygu(ilk)} sahne>
+  <header class="sahne yer-sahne">
+    <SiirFotosu siir={ilk} oncelik />
+    <div class="sahne-ic">
+      <p class="etiket">{m.yer.etiket}{UZAK_YERLER[y.ad] ? ` · ${yerAdi(UZAK_YERLER[y.ad], dil)}` : ''} · {siirSayisi(n, dil)}{aralik ? ` · ${aralik}` : ''}</p>
+      <h1 class="yer-ad">{yAd}</h1>
+      <p class="siir-alt">{m.yer.alt(burada, n)} {m.genel.siirlerTurkce}</p>
+    </div>
+    {
+      foto && (
+        <a class="sahne-kunye" href={foto.kaynak} rel="noopener">
+          {kunye(foto, dil)}
+        </a>
+      )
+    }
+  </header>
+
+  {
+    y.siirler.map((s, i) => (
+      <section class="yer-siiri" id={s.id} aria-label={imza(s, dil)}>
+        {i > 0 && <SiirSahnesi siir={s} seviye="h2" bagli etiket={imza(s, dil)} sinif="kisa" />}
+        <article class="sayfa siir">
+          {i === 0 && <p class="etiket">{imza(s, dil)}</p>}
+          <SiirGovde siir={s} acilis="gec" />
+          <a class="devami" href={siirYolu(s, dil)}>
+            {m.genel.siirinSayfasi}
+          </a>
+        </article>
+      </section>
+    ))
+  }
+
+  <nav class="sayfa diger" aria-labelledby="diger-baslik">
+    <h2 id="diger-baslik" class="ust-etiket">{m.yer.digerBaslik}</h2>
+    <ul class="diger-yerler">
+      {
+        digerleri.map((x) => (
+          <li>
+            <a href={yerYolu(x.ad, dil)}>
+              <SiirFotosu siir={x.siirler[0]} sinif="diger-foto" sizes="64px" genislikler={[160]} />
+              <span>{yerAdi(x.ad, dil)}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p><a href={sayfaYolu('harita', dil)}>{m.genel.haritadaGor}</a></p>
+  </nav>
+</Temel>
+
+<script>
+  import { gorununceAc } from '../scripts/acilis';
+  gorununceAc(Array.from(document.querySelectorAll<HTMLElement>('.govde.gec')));
+</script>
+
+<style>
+  .yer-sahne {
+    min-height: min(92svh, 50rem);
+  }
+  .yer-ad {
+    font-size: clamp(4rem, 2.4rem + 8vw, 8.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin: 0.6rem 0 0.9rem;
+  }
+  .yer-sahne .etiket {
+    color: var(--yazi);
+  }
+  .yer-siiri {
+    margin-top: 1.5rem;
+  }
+  .yer-siiri :global(.kisa) {
+    min-height: min(62svh, 34rem);
+  }
+  .yer-siiri :global(.siir-baslik a) {
+    text-decoration: none;
+  }
+  .yer-siiri .etiket {
+    margin: 1rem 0 1.5rem;
+  }
+  .devami {
+    font-family: var(--etiket);
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--soluk);
+    text-decoration: none;
+  }
+  .devami:hover {
+    color: var(--yazi);
+  }
+  .diger {
+    padding-top: 4rem;
+  }
+  .diger-yerler {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: 0.75rem 1.25rem;
+  }
+  .diger-yerler a {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+    font-family: var(--serif-baslik);
+    font-weight: 300;
+    font-size: 1.2rem;
+  }
+  .diger-yerler :global(.diger-foto) {
+    width: 3rem;
+    height: 3rem;
+    flex: none;
+    border-radius: 2px;
+  }
+  .diger-yerler a:hover span {
+    color: var(--vurgu);
+  }
+</style>

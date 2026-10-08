@@ -1,28 +1,31 @@
 ---
 import SiirFotosu from './SiirFotosu.astro';
 import { ad, basliksiz, imza, siirDuygulari, siirYolu, type Siir } from '../lib/siirler';
+import { duyguAdi } from '../data/duygular';
+import { dilBul, metin } from '../i18n';
 
 interface Props {
   siirler: Siir[];
 }
 
 const { siirler } = Astro.props;
+const dil = dilBul(Astro.url);
 ---
 
 <ul class="liste">
   {
     siirler.map((s) => (
       <li class="liste-oge" data-duygular={s.data.duygular.join(' ')}>
-        <a href={siirYolu(s)}>
+        <a href={siirYolu(s, dil)}>
           <SiirFotosu siir={s} sinif="liste-foto" sizes="72px" genislikler={[160]} />
           <span class={basliksiz(s) ? 'liste-ad ilk' : 'liste-ad'}>{ad(s)}</span>
           <span class="liste-imza">
             <span class="liste-noktalar" aria-hidden="true">
               {siirDuygulari(s).map((d) => (
-                <span class="nokta" style={`--nokta:${d.nokta}`} title={d.ad} />
+                <span class="nokta" style={`--nokta:${d.nokta}`} title={duyguAdi(d, dil)} />
               ))}
             </span>
-            {imza(s) || 'tarihsiz'}
+            {imza(s, dil) || metin(dil).genel.tarihsiz}
           </span>
         </a>
       </li>

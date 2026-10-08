@@ -3,7 +3,8 @@
 // Fotoğraf src/data/fotograflar.ts'den; renk verilirse o duygunun renginde, yoksa sepya.
 import Foto from './Foto.astro';
 import { duygu as duyguBul, type DuyguSlug } from '../data/duygular';
-import { fotograf, kunye } from '../lib/foto';
+import { fotoAciklama, fotograf, kunye } from '../lib/foto';
+import { dilBul } from '../i18n';
 
 interface Props {
   foto: string;
@@ -15,6 +16,7 @@ interface Props {
 
 const { foto: id, duygu, etiket, baslik, sinif } = Astro.props;
 const f = fotograf(id);
+const dil = dilBul(Astro.url);
 const d = duygu ? duyguBul(duygu) : undefined;
 const giris = Astro.slots.has('default');
 ---
@@ -32,5 +34,5 @@ const giris = Astro.slots.has('default');
       )
     }
   </div>
-  <a class="sahne-kunye" href={f.kaynak} rel="noopener" title={f.aciklama}>{kunye(f)}</a>
+  <a class="sahne-kunye" href={f.kaynak} rel="noopener" title={fotoAciklama(f, dil)}>{kunye(f, dil)}</a>
 </header>

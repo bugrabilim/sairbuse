@@ -1,14 +1,18 @@
 ---
 // Ortam sesi düğmesi: sessiz → deniz → yağmur. Tercih sekme boyunca hatırlanır;
 // sayfa değişince tarayıcı kuralları gereği ilk dokunuşta yeniden başlar.
+import { dilBul, metin } from '../i18n';
+const m = metin(dilBul(Astro.url)).ortam;
+// Betik metinleri düğmenin üstünden okur (işlevler JSON'a girmez, açık/kapalı kalıbı ayrıca gider)
+const yazilar = { sessiz: m.sessiz, deniz: m.deniz, yagmur: m.yagmur, kapali: m.kapali, acik: m.acik('{ad}') };
 ---
 
-<button class="dugme ortam-dugmesi" type="button" id="ortam" aria-pressed="false" data-durum="sessiz">
+<button class="dugme ortam-dugmesi" type="button" id="ortam" aria-pressed="false" data-durum="sessiz" aria-label={m.kapali} data-metin={JSON.stringify(yazilar)}>
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
     <path d="M2 14c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"></path>
     <path d="M2 19c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3" opacity=".5"></path>
   </svg>
-  <span class="ortam-yazi">ortam sesi</span>
+  <span class="ortam-yazi">{m.sessiz}</span>
 </button>
 
 <script>
@@ -17,14 +21,14 @@
   const dugme = document.getElementById('ortam') as HTMLButtonElement | null;
   const yazi = dugme?.querySelector('.ortam-yazi');
   const SIRA = ['sessiz', 'deniz', 'yagmur'] as const;
-  const AD: Record<string, string> = { sessiz: 'ortam sesi', deniz: 'deniz', yagmur: 'yağmur' };
+  const AD: Record<string, string> = JSON.parse(dugme?.dataset.metin ?? '{}');
   type Durum = (typeof SIRA)[number];
 
   function goster(d: Durum) {
     if (!dugme || !yazi) return;
     dugme.dataset.durum = d;
     dugme.setAttribute('aria-pressed', String(d !== 'sessiz'));
-    dugme.setAttribute('aria-label', d === 'sessiz' ? 'Ortam sesi kapalı; açmak için bas' : `Ortam sesi: ${AD[d]}. Değiştirmek için bas`);
+    dugme.setAttribute('aria-label', d === 'sessiz' ? AD.kapali : AD.acik.replace('{ad}', AD[d]));
     yazi.textContent = AD[d];
   }
 

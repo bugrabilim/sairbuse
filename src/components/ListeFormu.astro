@@ -1,0 +1,151 @@
+---
+// Bumba ortak e-posta listesine katılma formu (Bumba Genel Standartlar §6).
+// Çift onayı, rıza kaydını, onay/çıkış e-postalarını ve bot korumasını ortak servis yapar; burada yalnız form var.
+// JavaScript yoksa form servise gider ve sonuç #liste-tamam / #liste-hata ile bu sayfaya döner.
+import { SITE } from '../data/site';
+import { dilBul, metin } from '../i18n';
+
+const dil = dilBul(Astro.url);
+const m = metin(dil).liste;
+const donus = new URL(Astro.url.pathname, Astro.site).href;
+const aydinlatma = dil === 'en' ? 'https://bumbagroup.com/liste/aydinlatma?dil=en' : 'https://bumbagroup.com/liste/aydinlatma';
+const [rizaOnce, rizaSonra] = m.riza.split('{aydinlatma}');
+const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, hatalar: m.hatalar };
+---
+
+<section class="liste-kutusu" aria-labelledby="liste-baslik">
+  <h2 id="liste-baslik" class="liste-baslik">{m.baslik}</h2>
+  <p class="liste-aciklama">{m.aciklama}</p>
+  <form class="liste-formu" action="https://bumbagroup.com/api/liste/katil" method="post" data-metin={JSON.stringify(yazilar)}>
+    <input type="hidden" name="site" value={SITE.liste} />
+    <input type="hidden" name="dil" value={dil} />
+    <input type="hidden" name="donus" value={donus} />
+    <input type="hidden" name="kaynak" value={donus} />
+    <div class="liste-satir">
+      <label class="gorunmez" for="liste-eposta">{m.eposta}</label>
+      <input id="liste-eposta" type="email" name="eposta" required autocomplete="email" placeholder={m.eposta} />
+      <button class="dugme" type="submit">{m.katil}</button>
+    </div>
+    <label class="liste-riza">
+      <input type="checkbox" name="riza" value="on" required />
+      <span>{rizaOnce}<a href={aydinlatma} rel="noopener">{m.aydinlatma}</a>{rizaSonra}</span>
+    </label>
+    <input class="bot-tuzagi" type="text" name="web_sitesi" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <p class="liste-durum" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('.liste-formu');
+  const durum = form?.querySelector<HTMLElement>('.liste-durum');
+  const M = JSON.parse(form?.dataset.metin ?? '{}');
+
+  function goster(metin: string, iyi: boolean) {
+    if (!durum) return;
+    durum.textContent = metin;
+    durum.dataset.durum = iyi ? 'tamam' : 'hata';
+  }
+
+  // JS'siz gönderimden dönüşte sonucu göster
+  if (location.hash === '#liste-tamam') goster(M.tamam, true);
+  else if (location.hash === '#liste-hata') goster(M.hatalar.hata, false);
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const dugme = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const veri = Object.fromEntries(new FormData(form).entries());
+    delete veri.donus;
+    if (dugme) {
+      dugme.disabled = true;
+      dugme.textContent = M.gonderiliyor;
+    }
+    try {
+      const yanit = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(veri),
+      });
+      const sonuc = await yanit.json().catch(() => ({ durum: 'hata' }));
+      if (sonuc.durum === 'tamam') {
+        goster(M.tamam, true);
+        form.reset();
+        window.bumbaOlay?.('liste-katil');
+      } else {
+        goster(M.hatalar[sonuc.durum] ?? M.hatalar.hata, false);
+      }
+    } catch {
+      goster(M.hatalar.hata, false);
+    } finally {
+      if (dugme) {
+        dugme.disabled = false;
+        dugme.textContent = M.katil;
+      }
+    }
+  });
+</script>
+
+<style>
+  .liste-kutusu {
+    max-width: 64rem;
+    margin: 0 auto 2.25rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--cizgi);
+  }
+  .liste-baslik {
+    font-size: 1.6rem;
+    color: var(--yazi);
+  }
+  .liste-aciklama {
+    margin: 0.4rem 0 1rem !important;
+  }
+  .liste-satir {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 30rem;
+  }
+  .liste-satir input {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    color: var(--yazi);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--cizgi);
+    padding: 0.45rem 0.1rem;
+    border-radius: 0;
+  }
+  .liste-satir input:focus-visible {
+    outline: none;
+    border-bottom-color: var(--vurgu);
+  }
+  .liste-satir input::placeholder {
+    color: var(--soluk);
+  }
+  .liste-riza {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    max-width: 34rem;
+  }
+  .liste-riza input {
+    margin-top: 0.3rem;
+    accent-color: var(--vurgu);
+  }
+  .bot-tuzagi {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .liste-durum {
+    margin-top: 0.75rem !important;
+    font-style: italic;
+    min-height: 1.2em;
+  }
+  .liste-durum[data-durum='tamam'] {
+    color: var(--yazi);
+  }
+</style>
