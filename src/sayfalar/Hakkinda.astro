@@ -69,33 +69,41 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
       }
     </p>
 
-    <h2 id="fotograflar">{m.fotograflar}</h2>
-    <p>{m.fotoMetni}</p>
-    <ul class="kunyeler">
-      {
-        fotolar.map(({ f, siirler }) => {
-          const sf = f.sayfa ? sayfasi(f.sayfa.yol) : undefined;
-          return (
-            <li>
-              <span class="kunye-aciklama">{fotoAciklama(f, dil)}</span>
-              <span class="kunye-kim">
-                <a href={f.kaynak} rel="noopener">{f.yazar}</a> · <a href={f.lisansUrl} rel="noopener">{lisansAdi(f, dil)}</a> · {M.foto.renkleriDegisti}
-              </span>
-              <span class="kunye-siir">
-                {sf && <a href={sf.yol}>{m.sayfasi(sf.ad)}</a>}
-                {sf && siirler.length > 0 && ', '}
-                {siirler.map((s, i) => (
-                  <>
-                    {i > 0 && ', '}
-                    <a href={siirYolu(s, dil)}>{ad(s)}</a>
-                  </>
-                ))}
-              </span>
-            </li>
-          );
-        })
-      }
-    </ul>
+    <p class="foto-ac-satir">
+      <button class="dugme vurgulu" type="button" id="fotograflar" aria-haspopup="dialog" aria-controls="foto-pencere">{m.fotograflariGor}</button>
+    </p>
+    <dialog class="foto-pencere" id="foto-pencere" aria-labelledby="foto-baslik">
+      <div class="foto-pencere-bas">
+        <h2 id="foto-baslik">{m.fotograflar}</h2>
+        <button class="dugme" type="button" id="foto-kapat">{M.kart.kapat}</button>
+      </div>
+      <p>{m.fotoMetni}</p>
+      <ul class="kunyeler">
+        {
+          fotolar.map(({ f, siirler }) => {
+            const sf = f.sayfa ? sayfasi(f.sayfa.yol) : undefined;
+            return (
+              <li>
+                <span class="kunye-aciklama">{fotoAciklama(f, dil)}</span>
+                <span class="kunye-kim">
+                  <a href={f.kaynak} rel="noopener">{f.yazar}</a> · <a href={f.lisansUrl} rel="noopener">{lisansAdi(f, dil)}</a> · {M.foto.renkleriDegisti}
+                </span>
+                <span class="kunye-siir">
+                  {sf && <a href={sf.yol}>{m.sayfasi(sf.ad)}</a>}
+                  {sf && siirler.length > 0 && ', '}
+                  {siirler.map((s, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <a href={siirYolu(s, dil)}>{ad(s)}</a>
+                    </>
+                  ))}
+                </span>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </dialog>
 
     <h2 id="haklar">{m.haklar}</h2>
     <p>{m.haklarMetni}</p>
@@ -103,7 +111,68 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
   </article>
 </Temel>
 
+<script>
+  // Fotoğraf künyeleri bir pencerede; alt bilgideki "künyeler" bağlantısı (#fotograflar) pencereyi açar
+  const pencere = document.getElementById('foto-pencere') as HTMLDialogElement | null;
+  const ac = document.getElementById('fotograflar');
+  ac?.addEventListener('click', () => pencere?.showModal());
+  document.getElementById('foto-kapat')?.addEventListener('click', () => pencere?.close());
+  pencere?.addEventListener('click', (e) => {
+    if (e.target === pencere) pencere.close();
+  });
+  function hashKontrol() {
+    if (location.hash === '#fotograflar' && pencere && !pencere.open) pencere.showModal();
+  }
+  hashKontrol();
+  window.addEventListener('hashchange', hashKontrol);
+</script>
+
 <style>
+  .foto-ac-satir {
+    margin: 2.5rem 0 1rem;
+  }
+  .foto-pencere {
+    width: min(46rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 3rem);
+    padding: 0 clamp(1.25rem, 4vw, 2.5rem) 2rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 4px;
+    background: var(--zemin);
+    color: var(--yazi);
+    overflow-y: auto;
+  }
+  .foto-pencere::backdrop {
+    background: rgba(0, 0, 0, 0.72);
+  }
+  .foto-pencere-bas {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0 0.75rem;
+    background: var(--zemin);
+    border-bottom: 1px solid var(--cizgi);
+    margin-bottom: 1rem;
+  }
+  .foto-pencere-bas h2 {
+    margin: 0 !important;
+  }
+  /* JavaScript yoksa künyeler sayfada açık durur */
+  :global(html:not(.js)) .foto-pencere {
+    display: block;
+    position: static;
+    width: auto;
+    max-height: none;
+    border: 0;
+    padding: 0;
+  }
+  :global(html:not(.js)) .foto-ac-satir,
+  :global(html:not(.js)) #foto-kapat {
+    display: none;
+  }
   .hakkinda {
     max-width: 38rem;
   }

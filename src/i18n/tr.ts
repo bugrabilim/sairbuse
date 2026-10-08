@@ -183,6 +183,7 @@ export const tr = {
     antigoni: 'Antigoni, Burgazada’nın eski adı; {siir} orada yazıldı.',
     antigoniBag: 'şiirlerden biri',
     fotograflar: 'Fotoğraflar',
+    fotograflariGor: 'Fotoğraflar ve künyeleri',
     fotoMetni:
       'Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi gerçek; başka insanların çekip Wikimedia Commons’ta özgür lisansla paylaştığı fotoğraflar. Sitede siyah beyaza çevrilip şiirin duygusunun rengine boyandılar. Yeri belli olmayan birkaç şiirde fotoğraf yeri değil, şiirdeki bir imgeyi gösteriyor. Sayfaların başındaki fotoğraflar da aynı yoldan geldi: Kadıköy’de bir vapur, uzaydan İstanbul, 1862’de Tophane’deki saat kulesi, iki fincan kahve ve Antigoni adının geldiği Burgazada.',
     sayfasi: (ad: string) => `${ad} sayfası`,

@@ -185,6 +185,7 @@ export const en: Metin = {
     antigoni: 'Antigoni is the old name of Burgazada, one of the Princes’ Islands; {siir} was written there.',
     antigoniBag: 'one of the poems',
     fotograflar: 'Photographs',
+    fotograflariGor: 'Photographs and credits',
     fotoMetni:
       'Every poem opens with a photograph of the place where it was written. All the photographs are real: taken by other people and shared under free licences on Wikimedia Commons. On this site they were turned black and white and tinted in the colour of the poem’s emotion. For a few poems with no known place, the photograph shows an image from the poem instead. The photographs at the top of the pages came the same way: a ferry in Kadıköy, Istanbul from space, the clock tower in Tophane in 1862, two cups of coffee and Burgazada, where the name Antigoni comes from.',
     sayfasi: (ad: string) => `${ad} page`,
