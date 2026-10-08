@@ -125,7 +125,7 @@ Her şiir sayfasının altında üç kapı olur: **"aynı duygudan bir şiir"**,
 2. **Bir ekran, bir şiir:** Bol boşluk, büyük ve okunaklı yazı, mısra kırılımları aynen korunur.
 3. **Yavaşlık isteğe bağlı:** "Yavaş oku" modunda mısralar tek tek gelir. Varsayılanda şiirin tamamı görünür (erişilebilirlik), cihazında "hareketi azalt" ayarı açık olana animasyon yok.
 4. **Önce telefon:** Okurların çoğu Instagram ve WhatsApp'tan telefonla gelecek.
-5. **Gece gibi:** Site tek, koyu bir temada. Her şiir yazıldığı yerin fotoğrafıyla açılıyor (§11).
+5. **Gece gibi:** Site koyu (gece) temayla açılıyor; okur isterse düğmeyle açık (gündüz) temaya geçebilir (8 Ekim 2026, Bumba Standartları §3). Her şiir yazıldığı yerin fotoğrafıyla açılıyor (§11).
 
 ---
 
@@ -173,7 +173,7 @@ Duygu sayfasına girildiğinde zemin bu renge doğru yavaşça kayar. Paletin hi
 ### 4.4 Okurla bağ (Faz 3, isteğe bağlı)
 
 - **"Bu şiir bana … hissettirdi":** Okur tek bir kelime ya da renk bırakır (Unsent Project'ten esinle). Anonim olur, şair onaylamadan görünmez.
-- **Haftanın şiiri:** e-posta bülteni. E-posta kişisel veri olduğu için KVKK aydınlatma metni gerekir (§6).
+- **E-posta listesi:** Bumba ortak liste servisiyle (alt bilgideki form, çift onay). Duyurular ortak servisten gider; site kendi başına e-posta göndermez. Aydınlatma metni ortak, sitenin gizlilik sayfası ona bağlanır.
 
 ### 4.5 Ağır şiirler için nazik bir not (şairin kararı)
 
@@ -245,7 +245,7 @@ Kargayla
 | Yayınevi sözleşmesi, ISBN, bandrol, matbaa, dağıtım | Gerekli, masraflı | **Hiçbiri gerekmez** |
 | Telif | — | Fikir ve Sanat Eserleri Kanunu'na göre eser yaratıldığı anda korunur, tescil şart değil. Sitenin altında *"© [Şairin adı]. Tüm hakları saklıdır."* yazar, ya da isterseniz **CC BY-NC-ND 4.0** (kaynak gösterilerek paylaşılabilir, değiştirilemez, ticari kullanılamaz). |
 | 5651 sayılı Kanun, tanıtıcı bilgi | — | Yönetmelik bu yükümlülüğü **ticari ya da ekonomik amaçlı** içerik sağlayıcılarla sınırlıyor. Kişisel ve ticari olmayan bir şiir sitesi kapsam dışında. *(Bir "Bumba ürünü" olarak ticari konumlanırsa iletişim sayfasına tanıtıcı bilgiler eklenir.)* |
-| KVKK | — | Form, çerez ve dış yazı tipi yoksa ve analitik çerezsizse toplanan kişisel veri yok denecek kadar az. **Yorum ya da bülten eklenirse** aydınlatma metni gerekir. |
+| KVKK | — | Form, çerez ve dış yazı tipi yoksa ve analitik çerezsizse toplanan kişisel veri yok denecek kadar az. E-posta listesi eklendi (ortak servis); gizlilik ve çerez metni `/gizlilik/` ve `/en/privacy/`. |
 | Repo görünürlüğü | — | Repo herkese açıksa şiirlerin ham metni de açık olur. Zaten yayınlanacakları için sorun değil, ama taslak ve özel metinler repoya girmemeli. İsterseniz repo gizli kalabilir, Cloudflare Pages gizli repolarla da çalışır. |
 
 **Maliyet:**
@@ -277,7 +277,7 @@ Kargayla
 - [x] Giriş ("Şiir kitabım ağlıyor!" ve duygu seçimi), duygu sayfaları, şiir sayfası, tam liste, Hakkında
 - [x] Şiir sayfasında 3 kapı (aynı duygu / yer / yıl)
 - [x] Paylaşım önizleme görselleri (her şiir için ayrı)
-- [ ] Yayın: Coolify ya da Cloudflare Pages, alan adı, Umami *(Dockerfile, nginx ve adımlar hazır; panelde bağlanması kaldı)*
+- [x] Yayın: Coolify (uuid `x4s4woc3tff78dkjnegnoffy`), duygularinpesinde.bumba.tr, Umami. Ayrıntılar CLAUDE.md'de.
 - [x] Telefonda test, erişilebilirlik kontrolü (kontrast ≥ 4.5:1, hareket azaltma, yatay taşma yok)
 
 ### Faz 2 — Deneyim
@@ -310,7 +310,8 @@ Kargayla
 
 ### Faz 3 — Okurla bağ (isteğe bağlı)
 - [ ] Okurun bir şiire renk ya da kelime bırakması (moderasyonlu)
-- [ ] Haftanın şiiri bülteni
+- [x] E-posta listesi (Bumba ortak liste servisi)
+- [x] Bumba Genel Standartlar 3.2: TR/EN, açık/koyu tema, arama, SEO/GEO, llms.txt, HSTS/CSP, gizlilik (CLAUDE.md)
 - [ ] Instagram hesabı ve mısra kartlarıyla düzenli paylaşım
 
 ### Faz 4 — Belki bir gün kitap
@@ -353,7 +354,7 @@ Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", 
 | Ağır şiirler | Uyarı notu yok. |
 | **Açık:** Ses kayıtları | Şairin kendi sesiyle kayıtlar bekleniyor. Yapay sesle denenen örnekler düz okuduğu için kaldırıldı (§10.4). |
 | İmza | Alt bilgide Bumba Life rozeti var. |
-| Tasarım | B "Vapur": yer fotoğrafları, tek koyu tema (§11). Gece/gündüz düğmesi kaldırıldı. |
+| Tasarım | B "Vapur": yer fotoğrafları (§11). Varsayılan koyu; 8 Ekim 2026'dan beri açık tema düğmesi var (Standartlar §3). Arayüz Türkçe ve İngilizce; şiirler Türkçe. |
 | Fotoğraflar | Gerçek fotoğraflar, Wikimedia Commons'tan özgür lisanslı; fotoğrafçı adı ve lisans her şiirde ve Hakkında sayfasında. |
 | Yazım | TDK'ya göre düzeltildi (§8). Açık kalan tek nokta: "Uların". |
 

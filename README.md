@@ -1,5 +1,7 @@
 # Duyguların Peşinde
 
+> Proje kuralları, sunucu bilgileri ve Bumba Genel Standartlar: [CLAUDE.md](CLAUDE.md).
+
 Basılı kitap olarak çıkamayan bir şiir kitabının web hâli. Kitap gibi sayfa sayfa okunmuyor; her şiir tek bir ekranda, yazıldığı yerin fotoğrafıyla açılıyor ve okur ona duygu, yer ya da zaman üzerinden ulaşıyor.
 
 Adres: **https://duygularinpesinde.bumba.tr**
@@ -105,14 +107,14 @@ Yayın dalı `main`. Aşağıdaki iki yoldan biri yeterli.
 1. Coolify'da **New Resource → Public/Private Repository** ile `bugrabilim/sairbuse` reposunu seçin, dal olarak `main`.
 2. Build pack: **Dockerfile**. Repodaki `Dockerfile` siteyi derler ve `nginx.conf` ile 80 numaralı porttan sunar.
 3. Domain: `https://duygularinpesinde.bumba.tr`. Sertifikayı Coolify kendisi alır.
-4. İsteğe bağlı: ziyaretçi sayacı için **Build Variable** olarak `PUBLIC_UMAMI_ID` ekleyin. Değeri, `istatistik.bumba.tr`'de bu site için oluşturulan Website ID'dir.
+4. Ziyaretçi sayacının kimliği `src/data/site.ts`'de yazılı; başka bir Umami sitesine bağlamak için **Build Variable** olarak `PUBLIC_UMAMI_ID` verilebilir.
 5. Otomatik yayın için Coolify'ın GitHub entegrasyonunu ya da webhook'unu açın.
 
 ### B. Cloudflare Pages
 
 1. **Workers & Pages → Create → Pages → Connect to Git** adımlarını izleyip `bugrabilim/sairbuse` reposunu seçin. Production branch `main` olsun.
 2. Framework preset **Astro**, build command `npm run build`, output `dist`. Node sürümü `.nvmrc`'den okunur.
-3. İsteğe bağlı: `PUBLIC_UMAMI_ID` ortam değişkeni.
+3. İsteğe bağlı: `PUBLIC_UMAMI_ID` ortam değişkeni (yoksa `src/data/site.ts`'deki kimlik).
 4. **Custom domains** bölümüne `duygularinpesinde.bumba.tr` ekleyin. Belirli kayıt, `*.bumba.tr` joker kaydının önüne geçer. `public/_headers` Cloudflare'e özel önbellek ve güvenlik başlıklarını içerir.
 
 ## Harita verisi
