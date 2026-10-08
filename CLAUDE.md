@@ -24,9 +24,15 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - **Varsayılan tema koyu (gece).** Açık tema (gündüz) yalnız düğmeyle seçilir ve hatırlanır. Standartlar §3
   "ilk açılışta sistem tercihi" der; sahibi 8 Ekim 2026'da açıkça koyu varsayılan istedi, bu karar geçerli.
 - Şiir sayfasında şiir **harf harf yazılarak** açılır (satır satır değil); hız duyguya göre.
-- Ana sayfada "Yazıldıkları yerler" ve "ya da niyet tut" satırı yok; alt bilgide yalnız liste formu, telif
-  satırı, Gizlilik bağlantısı ve rozet var ("Haklar" bağlantısı yok). Fotoğraf künyeleri Hakkında'da bir
-  düğmeyle açılan pencerede.
+- Ana sayfada "Yazıldıkları yerler" ve "ya da niyet tut" satırı yok; duygu şeritleri dar (72rem) kalır.
+- Alt bilgi tek satır, üç sütun: solda telif, fotoğraf notu ve güncelleme tarihi; ortada e-posta listesi; sağda
+  Bumba rozeti. Gizlilik ve "Haklar" bağlantısı alt bilgide yok.
+- Hakkında'da "Fotoğraflar" ve "Gizlilik ve çerezler" düğmeyle açılan pencerelerde (`#fotograflar`,
+  `#gizlilik`); "Haklar" ve "Sık sorulanlar" aşağı açılır (`#haklar`, `#sorular`). `/gizlilik/` sayfası da
+  durur (KVKK bağlantıları için), metin tek yerden: `GizlilikMetni.astro`.
+- Şiir paylaşımı kendi menüsüyle: bağlantıyı kopyala, Facebook, Instagram (bağlantı kopyalanır), WhatsApp,
+  SMS, LinkedIn. Başka kanal eklenmez.
+- Ortam sesi menülü: kapalı, deniz, yağmur, vapur, gece; ses düzeyi ayarlı. Hepsi Web Audio ile üretilir.
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 
@@ -49,7 +55,7 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   **HSTS 8 Ekim 2026'da `max-age=86400` ile başladı; 15 Ekim 2026'dan sonra sorun yoksa `31536000` yapılacak.**
   includeSubDomains ve preload kullanılmaz.
 - Umami: site kimliği `3cc5cb50-4663-4436-b371-92cc3feb723b`, `data-domains="duygularinpesinde.bumba.tr"`.
-  Olaylar: `tema-degistir`, `dil-degistir`, `arama`, `liste-katil`, `duygu-sec`.
+  Olaylar: `tema-degistir`, `dil-degistir`, `arama`, `liste-katil`, `duygu-sec`, `paylas`, `ortam-sesi`.
 - Ortak e-posta listesi anahtarı: `duygularin-pesinde` (`src/data/site.ts`).
 
 ## SEO / GEO kaydı

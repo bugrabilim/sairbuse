@@ -92,6 +92,12 @@ export const en: Metin = {
     ornekNot: 'This is a sample reading; the poet’s own voice is coming soon.',
     baglantiKopyalandi: 'Link copied.',
   },
+  paylas: {
+    paylas: 'Share',
+    link: 'Copy link',
+    kopyalandi: 'Link copied.',
+    instagramNot: 'Link copied; paste it into your Instagram story or a message. You can also make a verse card for your story.',
+  },
   kart: {
     baslik: 'Verse card',
     gorselAlt: 'A card made from the lines you chose',
@@ -109,6 +115,11 @@ export const en: Metin = {
     sessiz: 'ambient sound',
     deniz: 'sea',
     yagmur: 'rain',
+    vapur: 'ferry',
+    gece: 'night',
+    kapat: 'off',
+    duzey: 'Volume',
+    baslik: 'Ambient sound',
     kapali: 'Ambient sound off; press to turn on',
     acik: (ad: string) => `Ambient sound: ${ad}. Press to change`,
   },
@@ -189,6 +200,7 @@ export const en: Metin = {
     antigoniBag: 'one of the poems',
     fotograflar: 'Photographs',
     fotograflariGor: 'Photographs and credits',
+    gizlilikGor: 'Privacy and cookies',
     fotoMetni:
       'Every poem opens with a photograph of the place where it was written. All the photographs are real: taken by other people and shared under free licences on Wikimedia Commons. On this site they were turned black and white and tinted in the colour of the poem’s emotion. For a few poems with no known place, the photograph shows an image from the poem instead. The photographs at the top of the pages came the same way: a ferry in Kadıköy, Istanbul from space, the clock tower in Tophane in 1862, two cups of coffee and Burgazada, where the name Antigoni comes from.',
     sayfasi: (ad: string) => `${ad} page`,

@@ -1,0 +1,60 @@
+---
+// KVKK aydınlatma metni, gizlilik ve çerez politikası. Hem /gizlilik/ sayfasında hem Hakkında'daki pencerede.
+// Metin kodun gerçekte yaptığına dayanır: site kişisel veri toplamaz; Umami çerezsiz; e-posta listesi ortak
+// servisle; tercihler localStorage'da.
+import { dilBul, metin } from '../i18n';
+
+interface Props {
+  /** Bölüm başlıklarının düzeyi (sayfada h2, pencerede h3) */
+  seviye?: 'h2' | 'h3';
+}
+const { seviye = 'h2' } = Astro.props;
+const Baslik = seviye;
+const dil = dilBul(Astro.url);
+const m = metin(dil).gizlilik;
+const listeAdres = dil === 'en' ? 'https://bumbagroup.com/liste/aydinlatma?dil=en' : 'https://bumbagroup.com/liste/aydinlatma';
+/** "{eposta}" ve "{liste}" yer tutucularını bağlantıya çevirir */
+const parcala = (s: string) => s.split(/(\{eposta\}|\{liste\})/);
+---
+
+<div class="gizlilik-metni">
+  {
+    m.bolumler.map((b) => (
+      <section>
+        <Baslik>{b.baslik}</Baslik>
+        <p>
+          {parcala(b.metin).map((p) =>
+            p === '{eposta}' ? (
+              <a href="mailto:bilgi@bumbagroup.com">bilgi@bumbagroup.com</a>
+            ) : p === '{liste}' ? (
+              <a href={listeAdres} rel="noopener">
+                {m.listeBag}
+              </a>
+            ) : (
+              p
+            ),
+          )}
+        </p>
+      </section>
+    ))
+  }
+  <p class="guncelleme">{m.guncelleme}</p>
+</div>
+
+<style>
+  .gizlilik-metni :is(h2, h3) {
+    font-size: 1.5rem;
+    font-style: normal;
+    margin: 2rem 0 0.5rem;
+  }
+  .gizlilik-metni section:first-child :is(h2, h3) {
+    margin-top: 0.5rem;
+  }
+  .guncelleme {
+    margin-top: 2.5rem;
+    font-family: var(--etiket);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--soluk);
+  }
+</style>

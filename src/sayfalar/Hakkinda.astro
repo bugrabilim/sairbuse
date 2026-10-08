@@ -1,6 +1,7 @@
 ---
 import Temel from '../layouts/Temel.astro';
 import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+import GizlilikMetni from '../components/GizlilikMetni.astro';
 import { SITE } from '../data/site';
 import { DUYGULAR, duyguAdi, renkAdi } from '../data/duygular';
 import { FOTOGRAFLAR } from '../data/fotograflar';
@@ -76,13 +77,15 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
       }
     </p>
 
-    <p class="foto-ac-satir">
-      <button class="dugme vurgulu" type="button" id="fotograflar" aria-haspopup="dialog" aria-controls="foto-pencere">{m.fotograflariGor}</button>
+    <p class="pencere-dugmeleri">
+      <button class="dugme vurgulu" type="button" id="fotograflar" data-pencere="foto-pencere" aria-haspopup="dialog">{m.fotograflariGor}</button>
+      <button class="dugme vurgulu" type="button" id="gizlilik" data-pencere="gizlilik-pencere" aria-haspopup="dialog">{m.gizlilikGor}</button>
     </p>
-    <dialog class="foto-pencere" id="foto-pencere" aria-labelledby="foto-baslik">
-      <div class="foto-pencere-bas">
+
+    <dialog class="pencere" id="foto-pencere" aria-labelledby="foto-baslik">
+      <div class="pencere-bas">
         <h2 id="foto-baslik">{m.fotograflar}</h2>
-        <button class="dugme" type="button" id="foto-kapat">{M.kart.kapat}</button>
+        <button class="dugme pencere-kapat" type="button">{M.kart.kapat}</button>
       </div>
       <p>{m.fotoMetni}</p>
       <ul class="kunyeler">
@@ -112,35 +115,54 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
       </ul>
     </dialog>
 
-    <h2 id="haklar">{m.haklar}</h2>
-    <p>{m.haklarMetni}</p>
-    <p>{m.fotoHaklar}</p>
+    <dialog class="pencere" id="gizlilik-pencere" aria-labelledby="gizlilik-baslik">
+      <div class="pencere-bas">
+        <h2 id="gizlilik-baslik">{M.gizlilik.baslik}</h2>
+        <button class="dugme pencere-kapat" type="button">{M.kart.kapat}</button>
+      </div>
+      <GizlilikMetni seviye="h3" />
+    </dialog>
 
-    <h2 id="sorular">{m.sssBaslik}</h2>
-    <dl class="sss">
-      {
-        m.sss.map((x) => (
-          <>
-            <dt>{x.soru}</dt>
-            <dd>{x.cevap}</dd>
-          </>
-        ))
-      }
-    </dl>
+    <details class="acilir" id="haklar">
+      <summary>{m.haklar}</summary>
+      <p>{m.haklarMetni}</p>
+      <p>{m.fotoHaklar}</p>
+    </details>
+
+    <details class="acilir" id="sorular">
+      <summary>{m.sssBaslik}</summary>
+      <dl class="sss">
+        {
+          m.sss.map((x) => (
+            <>
+              <dt>{x.soru}</dt>
+              <dd>{x.cevap}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </details>
   </article>
 </Temel>
 
 <script>
-  // Fotoğraf künyeleri bir pencerede; alt bilgideki "künyeler" bağlantısı (#fotograflar) pencereyi açar
-  const pencere = document.getElementById('foto-pencere') as HTMLDialogElement | null;
-  const ac = document.getElementById('fotograflar');
-  ac?.addEventListener('click', () => pencere?.showModal());
-  document.getElementById('foto-kapat')?.addEventListener('click', () => pencere?.close());
-  pencere?.addEventListener('click', (e) => {
-    if (e.target === pencere) pencere.close();
+  // Fotoğraflar ve gizlilik birer pencerede; "Haklar" ve "Sık sorulanlar" açılır-kapanır.
+  // Adresteki #fotograflar, #gizlilik, #haklar, #sorular ilgili bölümü açar (alt bilgideki "künyeler" gibi).
+  const pencereler: Record<string, string> = { '#fotograflar': 'foto-pencere', '#gizlilik': 'gizlilik-pencere' };
+  document.querySelectorAll<HTMLButtonElement>('[data-pencere]').forEach((b) =>
+    b.addEventListener('click', () => (document.getElementById(b.dataset.pencere ?? '') as HTMLDialogElement | null)?.showModal()),
+  );
+  document.querySelectorAll<HTMLDialogElement>('dialog.pencere').forEach((p) => {
+    p.querySelector('.pencere-kapat')?.addEventListener('click', () => p.close());
+    p.addEventListener('click', (e) => {
+      if (e.target === p) p.close();
+    });
   });
   function hashKontrol() {
-    if (location.hash === '#fotograflar' && pencere && !pencere.open) pencere.showModal();
+    const pencere = document.getElementById(pencereler[location.hash] ?? '') as HTMLDialogElement | null;
+    if (pencere && !pencere.open) pencere.showModal();
+    const acilir = document.querySelector<HTMLDetailsElement>(`details${location.hash || '#yok'}`);
+    if (acilir) acilir.open = true;
   }
   hashKontrol();
   window.addEventListener('hashchange', hashKontrol);
@@ -156,10 +178,13 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
     margin: 0.3rem 0 0;
     color: var(--soluk);
   }
-  .foto-ac-satir {
-    margin: 2.5rem 0 1rem;
+  .pencere-dugmeleri {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 2.5rem 0 1.5rem;
   }
-  .foto-pencere {
+  .pencere {
     width: min(46rem, calc(100vw - 2rem));
     max-height: calc(100dvh - 3rem);
     padding: 0 clamp(1.25rem, 4vw, 2.5rem) 2rem;
@@ -169,10 +194,10 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
     color: var(--yazi);
     overflow-y: auto;
   }
-  .foto-pencere::backdrop {
+  .pencere::backdrop {
     background: rgba(0, 0, 0, 0.72);
   }
-  .foto-pencere-bas {
+  .pencere-bas {
     position: sticky;
     top: 0;
     z-index: 1;
@@ -185,11 +210,11 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
     border-bottom: 1px solid var(--cizgi);
     margin-bottom: 1rem;
   }
-  .foto-pencere-bas h2 {
+  .pencere-bas h2 {
     margin: 0 !important;
   }
   /* JavaScript yoksa künyeler sayfada açık durur */
-  :global(html:not(.js)) .foto-pencere {
+  :global(html:not(.js)) .pencere {
     display: block;
     position: static;
     width: auto;
@@ -197,12 +222,50 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
     border: 0;
     padding: 0;
   }
-  :global(html:not(.js)) .foto-ac-satir,
-  :global(html:not(.js)) #foto-kapat {
+  :global(html:not(.js)) .pencere-dugmeleri,
+  :global(html:not(.js)) .pencere-kapat {
     display: none;
   }
   .hakkinda {
     max-width: 38rem;
+  }
+  /* Haklar ve sık sorulanlar: açılır-kapanır */
+  .acilir {
+    border-top: 1px solid var(--cizgi);
+    padding: 0.4rem 0;
+  }
+  .acilir:last-of-type {
+    border-bottom: 1px solid var(--cizgi);
+  }
+  .acilir summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    font-family: var(--serif-baslik);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.8rem;
+  }
+  .acilir summary::-webkit-details-marker {
+    display: none;
+  }
+  .acilir summary::after {
+    content: '+';
+    font-family: var(--etiket);
+    font-style: normal;
+    font-size: 1.2rem;
+    color: var(--soluk);
+    transition: transform 0.3s;
+  }
+  .acilir[open] summary::after {
+    transform: rotate(45deg);
+  }
+  .acilir > :not(summary) {
+    margin-top: 0;
   }
   .hakkinda h2 {
     font-size: 2.2rem;
