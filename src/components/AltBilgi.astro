@@ -1,6 +1,7 @@
 ---
 // Sitenin alt bilgisi. Telif yılı ilk şiirin yılından başlar.
 import { SITE } from '../data/site';
+import ListeFormu from './ListeFormu.astro';
 import { DUYGULAR, duyguAdi } from '../data/duygular';
 import { siirYolu, tumSiirler, uzunTarih } from '../lib/siirler';
 import { dilBul, duyguYolu, kucuk, metin, sayfaYolu } from '../i18n';
@@ -20,6 +21,7 @@ const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
 ---
 
 <footer class="alt">
+  <ListeFormu />
   <div class="alt-ust">
     <div class="alt-kimlik">
       <a class="logo" href={sayfaYolu('ana', dil)}>{SITE.ad}</a>
@@ -52,6 +54,7 @@ const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
     <p>{m.telif(yillar, SITE.sair)} {m.fotoNot} <a href={`${sayfaYolu('hakkinda', dil)}#fotograflar`}>{m.kunyeler}</a>.</p>
     <div class="alt-sag">
       <a href={`${sayfaYolu('hakkinda', dil)}#haklar`}>{m.haklar}</a>
+      <a href={sayfaYolu('gizlilik', dil)}>{m.gizlilik}</a>
       {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}
       <a class="bumba-imza" href="https://bumbagroup.com/life" rel="noopener" title={m.rozetBaslik}>
         <img class="rozet-acik" src="https://bumbagroup.com/rozet/life.svg" width="164" height="28" alt={m.rozetAlt} loading="lazy" />
