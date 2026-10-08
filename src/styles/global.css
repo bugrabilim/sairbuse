@@ -248,7 +248,8 @@ h3 {
 .ust-arac:hover {
   color: var(--yazi);
 }
-.tema-dugmesi svg {
+.tema-dugmesi svg,
+.ust-arac svg {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5;

@@ -1,0 +1,255 @@
+---
+// Site içi arama. Dizin derlemede üretilir (/arama.json); arama tarayıcıda, Türkçe harf ve büyük/küçük harf
+// farkı gözetmeden yapılır ("sogut" → Söğüt, "istanbul" → İstanbul).
+import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+import { dilBul, metin, sayfaYolu } from '../i18n';
+
+const dil = dilBul(Astro.url);
+const m = metin(dil).arama;
+const yazilar = {
+  sonuc: m.sonuc(0, '{q}').replace(/\b0\b/, '{n}'),
+  sonucBir: m.sonuc(1, '{q}').replace(/\b1\b/, '{n}'),
+  yok: m.yok('{q}'),
+  yokBag: m.yokBag,
+  siirler: sayfaYolu('siirler', dil),
+  turler: m.turler,
+};
+const [jsOnce, jsSonra] = m.jsYok.split('{siirler}');
+---
+
+<Temel baslik={m.baslik} aciklama={m.aciklama} sahne>
+  <SayfaSahnesi foto="imge-istanbul-gogu" duygu="ozlem" etiket={m.etiket} baslik={m.baslik}>
+    {m.giris}
+  </SayfaSahnesi>
+  <section class="sayfa arama">
+    <form class="arama-formu" role="search" action={sayfaYolu('arama', dil)} method="get">
+      <label class="gorunmez" for="arama-kutusu">{m.kutu}</label>
+      <input id="arama-kutusu" type="search" name="q" placeholder={m.ornek} autocomplete="off" spellcheck="false" />
+      <button class="dugme vurgulu" type="submit">{m.ara}</button>
+    </form>
+    <p class="arama-durum" id="arama-durum" role="status" aria-live="polite"></p>
+    <ol class="arama-sonuclar" id="arama-sonuclar" data-metin={JSON.stringify(yazilar)} data-dil={dil}></ol>
+    <noscript>
+      <p class="giris-metni">{jsOnce}<a href={sayfaYolu('siirler', dil)}>{m.yokBag}</a>{jsSonra}</p>
+    </noscript>
+  </section>
+</Temel>
+
+<script>
+  interface Kayit {
+    tur: string;
+    baslik: Record<string, string>;
+    alt: Record<string, string>;
+    href: Record<string, string>;
+    renk: string | null;
+    satirlar?: string[];
+    metin: string;
+  }
+
+  /** Türkçe harfleri ve büyük/küçük farkını yok sayan biçim: "Söğüt" → "sogut", "İstanbul" → "istanbul" */
+  function sade(s: string): string {
+    return s
+      .toLocaleLowerCase('tr')
+      .replace(/ç/g, 'c')
+      .replace(/ğ/g, 'g')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ş/g, 's')
+      .replace(/ü/g, 'u')
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[^\p{L}\p{N}]+/gu, ' ')
+      .trim();
+  }
+
+  const liste = document.getElementById('arama-sonuclar') as HTMLOListElement;
+  const durum = document.getElementById('arama-durum');
+  const kutu = document.getElementById('arama-kutusu') as HTMLInputElement;
+  const form = document.querySelector<HTMLFormElement>('.arama-formu');
+  const M = JSON.parse(liste.dataset.metin ?? '{}');
+  const dil = liste.dataset.dil ?? 'tr';
+  let dizin: (Kayit & { sadeBaslik: string; sadeMetin: string })[] | null = null;
+  let sonOlay = '';
+
+  async function yukle() {
+    if (dizin) return dizin;
+    const yanit = await fetch('/arama.json');
+    const veri: Kayit[] = await yanit.json();
+    dizin = veri.map((k) => ({ ...k, sadeBaslik: sade(k.baslik[dil]), sadeMetin: sade(`${k.baslik[dil]} ${k.alt[dil]} ${k.metin}`) }));
+    return dizin;
+  }
+
+  function el<K extends keyof HTMLElementTagNameMap>(etiket: K, sinif?: string, yazi?: string) {
+    const e = document.createElement(etiket);
+    if (sinif) e.className = sinif;
+    if (yazi) e.textContent = yazi;
+    return e;
+  }
+
+  async function ara(q: string) {
+    const terimler = sade(q).split(' ').filter(Boolean);
+    liste.replaceChildren();
+    if (!terimler.length) {
+      if (durum) durum.textContent = '';
+      return;
+    }
+    const kayitlar = await yukle();
+    const bulunan = kayitlar
+      .filter((k) => terimler.every((t) => k.sadeMetin.includes(t)))
+      .map((k) => {
+        // başlıkta geçen önce; sonra sayfa/duygu/yer, sonra şiirler
+        const puan = terimler.filter((t) => k.sadeBaslik.includes(t)).length * 10 + (k.tur === 'siir' ? 0 : 1);
+        return { k, puan };
+      })
+      .sort((a, b) => b.puan - a.puan)
+      .map((x) => x.k);
+
+    for (const k of bulunan) {
+      const li = el('li', 'arama-sonuc');
+      const a = el('a');
+      a.href = k.href[dil];
+      const nokta = el('span', 'nokta');
+      nokta.setAttribute('aria-hidden', 'true');
+      if (k.renk) nokta.style.setProperty('--nokta', k.renk);
+      else nokta.classList.add('bos');
+      const ad = el('span', 'arama-ad', k.baslik[dil]);
+      if (k.tur === 'siir') ad.lang = 'tr';
+      const bilgi = el('span', 'arama-bilgi', [M.turler[k.tur], k.alt[dil]].filter(Boolean).join(' · '));
+      a.append(nokta, ad, bilgi);
+      // şiirin içinde geçiyorsa o mısrayı göster
+      const satir = k.satirlar?.find((s) => terimler.some((t) => sade(s).includes(t)));
+      if (satir && !terimler.every((t) => k.sadeBaslik.includes(t))) {
+        const alinti = el('span', 'arama-misra', satir);
+        alinti.lang = 'tr';
+        a.append(alinti);
+      }
+      li.append(a);
+      liste.append(li);
+    }
+
+    if (durum) {
+      durum.replaceChildren();
+      if (bulunan.length) {
+        durum.textContent = (bulunan.length === 1 ? M.sonucBir : M.sonuc).replace('{n}', String(bulunan.length)).replace('{q}', q);
+      } else {
+        const [once, sonra] = M.yok.replace('{q}', q).split('{siirler}');
+        const bag = el('a', '', M.yokBag);
+        (bag as HTMLAnchorElement).href = M.siirler;
+        durum.append(once, bag, sonra ?? '');
+      }
+    }
+    const olay = sade(q).slice(0, 40);
+    if (olay !== sonOlay) {
+      sonOlay = olay;
+      window.bumbaOlay?.('arama', { sorgu: olay, sonuc: bulunan.length });
+    }
+  }
+
+  let bekle: number | undefined;
+  kutu.addEventListener('input', () => {
+    window.clearTimeout(bekle);
+    bekle = window.setTimeout(() => {
+      const q = kutu.value.trim();
+      const url = new URL(location.href);
+      if (q) url.searchParams.set('q', q);
+      else url.searchParams.delete('q');
+      history.replaceState(null, '', url);
+      ara(q);
+    }, 200);
+  });
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    ara(kutu.value.trim());
+  });
+
+  const ilk = new URLSearchParams(location.search).get('q') ?? '';
+  if (ilk) {
+    kutu.value = ilk;
+    ara(ilk);
+  }
+  kutu.focus({ preventScroll: true });
+</script>
+
+<style is:global>
+  /* Sonuçlar betikle eklendiği için stiller genel; hepsi .arama altında */
+  .arama .arama-formu {
+    display: flex;
+    gap: 0.6rem;
+    margin: 2.5rem 0 0.5rem;
+  }
+  .arama .arama-formu input {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    font-size: 1.25rem;
+    color: var(--yazi);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--cizgi);
+    padding: 0.5rem 0.1rem;
+    border-radius: 0;
+  }
+  .arama .arama-formu input:focus-visible {
+    outline: none;
+    border-bottom-color: var(--vurgu);
+  }
+  .arama .arama-formu input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+  .arama .arama-formu input::placeholder {
+    color: var(--soluk);
+    font-style: italic;
+  }
+  .arama .arama-durum {
+    color: var(--soluk);
+    font-style: italic;
+    min-height: 1.6em;
+  }
+  .arama .arama-sonuclar {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.25rem;
+  }
+  .arama .arama-sonuc a {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.75rem;
+    align-items: baseline;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--cizgi);
+    text-decoration: none;
+  }
+  .arama .arama-sonuc .nokta {
+    grid-row: span 3;
+    align-self: start;
+    margin-top: 0.55rem;
+  }
+  .arama .arama-sonuc .nokta.bos {
+    background: transparent;
+    border: 1px solid var(--soluk);
+  }
+  .arama .arama-ad {
+    font-family: var(--serif-baslik);
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+  .arama .arama-sonuc a:hover .arama-ad {
+    color: var(--vurgu);
+  }
+  .arama .arama-bilgi {
+    grid-column: 2;
+    font-family: var(--etiket);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--soluk);
+  }
+  .arama .arama-misra {
+    grid-column: 2;
+    font-style: italic;
+    color: var(--soluk);
+    margin-top: 0.2rem;
+  }
+</style>
