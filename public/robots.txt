@@ -1,5 +1,28 @@
+# Duyguların Peşinde
+# Arama motorları ve yapay zekâ arama botları siteyi tarayabilir (yanıtlarda alıntılanmak için).
+# Şiirlerin tüm hakları saklıdır: yalnızca yapay zekâ modeli EĞİTİMİ için tarayan botlar kapalı.
+
 User-agent: *
 Allow: /
 Disallow: /admin/
+
+# Yapay zekâ arama ve alıntı botları (açık)
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin/
+
+# Model eğitimi için tarayan botlar (kapalı)
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: Meta-ExternalAgent
+Disallow: /
 
 Sitemap: https://duygularinpesinde.bumba.tr/sitemap-index.xml

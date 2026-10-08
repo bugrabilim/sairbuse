@@ -3,7 +3,7 @@
 // site kişisel veri toplamaz; Umami çerezsiz; e-posta listesi ortak servisle; tercihler localStorage'da.
 import Temel from '../layouts/Temel.astro';
 import SayfaSahnesi from '../components/SayfaSahnesi.astro';
-import { dilBul, metin } from '../i18n';
+import { sayfaYolu, dilBul, metin } from '../i18n';
 
 const dil = dilBul(Astro.url);
 const m = metin(dil).gizlilik;
@@ -14,7 +14,7 @@ function parcala(metin: string) {
 }
 ---
 
-<Temel baslik={m.baslik} aciklama={m.aciklama} sahne>
+<Temel baslik={m.baslik} aciklama={m.aciklama} sahne kirinti={[{ ad: metin(dil).sayfaAdlari.gizlilik, yol: sayfaYolu('gizlilik', dil) }]}>
   <SayfaSahnesi foto="imge-mum" duygu="karanlik" etiket={m.etiket} baslik={m.baslik} />
   <article class="sayfa hakkinda gizlilik">
     {

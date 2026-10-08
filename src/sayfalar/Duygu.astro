@@ -6,6 +6,7 @@ import SiirGovde from '../components/SiirGovde.astro';
 import OrtamSesi from '../components/OrtamSesi.astro';
 import { DUYGULAR, duyguAdi, renkAdi, type Duygu } from '../data/duygular';
 import { dilBul, duyguYolu, kucuk, metin, siirSayisi } from '../i18n';
+import { koleksiyonSema } from '../lib/sema';
 import { imza, siirYolu, type Siir } from '../lib/siirler';
 import { kunye, siirFotografi } from '../lib/foto';
 
@@ -25,7 +26,7 @@ const acilis = kaynak ?? siirler[0];
 const acilisFotosu = siirFotografi(acilis);
 ---
 
-<Temel baslik={dAd} aciklama={m.duygu.aciklama(dAd, siirler.length, renkAdi(d, dil), d.misra.join(' / '))} duygu={d} sahne>
+<Temel baslik={dAd} aciklama={m.duygu.aciklama(dAd, siirler.length, renkAdi(d, dil), d.misra.join(' / '))} duygu={d} sahne sema={[koleksiyonSema(dAd, duyguYolu(d.slug, dil), siirler, dil)]} kirinti={[{ ad: dAd, yol: duyguYolu(d.slug, dil) }]}>
   <header class="sahne duygu-sahne">
     <SiirFotosu siir={acilis} oncelik />
     <div class="sahne-ic">

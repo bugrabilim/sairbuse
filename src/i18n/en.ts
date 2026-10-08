@@ -29,6 +29,7 @@ export const en: Metin = {
     kunyeler: 'credits',
     haklar: 'Rights',
     gizlilik: 'Privacy',
+    guncelleme: 'Last updated',
     rozetBaslik: 'Bumba Life, part of Bumba Group',
     rozetAlt: 'A Bumba Life product',
   },
@@ -75,6 +76,8 @@ export const en: Metin = {
   },
   siir: {
     hepsiIcin: 'Tap the poem to see it all',
+    aciklama: (misra: string, imza: string) => `A poem in Turkish by Antigoni: “${misra}”${imza ? ` (${imza})` : ''}.`,
+    baslikEki: ' · poem by Antigoni',
     bastanOku: 'Read from the start',
     misraKarti: 'Verse card',
     paylas: 'Share',
@@ -194,6 +197,35 @@ export const en: Metin = {
       'All rights to the poems and texts on this site are reserved. They may not be reproduced, copied or published elsewhere without permission. If you love a poem, share its link.',
     fotoHaklar: 'The photographs are not covered by this; each belongs to the photographer named above and is used under its own licence.',
     guncelleme: 'Last updated:',
+    sssBaslik: 'Questions',
+    sss: [
+      {
+        soru: 'What is Duyguların Peşinde?',
+        cevap:
+          'Duyguların Peşinde (In Pursuit of Emotions) is the home of 30 poems signed Antigoni, written between 2008 and 2021. They were meant to be a book that was never published; here they are read by emotion, place and time.',
+      },
+      {
+        soru: 'Who wrote the poems?',
+        cevap: 'The poems are signed Antigoni, the old name of Burgazada, one of the Princes’ Islands off Istanbul, where one of them was written.',
+      },
+      {
+        soru: 'Where were the poems written?',
+        cevap:
+          'Mostly in Istanbul: Moda, Kalkedon (Kadıköy), Cihangir, Feneryolu, Altunizade, Sirkeci, Burgazada, Büyükada and on an Eminönü ferry. A few in İzmir, in Söğüt near Marmaris, and in Paris, under the Eiffel Tower.',
+      },
+      {
+        soru: 'Which emotions are there?',
+        cevap: 'Seven, each with a colour taken from the poems: love (pink), longing (apricot), sorrow (yellow), loneliness (grey), parting (black), darkness (purple) and freedom (orange).',
+      },
+      {
+        soru: 'Can I share the poems?',
+        cevap: 'All rights to the poems are reserved; they may not be copied or published elsewhere. You are welcome to share a poem’s link or a verse card made on the site.',
+      },
+      {
+        soru: 'Are the poems available in English?',
+        cevap: 'The site has an English interface, but the poems have not been translated; they stay in Turkish, the language they were written in.',
+      },
+    ],
   },
   arama: {
     baslik: 'Search',

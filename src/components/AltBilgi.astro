@@ -3,7 +3,7 @@
 import { SITE } from '../data/site';
 import ListeFormu from './ListeFormu.astro';
 import { tumSiirler } from '../lib/siirler';
-import { dilBul, metin, sayfaYolu } from '../i18n';
+import { dilBul, metin, sayfaYolu, uzunTarihDil } from '../i18n';
 
 const dil = dilBul(Astro.url);
 const m = metin(dil).alt;
@@ -12,12 +12,14 @@ const ilk = tum.find((s) => s.data.tarih);
 const ilkYil = ilk?.data.tarih?.slice(0, 4);
 const buYil = String(new Date().getFullYear());
 const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
+// Sitenin en son derlendiği gün (her yayında yenilenir)
+const bugun = new Date().toISOString().slice(0, 10);
 ---
 
 <footer class="alt">
   <ListeFormu />
   <div class="alt-cizgi">
-    <p>{m.telif(yillar, SITE.sair)} {m.fotoNot} <a href={`${sayfaYolu('hakkinda', dil)}#fotograflar`}>{m.kunyeler}</a>.</p>
+    <p>{m.telif(yillar, SITE.sair)} {m.fotoNot} <a href={`${sayfaYolu('hakkinda', dil)}#fotograflar`}>{m.kunyeler}</a>. {m.guncelleme}: <time datetime={bugun}>{uzunTarihDil(bugun, dil)}</time>.</p>
     <div class="alt-sag">
       <a href={sayfaYolu('gizlilik', dil)}>{m.gizlilik}</a>
       {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}

@@ -76,7 +76,7 @@ const takvim = tum
   }));
 ---
 
-<Temel sahne>
+<Temel sahne sema={[{ '@type': 'WebPage', name: SITE.ad, description: m.site.ozet, inLanguage: dil, isPartOf: { '@id': 'https://duygularinpesinde.bumba.tr/#site' } }]}>
   <h1 class="gorunmez">{SITE.ad}</h1>
 
   <section class="sahne vitrin" aria-label={m.ana.vitrinAria}>
@@ -258,6 +258,7 @@ const takvim = tum
   </section>
 
   <section class="soru" aria-labelledby="soru-baslik">
+    <p class="ana-ozet">{m.site.ozet}</p>
     <h2 id="soru-baslik" class="etiket">{m.ana.soru}</h2>
     <ul class="cipler soru-cipleri">
       {
@@ -491,6 +492,12 @@ const takvim = tum
   }
 
   /* ---------- Soru ---------- */
+  .ana-ozet {
+    max-width: 40rem;
+    margin: 1.5rem 0 2rem;
+    color: var(--soluk);
+    font-size: 1.05rem;
+  }
   .soru {
     max-width: 72rem;
     margin: 0 auto;

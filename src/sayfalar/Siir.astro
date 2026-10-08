@@ -19,7 +19,8 @@ import {
   type Siir,
 } from '../lib/siirler';
 import { duyguAdi } from '../data/duygular';
-import { dilBul, duyguYolu, kucuk, metin } from '../i18n';
+import { dilBul, duyguYolu, kucuk, metin, sayfaYolu } from '../i18n';
+import { siirSema } from '../lib/sema';
 
 interface Props {
   siir: Siir;
@@ -34,8 +35,9 @@ const m = metin(dil);
 const sira = tum.findIndex((x) => x.id === siir.id) + 1;
 const d = anaDuygu(siir);
 const im = imza(siir, dil);
+const ogGorsel = dil === 'en' ? `/og/en/${siir.id}.jpg` : `/og/${siir.id}.jpg`;
 const sayfaBasligi = basliksiz(siir) ? `${ilkMisra(siir)}…` : ad(siir);
-const aciklama = [ilkMisra(siir), im].filter(Boolean).join(' — ');
+const aciklama = m.siir.aciklama(ilkMisra(siir), im);
 // Şairin kendi kaydı en başta, varsa örnekler arkada
 const kayitlar = [
   ...(siir.data.ses ? [{ dosya: siir.data.ses, etiket: m.siir.sairinSesi }] : []),
@@ -43,7 +45,19 @@ const kayitlar = [
 ];
 ---
 
-<Temel baslik={sayfaBasligi} aciklama={aciklama} gorsel={dil === 'en' ? `/og/en/${siir.id}.jpg` : `/og/${siir.id}.jpg`} duygu={d} sahne sinif="siir-sayfasi">
+<Temel
+  baslik={sayfaBasligi + m.siir.baslikEki}
+  aciklama={aciklama}
+  gorsel={ogGorsel}
+  duygu={d}
+  sahne
+  sinif="siir-sayfasi"
+  sema={[siirSema(siir, dil, ogGorsel)]}
+  kirinti={[
+    { ad: m.sayfaAdlari.siirler, yol: sayfaYolu('siirler', dil) },
+    { ad: ad(siir), yol: siirYolu(siir, dil) },
+  ]}
+>
   <div class="siir-duzen">
     <SiirSahnesi siir={siir} etiket={`${duyguAdi(d, dil)} · ${sira} / ${tum.length}`} oncelik sizes="(min-width: 64rem) 52vw, 100vw" />
 

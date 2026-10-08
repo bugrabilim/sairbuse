@@ -3,7 +3,8 @@ import Temel from '../layouts/Temel.astro';
 import SiirListesi from '../components/SiirListesi.astro';
 import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import { DUYGULAR, duyguAdi } from '../data/duygular';
-import { dilBul, kucuk, metin, siirSayisi } from '../i18n';
+import { dilBul, kucuk, metin, sayfaYolu, siirSayisi } from '../i18n';
+import { koleksiyonSema } from '../lib/sema';
 import { tumSiirler } from '../lib/siirler';
 
 const dil = dilBul(Astro.url);
@@ -11,7 +12,11 @@ const m = metin(dil);
 const tum = await tumSiirler();
 ---
 
-<Temel baslik={m.siirler.baslik} aciklama={m.siirler.aciklama(tum.length)} sahne>
+<Temel baslik={m.siirler.baslik} aciklama={m.siirler.aciklama(tum.length)}
+  sahne
+  sema={[koleksiyonSema(m.siirler.baslik, sayfaYolu('siirler', dil), tum, dil)]}
+  kirinti={[{ ad: m.siirler.baslik, yol: sayfaYolu('siirler', dil) }]}
+>
   <SayfaSahnesi foto="sayfa-siirler" duygu="ozgurluk" etiket={siirSayisi(tum.length, dil)} baslik={m.siirler.baslik}>
     {m.siirler.giris} {m.genel.siirlerTurkce}
   </SayfaSahnesi>
