@@ -192,6 +192,78 @@ export const tr = {
     fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri yukarıda adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
     guncelleme: 'Son güncelleme:',
   },
+  arama: {
+    baslik: 'Arama',
+    aciklama: 'Şiirlerde, duygularda ve yerlerde ara.',
+    etiket: 'Şiirlerde, duygularda, yerlerde',
+    giris: 'Bir kelime, bir yer, bir yıl ya da bir duygu yaz. Türkçe harfleri yazmasan da bulur: "sogut" Söğüt\'ü getirir.',
+    kutu: 'Aranacak kelime',
+    ara: 'Ara',
+    ornek: 'ör. vapur, Moda, 2012, hüzün',
+    sonuc: (n: number, q: string) => `"${q}" için ${n} sonuç`,
+    yok: (q: string) => `"${q}" için bir şey bulamadık. Başka bir kelime dene ya da {siirler} göz at.`,
+    yokBag: 'bütün şiirlere',
+    turler: { siir: 'şiir', duygu: 'duygu', yer: 'yer', sayfa: 'sayfa' } as Record<string, string>,
+    jsYok: 'Arama için tarayıcında JavaScript açık olmalı. Bu arada {siirler} göz atabilirsin.',
+  },
+  liste: {
+    baslik: 'Yeni şiir gelince haber ver',
+    aciklama: 'Yeni şiirler ve sitedeki yenilikler için e-posta listesine katılın.',
+    eposta: 'E-posta adresiniz',
+    riza: '{aydinlatma} okudum, e-posta almayı kabul ediyorum.',
+    aydinlatma: 'Aydınlatma metnini',
+    katil: 'Katıl',
+    gonderiliyor: 'Gönderiliyor…',
+    tamam: 'Onay e-postası gönderdik; gelen kutunuzdaki bağlantıya tıklayınca listeye katılmış olursunuz.',
+    hatalar: {
+      'gecersiz-eposta': 'Bu e-posta adresi geçerli görünmüyor.',
+      'riza-yok': 'Katılmak için aydınlatma metnini onaylamanız gerekiyor.',
+      'cok-fazla-istek': 'Çok fazla deneme oldu. Biraz sonra tekrar deneyin.',
+      'gonderim-kapali': 'Liste şu an kayıt almıyor. Biraz sonra tekrar deneyin.',
+      hata: 'Bir şeyler ters gitti. Biraz sonra tekrar deneyin.',
+    } as Record<string, string>,
+  },
+  gizlilik: {
+    baslik: 'Gizlilik ve çerezler',
+    aciklama: 'Duyguların Peşinde hangi verileri işler, hangilerini işlemez: istatistik, e-posta listesi, çerezler ve haklarınız.',
+    etiket: 'KVKK aydınlatma metni',
+    guncelleme: 'Son güncelleme: 8 Ekim 2026',
+    bolumler: [
+      {
+        baslik: 'Veri sorumlusu',
+        metin: 'Bu sitenin veri sorumlusu Bumba Teknoloji Limited Şirketi’dir (Ataşehir / İstanbul). Sorularınız ve KVKK kapsamındaki başvurularınız için: {eposta}.',
+      },
+      {
+        baslik: 'Kısaca',
+        metin: 'Bu bir şiir sitesi. Üyelik, yorum ya da iletişim formu yok; okumak için hiçbir bilgi vermeniz gerekmiyor. Sitenin kendisi kişisel veri toplamaz.',
+      },
+      {
+        baslik: 'Ziyaret istatistikleri',
+        metin: 'Kaç kişinin hangi sayfayı okuduğunu görmek için kendi sunucumuzda çalışan Umami’yi (istatistik.bumba.tr) kullanıyoruz. Umami çerez kullanmaz, sizi siteden siteye izlemez ve IP adresinizi saklamaz; yalnızca toplu sayılar tutar: sayfa, yönlendiren site, ülke, tarayıcı ve cihaz türü. Arama kutusuna yazdığınız kelime, tema ve dil seçimi gibi işlemler de adsız olay olarak sayılır.',
+      },
+      {
+        baslik: 'E-posta listesi',
+        metin: 'Sayfaların altındaki formla yeni şiirlerden haberdar olmak için e-posta adresinizi bırakabilirsiniz. Bu liste Bumba Group’un ortak liste servisiyle yönetilir: adresiniz ancak gelen onay e-postasındaki bağlantıya tıklarsanız listeye eklenir, her e-postadaki bağlantıyla tek tıkla çıkabilirsiniz. Ayrıntılar: {liste}.',
+      },
+      {
+        baslik: 'Teknik kayıtlar',
+        metin: 'Siteyi sunan sunucu, her istek için IP adresi, tarih ve istenen adres gibi teknik kayıtları güvenlik ve arıza takibi amacıyla kısa süre tutar. Bu kayıtlar başka bir amaçla kullanılmaz ve kimseyle paylaşılmaz.',
+      },
+      {
+        baslik: 'Çerezler',
+        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil ve ana sayfada en son gördüğünüz mısra. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
+      },
+      {
+        baslik: 'Dışarıdan gelen içerik',
+        metin: 'Yazı tipleri ve fotoğraflar sitenin kendi sunucusundan gelir. Alt bilgideki Bumba rozeti bumbagroup.com’dan yüklenir; bu sırada tarayıcınız o sunucuya bağlanır.',
+      },
+      {
+        baslik: 'Haklarınız',
+        metin: 'KVKK’nın 11. maddesi uyarınca verilerinizin işlenip işlenmediğini öğrenme, düzeltilmesini ya da silinmesini isteme ve itiraz etme haklarınız var. Başvurunuzu {eposta} adresine yazabilirsiniz.',
+      },
+    ],
+    listeBag: 'e-posta listesi aydınlatma metni',
+  },
   sayfaAdlari: {
     ana: 'Ana sayfa',
     siirler: 'Bütün şiirler',

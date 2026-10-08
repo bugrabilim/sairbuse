@@ -1,0 +1,57 @@
+---
+// KVKK aydınlatma metni, gizlilik ve çerez politikası. Metin kodun gerçekte yaptığına dayanır:
+// site kişisel veri toplamaz; Umami çerezsiz; e-posta listesi ortak servisle; tercihler localStorage'da.
+import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+import { dilBul, metin } from '../i18n';
+
+const dil = dilBul(Astro.url);
+const m = metin(dil).gizlilik;
+const listeAdres = dil === 'en' ? 'https://bumbagroup.com/liste/aydinlatma?dil=en' : 'https://bumbagroup.com/liste/aydinlatma';
+/** "{eposta}" ve "{liste}" yer tutucularını bağlantıya çevirir */
+function parcala(metin: string) {
+  return metin.split(/(\{eposta\}|\{liste\})/);
+}
+---
+
+<Temel baslik={m.baslik} aciklama={m.aciklama} sahne>
+  <SayfaSahnesi foto="imge-mum" duygu="karanlik" etiket={m.etiket} baslik={m.baslik} />
+  <article class="sayfa hakkinda gizlilik">
+    {
+      m.bolumler.map((b) => (
+        <section>
+          <h2>{b.baslik}</h2>
+          <p>
+            {parcala(b.metin).map((p) =>
+              p === '{eposta}' ? (
+                <a href="mailto:bilgi@bumbagroup.com">bilgi@bumbagroup.com</a>
+              ) : p === '{liste}' ? (
+                <a href={listeAdres} rel="noopener">{m.listeBag}</a>
+              ) : (
+                p
+              ),
+            )}
+          </p>
+        </section>
+      ))
+    }
+    <p class="guncelleme">{m.guncelleme}</p>
+  </article>
+</Temel>
+
+<style>
+  .gizlilik {
+    max-width: 38rem;
+  }
+  .gizlilik h2 {
+    font-size: 1.7rem;
+    margin: 2.2rem 0 0.6rem;
+  }
+  .guncelleme {
+    margin-top: 2.5rem;
+    font-family: var(--etiket);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--soluk);
+  }
+</style>

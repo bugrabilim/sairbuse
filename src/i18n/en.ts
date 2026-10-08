@@ -194,6 +194,78 @@ export const en: Metin = {
     fotoHaklar: 'The photographs are not covered by this; each belongs to the photographer named above and is used under its own licence.',
     guncelleme: 'Last updated:',
   },
+  arama: {
+    baslik: 'Search',
+    aciklama: 'Search the poems, emotions and places.',
+    etiket: 'Poems, emotions, places',
+    giris: 'Type a word, a place, a year or an emotion. You don’t need Turkish letters: “sogut” finds Söğüt. The poems are in Turkish, so words from the poems are Turkish too.',
+    kutu: 'Search for',
+    ara: 'Search',
+    ornek: 'e.g. vapur, Moda, 2012, sorrow',
+    sonuc: (n: number, q: string) => `${n} result${n === 1 ? '' : 's'} for “${q}”`,
+    yok: (q: string) => `Nothing found for “${q}”. Try another word or browse {siirler}.`,
+    yokBag: 'all the poems',
+    turler: { siir: 'poem', duygu: 'emotion', yer: 'place', sayfa: 'page' },
+    jsYok: 'Search needs JavaScript turned on in your browser. Meanwhile you can browse {siirler}.',
+  },
+  liste: {
+    baslik: 'Tell me when a new poem arrives',
+    aciklama: 'Join the mailing list for new poems and news from the site.',
+    eposta: 'Your email address',
+    riza: 'I have read the {aydinlatma} and agree to receive emails.',
+    aydinlatma: 'privacy notice',
+    katil: 'Join',
+    gonderiliyor: 'Sending…',
+    tamam: 'We’ve sent you a confirmation email; click the link in it and you’re on the list.',
+    hatalar: {
+      'gecersiz-eposta': 'This email address doesn’t look valid.',
+      'riza-yok': 'Please accept the privacy notice to join.',
+      'cok-fazla-istek': 'Too many attempts. Please try again in a little while.',
+      'gonderim-kapali': 'The list isn’t taking sign-ups right now. Please try again in a little while.',
+      hata: 'Something went wrong. Please try again in a little while.',
+    },
+  },
+  gizlilik: {
+    baslik: 'Privacy and cookies',
+    aciklama: 'What data Duyguların Peşinde processes and what it doesn’t: statistics, the mailing list, cookies and your rights.',
+    etiket: 'Privacy notice (KVKK)',
+    guncelleme: 'Last updated: 8 October 2026',
+    bolumler: [
+      {
+        baslik: 'Data controller',
+        metin: 'The data controller for this site is Bumba Teknoloji Limited Şirketi (Ataşehir, Istanbul). For questions and requests under Turkey’s data protection law (KVKK), write to {eposta}.',
+      },
+      {
+        baslik: 'In short',
+        metin: 'This is a poetry site. There are no accounts, comments or contact forms, and you don’t have to give any information to read. The site itself doesn’t collect personal data.',
+      },
+      {
+        baslik: 'Visitor statistics',
+        metin: 'To see how many people read which page, we use Umami running on our own server (istatistik.bumba.tr). Umami uses no cookies, doesn’t follow you across sites and doesn’t store your IP address; it keeps only totals: page, referring site, country, browser and device type. Actions such as the words you type into search and your theme and language choices are counted as anonymous events.',
+      },
+      {
+        baslik: 'Mailing list',
+        metin: 'With the form at the bottom of the pages you can leave your email address to hear about new poems. The list is run by Bumba Group’s shared mailing list service: your address is only added once you click the link in the confirmation email, and every email has a one-click unsubscribe link. Details: {liste}.',
+      },
+      {
+        baslik: 'Technical logs',
+        metin: 'The server that hosts the site keeps short-lived technical logs of each request, such as IP address, time and requested address, for security and troubleshooting. They are not used for anything else and not shared with anyone.',
+      },
+      {
+        baslik: 'Cookies',
+        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose and the last line of verse you saw on the home page. They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
+      },
+      {
+        baslik: 'Content from elsewhere',
+        metin: 'Fonts and photographs are served from the site’s own server. The Bumba badge in the footer is loaded from bumbagroup.com, so your browser connects to that server.',
+      },
+      {
+        baslik: 'Your rights',
+        metin: 'Under Article 11 of the KVKK you have the right to learn whether your data is processed, to ask for it to be corrected or deleted, and to object. Write to {eposta} to make a request.',
+      },
+    ],
+    listeBag: 'mailing list privacy notice',
+  },
   sayfaAdlari: {
     ana: 'Home',
     siirler: 'All poems',
