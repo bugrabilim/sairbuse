@@ -1,7 +1,13 @@
 /*
+  Strict-Transport-Security: max-age=86400
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://istatistik.bumba.tr; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://bumbagroup.com; font-src 'self'; media-src 'self' blob:; connect-src 'self' https://istatistik.bumba.tr https://bumbagroup.com; form-action 'self' https://bumbagroup.com; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+/admin/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'self' https: data: blob: 'unsafe-inline' 'unsafe-eval'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'
 
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable

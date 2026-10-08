@@ -25,7 +25,7 @@ export interface Duygu {
   zeminGunduz: string;
   /** Liste noktaları ve paylaşım görselleri için */
   nokta: string;
-  /** Gündüz temasında da sayfayı karanlıkta tut */
+  /** Rengi siyah: haritada noktası açık bir halkayla çizilir */
   hepGece?: boolean;
   /** Fotoğrafın ışıkları bu iki renk arasında boyanır (üstten alta) */
   isik: [string, string];
@@ -105,7 +105,8 @@ export const DUYGULAR: Duygu[] = [
     gece: '#d8d2c8',
     gunduz: '#1a1714',
     zeminGece: '#030303',
-    zeminGunduz: '#030303',
+    // gündüz temasında siyah, kâğıt üstünde mürekkep olur
+    zeminGunduz: '#ebe8e3',
     nokta: '#050505',
     hepGece: true,
     isik: ['#d9d4cc', '#8f8981'],

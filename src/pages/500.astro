@@ -1,0 +1,13 @@
+---
+// nginx'in sunucu hatalarında gösterdiği sayfa (nginx.conf: error_page 500 502 503 504)
+import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+---
+
+<Temel baslik="Bir aksilik oldu" sahne noindex>
+  <SayfaSahnesi foto="imge-sisli-agac" duygu="karanlik" etiket="500 · bir aksilik" baslik="Şiirler şu an açılmıyor." />
+  <section class="sayfa yok">
+    <p>Sunucuda bir sorun çıktı. Biraz sonra tekrar deneyin.</p>
+    <p><a href="/">Başa dön</a></p>
+  </section>
+</Temel>

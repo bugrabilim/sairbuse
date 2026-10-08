@@ -49,9 +49,10 @@ const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
     <p>© {yillar} {SITE.sair}. Şiirlerin tüm hakları saklıdır. Fotoğraflar kendi lisanslarıyla kullanılıyor; <a href="/hakkinda/#fotograflar">künyeler</a>.</p>
     <div class="alt-sag">
       <a href="/hakkinda/#haklar">Haklar</a>
-      {/* Bumba Group imzası (bugrabilim/bumba, docs/MARKA_MIMARISI.md §6); site koyu olduğu için koyu rozet */}
+      {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}
       <a class="bumba-imza" href="https://bumbagroup.com/life" rel="noopener" title="Bumba Life, bir Bumba Group kolu">
-        <img src="https://bumbagroup.com/rozet/life-koyu.svg" width="164" height="28" alt="Bir Bumba Life ürünü" loading="lazy" />
+        <img class="rozet-acik" src="https://bumbagroup.com/rozet/life.svg" width="164" height="28" alt="Bir Bumba Life ürünü" loading="lazy" />
+        <img class="rozet-koyu" src="https://bumbagroup.com/rozet/life-koyu.svg" width="164" height="28" alt="Bir Bumba Life ürünü" loading="lazy" />
       </a>
     </div>
   </div>
@@ -108,6 +109,17 @@ const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
+  }
+  .bumba-imza {
+    display: inline-flex;
+    opacity: 0.85;
+  }
+  .bumba-imza:hover {
+    opacity: 1;
+  }
+  :global([data-theme='gece']) .rozet-acik,
+  :global([data-theme='gunduz']) .rozet-koyu {
+    display: none;
   }
   .alt-sag {
     display: flex;
