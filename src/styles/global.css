@@ -2,7 +2,8 @@
    Her şiir yazıldığı yerin fotoğrafıyla açılır. Fotoğraf siyah beyaza çekilir, ışıkları şiirin
    duygusunun rengine boyanır; üstünde film greni. Şiir koyu zeminde, satır satır. */
 
-:root {
+:root,
+[data-theme='gunduz'] :is(.karanlik-alan, .sahne, .serit, .sahneli .ust) {
   --zemin: #0d0c0b;
   --zemin-2: #171513;
   --yazi: #f1eadf;
@@ -10,7 +11,26 @@
   --cizgi: rgba(241, 234, 223, 0.14);
   --vurgu: #e9dcc6;
   --golge: rgba(0, 0, 0, 0.5);
+  --perde: rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
 
+/* Gündüz: aynı kimlik, kâğıt zemin. Fotoğraflı alanlar (sahneler, şeritler, .karanlik-alan) gece kalır, yazı fotoğrafın üstünde okunsun */
+[data-theme='gunduz'] {
+  --zemin: #f3eee5;
+  --zemin-2: #e9e2d6;
+  --yazi: #1c1815;
+  --soluk: #675e54;
+  --cizgi: rgba(28, 24, 21, 0.16);
+  --vurgu: #6b4f33;
+  --golge: rgba(60, 40, 20, 0.18);
+  color-scheme: light;
+}
+[data-theme='gunduz'] :is(.karanlik-alan, .sahne, .serit, .sahneli .ust) {
+  color: var(--yazi);
+}
+
+:root {
   /* Duygusu olmayan sayfalarda fotoğraflar sıcak bir sepya tonunda */
   --ton-ust: #efe6d6;
   --ton-alt: #c9b79a;
@@ -22,13 +42,17 @@
   --olcu: 34rem;
   --kenar: clamp(1.25rem, 5vw, 3rem);
   --yavas: 1.1s;
-  color-scheme: dark;
 }
 
 /* Duygu sayfaları: zemin o duygunun gölge rengine, vurgu duygunun rengine döner */
-body.duygulu {
+body.duygulu,
+[data-theme='gunduz'] body.duygulu :is(.karanlik-alan, .sahne, .serit, .sahneli .ust) {
   --zemin: var(--z-gece);
   --vurgu: var(--d-gece);
+}
+[data-theme='gunduz'] body.duygulu {
+  --zemin: var(--z-gunduz);
+  --vurgu: var(--d-gunduz);
 }
 
 @view-transition {
@@ -155,7 +179,20 @@ h3 {
   padding: max(1.1rem, env(safe-area-inset-top)) var(--kenar) 1.1rem;
 }
 .sahneli .ust {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent);
+  background: linear-gradient(180deg, var(--perde), transparent);
+}
+/* Şiir sayfası bilgisayarda iki sütun: fotoğraf solda (%51), şiir sağda kâğıtta. Gündüz temasında
+   üst şeridin yalnız ad kısmı fotoğrafın üstünde; menü ve araçlar kâğıdın renginde kalır. */
+@media (min-width: 64rem) {
+  [data-theme='gunduz'] .siir-sayfasi .ust {
+    --yazi: #1c1815;
+    --soluk: #675e54;
+    color: var(--yazi);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent) no-repeat 0 0 / 51.2% 100%;
+  }
+  [data-theme='gunduz'] .siir-sayfasi .ust .logo {
+    color: #f1eadf;
+  }
 }
 
 .logo {
@@ -166,6 +203,62 @@ h3 {
   text-transform: uppercase;
   text-decoration: none;
   color: var(--yazi);
+}
+
+/* Tema (ve dil, arama) düğmeleri: menünün yanında, telefonda da görünür */
+.ust-araclar {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  margin-right: -0.5rem;
+  position: relative;
+  z-index: 2;
+}
+/* Masaüstünde sıra: ad, menü, araçlar */
+.menu {
+  order: 1;
+  margin-left: auto;
+}
+.ust-araclar {
+  order: 2;
+}
+.menu-dugmesi {
+  order: 3;
+}
+.tema-dugmesi,
+.ust-arac {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--yazi) 72%, transparent);
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--etiket);
+  font-weight: 600;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  transition: color 0.3s;
+}
+.tema-dugmesi:hover,
+.ust-arac:hover {
+  color: var(--yazi);
+}
+.tema-dugmesi svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Düğme gidilecek temanın simgesini gösterir */
+[data-theme='gece'] .ikon-ay,
+[data-theme='gunduz'] .ikon-gunes {
+  display: none;
 }
 
 .menu-dugmesi {
@@ -245,6 +338,9 @@ h3 {
 @media (max-width: 52rem) {
   .js .menu-dugmesi {
     display: grid;
+  }
+  .js .ust-araclar {
+    margin: 0 0 0 auto;
   }
   .js .menu {
     position: fixed;
