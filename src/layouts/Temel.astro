@@ -34,7 +34,7 @@ const { baslik, aciklama = SITE.aciklama, gorsel = '/og/site.jpg', duygu, sinif 
 const tamBaslik = baslik ? `${baslik} — ${SITE.ad}` : SITE.ad;
 const kanonik = new URL(Astro.url.pathname, Astro.site);
 const gorselUrl = new URL(gorsel, Astro.site);
-const umami = import.meta.env.PUBLIC_UMAMI_ID;
+const umami = import.meta.env.PUBLIC_UMAMI_ID || SITE.umami;
 const yol = Astro.url.pathname;
 const menu = [
   { href: '/siirler/', ad: 'şiirler' },
@@ -73,8 +73,14 @@ const temaRengi = duygu ? duygu.zeminGece : '#0d0c0b';
 
     <script is:inline>
       document.documentElement.classList.add('js');
+      // Umami olayı; sayaç yüklenmediyse sessizce geçer. Olay verisine kişisel bilgi konmaz.
+      window.bumbaOlay = function (ad, veri) {
+        try {
+          if (window.umami) window.umami.track(ad, veri);
+        } catch (e) {}
+      };
     </script>
-    {umami && <script defer src="https://istatistik.bumba.tr/script.js" data-website-id={umami} />}
+    <script defer src="https://istatistik.bumba.tr/script.js" data-website-id={umami} data-domains={SITE.alan}></script>
   </head>
   <body class={govdeSinifi} style={duygu ? duyguStili(duygu) : undefined} data-duygu={duygu?.slug}>
     <a class="atla" href="#icerik">İçeriğe geç</a>
