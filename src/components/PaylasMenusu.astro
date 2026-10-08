@@ -1,0 +1,176 @@
+---
+// Şiir sayfasının paylaşma menüsü: tarayıcının paylaşım penceresi yerine sitenin kendi kısa listesi.
+// Bağlantı kopyalama, Facebook, Instagram, WhatsApp, SMS ve LinkedIn. Instagram'ın web paylaşım adresi
+// olmadığı için bağlantı kopyalanır ve Instagram açılır.
+import { dilBul, metin } from '../i18n';
+
+interface Props {
+  baslik: string;
+}
+const { baslik } = Astro.props;
+const dil = dilBul(Astro.url);
+const m = metin(dil).paylas;
+const adres = new URL(Astro.url.pathname, Astro.site).href;
+const u = encodeURIComponent(adres);
+const metinli = encodeURIComponent(`${baslik} — ${adres}`);
+const kanallar = [
+  { ad: 'facebook', etiket: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
+  { ad: 'whatsapp', etiket: 'WhatsApp', href: `https://wa.me/?text=${metinli}` },
+  { ad: 'sms', etiket: 'SMS', href: `sms:?&body=${metinli}` },
+  { ad: 'linkedin', etiket: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}` },
+];
+---
+
+<div class="paylas-kutusu">
+  <button class="dugme" type="button" id="paylas" aria-expanded="false" aria-controls="paylas-menusu">{m.paylas}</button>
+  <div class="paylas-menusu" id="paylas-menusu" hidden data-adres={adres} data-kopyalandi={m.kopyalandi} data-instagram={m.instagramNot}>
+    <button type="button" class="paylas-secenek" data-kanal="link">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" /><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /></svg>
+      {m.link}
+    </button>
+    <button type="button" class="paylas-secenek" data-kanal="instagram">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="0.6" /></svg>
+      Instagram
+    </button>
+    {
+      kanallar.map((k) => (
+        <a class="paylas-secenek" href={k.href} data-kanal={k.ad} target={k.ad === 'sms' ? undefined : '_blank'} rel="noopener">
+          {k.ad === 'facebook' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14 8h2.5V4.5H14A3.5 3.5 0 0 0 10.5 8v2.5H8V14h2.5v6H14v-6h2.5l.5-3.5h-3V8.5a.5.5 0 0 1 .5-.5Z" />
+            </svg>
+          )}
+          {k.ad === 'whatsapp' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 20l1.2-3.6A8 8 0 1 1 8 19z" />
+              <path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-2-2l.8-1-1-2z" />
+            </svg>
+          )}
+          {k.ad === 'sms' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 5h16v11H9l-5 4z" />
+              <path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" />
+            </svg>
+          )}
+          {k.ad === 'linkedin' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3.5" y="3.5" width="17" height="17" rx="2.5" />
+              <path d="M8 10.5V16M8 8v.01M11.5 16v-5.5M11.5 13a2.5 2.5 0 0 1 5 0V16" />
+            </svg>
+          )}
+          {k.etiket}
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  const dugme = document.getElementById('paylas') as HTMLButtonElement | null;
+  const menu = document.getElementById('paylas-menusu');
+  const durum = document.getElementById('durum');
+
+  function ac(acik: boolean) {
+    if (!menu || !dugme) return;
+    menu.hidden = !acik;
+    dugme.setAttribute('aria-expanded', String(acik));
+    if (acik) menu.querySelector<HTMLElement>('.paylas-secenek')?.focus();
+  }
+  dugme?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    ac(menu?.hidden === true);
+  });
+  document.addEventListener('click', (e) => {
+    if (menu && !menu.hidden && !menu.contains(e.target as Node)) ac(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      ac(false);
+      dugme?.focus();
+    }
+  });
+
+  async function kopyala(): Promise<boolean> {
+    try {
+      await navigator.clipboard.writeText(menu?.dataset.adres ?? location.href);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  menu?.querySelectorAll<HTMLElement>('[data-kanal]').forEach((s) =>
+    s.addEventListener('click', async (e) => {
+      const kanal = s.dataset.kanal ?? '';
+      window.bumbaOlay?.('paylas', { kanal });
+      if (kanal === 'link') {
+        const tamam = await kopyala();
+        if (durum) durum.textContent = tamam ? (menu.dataset.kopyalandi ?? '') : (menu.dataset.adres ?? '');
+        ac(false);
+      } else if (kanal === 'instagram') {
+        e.preventDefault();
+        await kopyala();
+        if (durum) durum.textContent = menu.dataset.instagram ?? '';
+        window.open('https://www.instagram.com/', '_blank', 'noopener');
+        ac(false);
+      } else {
+        ac(false);
+      }
+    }),
+  );
+</script>
+
+<style>
+  .paylas-kutusu {
+    position: relative;
+  }
+  .paylas-menusu {
+    position: absolute;
+    z-index: 15;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    min-width: 13rem;
+    display: grid;
+    padding: 0.4rem;
+    background: var(--zemin-2);
+    border: 1px solid var(--cizgi);
+    border-radius: 6px;
+    box-shadow: 0 12px 30px var(--golge);
+  }
+  .paylas-menusu[hidden] {
+    display: none;
+  }
+  .paylas-secenek {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.6rem 0.7rem;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--yazi);
+    font: inherit;
+    font-family: var(--etiket);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .paylas-secenek:hover,
+  .paylas-secenek:focus-visible {
+    background: color-mix(in srgb, var(--vurgu) 14%, transparent);
+  }
+  .paylas-secenek svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>

@@ -17,11 +17,20 @@ const bugun = new Date().toISOString().slice(0, 10);
 ---
 
 <footer class="alt">
-  <ListeFormu />
-  <div class="alt-cizgi">
-    <p>{m.telif(yillar, SITE.sair)} {m.fotoNot} <a href={`${sayfaYolu('hakkinda', dil)}#fotograflar`}>{m.kunyeler}</a>. {m.guncelleme}: <time datetime={bugun}>{uzunTarihDil(bugun, dil)}</time>.</p>
+  <div class="alt-izgara">
+    <div class="alt-sol">
+      <p>{m.telif(yillar, SITE.sair)}</p>
+      <p>
+        {m.fotoNot} <a href={`${sayfaYolu('hakkinda', dil)}#fotograflar`}>{m.kunyeler}</a>.
+      </p>
+      <p>
+        {m.guncelleme}: <time datetime={bugun}>{uzunTarihDil(bugun, dil)}</time>.
+      </p>
+    </div>
+    <div class="alt-orta">
+      <ListeFormu />
+    </div>
     <div class="alt-sag">
-      <a href={sayfaYolu('gizlilik', dil)}>{m.gizlilik}</a>
       {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}
       <a class="bumba-imza" href="https://bumbagroup.com/life" rel="noopener" title={m.rozetBaslik}>
         <img class="rozet-acik" src="https://bumbagroup.com/rozet/life.svg" width="164" height="28" alt={m.rozetAlt} loading="lazy" />
@@ -34,23 +43,39 @@ const bugun = new Date().toISOString().slice(0, 10);
 <style>
   .alt {
     margin-top: 3rem;
-    padding: 2.5rem var(--kenar) 2rem;
+    padding: 2.5rem var(--kenar) 2.5rem;
     border-top: 1px solid var(--cizgi);
     color: var(--soluk);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
-  .alt p {
-    margin: 0;
+  /* Tek satır: solda telif, ortada e-posta listesi, sağda imza */
+  .alt-izgara {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 2rem 3rem;
+    align-items: center;
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+  .alt-sol p {
+    margin: 0 0 0.3rem;
+  }
+  .alt-sag {
+    justify-self: end;
   }
   .alt a {
     color: var(--soluk);
-    text-decoration: none;
   }
   .alt a:hover {
     color: var(--yazi);
   }
+  .alt-sol a {
+    text-decoration: underline;
+    text-decoration-color: var(--cizgi);
+  }
   .bumba-imza {
     display: inline-flex;
+    line-height: 0;
     opacity: 0.85;
   }
   .bumba-imza:hover {
@@ -60,22 +85,17 @@ const bugun = new Date().toISOString().slice(0, 10);
   :global([data-theme='gunduz']) .rozet-koyu {
     display: none;
   }
-  .alt-sag {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-  }
-  .alt-cizgi a {
-    text-decoration: underline;
-    text-decoration-color: var(--cizgi);
-  }
-  .alt-cizgi {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.25rem 1rem;
-    max-width: 64rem;
-    margin: 0 auto;
+  /* Telefonda alt alta: önce liste, sonra telif, en sonda imza */
+  @media (max-width: 52rem) {
+    .alt-izgara {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+    .alt-orta {
+      order: -1;
+    }
+    .alt-sag {
+      justify-self: start;
+    }
   }
 </style>

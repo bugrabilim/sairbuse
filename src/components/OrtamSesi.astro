@@ -1,35 +1,79 @@
 ---
-// Ortam sesi düğmesi: sessiz → deniz → yağmur. Tercih sekme boyunca hatırlanır;
-// sayfa değişince tarayıcı kuralları gereği ilk dokunuşta yeniden başlar.
+// Ortam sesi: düğme küçük bir menü açar; deniz, yağmur, vapur, gece ya da kapalı, bir de ses düzeyi.
+// Seçim sekme boyunca, ses düzeyi kalıcı olarak hatırlanır. Sayfa değişince tarayıcı kuralları gereği ses
+// ilk dokunuşta yeniden başlar. Sesler scripts/ortam.ts'de tarayıcıda üretilir.
 import { dilBul, metin } from '../i18n';
 const m = metin(dilBul(Astro.url)).ortam;
+const secenekler = [
+  { ad: 'sessiz', etiket: m.kapat },
+  { ad: 'deniz', etiket: m.deniz },
+  { ad: 'yagmur', etiket: m.yagmur },
+  { ad: 'vapur', etiket: m.vapur },
+  { ad: 'gece', etiket: m.gece },
+];
 // Betik metinleri düğmenin üstünden okur (işlevler JSON'a girmez, açık/kapalı kalıbı ayrıca gider)
-const yazilar = { sessiz: m.sessiz, deniz: m.deniz, yagmur: m.yagmur, kapali: m.kapali, acik: m.acik('{ad}') };
+const yazilar = {
+  sessiz: m.sessiz,
+  deniz: m.deniz,
+  yagmur: m.yagmur,
+  vapur: m.vapur,
+  gece: m.gece,
+  kapali: m.kapali,
+  acik: m.acik('{ad}'),
+};
 ---
 
-<button class="dugme ortam-dugmesi" type="button" id="ortam" aria-pressed="false" data-durum="sessiz" aria-label={m.kapali} data-metin={JSON.stringify(yazilar)}>
-  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-    <path d="M2 14c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"></path>
-    <path d="M2 19c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3" opacity=".5"></path>
-  </svg>
-  <span class="ortam-yazi">{m.sessiz}</span>
-</button>
+<div class="ortam-kutusu">
+  <button
+    class="dugme ortam-dugmesi"
+    type="button"
+    id="ortam"
+    aria-expanded="false"
+    aria-controls="ortam-menusu"
+    data-durum="sessiz"
+    aria-label={m.kapali}
+    data-metin={JSON.stringify(yazilar)}
+  >
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+      <path d="M2 14c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"></path>
+      <path d="M2 19c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3" opacity=".5"></path>
+    </svg>
+    <span class="ortam-yazi">{m.sessiz}</span>
+  </button>
+  <div class="ortam-menusu" id="ortam-menusu" role="group" aria-label={m.baslik} hidden>
+    {
+      secenekler.map((s) => (
+        <button type="button" class="ortam-secenek" data-ortam={s.ad} aria-pressed={s.ad === 'sessiz' ? 'true' : 'false'}>
+          <span class="isaret" aria-hidden="true" />
+          {s.etiket}
+        </button>
+      ))
+    }
+    <label class="ortam-duzey">
+      <span>{m.duzey}</span>
+      <input type="range" min="0" max="1" step="0.05" value="0.6" id="ortam-duzey" />
+    </label>
+  </div>
+</div>
 
 <script>
-  import { baslat, bitir, type Ortam } from '../scripts/ortam';
+  import { baslat, bitir, duzeyAyarla, type Ortam } from '../scripts/ortam';
 
   const dugme = document.getElementById('ortam') as HTMLButtonElement | null;
+  const menu = document.getElementById('ortam-menusu');
   const yazi = dugme?.querySelector('.ortam-yazi');
-  const SIRA = ['sessiz', 'deniz', 'yagmur'] as const;
+  const duzeyKutusu = document.getElementById('ortam-duzey') as HTMLInputElement | null;
+  const secenekler = Array.from(menu?.querySelectorAll<HTMLButtonElement>('[data-ortam]') ?? []);
   const AD: Record<string, string> = JSON.parse(dugme?.dataset.metin ?? '{}');
-  type Durum = (typeof SIRA)[number];
+  const SESLER = ['deniz', 'yagmur', 'vapur', 'gece'];
+  type Durum = 'sessiz' | Ortam;
 
   function goster(d: Durum) {
     if (!dugme || !yazi) return;
     dugme.dataset.durum = d;
-    dugme.setAttribute('aria-pressed', String(d !== 'sessiz'));
     dugme.setAttribute('aria-label', d === 'sessiz' ? AD.kapali : AD.acik.replace('{ad}', AD[d]));
     yazi.textContent = AD[d];
+    secenekler.forEach((s) => s.setAttribute('aria-pressed', String(s.dataset.ortam === d)));
   }
 
   function kaydet(d: Durum) {
@@ -44,13 +88,57 @@ const yazilar = { sessiz: m.sessiz, deniz: m.deniz, yagmur: m.yagmur, kapali: m.
     goster(d);
     kaydet(d);
     if (d === 'sessiz') bitir();
-    else await baslat(d as Ortam);
+    else {
+      await baslat(d);
+      window.bumbaOlay?.('ortam-sesi', { ses: d });
+    }
+  }
+
+  function menuAc(acik: boolean) {
+    if (!menu || !dugme) return;
+    menu.hidden = !acik;
+    dugme.setAttribute('aria-expanded', String(acik));
+    if (acik) menu.querySelector<HTMLElement>('[aria-pressed="true"]')?.focus();
   }
 
   dugme?.addEventListener('click', (e) => {
     e.stopPropagation();
-    const simdiki = (dugme.dataset.durum ?? 'sessiz') as Durum;
-    uygula(SIRA[(SIRA.indexOf(simdiki) + 1) % SIRA.length]);
+    menuAc(menu?.hidden === true);
+  });
+  menu?.addEventListener('click', (e) => e.stopPropagation());
+  document.addEventListener('click', () => {
+    if (menu && !menu.hidden) menuAc(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      menuAc(false);
+      dugme?.focus();
+    }
+  });
+  secenekler.forEach((s) =>
+    s.addEventListener('click', () => {
+      uygula((s.dataset.ortam ?? 'sessiz') as Durum);
+    }),
+  );
+
+  // Ses düzeyi kalıcı olarak hatırlanır
+  let duzey = 0.6;
+  try {
+    const k = localStorage.getItem('ortam-duzey');
+    if (k !== null) duzey = Number(k);
+  } catch {
+    /* yok */
+  }
+  if (duzeyKutusu) duzeyKutusu.value = String(duzey);
+  duzeyAyarla(duzey);
+  duzeyKutusu?.addEventListener('input', () => {
+    const v = Number(duzeyKutusu.value);
+    duzeyAyarla(v);
+    try {
+      localStorage.setItem('ortam-duzey', String(v));
+    } catch {
+      /* hatırlanmaz */
+    }
   });
 
   // Önceki sayfada açıksa: düğme açık görünür, ses ilk dokunuşta geri gelir
@@ -60,7 +148,7 @@ const yazilar = { sessiz: m.sessiz, deniz: m.deniz, yagmur: m.yagmur, kapali: m.
   } catch {
     /* yok */
   }
-  if (kayitli !== 'sessiz' && SIRA.includes(kayitli)) {
+  if (SESLER.includes(kayitli)) {
     goster(kayitli);
     const devam = () => {
       if (dugme?.dataset.durum === kayitli) baslat(kayitli as Ortam);
@@ -71,15 +159,88 @@ const yazilar = { sessiz: m.sessiz, deniz: m.deniz, yagmur: m.yagmur, kapali: m.
 </script>
 
 <style>
+  .ortam-kutusu {
+    position: relative;
+  }
   .ortam-dugmesi svg {
     flex: none;
   }
-  .ortam-dugmesi[aria-pressed='true'] svg {
+  .ortam-dugmesi:not([data-durum='sessiz']) {
+    color: var(--yazi);
+  }
+  .ortam-dugmesi:not([data-durum='sessiz']) svg {
     animation: dalga 3s ease-in-out infinite;
   }
   @keyframes dalga {
     50% {
       transform: translateX(2px);
     }
+  }
+  .ortam-menusu {
+    position: absolute;
+    z-index: 15;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    min-width: 12.5rem;
+    display: grid;
+    padding: 0.4rem;
+    background: var(--zemin-2);
+    border: 1px solid var(--cizgi);
+    border-radius: 6px;
+    box-shadow: 0 12px 30px var(--golge);
+  }
+  /* Fotoğraflı başlığın içindeyken (duygu sayfası) yukarı açılır; başlık taşanı kesiyor */
+  :global(.sahne) .ortam-menusu {
+    top: auto;
+    bottom: calc(100% + 0.25rem);
+  }
+  .ortam-menusu[hidden] {
+    display: none;
+  }
+  .ortam-secenek {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem 0.7rem;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--yazi);
+    font-family: var(--etiket);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+  }
+  .ortam-secenek:hover,
+  .ortam-secenek:focus-visible {
+    background: color-mix(in srgb, var(--vurgu) 14%, transparent);
+  }
+  .isaret {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    border: 1px solid var(--soluk);
+    flex: none;
+  }
+  .ortam-secenek[aria-pressed='true'] .isaret {
+    background: var(--vurgu);
+    border-color: var(--vurgu);
+  }
+  .ortam-duzey {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.6rem 0.7rem 0.4rem;
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--cizgi);
+    font-family: var(--etiket);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--soluk);
+  }
+  .ortam-duzey input {
+    width: 100%;
+    accent-color: var(--vurgu);
   }
 </style>

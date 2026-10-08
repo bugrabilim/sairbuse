@@ -91,6 +91,12 @@ export const tr = {
     ornekNot: 'Bu bir örnek okumadır; şairin kendi sesi yakında.',
     baglantiKopyalandi: 'Bağlantı kopyalandı.',
   },
+  paylas: {
+    paylas: 'Paylaş',
+    link: 'Bağlantıyı kopyala',
+    kopyalandi: 'Bağlantı kopyalandı.',
+    instagramNot: 'Bağlantı kopyalandı; Instagram’da hikâyene ya da mesajına yapıştırabilirsin. Hikâye için mısra kartı da hazırlayabilirsin.',
+  },
   kart: {
     baslik: 'Mısra kartı',
     gorselAlt: 'Seçtiğin mısralarla hazırlanan kart',
@@ -108,6 +114,11 @@ export const tr = {
     sessiz: 'ortam sesi',
     deniz: 'deniz',
     yagmur: 'yağmur',
+    vapur: 'vapur',
+    gece: 'gece',
+    kapat: 'kapalı',
+    duzey: 'Ses düzeyi',
+    baslik: 'Ortam sesi',
     kapali: 'Ortam sesi kapalı; açmak için bas',
     acik: (ad: string) => `Ortam sesi: ${ad}. Değiştirmek için bas`,
   },
@@ -187,6 +198,7 @@ export const tr = {
     antigoniBag: 'şiirlerden biri',
     fotograflar: 'Fotoğraflar',
     fotograflariGor: 'Fotoğraflar ve künyeleri',
+    gizlilikGor: 'Gizlilik ve çerezler',
     fotoMetni:
       'Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi gerçek; başka insanların çekip Wikimedia Commons’ta özgür lisansla paylaştığı fotoğraflar. Sitede siyah beyaza çevrilip şiirin duygusunun rengine boyandılar. Yeri belli olmayan birkaç şiirde fotoğraf yeri değil, şiirdeki bir imgeyi gösteriyor. Sayfaların başındaki fotoğraflar da aynı yoldan geldi: Kadıköy’de bir vapur, uzaydan İstanbul, 1862’de Tophane’deki saat kulesi, iki fincan kahve ve Antigoni adının geldiği Burgazada.',
     sayfasi: (ad: string) => `${ad} sayfası`,

@@ -5,6 +5,7 @@ import SiirFotosu from '../components/SiirFotosu.astro';
 import SiirGovde from '../components/SiirGovde.astro';
 import MisraKarti from '../components/MisraKarti.astro';
 import OrtamSesi from '../components/OrtamSesi.astro';
+import PaylasMenusu from '../components/PaylasMenusu.astro';
 import Sesler from '../components/Sesler.astro';
 import { SITE } from '../data/site';
 import {
@@ -71,7 +72,7 @@ const kayitlar = [
       <div class="arac">
         <button class="dugme" type="button" id="bastan-oku">{m.siir.bastanOku}</button>
         <button class="dugme" type="button" id="kart-dugme" aria-pressed="false">{m.siir.misraKarti}</button>
-        <button class="dugme" type="button" id="paylas" data-baslik={sayfaBasligi} data-kopyalandi={m.siir.baglantiKopyalandi}>{m.siir.paylas}</button>
+        <PaylasMenusu baslik={sayfaBasligi} />
         <OrtamSesi />
         <button class="dugme vurgulu" type="button" id="kart-olustur" hidden>{m.siir.kartOlustur}</button>
       </div>
@@ -122,7 +123,6 @@ const kayitlar = [
 
   const govde = document.getElementById('govde');
   const ipucu = document.getElementById('ipucu');
-  const durum = document.getElementById('durum');
   let sayac: number | undefined;
 
   function ipucunuZamanla() {
@@ -151,25 +151,6 @@ const kayitlar = [
     });
   }
 
-  const paylas = document.getElementById('paylas');
-  paylas?.addEventListener('click', async () => {
-    const url = location.href;
-    const title = paylas.dataset.baslik ?? document.title;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url });
-      } catch {
-        /* vazgeçildi */
-      }
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(url);
-      if (durum) durum.textContent = paylas.dataset.kopyalandi ?? '';
-    } catch {
-      if (durum) durum.textContent = url;
-    }
-  });
 </script>
 
 <style>
