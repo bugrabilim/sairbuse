@@ -286,7 +286,7 @@ Kargayla
 - [x] Şiir Falı
 - [x] Duygu × Yer çarkı (fal sayfasında)
 - [x] "Bugün yazılmış şiir"
-- [x] Satır satır açılış: dokununca hepsi, "Baştan oku" ile yeniden
+- [x] Harf harf açılış (önce satır satırdı; 8 Ekim 2026'da sahibinin isteğiyle değişti): dokununca hepsi, "Baştan oku" ile yeniden
 - [x] Duygulara özel geçiş hareketleri
 - [x] Mısra paylaş kartı (1080×1920, tarayıcıda çizilir)
 - [x] Şairin sesiyle okuma altyapısı *(kayıtlar bekleniyor)*
@@ -388,7 +388,7 @@ Arayüz önerisi: "ortam sesi" düğmesinin yanında bir "müzik" düğmesi. İk
 
 - **Yağmurlu cam:** Yağmur sesi açıkken ekranda ince damla izleri (canvas).
 - **Vapur salınımı:** Vapurda yazılmış şiirlerde ("Eminönü vapuru", "Beşiktaş vapurundayız") metin çok hafif sallanır.
-- **Daktilo sesi:** Satır satır açılırken her mısrada kısık bir daktilo tuşu (isteğe bağlı).
+- **Daktilo sesi:** Harf harf açılırken her mısrada kısık bir daktilo tuşu (isteğe bağlı).
 - **Günün saati:** Zemin sabah, akşam ve gece hafifçe ton değiştirir.
 - **El yazısı:** Şairin el yazısıyla taranmış imzalar ya da başlıklar varsa şiir sayfalarına eklenebilir.
 

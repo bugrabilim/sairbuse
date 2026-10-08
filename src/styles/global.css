@@ -886,34 +886,46 @@ body:not(.sahneli) main {
   }
 }
 
-/* ---------- Satır satır açılış ----------
-   Şiir açılırken mısralar birer birer, o duygunun kendi hareketiyle gelir
-   (Atlas of Emotions'tan esinle). Şiire dokununca ya da bir tuşa basınca hepsi gelir.
-   Hareketi azalt ayarı açıksa yukarıdaki kural hepsini anında gösterir. */
+/* ---------- Harf harf açılış ----------
+   Şiir açılırken yazılıyormuş gibi harf harf belirir (scripts/acilis.ts). Hız ve harfin belirişi
+   duyguya göre değişir. Şiire dokununca ya da bir tuşa basınca hepsi gelir.
+   Hareketi azalt ayarı açıksa hepsi hemen görünür. */
 
-.govde.satir-satir {
-  --aralik: 0.55s;
+:root {
+  --hiz: 32; /* harf / saniye */
+  --satir-arasi: 260; /* ms */
+  --kita-arasi: 650; /* ms */
+  --harf-gecis: 0.35s;
+}
+.govde.satir-satir,
+.govde.yaziliyor {
   cursor: pointer;
 }
-.govde.satir-satir .misra {
-  animation-name: d-ac;
-  animation-duration: 1.4s;
-  animation-timing-function: ease;
-  animation-fill-mode: both;
-  animation-delay: calc(0.25s + var(--i, 0) * var(--aralik));
+/* Betik devralana kadar şiir görünmesin; betik çalışmazsa 4 saniye sonra kendiliğinden görünür */
+.js .govde.satir-satir:not(.yaziliyor):not(.hepsi) .misra {
+  visibility: hidden;
+  animation: guvence 0s 4s forwards;
 }
-@keyframes d-ac {
-  from {
-    opacity: 0;
+@keyframes guvence {
+  to {
+    visibility: visible;
   }
 }
-/* Dokununca hepsi; mısra kartı seçimi de hepsini açık tutar */
-body .govde.hepsi .misra,
-body .govde.secim .misra {
-  animation: none !important;
+.govde.yaziliyor .harf {
+  opacity: 0;
+  transition: opacity var(--harf-gecis) ease;
+}
+.govde.yaziliyor .harf.acik {
+  opacity: 1;
 }
 .govde.hepsi {
   cursor: auto;
+}
+/* Dokununca ya da mısra kartı seçimi açılınca yazılma beklenmeden hepsi */
+.govde.hepsi .harf,
+.govde.secim .harf {
+  opacity: 1 !important;
+  filter: none !important;
 }
 /* Duygu sayfalarında şiir ekrana girene kadar bekler (yalnız JavaScript açıkken) */
 .js .govde.gec .misra {
@@ -937,91 +949,52 @@ body .govde.secim .misra {
   opacity: 0;
 }
 
-/* aşk: ılık bir açılış */
-body[data-duygu='ask'] .govde.satir-satir .misra {
-  animation-name: d-ask;
-  transform-origin: left center;
+/* aşk: ılık, sakin */
+body[data-duygu='ask'] {
+  --hiz: 30;
+  --harf-gecis: 0.5s;
 }
-@keyframes d-ask {
-  from {
-    opacity: 0;
-    transform: scale(0.97);
-  }
-}
-/* özlem: geçmişten, soldan süzülür */
-body[data-duygu='ozlem'] .govde.satir-satir .misra {
-  animation-name: d-ozlem;
-  animation-duration: 1.8s;
-}
-@keyframes d-ozlem {
-  from {
-    opacity: 0;
-    transform: translateX(-0.9rem);
-  }
+/* özlem: ağır, geçmişten */
+body[data-duygu='ozlem'] {
+  --hiz: 26;
+  --satir-arasi: 380;
+  --harf-gecis: 0.6s;
 }
 /* hüzün: buğulu gelir, yavaşça netleşir */
-body[data-duygu='huzun'] .govde.satir-satir {
-  --aralik: 0.65s;
+body[data-duygu='huzun'] {
+  --hiz: 24;
+  --satir-arasi: 420;
+  --harf-gecis: 0.9s;
 }
-body[data-duygu='huzun'] .govde.satir-satir .misra {
-  animation-name: d-huzun;
-  animation-duration: 2.2s;
+body[data-duygu='huzun'] .govde.yaziliyor .harf {
+  filter: blur(3px);
+  transition:
+    opacity var(--harf-gecis) ease,
+    filter var(--harf-gecis) ease;
 }
-@keyframes d-huzun {
-  from {
-    opacity: 0;
-    filter: blur(5px);
-  }
+body[data-duygu='huzun'] .govde.yaziliyor .harf.acik {
+  filter: none;
 }
-/* yalnızlık: harfler birbirinden uzak başlar */
-body[data-duygu='yalnizlik'] .govde.satir-satir .misra {
-  animation-name: d-yalnizlik;
-  animation-duration: 2s;
-}
-@keyframes d-yalnizlik {
-  from {
-    opacity: 0;
-    letter-spacing: 0.12em;
-  }
+/* yalnızlık: aralıklı */
+body[data-duygu='yalnizlik'] {
+  --hiz: 26;
+  --satir-arasi: 500;
 }
 /* ayrılık: geçiş yok, kesilerek */
-body[data-duygu='ayrilik'] .govde.satir-satir {
-  --aralik: 0.45s;
-}
-body[data-duygu='ayrilik'] .govde.satir-satir .misra {
-  animation-name: d-ayrilik;
-  animation-duration: 0.01s;
-  animation-timing-function: steps(1, end);
-}
-@keyframes d-ayrilik {
-  from {
-    opacity: 0;
-  }
+body[data-duygu='ayrilik'] {
+  --hiz: 38;
+  --harf-gecis: 0s;
 }
 /* karanlık: karanlıktan ağır ağır */
-body[data-duygu='karanlik'] .govde.satir-satir {
-  --aralik: 0.7s;
+body[data-duygu='karanlik'] {
+  --hiz: 22;
+  --kita-arasi: 900;
+  --harf-gecis: 1.1s;
 }
-body[data-duygu='karanlik'] .govde.satir-satir .misra {
-  animation-name: d-karanlik;
-  animation-duration: 2.6s;
-}
-@keyframes d-karanlik {
-  from {
-    opacity: 0;
-    filter: brightness(0.2);
-  }
-}
-/* özgürlük: aşağıdan yukarı, hafifçe */
-body[data-duygu='ozgurluk'] .govde.satir-satir .misra {
-  animation-name: d-ozgurluk;
-  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-@keyframes d-ozgurluk {
-  from {
-    opacity: 0;
-    transform: translateY(0.9rem);
-  }
+/* özgürlük: hafif, akıcı */
+body[data-duygu='ozgurluk'] {
+  --hiz: 38;
+  --satir-arasi: 200;
 }
 
 @media (prefers-reduced-motion: reduce) {
