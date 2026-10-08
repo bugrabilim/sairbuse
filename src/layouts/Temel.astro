@@ -99,14 +99,14 @@ const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
 
     <script is:inline>
       // Tema sayfa çizilmeden seçilir ki yanlış tema bir an bile görünmesin.
-      // Seçim yoksa sistem tercihi; seçim localStorage'da ("tema": gece | gunduz).
+      // Varsayılan gece (koyu); okur düğmeyle gündüzü seçerse localStorage'da hatırlanır ("tema").
       (function () {
         var k = document.documentElement;
         var t = null;
         try {
           t = localStorage.getItem('tema');
         } catch (e) {}
-        if (t !== 'gece' && t !== 'gunduz') t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'gunduz' : 'gece';
+        if (t !== 'gece' && t !== 'gunduz') t = 'gece';
         k.setAttribute('data-theme', t);
         k.classList.add('js');
       })();
@@ -200,7 +200,7 @@ const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
       });
       document.querySelectorAll('.menu a').forEach((a) => a.addEventListener('click', kapat));
 
-      // Tema düğmesi: seçimi hatırlar; seçim yokken sistem tercihi değişirse ona uyar
+      // Tema düğmesi: seçimi hatırlar
       const temaDugmesi = document.querySelector<HTMLButtonElement>('.tema-dugmesi');
       const temaMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
       function temaUygula(t: string) {
@@ -216,13 +216,6 @@ const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
           localStorage.setItem('tema', yeni);
         } catch {}
         window.bumbaOlay?.('tema-degistir', { tema: yeni });
-      });
-      window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-        let secili = null;
-        try {
-          secili = localStorage.getItem('tema');
-        } catch {}
-        if (!secili) temaUygula(e.matches ? 'gunduz' : 'gece');
       });
 
       // Dil değiştirici: seçimi hatırlar
