@@ -6,6 +6,7 @@ import SiirGovde from '../components/SiirGovde.astro';
 import { UZAK_YERLER } from '../data/yerler';
 import { anaDuygu, imza, siirYolu, yerYolu, yil, type Yer } from '../lib/siirler';
 import { dilBul, metin, sayfaYolu, siirSayisi, yerAdi, yerde } from '../i18n';
+import { koleksiyonSema } from '../lib/sema';
 import { kunye, siirFotografi } from '../lib/foto';
 
 interface Props {
@@ -25,7 +26,14 @@ const aralik = yillar.length > 1 ? `${yillar[0]}–${yillar[yillar.length - 1]}`
 const n = y.siirler.length;
 ---
 
-<Temel baslik={yAd} aciklama={m.yer.aciklama(burada, n)} duygu={anaDuygu(ilk)} sahne>
+<Temel baslik={yAd} aciklama={m.yer.aciklama(burada, n)} duygu={anaDuygu(ilk)}
+  sahne
+  sema={[koleksiyonSema(yAd, yerYolu(y.ad, dil), y.siirler, dil)]}
+  kirinti={[
+    { ad: m.sayfaAdlari.harita, yol: sayfaYolu('harita', dil) },
+    { ad: yAd, yol: yerYolu(y.ad, dil) },
+  ]}
+>
   <header class="sahne yer-sahne">
     <SiirFotosu siir={ilk} oncelik />
     <div class="sahne-ic">

@@ -32,7 +32,7 @@ const veri = {
 const [jsOnce, jsSonra] = m.jsYok.split('{siirler}');
 ---
 
-<Temel baslik={m.baslik} aciklama={m.aciklama} sahne>
+<Temel baslik={m.baslik} aciklama={m.aciklama} sahne kirinti={[{ ad: metin(dil).sayfaAdlari.fal, yol: sayfaYolu('fal', dil) }]}>
   <SayfaSahnesi foto="sayfa-fal" duygu="ozlem" etiket={m.etiket} baslik={m.baslik}>
     {m.giris} {metin(dil).genel.siirlerTurkce}
   </SayfaSahnesi>

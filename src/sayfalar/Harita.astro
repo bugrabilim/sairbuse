@@ -6,7 +6,7 @@ import harita from '../data/harita.json';
 import haritaGenis from '../data/harita-genis.json';
 import { DIS_YERLER, HARITA_YERLERI, ISTANBUL, UZAK_YERLER, yerSlug } from '../data/yerler';
 import { anaDuygu, ad, tumSiirler, yerGrubu, yerYolu, type Siir } from '../lib/siirler';
-import { dilBul, metin, siirSayisi, yerAdi } from '../i18n';
+import { sayfaYolu, dilBul, metin, siirSayisi, yerAdi } from '../i18n';
 
 const dil = dilBul(Astro.url);
 const m = metin(dil).harita;
@@ -56,7 +56,7 @@ const uzaklar = [...yerdekiler.keys()].filter((y) => !haritadakiler.includes(y))
 const ARA = 16; // aynı yerdeki noktalar arası
 ---
 
-<Temel baslik={m.baslik} aciklama={m.aciklama} sahne>
+<Temel baslik={m.baslik} aciklama={m.aciklama} sahne kirinti={[{ ad: metin(dil).sayfaAdlari.harita, yol: sayfaYolu('harita', dil) }]}>
   <SayfaSahnesi foto="sayfa-harita" etiket={m.etiket(haritadakiler.length, istanbulSiirleri)} baslik={m.baslik}>
     {m.giris}
   </SayfaSahnesi>

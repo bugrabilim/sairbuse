@@ -18,7 +18,7 @@ const yazilar = {
 const [jsOnce, jsSonra] = m.jsYok.split('{siirler}');
 ---
 
-<Temel baslik={m.baslik} aciklama={m.aciklama} sahne>
+<Temel baslik={m.baslik} aciklama={m.aciklama} sahne kirinti={[{ ad: metin(dil).sayfaAdlari.arama, yol: sayfaYolu('arama', dil) }]}>
   <SayfaSahnesi foto="imge-istanbul-gogu" duygu="ozlem" etiket={m.etiket} baslik={m.baslik}>
     {m.giris}
   </SayfaSahnesi>

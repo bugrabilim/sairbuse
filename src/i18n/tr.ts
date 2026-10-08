@@ -28,6 +28,7 @@ export const tr = {
     kunyeler: 'künyeler',
     haklar: 'Haklar',
     gizlilik: 'Gizlilik',
+    guncelleme: 'Son güncelleme',
     rozetBaslik: 'Bumba Life, bir Bumba Group kolu',
     rozetAlt: 'Bir Bumba Life ürünü',
   },
@@ -74,6 +75,8 @@ export const tr = {
   },
   siir: {
     hepsiIcin: 'Hepsi için şiire dokun',
+    aciklama: (misra: string, imza: string) => [misra, imza].filter(Boolean).join(' — '),
+    baslikEki: '',
     bastanOku: 'Baştan oku',
     misraKarti: 'Mısra kartı',
     paylas: 'Paylaş',
@@ -192,6 +195,35 @@ export const tr = {
       'Bu sitedeki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz. Bir şiiri sevdiysen bağlantısını paylaşabilirsin.',
     fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri yukarıda adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
     guncelleme: 'Son güncelleme:',
+    sssBaslik: 'Sık sorulanlar',
+    sss: [
+      {
+        soru: 'Duyguların Peşinde nedir?',
+        cevap:
+          'Antigoni imzalı, 2008–2021 arasında yazılmış 30 şiirin sitesi. Bir kitap olacaktı, basılamadı; burada şiirler duygu, yer ve zaman üzerinden okunuyor.',
+      },
+      {
+        soru: 'Şiirleri kim yazdı?',
+        cevap: 'Şiirler Antigoni imzasını taşıyor. Antigoni, Burgazada’nın eski adı; şiirlerden biri orada yazıldı.',
+      },
+      {
+        soru: 'Şiirler nerede yazıldı?',
+        cevap:
+          'Çoğu İstanbul’da: Moda, Kalkedon (Kadıköy), Cihangir, Feneryolu, Altunizade, Sirkeci, Burgazada, Büyükada ve bir Eminönü vapurunda. Birkaçı İzmir’de, Marmaris Söğüt’te ve Paris’te, Eyfel Kulesi’nin altında.',
+      },
+      {
+        soru: 'Hangi duygular var?',
+        cevap: 'Yedi duygu, her birinin rengi şiirlerin içinden: aşk (pembe), özlem (kayısı), hüzün (sarı), yalnızlık (gri), ayrılık (siyah), karanlık (mor), özgürlük (turuncu).',
+      },
+      {
+        soru: 'Şiirleri paylaşabilir miyim?',
+        cevap: 'Şiirlerin tüm hakları saklıdır; kopyalanıp başka yerde yayımlanamaz. Bir şiirin bağlantısını ya da sitedeki mısra kartını paylaşabilirsiniz.',
+      },
+      {
+        soru: 'Şiirlerin İngilizcesi var mı?',
+        cevap: 'Sitenin İngilizce bir arayüzü var ama şiirler çevrilmedi; yazıldıkları dilde, Türkçe duruyor.',
+      },
+    ],
   },
   arama: {
     baslik: 'Arama',

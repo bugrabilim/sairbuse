@@ -6,7 +6,8 @@ import { DUYGULAR, duyguAdi, renkAdi } from '../data/duygular';
 import { FOTOGRAFLAR } from '../data/fotograflar';
 import { ad, imza, siirYolu, tumSiirler } from '../lib/siirler';
 import { fotoAciklama, lisansAdi, siirFotografi } from '../lib/foto';
-import { SAYFALAR, dilBul, duyguYolu, metin, type SayfaAdi } from '../i18n';
+import { SAYFALAR, dilBul, duyguYolu, metin, sayfaYolu, type SayfaAdi } from '../i18n';
+import { sssSema } from '../lib/sema';
 
 const dil = dilBul(Astro.url);
 const M = metin(dil);
@@ -27,7 +28,13 @@ function sayfasi(yol: string) {
 const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
 ---
 
-<Temel baslik={m.baslik} aciklama={m.aciklama} sahne>
+<Temel
+  baslik={m.baslik}
+  aciklama={m.aciklama}
+  sahne
+  sema={[sssSema(m.sss)]}
+  kirinti={[{ ad: m.baslik, yol: sayfaYolu('hakkinda', dil) }]}
+>
   <SayfaSahnesi foto="sayfa-hakkinda" duygu="karanlik" etiket={SITE.ad} baslik={m.baslik} />
   <article class="sayfa hakkinda">
     <p>{m.giris1}</p>
@@ -108,6 +115,18 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
     <h2 id="haklar">{m.haklar}</h2>
     <p>{m.haklarMetni}</p>
     <p>{m.fotoHaklar}</p>
+
+    <h2 id="sorular">{m.sssBaslik}</h2>
+    <dl class="sss">
+      {
+        m.sss.map((x) => (
+          <>
+            <dt>{x.soru}</dt>
+            <dd>{x.cevap}</dd>
+          </>
+        ))
+      }
+    </dl>
   </article>
 </Temel>
 
@@ -128,6 +147,15 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
 </script>
 
 <style>
+  .sss dt {
+    font-family: var(--serif-baslik);
+    font-size: 1.25rem;
+    margin-top: 1.4rem;
+  }
+  .sss dd {
+    margin: 0.3rem 0 0;
+    color: var(--soluk);
+  }
   .foto-ac-satir {
     margin: 2.5rem 0 1rem;
   }

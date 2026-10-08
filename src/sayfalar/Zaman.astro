@@ -4,7 +4,7 @@ import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import SiirListesi from '../components/SiirListesi.astro';
 import { ad, anaDuygu, basliksiz, gunAy, imza, siirYolu, tumSiirler, yerGrubu, yil } from '../lib/siirler';
 import { duyguAdi } from '../data/duygular';
-import { dilBul, metin, yerAdi, yerde } from '../i18n';
+import { sayfaYolu, dilBul, metin, yerAdi, yerde } from '../i18n';
 
 const dil = dilBul(Astro.url);
 const M = metin(dil);
@@ -44,7 +44,7 @@ const kesismeler = [...gunler.entries()]
   });
 ---
 
-<Temel baslik={m.baslik} aciklama={m.aciklama(ilkYil, sonYil, tarihli.length)} sahne>
+<Temel baslik={m.baslik} aciklama={m.aciklama(ilkYil, sonYil, tarihli.length)} sahne kirinti={[{ ad: metin(dil).sayfaAdlari.zaman, yol: sayfaYolu('zaman', dil) }]}>
   <SayfaSahnesi foto="sayfa-zaman" duygu="ayrilik" etiket={`${ilkYil} – ${sonYil}`} baslik={m.baslik}>
     {m.giris(sonYil - ilkYil, tarihli.length)}
   </SayfaSahnesi>
