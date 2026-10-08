@@ -1,6 +1,6 @@
 ---
-import Sayfa from '../../sayfalar/Siir.astro';
-import { tumSiirler } from '../../lib/siirler';
+import Sayfa from '../../../sayfalar/Siir.astro';
+import { tumSiirler } from '../../../lib/siirler';
 
 export async function getStaticPaths() {
   const tum = await tumSiirler();

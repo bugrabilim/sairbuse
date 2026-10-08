@@ -1,13 +1,10 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { duygu, type Duygu } from '../data/duygular';
 import { gercekYer, yerSlug } from '../data/yerler';
+import { duyguAdi } from '../data/duygular';
+import { gunAyDil, siirYoluDil, uzunTarihDil, yerAdi, yerYoluDil, metin, type Dil } from '../i18n';
 
 export type Siir = CollectionEntry<'siirler'>;
-
-const AYLAR = [
-  'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-  'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık',
-];
 
 /** Tarihliler eskiden yeniye, tarihsizler sonda. */
 function sirala(a: Siir, b: Siir): number {
@@ -51,21 +48,19 @@ export function tarihYaz(tarih: string): string {
   return `${g}.${a}.${y}`;
 }
 
-export function uzunTarih(tarih: string): string {
-  const [y, a, g] = tarih.split('-').map(Number);
-  return `${g} ${AYLAR[a - 1]} ${y}`;
+export function uzunTarih(tarih: string, dil: Dil = 'tr'): string {
+  return uzunTarihDil(tarih, dil);
 }
 
-export function gunAy(tarih: string): string {
-  const [, a, g] = tarih.split('-').map(Number);
-  return `${g} ${AYLAR[a - 1]}`;
+export function gunAy(tarih: string, dil: Dil = 'tr'): string {
+  return gunAyDil(tarih, dil);
 }
 
-/** Şairin kendi biçimi: "18.07.2011 – Moda" */
-export function imza(s: Siir): string {
+/** Şairin kendi biçimi: "18.07.2011 – Moda" (İngilizcede yer adı çevrilir: "evde" → "at home") */
+export function imza(s: Siir, dil: Dil = 'tr'): string {
   const p: string[] = [];
   if (s.data.tarih) p.push(tarihYaz(s.data.tarih));
-  if (s.data.yer) p.push(s.data.yer);
+  if (s.data.yer) p.push(yerAdi(s.data.yer, dil));
   return p.join(' – ');
 }
 
@@ -77,13 +72,15 @@ export interface SahneBasligi {
 }
 
 /** Fotoğrafın üstündeki büyük başlık: adı, yoksa yeri, yoksa tarihi, o da yoksa ilk mısrası. */
-export function sahneBasligi(s: Siir): SahneBasligi {
-  const { baslik, yer, tarih } = s.data;
-  const t = tarih ? uzunTarih(tarih) : '';
+export function sahneBasligi(s: Siir, dil: Dil = 'tr'): SahneBasligi {
+  const { baslik, tarih } = s.data;
+  const yer = s.data.yer ? yerAdi(s.data.yer, dil) : undefined;
+  const t = tarih ? uzunTarih(tarih, dil) : '';
+  const tarihsiz = metin(dil).genel.tarihsiz;
   if (baslik) return { baslik, alt: [yer, t].filter(Boolean).join(' · '), tur: 'ad' };
-  if (yer) return { baslik: yer, alt: t || 'tarihsiz', tur: 'yer' };
+  if (yer) return { baslik: yer, alt: t || tarihsiz, tur: 'yer' };
   if (t) return { baslik: t, alt: '', tur: 'tarih' };
-  return { baslik: ad(s), alt: 'tarihsiz', tur: 'ilk' };
+  return { baslik: ad(s), alt: tarihsiz, tur: 'ilk' };
 }
 
 export function yil(s: Siir): string | undefined {
@@ -102,8 +99,8 @@ export function siirDuygulari(s: Siir): Duygu[] {
   return s.data.duygular.map(duygu);
 }
 
-export function siirYolu(s: Siir): string {
-  return `/siir/${s.id}/`;
+export function siirYolu(s: Siir, dil: Dil = 'tr'): string {
+  return siirYoluDil(s.id, dil);
 }
 
 /** Listede s'den sonra gelen ve koşula uyan ilk şiir (başa sararak). */
@@ -123,42 +120,43 @@ export interface Kapi {
 }
 
 /** Bir şiirden çıkan üç kapı: aynı duygu, aynı yer, aynı yıl. */
-export function kapilar(s: Siir, tum: Siir[]): Kapi[] {
+export function kapilar(s: Siir, tum: Siir[], dil: Dil = 'tr'): Kapi[] {
   const sonuc: Kapi[] = [];
+  const m = metin(dil).siir;
   const d = anaDuygu(s);
   const ayniDuygu = sonraki(s, tum, (x) => x.data.duygular.includes(d.slug));
-  if (ayniDuygu) sonuc.push({ etiket: 'Aynı duygudan', deger: d.ad.toLocaleLowerCase('tr'), siir: ayniDuygu });
+  if (ayniDuygu) sonuc.push({ etiket: m.ayniDuygudan, deger: duyguAdi(d, dil).toLocaleLowerCase(dil), siir: ayniDuygu });
 
   const yer = yerGrubu(s);
   const ayniYer = yer ? sonraki(s, tum, (x) => yerGrubu(x) === yer) : undefined;
-  if (yer && ayniYer) sonuc.push({ etiket: 'Aynı yerden', deger: yer, siir: ayniYer });
+  if (yer && ayniYer) sonuc.push({ etiket: m.ayniYerden, deger: yerAdi(yer, dil), siir: ayniYer });
 
   const y = yil(s);
   const ayniYil = y ? sonraki(s, tum, (x) => yil(x) === y) : undefined;
-  if (y && ayniYil) sonuc.push({ etiket: 'Aynı yıldan', deger: y, siir: ayniYil });
+  if (y && ayniYil) sonuc.push({ etiket: m.ayniYildan, deger: y, siir: ayniYil });
 
   return sonuc;
 }
 
 /** Tarayıcı tarafı betikler için hafif şiir verisi */
-export function istemciVerisi(s: Siir) {
+export function istemciVerisi(s: Siir, dil: Dil = 'tr') {
+  const y = yerGrubu(s);
   return {
     id: s.id,
     ad: ad(s),
     basliksiz: basliksiz(s),
-    imza: imza(s),
+    imza: imza(s, dil),
     tarih: s.data.tarih ?? null,
-    yer: yerGrubu(s) ?? null,
+    yer: y ? yerAdi(y, dil) : null,
     duygu: anaDuygu(s).slug,
     kitalar: kitalar(s),
-    sahne: sahneBasligi(s),
+    sahne: sahneBasligi(s, dil),
+    href: siirYolu(s, dil),
   };
 }
 
 /** Takvimde anlamı olan günler (AA-GG) */
-export const OZEL_GUNLER: Record<string, string> = {
-  '12-21': 'yılın en uzun gecesi',
-};
+export const OZEL_GUNLER: Record<string, string> = metin('tr').ozelGunler;
 
 /** Türkçe bulunma eki: Moda'da, Söğüt'te, Cihangir'de */
 export function bulunma(yer: string): string {
@@ -189,6 +187,6 @@ export function yerler(tum: Siir[]): Yer[] {
     .sort((a, b) => b.siirler.length - a.siirler.length || a.ad.localeCompare(b.ad, 'tr'));
 }
 
-export function yerYolu(ad: string): string {
-  return `/yer/${yerSlug(ad)}/`;
+export function yerYolu(ad: string, dil: Dil = 'tr'): string {
+  return yerYoluDil(ad, dil);
 }

@@ -2,7 +2,9 @@
 // Şiirin açılışı: yazıldığı yerin fotoğrafı ve üstünde büyük başlık.
 import SiirFotosu from './SiirFotosu.astro';
 import { anaDuygu, sahneBasligi, siirYolu, type Siir } from '../lib/siirler';
-import { kunye, siirFotografi } from '../lib/foto';
+import { fotoAciklama, kunye, siirFotografi } from '../lib/foto';
+import { duyguAdi } from '../data/duygular';
+import { dilBul } from '../i18n';
 
 interface Props {
   siir: Siir;
@@ -18,25 +20,26 @@ interface Props {
 
 const { siir, seviye = 'h1', bagli = false, etiket, oncelik = false, sinif, sizes = '100vw' } = Astro.props;
 const Baslik = seviye;
-const b = sahneBasligi(siir);
+const dil = dilBul(Astro.url);
+const b = sahneBasligi(siir, dil);
 const foto = siirFotografi(siir);
-const href = bagli ? siirYolu(siir) : undefined;
-const ust = etiket ?? anaDuygu(siir).ad;
+const href = bagli ? siirYolu(siir, dil) : undefined;
+const ust = etiket ?? duyguAdi(anaDuygu(siir), dil);
 ---
 
 <header class:list={['sahne siir-sahne', sinif]}>
   <SiirFotosu siir={siir} oncelik={oncelik} sizes={sizes} />
   <div class="sahne-ic">
     <p class="etiket">{ust}</p>
-    <Baslik class:list={['siir-baslik', { uzun: b.baslik.length > 13 && b.tur !== 'ilk', ilk: b.tur === 'ilk' }]}>
+    <Baslik lang="tr" class:list={['siir-baslik', { uzun: b.baslik.length > 13 && b.tur !== 'ilk', ilk: b.tur === 'ilk' }]}>
       {href ? <a href={href}>{b.baslik}</a> : b.baslik}
     </Baslik>
     {b.alt && <p class="siir-alt">{b.alt}</p>}
   </div>
   {
     foto && (
-      <a class="sahne-kunye" href={foto.kaynak} rel="noopener" title={foto.aciklama}>
-        {kunye(foto)}
+      <a class="sahne-kunye" href={foto.kaynak} rel="noopener" title={fotoAciklama(foto, dil)}>
+        {kunye(foto, dil)}
       </a>
     )
   }

@@ -1,5 +1,6 @@
 ---
 // Şiirin sesli okumaları. Şairin kendi kaydı ya da açıkça "örnek" diye etiketli yapay sesler.
+import { dilBul, metin } from '../i18n';
 interface Kayit {
   dosya: string;
   etiket: string;
@@ -10,6 +11,7 @@ interface Props {
 }
 const { kayitlar } = Astro.props;
 const ornekVar = kayitlar.some((k) => k.ornek);
+const m = metin(dilBul(Astro.url)).siir;
 ---
 
 <div class="sesler">
@@ -27,7 +29,7 @@ const ornekVar = kayitlar.some((k) => k.ornek);
     }
   </div>
   <span class="ses-cizgi" aria-hidden="true"><span id="ses-ilerleme"></span></span>
-  {ornekVar && <p class="ses-notu">Bu bir örnek okumadır; şairin kendi sesi yakında.</p>}
+  {ornekVar && <p class="ses-notu">{m.ornekNot}</p>}
   {kayitlar.map((k, i) => <audio preload="none" src={k.dosya} data-i={i} />)}
 </div>
 

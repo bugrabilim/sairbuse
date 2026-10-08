@@ -1,0 +1,187 @@
+---
+import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+import { SITE } from '../data/site';
+import { DUYGULAR, duyguAdi, renkAdi } from '../data/duygular';
+import { FOTOGRAFLAR } from '../data/fotograflar';
+import { ad, imza, siirYolu, tumSiirler } from '../lib/siirler';
+import { fotoAciklama, lisansAdi, siirFotografi } from '../lib/foto';
+import { SAYFALAR, dilBul, duyguYolu, metin, type SayfaAdi } from '../i18n';
+
+const dil = dilBul(Astro.url);
+const M = metin(dil);
+const m = M.hakkinda;
+const tum = await tumSiirler();
+const acilis = tum.find((s) => s.id === '2011-07-18-moda');
+const antigoni = tum.find((s) => s.id === '2011-10-24-antigoni');
+const renkler = DUYGULAR.map((d) => ({ d, kaynak: tum.find((s) => s.id === d.kaynak) }));
+// Her fotoğraf ve onu kullanan şiirler
+const fotolar = FOTOGRAFLAR.map((f) => ({ f, siirler: tum.filter((s) => siirFotografi(s)?.id === f.id) })).filter(
+  (x) => x.siirler.length || x.f.sayfa,
+);
+/** Fotoğrafın başında durduğu sayfa, o dilde (ad ve adres) */
+function sayfasi(yol: string) {
+  const anahtar = (Object.keys(SAYFALAR) as SayfaAdi[]).find((k) => SAYFALAR[k].tr === yol);
+  return anahtar ? { ad: M.sayfaAdlari[anahtar], yol: SAYFALAR[anahtar][dil] } : undefined;
+}
+const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
+---
+
+<Temel baslik={m.baslik} aciklama={m.aciklama} sahne>
+  <SayfaSahnesi foto="sayfa-hakkinda" duygu="karanlik" etiket={SITE.ad} baslik={m.baslik} />
+  <article class="sayfa hakkinda">
+    <p>{m.giris1}</p>
+    <p>{m.giris2}</p>
+    <blockquote lang="tr">
+      <p>Şiir kitabım ağlıyor!<br />…<br />Yaşayamazmış<br />Böyle ağlarmış</p>
+      {acilis && <cite><a href={siirYolu(acilis, dil)}>{imza(acilis, dil)}</a></cite>}
+    </blockquote>
+    <p>{m.giris3}</p>
+
+    <h2>{m.renkler}</h2>
+    <p>{m.renklerGiris}</p>
+    <ul class="renkler">
+      {
+        renkler.map(({ d, kaynak }) => (
+          <li style={`--nokta:${d.nokta}`}>
+            <span class="nokta buyuk" aria-hidden="true" />
+            <span class="renk-ad">
+              <a href={duyguYolu(d.slug, dil)}>{duyguAdi(d, dil)}</a> · {renkAdi(d, dil)}
+            </span>
+            <span class="renk-misra" lang="tr">
+              {d.misra.join(' / ')}
+              {kaynak && <> — <a href={siirYolu(kaynak, dil)}>{imza(kaynak, dil)}</a></>}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2>{m.imza}</h2>
+    <p>
+      {m.imzaMetni(SITE.sair)}{' '}
+      {
+        SITE.sair === 'Antigoni' && antigoni && (
+          <>
+            {antigoniOnce}<a href={siirYolu(antigoni, dil)}>{m.antigoniBag}</a>{antigoniSonra}
+          </>
+        )
+      }
+    </p>
+
+    <h2 id="fotograflar">{m.fotograflar}</h2>
+    <p>{m.fotoMetni}</p>
+    <ul class="kunyeler">
+      {
+        fotolar.map(({ f, siirler }) => {
+          const sf = f.sayfa ? sayfasi(f.sayfa.yol) : undefined;
+          return (
+            <li>
+              <span class="kunye-aciklama">{fotoAciklama(f, dil)}</span>
+              <span class="kunye-kim">
+                <a href={f.kaynak} rel="noopener">{f.yazar}</a> · <a href={f.lisansUrl} rel="noopener">{lisansAdi(f, dil)}</a> · {M.foto.renkleriDegisti}
+              </span>
+              <span class="kunye-siir">
+                {sf && <a href={sf.yol}>{m.sayfasi(sf.ad)}</a>}
+                {sf && siirler.length > 0 && ', '}
+                {siirler.map((s, i) => (
+                  <>
+                    {i > 0 && ', '}
+                    <a href={siirYolu(s, dil)}>{ad(s)}</a>
+                  </>
+                ))}
+              </span>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <h2 id="haklar">{m.haklar}</h2>
+    <p>{m.haklarMetni}</p>
+    <p>{m.fotoHaklar}</p>
+  </article>
+</Temel>
+
+<style>
+  .hakkinda {
+    max-width: 38rem;
+  }
+  .hakkinda h2 {
+    font-size: 2.2rem;
+    font-style: italic;
+    margin: 3rem 0 0.75rem;
+  }
+  .hakkinda blockquote {
+    margin: 1.5rem 0;
+    padding-left: 1.1rem;
+    border-left: 2px solid var(--cizgi);
+    font-style: italic;
+    font-size: 1.25rem;
+  }
+  .hakkinda blockquote p {
+    margin: 0 0 0.3rem;
+  }
+  .hakkinda cite {
+    font-style: normal;
+    font-size: 0.95rem;
+    color: var(--soluk);
+  }
+  .renkler {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .renkler li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.9rem;
+    align-items: center;
+  }
+  .nokta.buyuk {
+    width: 1.6rem;
+    height: 1.6rem;
+    grid-row: span 2;
+  }
+  .renk-ad a {
+    font-family: var(--serif-baslik);
+    font-size: 1.3rem;
+    font-weight: 300;
+    text-decoration: none;
+  }
+  .renk-ad {
+    color: var(--soluk);
+  }
+  .renk-misra {
+    font-style: italic;
+    color: var(--soluk);
+    font-size: 1rem;
+  }
+  .renk-misra a {
+    font-style: normal;
+  }
+  .kunyeler {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: grid;
+    gap: 1rem;
+    font-size: 0.98rem;
+  }
+  .kunyeler li {
+    display: grid;
+    gap: 0.1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--cizgi);
+  }
+  .kunye-aciklama {
+    font-style: italic;
+  }
+  .kunye-kim,
+  .kunye-siir {
+    color: var(--soluk);
+    font-size: 0.92rem;
+  }
+</style>

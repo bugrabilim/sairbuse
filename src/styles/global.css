@@ -1031,3 +1031,11 @@ body[data-duygu='ozgurluk'] .govde.satir-satir .misra {
     display: none;
   }
 }
+
+/* İngilizce sayfalarda şiirlerin Türkçe olduğunu söyleyen küçük not */
+.dil-notu {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--soluk);
+}

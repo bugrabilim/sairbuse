@@ -1,0 +1,43 @@
+---
+import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+import { imza, siirYolu, tumSiirler } from '../lib/siirler';
+import { dilBul, metin, sayfaYolu } from '../i18n';
+
+const dil = dilBul(Astro.url);
+const m = metin(dil).yok;
+const genel = metin(dil).genel;
+const tum = await tumSiirler();
+const siir = tum.find((s) => s.id === '2012-01-22-kalkedon');
+---
+
+<Temel baslik={m.baslik} sahne noindex karsilikYok>
+  <SayfaSahnesi foto="imge-sisli-agac" duygu="yalnizlik" etiket={m.etiket} baslik={m.sahne} />
+  <section class="sayfa yok">
+    <blockquote lang="tr">
+      <p>Ne kadar zaman olmuş?<br />…<br />Unutmuşum</p>
+      {siir && <cite><a href={siirYolu(siir, dil)}>{imza(siir, dil)}</a></cite>}
+    </blockquote>
+    <p>
+      {m.devam.split(/(\{bas\}|\{fal\})/).map((p) =>
+        p === '{bas}' ? <a href={sayfaYolu('ana', dil)}>{genel.basaDon}</a> : p === '{fal}' ? <a href={sayfaYolu('fal', dil)}>{m.fal}</a> : p,
+      )}
+    </p>
+  </section>
+</Temel>
+
+<style>
+  blockquote {
+    margin: 2rem 0;
+    font-style: italic;
+    font-size: 1.3rem;
+  }
+  blockquote p {
+    margin: 0 0 0.3rem;
+  }
+  cite {
+    font-style: normal;
+    font-size: 0.95rem;
+    color: var(--soluk);
+  }
+</style>

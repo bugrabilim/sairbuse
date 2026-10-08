@@ -1,12 +1,13 @@
 ---
-import Sayfa from '../../sayfalar/Duygu.astro';
-import { DUYGULAR } from '../../data/duygular';
-import { tumSiirler } from '../../lib/siirler';
+import Sayfa from '../../../sayfalar/Duygu.astro';
+import { DUYGULAR } from '../../../data/duygular';
+import { tumSiirler } from '../../../lib/siirler';
+import { DUYGU_EN } from '../../../i18n';
 
 export async function getStaticPaths() {
   const tum = await tumSiirler();
   return DUYGULAR.map((d) => ({
-    params: { duygu: d.slug },
+    params: { duygu: DUYGU_EN[d.slug] },
     props: {
       d,
       siirler: tum.filter((s) => s.data.duygular.includes(d.slug)),

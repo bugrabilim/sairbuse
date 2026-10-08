@@ -17,6 +17,8 @@ export interface Duygu {
   /** "Bugün neyin peşindesin?" sorusunun cevabı: "aşkın", "özlemin"… */
   ilgi: string;
   renkAdi: string;
+  /** İngilizce sayfalarda adı, "neyin peşindesin" cevabı ve rengi */
+  en: { ad: string; ilgi: string; renkAdi: string };
   /** Gece temasında yazı/vurgu rengi */
   gece: string;
   /** Gündüz temasında yazı/vurgu rengi */
@@ -42,6 +44,7 @@ export const DUYGULAR: Duygu[] = [
     ad: 'Aşk',
     ilgi: 'aşkın',
     renkAdi: 'pembe',
+    en: { ad: 'Love', ilgi: 'love', renkAdi: 'pink' },
     gece: '#e891b2',
     gunduz: '#a3335f',
     zeminGece: '#21111a',
@@ -57,6 +60,7 @@ export const DUYGULAR: Duygu[] = [
     ad: 'Özlem',
     ilgi: 'özlemin',
     renkAdi: 'kayısı',
+    en: { ad: 'Longing', ilgi: 'longing', renkAdi: 'apricot' },
     gece: '#f2a766',
     gunduz: '#9a5114',
     zeminGece: '#21160e',
@@ -72,6 +76,7 @@ export const DUYGULAR: Duygu[] = [
     ad: 'Hüzün',
     ilgi: 'hüznün',
     renkAdi: 'sarı',
+    en: { ad: 'Sorrow', ilgi: 'sorrow', renkAdi: 'yellow' },
     gece: '#ebcb52',
     gunduz: '#735c00',
     zeminGece: '#1f1b0b',
@@ -87,6 +92,7 @@ export const DUYGULAR: Duygu[] = [
     ad: 'Yalnızlık',
     ilgi: 'yalnızlığın',
     renkAdi: 'gri',
+    en: { ad: 'Loneliness', ilgi: 'loneliness', renkAdi: 'grey' },
     gece: '#aab0b7',
     gunduz: '#545a61',
     zeminGece: '#16181b',
@@ -102,6 +108,7 @@ export const DUYGULAR: Duygu[] = [
     ad: 'Ayrılık',
     ilgi: 'ayrılığın',
     renkAdi: 'siyah',
+    en: { ad: 'Parting', ilgi: 'parting', renkAdi: 'black' },
     gece: '#d8d2c8',
     gunduz: '#1a1714',
     zeminGece: '#030303',
@@ -119,6 +126,7 @@ export const DUYGULAR: Duygu[] = [
     ad: 'Karanlık',
     ilgi: 'karanlığın',
     renkAdi: 'mor',
+    en: { ad: 'Darkness', ilgi: 'darkness', renkAdi: 'purple' },
     gece: '#b991ea',
     gunduz: '#61359a',
     zeminGece: '#160e21',
@@ -134,6 +142,7 @@ export const DUYGULAR: Duygu[] = [
     ad: 'Özgürlük',
     ilgi: 'özgürlüğün',
     renkAdi: 'turuncu',
+    en: { ad: 'Freedom', ilgi: 'freedom', renkAdi: 'orange' },
     gece: '#f4874f',
     gunduz: '#a6430c',
     zeminGece: '#22110a',
@@ -164,4 +173,16 @@ export function duyguStili(d: Duygu): string {
     `--ton-alt:${d.isik[1]}`,
     `--ton-golge:${d.golge}`,
   ].join(';');
+}
+
+/** Duygunun o dildeki adı: "Aşk" / "Love" */
+export function duyguAdi(d: Duygu, dil: 'tr' | 'en'): string {
+  return dil === 'en' ? d.en.ad : d.ad;
+}
+/** "Bugün neyin peşindesin?" cevabı: "aşkın" / "love" */
+export function duyguIlgi(d: Duygu, dil: 'tr' | 'en'): string {
+  return dil === 'en' ? d.en.ilgi : d.ilgi;
+}
+export function renkAdi(d: Duygu, dil: 'tr' | 'en'): string {
+  return dil === 'en' ? d.en.renkAdi : d.renkAdi;
 }

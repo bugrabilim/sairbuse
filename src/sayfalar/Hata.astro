@@ -1,0 +1,16 @@
+---
+// nginx'in sunucu hatalarında gösterdiği sayfa (nginx.conf: error_page 500 502 503 504)
+import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+import { dilBul, metin, sayfaYolu } from '../i18n';
+const dil = dilBul(Astro.url);
+const m = metin(dil).hata;
+---
+
+<Temel baslik={m.baslik} sahne noindex karsilikYok>
+  <SayfaSahnesi foto="imge-sisli-agac" duygu="karanlik" etiket={m.etiket} baslik={m.sahne} />
+  <section class="sayfa yok">
+    <p>{m.metin}</p>
+    <p><a href={sayfaYolu('ana', dil)}>{metin(dil).genel.basaDon}</a></p>
+  </section>
+</Temel>

@@ -18,7 +18,8 @@ import '@fontsource/inter/latin-ext-600.css';
 import '../styles/global.css';
 import AltBilgi from '../components/AltBilgi.astro';
 import { SITE } from '../data/site';
-import { DUYGULAR, duyguStili, type Duygu } from '../data/duygular';
+import { DUYGULAR, duyguAdi, duyguStili, type Duygu } from '../data/duygular';
+import { DILLER, OG_YEREL, dilBul, duyguYolu, karsilik, kucuk, metin, sayfaYolu } from '../i18n';
 
 interface Props {
   baslik?: string;
@@ -30,28 +31,39 @@ interface Props {
   sahne?: boolean;
   /** Arama motorları dizine almasın (404, 500) */
   noindex?: boolean;
+  /** Sayfanın öbür dilde karşılığı yoksa (404, 500) dil değiştirici ana sayfaya gider */
+  karsilikYok?: boolean;
 }
 
-const { baslik, aciklama = SITE.aciklama, gorsel = '/og/site.jpg', duygu, sinif = '', sahne = false, noindex = false } = Astro.props;
+const yol = Astro.url.pathname;
+const dil = dilBul(Astro.url);
+const m = metin(dil);
+const obur = dil === 'tr' ? 'en' : 'tr';
+const {
+  baslik,
+  aciklama = m.site.aciklama,
+  gorsel = dil === 'en' ? '/og/en/site.jpg' : '/og/site.jpg',
+  duygu,
+  sinif = '',
+  sahne = false,
+  noindex = false,
+  karsilikYok = false,
+} = Astro.props;
 const tamBaslik = baslik ? `${baslik} — ${SITE.ad}` : SITE.ad;
-const kanonik = new URL(Astro.url.pathname, Astro.site);
+const kanonik = new URL(yol, Astro.site);
 const gorselUrl = new URL(gorsel, Astro.site);
 const umami = import.meta.env.PUBLIC_UMAMI_ID || SITE.umami;
-const yol = Astro.url.pathname;
-const menu = [
-  { href: '/siirler/', ad: 'şiirler' },
-  { href: '/harita/', ad: 'harita' },
-  { href: '/zaman/', ad: 'zaman' },
-  { href: '/fal/', ad: 'fal' },
-  { href: '/hakkinda/', ad: 'hakkında' },
-];
+// Her dilde aynı sayfanın adresi (hreflang ve dil değiştirici)
+const diller = DILLER.map((d) => ({ dil: d, href: karsilikYok ? sayfaYolu('ana', d) : karsilik(yol, d) }));
+const oburYol = diller.find((x) => x.dil === obur)!.href;
+const menu = (['siirler', 'harita', 'zaman', 'fal', 'hakkinda'] as const).map((s) => ({ href: sayfaYolu(s, dil), ad: m.menu[s] }));
 const govdeSinifi = [duygu ? 'duygulu' : '', sahne ? 'sahneli' : '', sinif].filter(Boolean).join(' ');
 const temaRengi = duygu ? duygu.zeminGece : '#0d0c0b';
 const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
 ---
 
 <!doctype html>
-<html lang="tr" data-theme="gece">
+<html lang={dil} data-theme="gece">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -59,13 +71,22 @@ const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
     <meta name="description" content={aciklama} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={kanonik} />
+    {
+      !noindex && (
+        <>
+          {diller.map((d) => <link rel="alternate" hreflang={d.dil} href={new URL(d.href, Astro.site)} />)}
+          <link rel="alternate" hreflang="x-default" href={new URL(diller[0].href, Astro.site)} />
+        </>
+      )
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content={temaRengi} data-gece={temaRengi} data-gunduz={temaRengiGunduz} />
     <meta name="author" content={SITE.sair} />
 
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:locale" content={OG_YEREL[dil]} />
+    <meta property="og:locale:alternate" content={OG_YEREL[obur]} />
     <meta property="og:site_name" content={SITE.ad} />
     <meta property="og:title" content={tamBaslik} />
     <meta property="og:description" content={aciklama} />
@@ -74,6 +95,7 @@ const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <slot name="bas" />
 
     <script is:inline>
       // Tema sayfa çizilmeden seçilir ki yanlış tema bir an bile görünmesin.
@@ -95,41 +117,53 @@ const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
         } catch (e) {}
       };
     </script>
+    <script is:inline define:vars={{ dil, oburYol }}>
+      // Dil seçimi hatırlanır: başka dili seçmiş biri siteye dışarıdan gelirse kendi diline geçer
+      (function () {
+        var secili = null;
+        try {
+          secili = localStorage.getItem('dil');
+        } catch (e) {}
+        var icerden = document.referrer && new URL(document.referrer).host === location.host;
+        if (secili && secili !== dil && !icerden) location.replace(oburYol + location.search + location.hash);
+      })();
+    </script>
     <script defer src="https://istatistik.bumba.tr/script.js" data-website-id={umami} data-domains={SITE.alan}></script>
   </head>
   <body class={govdeSinifi} style={duygu ? duyguStili(duygu) : undefined} data-duygu={duygu?.slug}>
-    <a class="atla" href="#icerik">İçeriğe geç</a>
+    <a class="atla" href="#icerik">{m.ust.icerigeGec}</a>
     <header class="ust">
-      <a class="logo" href="/">{SITE.ad}</a>
+      <a class="logo" href={sayfaYolu('ana', dil)}>{SITE.ad}</a>
       <div class="ust-araclar">
-        <button class="tema-dugmesi" type="button" aria-label="Gündüz temasına geç" data-gece="Gündüz temasına geç" data-gunduz="Gece temasına geç">
+        <a class="ust-arac dil-dugmesi" href={oburYol} hreflang={obur} lang={obur} data-dil={obur} aria-label={m.dil.degistir}>{m.dil.oburKisa}</a>
+        <button class="tema-dugmesi" type="button" aria-label={m.ust.gunduzeGec} data-gece={m.ust.gunduzeGec} data-gunduz={m.ust.geceyeGec}>
           <svg class="ikon-gunes" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg>
           <svg class="ikon-ay" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" /></svg>
         </button>
       </div>
       <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="menu">
-        <span class="gorunmez">Menü</span>
+        <span class="gorunmez">{m.ust.menu}</span>
         <span class="cubuk" aria-hidden="true"></span>
       </button>
-      <nav class="menu" id="menu" aria-label="Ana menü">
+      <nav class="menu" id="menu" aria-label={m.ust.anaMenu}>
         <ul class="menu-yollar">
           {
-            menu.map((m) => (
+            menu.map((x) => (
               <li>
-                <a href={m.href} aria-current={yol.startsWith(m.href) ? 'page' : undefined}>
-                  {m.ad}
+                <a href={x.href} aria-current={yol.startsWith(x.href) ? 'page' : undefined}>
+                  {x.ad}
                 </a>
               </li>
             ))
           }
         </ul>
-        <ul class="menu-duygular" aria-label="Duygular">
+        <ul class="menu-duygular" aria-label={m.ust.duygular}>
           {
             DUYGULAR.map((d) => (
               <li>
-                <a href={`/duygu/${d.slug}/`} style={`--nokta:${d.nokta}`}>
+                <a href={duyguYolu(d.slug, dil)} style={`--nokta:${d.nokta}`}>
                   <span class="nokta" aria-hidden="true" />
-                  {d.ad.toLocaleLowerCase('tr')}
+                  {kucuk(duyguAdi(d, dil), dil)}
                 </a>
               </li>
             ))
@@ -186,6 +220,15 @@ const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
           secili = localStorage.getItem('tema');
         } catch {}
         if (!secili) temaUygula(e.matches ? 'gunduz' : 'gece');
+      });
+
+      // Dil değiştirici: seçimi hatırlar
+      document.querySelector<HTMLAnchorElement>('.dil-dugmesi')?.addEventListener('click', (e) => {
+        const hedef = (e.currentTarget as HTMLAnchorElement).dataset.dil ?? 'tr';
+        try {
+          localStorage.setItem('dil', hedef);
+        } catch {}
+        window.bumbaOlay?.('dil-degistir', { dil: hedef });
       });
     </script>
   </body>

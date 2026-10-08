@@ -1,6 +1,6 @@
 ---
-import Sayfa from '../../sayfalar/Yer.astro';
-import { tumSiirler, yerler } from '../../lib/siirler';
+import Sayfa from '../../../sayfalar/Yer.astro';
+import { tumSiirler, yerler } from '../../../lib/siirler';
 
 export async function getStaticPaths() {
   const liste = yerler(await tumSiirler());
