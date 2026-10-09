@@ -5,3 +5,6 @@ dist/
 .env.*
 !.env.example
 .DS_Store
+
+# Basılı kitabın çıktıları (sitede yayımlanmaz)
+kitap-cikti/

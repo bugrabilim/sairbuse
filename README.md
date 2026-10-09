@@ -44,6 +44,18 @@ Ortam sesleri gerçek saha kayıtları: Hollanda Ses ve Görüntü Enstitüsü'n
 - Fon müziği (varsayılan kapalı, ortam sesi menüsünden açılır): her duygunun makamında taksim gibi yavaş bir ezgi; hüzün Hicaz, özlem Uşşak, aşk Hüzzam, özgürlük Rast, karanlık Saba, ayrılık Kürdi, yalnızlık Segah. Dosyalar `public/muzik/`, üretimi `python3 scripts/muzik.py` (fluidsynth, FluidR3_GM ses kütüphanesi ve `mido` gerekir; makamın koma aralıkları perde bükmeyle çalınır).
 - Yeniden üretmek: `python3 scripts/ortam.py <klasör>` özgün kayıtları Commons'tan indirir, en dingin bölümü keser, ses düzeyini eşitler (ffmpeg ve numpy gerekir). Aynı iş GitHub Actions'ta da var ("Ortam sesleri" iş akışı, elle tetiklenebilir).
 
+## Basılı kitap
+
+Sitede yayımlanmaz. A5, saman kâğıt, iç sayfalar siyah beyaz, kapak renkli; şiirler ve fotoğraflar sitenin kaynağından gelir.
+
+```sh
+pip install pyyaml segno
+python3 scripts/kitap/kitap.py      # kitap-cikti/ içine sayfaları hazırlar (ffmpeg gerekir)
+node scripts/kitap/pdf.cjs          # ic-prova.pdf, ic-baski.pdf, kapak.pdf (playwright-core + Chromium)
+```
+
+Sırt kalınlığı sayfa sayısından tahmin edilir; kesin ölçü kâğıda göre matbaadan alınır (`scripts/kitap/kitap.py` → `YAPRAK_MM`).
+
 ## Şiir eklemek ya da düzeltmek
 
 ### Şiir paneliyle (önerilen)
