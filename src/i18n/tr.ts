@@ -111,6 +111,7 @@ export const tr = {
     hazirlanamadi: 'Kart hazırlanamadı.',
     hazir: 'Kart hazır.',
   },
+  mum: { ac: 'Mum ışığı', sondur: 'Mumu söndür' },
   ortam: {
     sessiz: 'ortam sesi',
     deniz: 'deniz',
@@ -123,6 +124,7 @@ export const tr = {
     ev: 'ev',
     siirin: (ad: string) => `şiirin sesi · ${ad}`,
     duygunun: (ad: string) => `bu duygunun sesi · ${ad}`,
+    muzik: (makam: string) => `fon müziği · ${makam}`,
     kapat: 'kapalı',
     duzey: 'Ses düzeyi',
     baslik: 'Ortam sesi',
@@ -213,7 +215,7 @@ export const tr = {
     haklarMetni:
       'Bu sitedeki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz. Bir şiiri sevdiysen bağlantısını paylaşabilirsin.',
     fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri “Fotoğraflar ve künyeleri” penceresinde adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
-    sesHaklar: 'Ortam sesleri de bu kapsamda değil. Hepsi gerçek saha kaydı: Hollanda Ses ve Görüntü Enstitüsü’nün (Beeld en Geluid) arşivinden, Wikimedia Commons’ta CC BY-SA 3.0 ile paylaşılmış. Sitede kesilip ses düzeyleri eşitlendi.',
+    sesHaklar: 'Ortam sesleri de bu kapsamda değil. Hepsi gerçek saha kaydı: Hollanda Ses ve Görüntü Enstitüsü’nün (Beeld en Geluid) arşivinden, Wikimedia Commons’ta CC BY-SA 3.0 ile paylaşılmış. Sitede kesilip ses düzeyleri eşitlendi. Fon müzikleri bu site için makamlarına göre üretildi; çalgı sesleri FluidR3_GM ses kütüphanesinden (MIT lisanslı).',
     guncelleme: 'Son güncelleme:',
     sssBaslik: 'Sık sorulanlar',
     sss: [
@@ -304,7 +306,7 @@ export const tr = {
       },
       {
         baslik: 'Çerezler',
-        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesi tercihiniz ve düzeyi, ana sayfada en son gördüğünüz mısra. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
+        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesi ve fon müziği tercihiniz ve düzeyi, ana sayfada en son gördüğünüz mısra; mum ışığını açtıysanız bu yalnız o ziyaret boyunca (sessionStorage) hatırlanır. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
       },
       {
         baslik: 'Dışarıdan gelen içerik',

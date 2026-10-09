@@ -35,7 +35,7 @@ function yukle(ctx: AudioContext, adres: string): Promise<AudioBuffer> {
 }
 
 /** Tamponu çapraz geçişli, kesintisiz döngüyle çalar */
-function dongu(ctx: AudioContext, tampon: AudioBuffer, cikis: AudioNode, gecis: number): () => void {
+function dongu(ctx: AudioContext, tampon: AudioBuffer, cikis: AudioNode, gecis: number, rastgele = true): () => void {
   let bitti = false;
   let sayac = 0;
   const calanlar = new Set<AudioBufferSourceNode>();
@@ -48,7 +48,7 @@ function dongu(ctx: AudioContext, tampon: AudioBuffer, cikis: AudioNode, gecis: 
     const g = ctx.createGain();
     k.connect(g).connect(cikis);
     // İlk kopya kaydın rastgele bir yerinden başlar; her açılış aynı saniyeyle başlamasın
-    const ofset = ilk ? Math.random() * Math.max(0, sure - 16) : 0;
+    const ofset = ilk && rastgele ? Math.random() * Math.max(0, sure - 16) : 0;
     const kalan = sure - ofset;
     g.gain.setValueAtTime(0, baslangic);
     g.gain.linearRampToValueAtTime(1, baslangic + gecis);
@@ -121,29 +121,74 @@ export async function baslat(tur: Ortam) {
   const g = ctx.createGain();
   g.gain.value = 0;
   g.connect(ctx.destination);
-  g.gain.setTargetAtTime(ANA_SEVIYE * duzey, ctx.currentTime, 0.8);
+  g.gain.setTargetAtTime(ortamSeviyesi(), ctx.currentTime, 0.8);
   const durduranlar = [dongu(ctx, tampon, g, gecisSuresi(tur))];
   if (duduk) durduranlar.push(arada(ctx, duduk, g, 0.7, 75, 150));
   ana = g;
   durdur = () => durduranlar.forEach((d) => d());
 }
 
-/** Ses düzeyi (0–1) */
+/** Fon müziği açıkken ortam sesi biraz kısılır, ikisi birbirini bastırmasın */
+const ortamSeviyesi = () => ANA_SEVIYE * duzey * (muzik ? 0.6 : 1);
+const MUZIK_SEVIYE = 0.8;
+
+/** Ses düzeyi (0–1): ortam sesi ve fon müziği birlikte */
 export function duzeyAyarla(yeni: number) {
   duzey = Math.max(0, Math.min(1, yeni));
-  if (baglam && ana) ana.gain.setTargetAtTime(ANA_SEVIYE * duzey, baglam.currentTime, 0.15);
+  if (baglam && ana) ana.gain.setTargetAtTime(ortamSeviyesi(), baglam.currentTime, 0.15);
+  if (baglam && muzik) muzik.gain.setTargetAtTime(MUZIK_SEVIYE * duzey, baglam.currentTime, 0.15);
 }
 
 export function bitir(sure = 1.2) {
   sira++;
   if (!baglam || !ana) return;
-  const g = ana;
-  const d = durdur;
+  sondur(ana, durdur, sure);
+  ana = null;
+  durdur = null;
+}
+
+function sondur(g: GainNode, d: (() => void) | null, sure: number) {
+  if (!baglam) return;
   g.gain.setTargetAtTime(0, baglam.currentTime, sure / 4);
   window.setTimeout(() => {
     d?.();
     g.disconnect();
   }, sure * 1000 + 200);
-  ana = null;
-  durdur = null;
+}
+
+// Fon müziği: her duygunun kendi makamında bir taksim (public/muzik/, üretimi scripts/muzik.py).
+// Ortam sesinin yanında ayrı bir kanaldan çalar; aynı çapraz geçişli döngüyle.
+let muzik: GainNode | null = null;
+let muzikDurdur: (() => void) | null = null;
+let muzikSira = 0;
+
+export async function muzikBaslat(duygu: string) {
+  baglam ??= new AudioContext();
+  const ctx = baglam;
+  const acilis = ctx.resume();
+  muzikBitir(0.8);
+  const benim = ++muzikSira;
+  let tampon: AudioBuffer;
+  try {
+    [tampon] = await Promise.all([yukle(ctx, `/muzik/${duygu}.mp3`), acilis]);
+  } catch {
+    return;
+  }
+  if (benim !== muzikSira) return;
+  const g = ctx.createGain();
+  g.gain.value = 0;
+  g.connect(ctx.destination);
+  g.gain.setTargetAtTime(MUZIK_SEVIYE * duzey, ctx.currentTime, 1.5);
+  muzik = g;
+  muzikDurdur = dongu(ctx, tampon, g, 6, false); // taksim baştan başlar
+  if (ana) ana.gain.setTargetAtTime(ortamSeviyesi(), ctx.currentTime, 0.8);
+}
+
+export function muzikBitir(sure = 1.5) {
+  muzikSira++;
+  if (!baglam || !muzik) return;
+  sondur(muzik, muzikDurdur, sure);
+  muzik = null;
+  muzikDurdur = null;
+  if (ana) ana.gain.setTargetAtTime(ortamSeviyesi(), baglam.currentTime, 0.8);
 }

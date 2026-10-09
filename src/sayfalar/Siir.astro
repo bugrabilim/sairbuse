@@ -5,6 +5,7 @@ import SiirFotosu from '../components/SiirFotosu.astro';
 import SiirGovde from '../components/SiirGovde.astro';
 import MisraKarti from '../components/MisraKarti.astro';
 import OrtamSesi from '../components/OrtamSesi.astro';
+import MumIsigi from '../components/MumIsigi.astro';
 import PaylasMenusu from '../components/PaylasMenusu.astro';
 import Sesler from '../components/Sesler.astro';
 import { SITE } from '../data/site';
@@ -74,7 +75,8 @@ const kayitlar = [
         <button class="dugme" type="button" id="bastan-oku">{m.siir.bastanOku}</button>
         <button class="dugme" type="button" id="kart-dugme" aria-pressed="false">{m.siir.misraKarti}</button>
         <PaylasMenusu baslik={sayfaBasligi} />
-        <OrtamSesi varsayilan={siir.data.ortam ?? DUYGU_ORTAMI[d.slug]} />
+        <OrtamSesi varsayilan={siir.data.ortam ?? DUYGU_ORTAMI[d.slug]} duygu={d.slug} />
+        <MumIsigi />
         <button class="dugme vurgulu" type="button" id="kart-olustur" hidden>{m.siir.kartOlustur}</button>
       </div>
       <p class="durum" id="durum" role="status" aria-live="polite"></p>

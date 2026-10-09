@@ -46,7 +46,7 @@ const acilisFotosu = siirFotografi(acilis);
         </p>
         {kaynak && <cite><a href={siirYolu(kaynak, dil)}>{imza(kaynak, dil)}</a></cite>}
       </blockquote>
-      <div class="arac duygu-arac"><OrtamSesi varsayilan={DUYGU_ORTAMI[d.slug]} tur="duygu" /></div>
+      <div class="arac duygu-arac"><OrtamSesi varsayilan={DUYGU_ORTAMI[d.slug]} duygu={d.slug} tur="duygu" /></div>
     </div>
     {
       acilisFotosu && (

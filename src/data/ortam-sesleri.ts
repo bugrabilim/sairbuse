@@ -39,3 +39,14 @@ export const DUYGU_ORTAMI: Record<string, Ortam> = {
   karanlik: 'gece',
   ozgurluk: 'kuslar',
 };
+
+/** Fon müziği: her duygunun makamı (public/muzik/<duygu>.mp3, üretimi scripts/muzik.py) */
+export const DUYGU_MAKAMI: Record<string, string> = {
+  ask: 'Hüzzam',
+  ozlem: 'Uşşak',
+  huzun: 'Hicaz',
+  yalnizlik: 'Segah',
+  ayrilik: 'Kürdi',
+  karanlik: 'Saba',
+  ozgurluk: 'Rast',
+};
