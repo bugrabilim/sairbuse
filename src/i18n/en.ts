@@ -112,7 +112,6 @@ export const en: Metin = {
     hazirlanamadi: 'The card could not be made.',
     hazir: 'The card is ready.',
   },
-  mum: { ac: 'Candlelight', sondur: 'Blow out the candle' },
   ortam: {
     sessiz: 'ambient sound',
     deniz: 'sea',
@@ -308,7 +307,7 @@ export const en: Metin = {
       },
       {
         baslik: 'Cookies',
-        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose, your ambient sound and background music choices and volume, and the last line of verse you saw on the home page; if you light the candle, that is remembered only for that visit (sessionStorage). They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
+        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose, your ambient sound and background music choices and volume, and the last line of verse you saw on the home page. They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
       },
       {
         baslik: 'Content from elsewhere',

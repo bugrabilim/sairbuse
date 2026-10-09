@@ -47,8 +47,7 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   gibi bir ezgi (hüzün Hicaz, özlem Uşşak, aşk Hüzzam, özgürlük Rast, karanlık Saba, ayrılık Kürdi, yalnızlık
   Segah). `public/muzik/<duygu>.mp3`, üretimi `scripts/muzik.py` (fluidsynth + FluidR3_GM, MIT; koma aralıkları
   perde bükmeyle). Açılınca hatırlanır, ortam sesi biraz kısılır.
-- **Mum ışığı varsayılan kapalı:** şiir sayfasında "Mum ışığı" düğmesi; ekran kararır, şiir imleci/parmağı
-  izleyen titrek bir ışıkta okunur. Ziyaret boyunca açık kalır (sessionStorage), "Mumu söndür" ya da Esc kapatır.
+- Mum ışığı modu denendi, sahibi gereksiz buldu (9 Ekim 2026): kaldırıldı, geri eklenmez.
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 
@@ -73,7 +72,7 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   includeSubDomains ve preload kullanılmaz.
 - Umami: site kimliği `3cc5cb50-4663-4436-b371-92cc3feb723b`, `data-domains="duygularinpesinde.bumba.tr"`.
   Olaylar: `tema-degistir`, `dil-degistir`, `arama`, `liste-katil`, `duygu-sec`, `paylas`, `ortam-sesi`,
-  `fon-muzigi`, `mum-isigi`.
+  `fon-muzigi`.
 - Ortak e-posta listesi anahtarı: `duygularin-pesinde` (`src/data/site.ts`).
 
 ## SEO / GEO kaydı

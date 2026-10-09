@@ -111,7 +111,6 @@ export const tr = {
     hazirlanamadi: 'Kart hazırlanamadı.',
     hazir: 'Kart hazır.',
   },
-  mum: { ac: 'Mum ışığı', sondur: 'Mumu söndür' },
   ortam: {
     sessiz: 'ortam sesi',
     deniz: 'deniz',
@@ -306,7 +305,7 @@ export const tr = {
       },
       {
         baslik: 'Çerezler',
-        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesi ve fon müziği tercihiniz ve düzeyi, ana sayfada en son gördüğünüz mısra; mum ışığını açtıysanız bu yalnız o ziyaret boyunca (sessionStorage) hatırlanır. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
+        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesi ve fon müziği tercihiniz ve düzeyi, ana sayfada en son gördüğünüz mısra. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
       },
       {
         baslik: 'Dışarıdan gelen içerik',
