@@ -315,7 +315,7 @@ Kargayla
 - [ ] Instagram hesabı ve mısra kartlarıyla düzenli paylaşım
 
 ### Faz 4 — Belki bir gün kitap
-- [ ] Basılı kitap, A5 (sahibinin seçimi, Ekim 2026): saman kâğıt, siyah beyaz fotoğraflar, renkli kapak; baskı dosyaları sitenin dışında üretilir, sitede yayımlanmaz. Görsel taslak aşamasında.
+- [ ] Basılı kitap, A5 (sahibinin seçimi, Ekim 2026): saman kâğıt, siyah beyaz fotoğraflar, renkli kapak; baskı dosyaları sitenin dışında üretilir, sitede yayımlanmaz. Seçimler yapıldı (Moda kapağı, her şiirde fotoğraf, yıl ayraçları, arka kapakta QR); tam prova `scripts/kitap/` ile üretiliyor, matbaa seçimi bekleniyor.
 
 ---
 

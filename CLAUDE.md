@@ -50,8 +50,11 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - Mum ışığı modu denendi, sahibi gereksiz buldu (9 Ekim 2026): kaldırıldı, geri eklenmez.
 - **Okur notu yok** (9 Ekim 2026): okur şiire renk ya da kelime bırakmaz, şair onay vermez, şair için giriş/şifre
   yok. Site statik kalır; sunucu tarafı eklenmez.
-- **Kitap (basılı, A5) siteye konmaz:** saman kâğıt, fotoğraflar siyah beyaz, yalnız kapaklar renkli. Baskı
-  dosyaları sitenin dışında üretilir ve yalnız sahibine/matbaaya verilir (taslak aşamasında).
+- **Kitap (basılı, A5) siteye konmaz:** saman kâğıt, iç sayfalar tek renk (siyah), yalnız kapak renkli. Sahibinin
+  seçimleri (9 Ekim 2026): kapakta sarıya boyanmış Moda fotoğrafı; her şiirde fotoğraf (solda), şiir sağda; yıl
+  ayraçları var (her yılın ilk şiirinde fotoğraf şiirin üstünde küçük); arka kapakta adres yazısı değil QR kod.
+  Üretim: `python3 scripts/kitap/kitap.py && node scripts/kitap/pdf.cjs` → `kitap-cikti/` (git'e girmez):
+  `ic-prova.pdf` (saman zeminli, bakmak için), `ic-baski.pdf` (zeminsiz, matbaaya), `kapak.pdf` (açılım).
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 
