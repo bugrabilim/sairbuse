@@ -1,8 +1,10 @@
 // Ortam seslerinin künyeleri. Kayıtlar Beeld en Geluid'in (Hollanda Ses ve Görüntü Enstitüsü) arşivinden,
 // Wikimedia Commons'ta CC BY-SA 3.0 ile paylaşılmış. Sitede kesilip düzeyleri eşitlendi (scripts/ortam.py);
 // bu hâlleri de aynı lisansla kullanılabilir.
+import type { Ortam } from '../scripts/ortam';
+
 export interface OrtamKaydi {
-  ses: 'deniz' | 'yagmur' | 'vapur' | 'gece';
+  ses: Ortam;
   /** Commons'taki dosya adı (File: öneki olmadan) */
   dosya: string;
   tr: string;
@@ -18,6 +20,10 @@ export const ORTAM_KAYITLARI: OrtamKaydi[] = [
   { ses: 'vapur', dosya: 'Het varen van de IJ-pont - SoundCloud - Beeld en Geluid.ogg', tr: 'Amsterdam’da IJ vapuru yolda', en: 'The IJ ferry under way, Amsterdam' },
   { ses: 'vapur', dosya: 'Het fluiten van de IJ-pont - SoundCloud - Beeld en Geluid.ogg', tr: 'IJ vapurunun düdüğü', en: 'The IJ ferry’s horn' },
   { ses: 'gece', dosya: 'Krekels en kikkers - SoundCloud - Beeld en Geluid.ogg', tr: 'Cırcır böcekleri ve kurbağalar', en: 'Crickets and frogs' },
+  { ses: 'kafe', dosya: 'Rustige sfeer in een café - SoundCloud - Beeld en Geluid.ogg', tr: 'Sakin bir kafe', en: 'A quiet café' },
+  { ses: 'sehir', dosya: 'Sfeer in binnenstad - SoundCloud - Beeld en Geluid.ogg', tr: 'Şehir merkezinde bir sokak', en: 'A street in the city centre' },
+  { ses: 'kuslar', dosya: 'Wind door de bomen en kwetteren van vogels - SoundCloud - Beeld en Geluid.ogg', tr: 'Ağaçlarda rüzgâr ve kuşlar', en: 'Wind in the trees and birdsong' },
+  { ses: 'ev', dosya: 'Het tikken van een staande klok - SoundCloud - Beeld en Geluid.ogg', tr: 'Bir odada duvar saatinin tıkırtısı', en: 'A grandfather clock ticking in a room' },
 ];
 
 export const commonsAdresi = (dosya: string) => `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(dosya.replace(/ /g, '_'))}`;
