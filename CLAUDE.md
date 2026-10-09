@@ -51,8 +51,11 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - **Okur notu yok** (9 Ekim 2026): okur şiire renk ya da kelime bırakmaz, şair onay vermez, şair için giriş/şifre
   yok. Site statik kalır; sunucu tarafı eklenmez.
 - **Kitap (basılı, A5) siteye konmaz:** saman kâğıt, iç sayfalar tek renk (siyah), yalnız kapak renkli. Sahibinin
-  seçimleri (9 Ekim 2026): kapakta sarıya boyanmış Moda fotoğrafı; her şiirde fotoğraf (solda), şiir sağda; yıl
-  ayraçları var (her yılın ilk şiirinde fotoğraf şiirin üstünde küçük); arka kapakta adres yazısı değil QR kod.
+  seçimleri (9 Ekim 2026): kapakta sarıya boyanmış Moda fotoğrafı; her şiirde fotoğraf; yıl ayraçları var; arka
+  kapakta adres yazısı değil QR kod. Düzen: şiir fotoğrafıyla tek sayfaya sığıyorsa fotoğraf üstte, şiir altta;
+  sığmıyorsa aynı açık sayfada yan yana (fotoğraf solda, şiir sağda); çok uzun şiir kendi sayfasında iki sütun.
+  Sayfa başında yıl yazmaz. Fotoğraf künyeleri sonda tek sayfa, iki sütun. Boş sayfa ancak kaçınılmazsa
+  (yıl ayracından önce).
   Üretim: `python3 scripts/kitap/kitap.py && node scripts/kitap/pdf.cjs` → `kitap-cikti/` (git'e girmez):
   `ic-prova.pdf` (saman zeminli, bakmak için), `ic-baski.pdf` (zeminsiz, matbaaya), `kapak.pdf` (açılım).
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller

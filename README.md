@@ -54,6 +54,11 @@ python3 scripts/kitap/kitap.py      # kitap-cikti/ içine sayfaları hazırlar (
 node scripts/kitap/pdf.cjs          # ic-prova.pdf, ic-baski.pdf, kapak.pdf (playwright-core + Chromium)
 ```
 
+`kitap.py` önce her şiirin boyunu tarayıcıda ölçer (`scripts/kitap/olc.cjs`): fotoğrafla tek sayfaya sığan şiir
+fotoğrafın altına, sığmayan karşısındaki sayfaya, tek sütuna da sığmayan iki sütuna dizilir. Yan yana sayfalar hep aynı
+açık sayfaya düşecek biçimde yerleşim hesaplanır. Chromium yerelde başka yerdeyse `CHROMIUM` ve `PLAYWRIGHT_CORE`
+ortam değişkenleriyle verilir.
+
 Sırt kalınlığı sayfa sayısından tahmin edilir; kesin ölçü kâğıda göre matbaadan alınır (`scripts/kitap/kitap.py` → `YAPRAK_MM`).
 
 ## Şiir eklemek ya da düzeltmek
