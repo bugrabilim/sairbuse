@@ -77,7 +77,7 @@ Sırt kalınlığı sayfa sayısından tahmin edilir; kesin ölçü kâğıda g�
 
 Şairin sesiyle yapılmış bir kayıt varsa şiirin **Şairin sesi** alanından yüklenebilir. Dosya `public/ses/` klasörüne gider ve şiir sayfasında "Şairin sesinden dinle" düğmesi belirir. Başka okumalar (ör. farklı sesler) **Diğer okumalar** listesine eklenir; her biri ayrı bir düğme olur.
 
-Şu an sitede kayıt yok. Yapay sesle denenen örnekler şiiri düz okuduğu için kaldırıldı; kayıtların insan sesiyle yapılması bekleniyor (bkz. `PLAN.md` §10.4).
+Şu an üç şiirin kaydı var (9 Ekim 2026): "Erik ağacının" (24.05.2017, Altunizade), "Sevgimi başka bir sevgiyle sevdim" (21.12.2019, Feneryolu) ve "Şimdi daha benim değilsin ya hani" (18.07.2020, Moda). Dosyalar `public/ses/<şiir>.mp3`; ses düzeyleri eşitlendi (−18 LUFS). Okuma sürerken ortam sesi ve fon müziği kısılır. Yapay sesle denenen örnekler şiiri düz okuduğu için kaldırıldı (bkz. `PLAN.md` §10.4).
 
 ### Dosyayı doğrudan düzenleyerek
 

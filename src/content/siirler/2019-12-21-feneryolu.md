@@ -5,6 +5,7 @@ yerGrubu: "Feneryolu"
 duygular: ["ayrilik"]
 ortam: "ev"
 foto: "feneryolu-kis"
+ses: "/ses/2019-12-21-feneryolu.mp3"
 kaynak: "şiirler.docx"
 ---
 Sevgimi başka bir sevgiyle sevdim

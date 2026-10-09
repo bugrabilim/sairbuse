@@ -289,14 +289,14 @@ Kargayla
 - [x] Harf harf açılış (önce satır satırdı; 8 Ekim 2026'da sahibinin isteğiyle değişti): dokununca hepsi, "Baştan oku" ile yeniden
 - [x] Duygulara özel geçiş hareketleri
 - [x] Mısra paylaş kartı (1080×1920, tarayıcıda çizilir)
-- [x] Şairin sesiyle okuma altyapısı *(kayıtlar bekleniyor)*
+- [x] Şairin sesiyle okuma altyapısı (ilk üç kayıt 9 Ekim 2026'da eklendi)
 - [x] Ortam sesleri: deniz, yağmur, vapur, gece (Ekim 2026'dan beri gerçek saha kayıtları, Beeld en Geluid / Commons)
 - [x] Sveltia CMS paneli `/admin/` (GitHub erişim anahtarıyla giriş)
 
 ### Faz 2.5 — Atmosfer (öneri, §10)
 - [ ] ~~Mum ışığı modu~~ (denendi, sahibi gereksiz buldu; Ekim 2026'da kaldırıldı)
 - [x] Duygunun makamında fon müziği (varsayılan kapalı; `scripts/muzik.py` ile üretilmiş taksimler, Ekim 2026)
-- [ ] Şairin ya da bir insanın sesiyle kayıtlar *(yapay ses denendi, düz okuduğu için kaldırıldı; §10.4)*
+- [ ] Şairin ya da bir insanın sesiyle kayıtlar: 30 şiirden 3'ü hazır *(yapay ses denendi, düz okuduğu için kaldırıldı; §10.4)*
 - [ ] Yağmurlu cam, vapur salınımı gibi küçük dokunuşlar
 
 ### Faz 2.6 — Yeni tasarım: "Vapur" (§11)
@@ -352,7 +352,7 @@ Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", 
 | Adres | `duygularinpesinde.bumba.tr` |
 | Lisans | Tüm hakları saklıdır. |
 | Ağır şiirler | Uyarı notu yok. |
-| **Açık:** Ses kayıtları | Şairin kendi sesiyle kayıtlar bekleniyor. Yapay sesle denenen örnekler düz okuduğu için kaldırıldı (§10.4). |
+| **Açık:** Ses kayıtları | Üç şiirin kaydı eklendi (9 Ekim 2026), diğerleri bekleniyor. Yapay sesle denenen örnekler düz okuduğu için kaldırıldı (§10.4). |
 | İmza | Alt bilgide Bumba Life rozeti var. |
 | Tasarım | B "Vapur": yer fotoğrafları (§11). Varsayılan koyu; 8 Ekim 2026'dan beri açık tema düğmesi var (Standartlar §3). Arayüz Türkçe ve İngilizce; şiirler Türkçe. |
 | Fotoğraflar | Gerçek fotoğraflar, Wikimedia Commons'tan özgür lisanslı; fotoğrafçı adı ve lisans her şiirde ve Hakkında sayfasında. |
@@ -395,7 +395,7 @@ Arayüz önerisi: "ortam sesi" düğmesinin yanında bir "müzik" düğmesi. İk
 
 ### 10.4 Ses kayıtları
 
-Asıl hedef, şiirlerin şairin kendi sesiyle okunması; bu iş **açık** duruyor. Kayıtlar panelden ("Şairin sesi" ya da "Diğer okumalar") veya `public/ses/` klasöründen eklenebilir. Oynatıcı hazır.
+Asıl hedef, şiirlerin şairin kendi sesiyle okunması; bu iş **sürüyor**: 9 Ekim 2026'da ilk üç kayıt eklendi (Erik ağacının, Sevgimi başka bir sevgiyle sevdim, Şimdi daha benim değilsin ya hani). Kayıt sürerken ortam sesi ve fon müziği kısılır. Kayıtlar panelden ("Şairin sesi" ya da "Diğer okumalar") veya `public/ses/` klasöründen eklenebilir. Oynatıcı hazır.
 
 **Yapay ses denendi, kaldırıldı (Ekim 2026).** Açılış şiiri açık kaynak Türkçe ses modelleriyle (Chatterbox Multilingual, Piper `tr_TR-dfki`) bir kadın ve bir erkek sesiyle okutuldu. Kelimeler doğru çıktı (Whisper ile denetlendi), ama okuma düz ve vurgusuzdu; şiir böyle okunmaz. Bu modellerle duygulu bir şiir okuması elde edilemiyor, o yüzden örnekler siteden kaldırıldı. Kayıtların bir insan sesiyle yapılması gerekiyor.
 

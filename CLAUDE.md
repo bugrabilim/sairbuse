@@ -20,7 +20,9 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 
 - Şiirlerin tüm hakları saklıdır; lisans yok. Şiirler çevrilmez: İngilizce sayfalarda Türkçe kalır, `lang="tr"`.
 - "sevgimiz percinlensin-aşkmetni.txt" şiir değildir, sitede yayımlanmaz.
-- Yapay sesle okuma yok (kaldırıldı).
+- Yapay sesle okuma yok (kaldırıldı). İnsan sesiyle kayıtlar şiir dosyasında `ses:` ("Şairin sesinden dinle"),
+  dosyalar `public/ses/<şiir>.mp3`, düzey −18 LUFS'e eşitlenir; okuma sürerken ortam sesi ve fon müziği kısılır.
+  9 Ekim 2026: üç şiirin kaydı var (2017-05-24-altunizade, 2019-12-21-feneryolu, 2020-07-18-moda).
 - **Varsayılan tema koyu (gece).** Açık tema (gündüz) yalnız düğmeyle seçilir ve hatırlanır. Standartlar §3
   "ilk açılışta sistem tercihi" der; sahibi 8 Ekim 2026'da açıkça koyu varsayılan istedi, bu karar geçerli.
   Seçim `localStorage` `tema-secimi` anahtarında; eski `tema` anahtarı (sistem tercihini yazmış olabilir) okunmaz.

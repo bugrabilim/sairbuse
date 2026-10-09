@@ -1,5 +1,5 @@
 ---
-// Şiirin sesli okumaları. Şairin kendi kaydı ya da açıkça "örnek" diye etiketli yapay sesler.
+// Şiirin sesli okumaları: şairin kendi kaydı (ses) ve varsa başka okumalar (sesler).
 import { dilBul, metin } from '../i18n';
 interface Kayit {
   dosya: string;
@@ -49,8 +49,16 @@ const m = metin(dilBul(Astro.url)).siir;
       sesler.forEach((s) => s !== ses && s.pause()); // aynı anda tek okuma
       ses.play();
     });
-    ses.addEventListener('play', () => d.setAttribute('aria-pressed', 'true'));
-    ses.addEventListener('pause', () => d.setAttribute('aria-pressed', 'false'));
+    // Okuma sürerken ortam sesi ve fon müziği kısılır (src/scripts/ortam.ts)
+    const bildir = (acik: boolean) => document.dispatchEvent(new CustomEvent('okuma', { detail: acik }));
+    ses.addEventListener('play', () => {
+      d.setAttribute('aria-pressed', 'true');
+      bildir(true);
+    });
+    ses.addEventListener('pause', () => {
+      d.setAttribute('aria-pressed', 'false');
+      if (sesler.every((s) => s.paused)) bildir(false);
+    });
     ses.addEventListener('timeupdate', () => {
       if (ilerleme && ses.duration) ilerleme.style.width = `${(ses.currentTime / ses.duration) * 100}%`;
     });

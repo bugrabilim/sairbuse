@@ -128,15 +128,26 @@ export async function baslat(tur: Ortam) {
   durdur = () => durduranlar.forEach((d) => d());
 }
 
-/** Fon müziği açıkken ortam sesi biraz kısılır, ikisi birbirini bastırmasın */
-const ortamSeviyesi = () => ANA_SEVIYE * duzey * (muzik ? 0.6 : 1);
+/** Fon müziği açıkken ortam sesi biraz kısılır, ikisi birbirini bastırmasın; sesli okuma sürerken ikisi de kısılır */
+const ortamSeviyesi = () => ANA_SEVIYE * duzey * (muzik ? 0.6 : 1) * (okuma ? OKUMA_KISMA : 1);
+const muzikSeviyesi = () => MUZIK_SEVIYE * duzey * (okuma ? OKUMA_KISMA : 1);
 const MUZIK_SEVIYE = 0.8;
+const OKUMA_KISMA = 0.3;
+let okuma = false;
+
+// Şiirin sesli okuması (Sesler.astro) başlayınca ve bitince 'okuma' olayı gelir
+document.addEventListener('okuma', (o) => {
+  okuma = (o as CustomEvent<boolean>).detail;
+  if (!baglam) return;
+  if (ana) ana.gain.setTargetAtTime(ortamSeviyesi(), baglam.currentTime, 0.4);
+  if (muzik) muzik.gain.setTargetAtTime(muzikSeviyesi(), baglam.currentTime, 0.4);
+});
 
 /** Ses düzeyi (0–1): ortam sesi ve fon müziği birlikte */
 export function duzeyAyarla(yeni: number) {
   duzey = Math.max(0, Math.min(1, yeni));
   if (baglam && ana) ana.gain.setTargetAtTime(ortamSeviyesi(), baglam.currentTime, 0.15);
-  if (baglam && muzik) muzik.gain.setTargetAtTime(MUZIK_SEVIYE * duzey, baglam.currentTime, 0.15);
+  if (baglam && muzik) muzik.gain.setTargetAtTime(muzikSeviyesi(), baglam.currentTime, 0.15);
 }
 
 export function bitir(sure = 1.2) {
@@ -178,7 +189,7 @@ export async function muzikBaslat(duygu: string) {
   const g = ctx.createGain();
   g.gain.value = 0;
   g.connect(ctx.destination);
-  g.gain.setTargetAtTime(MUZIK_SEVIYE * duzey, ctx.currentTime, 1.5);
+  g.gain.setTargetAtTime(muzikSeviyesi(), ctx.currentTime, 1.5);
   muzik = g;
   muzikDurdur = dongu(ctx, tampon, g, 6, false); // taksim baştan başlar
   if (ana) ana.gain.setTargetAtTime(ortamSeviyesi(), ctx.currentTime, 0.8);
