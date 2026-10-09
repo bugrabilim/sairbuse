@@ -70,8 +70,9 @@ export const en: Metin = {
   siirler: {
     baslik: 'All poems',
     aciklama: (n: number) => `${n} poems in the order they were written. The poems are in Turkish.`,
-    giris: 'In the order they were written. Untitled poems go by their first line.',
+    giris: 'In the order they were written. Untitled poems go by their first line. Poems with a speaker icon can be listened to.',
     suzgec: 'Filter by emotion',
+    sesli: 'Has a spoken reading',
     hepsi: 'all',
   },
   siir: {

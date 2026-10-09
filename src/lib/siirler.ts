@@ -30,6 +30,11 @@ export function kitalar(s: Siir): string[][] {
     .map((k) => k.split('\n').map((m) => m.trimEnd()));
 }
 
+/** Sesli okuması olan şiir: `ses:` ya da `sesler:` dolu */
+export function sesli(s: Siir): boolean {
+  return Boolean(s.data.ses) || (s.data.sesler?.length ?? 0) > 0;
+}
+
 export function ilkMisra(s: Siir): string {
   return kitalar(s)[0]?.[0] ?? '';
 }

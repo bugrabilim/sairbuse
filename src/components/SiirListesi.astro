@@ -1,6 +1,6 @@
 ---
 import SiirFotosu from './SiirFotosu.astro';
-import { ad, basliksiz, imza, siirDuygulari, siirYolu, type Siir } from '../lib/siirler';
+import { ad, basliksiz, imza, sesli, siirDuygulari, siirYolu, type Siir } from '../lib/siirler';
 import { duyguAdi } from '../data/duygular';
 import { dilBul, metin } from '../i18n';
 
@@ -10,6 +10,7 @@ interface Props {
 
 const { siirler } = Astro.props;
 const dil = dilBul(Astro.url);
+const sesliYazi = metin(dil).siirler.sesli;
 ---
 
 <ul class="liste">
@@ -18,7 +19,19 @@ const dil = dilBul(Astro.url);
       <li class="liste-oge" data-duygular={s.data.duygular.join(' ')}>
         <a href={siirYolu(s, dil)}>
           <SiirFotosu siir={s} sinif="liste-foto" sizes="72px" genislikler={[160]} />
-          <span class={basliksiz(s) ? 'liste-ad ilk' : 'liste-ad'}>{ad(s)}</span>
+          <span class={basliksiz(s) ? 'liste-ad ilk' : 'liste-ad'}>
+            {ad(s)}
+            {sesli(s) && (
+              <span class="liste-ses" title={sesliYazi}>
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor" stroke="none" />
+                  <path d="M15.5 9a4.2 4.2 0 0 1 0 6" />
+                  <path d="M18 6.5a8 8 0 0 1 0 11" />
+                </svg>
+                <span class="gorunmez">{sesliYazi}</span>
+              </span>
+            )}
+          </span>
           <span class="liste-imza">
             <span class="liste-noktalar" aria-hidden="true">
               {siirDuygulari(s).map((d) => (

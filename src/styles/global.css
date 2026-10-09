@@ -900,6 +900,12 @@ body:not(.sahneli) main {
 .liste-ad.ilk {
   font-style: italic;
 }
+.liste-ses {
+  display: inline-flex;
+  vertical-align: -0.1em;
+  margin-left: 0.5rem;
+  color: var(--vurgu);
+}
 .liste-imza {
   display: flex;
   align-items: center;

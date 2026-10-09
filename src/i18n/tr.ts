@@ -69,8 +69,9 @@ export const tr = {
   siirler: {
     baslik: 'Bütün şiirler',
     aciklama: (n: number) => `${n} şiir, yazıldıkları sırayla.`,
-    giris: 'Yazıldıkları sırayla. Adı olmayan şiirler ilk mısralarıyla anılıyor.',
+    giris: 'Yazıldıkları sırayla. Adı olmayan şiirler ilk mısralarıyla anılıyor. Hoparlör işaretli şiirler sesli dinlenebilir.',
     suzgec: 'Duyguya göre süz',
+    sesli: 'Sesli okuması var',
     hepsi: 'hepsi',
   },
   siir: {

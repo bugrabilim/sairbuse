@@ -20,6 +20,8 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 
 - Şiirlerin tüm hakları saklıdır; lisans yok. Şiirler çevrilmez: İngilizce sayfalarda Türkçe kalır, `lang="tr"`.
 - "sevgimiz percinlensin-aşkmetni.txt" şiir değildir, sitede yayımlanmaz.
+- Şiirler listesinde (Bütün şiirler, Harita, Zaman) sesli okuması olan şiirin adının yanında hoparlör işareti var
+  (`sesli()` → `SiirListesi.astro`, `.liste-ses`; ekran okuyucuya "Sesli okuması var").
 - Yapay sesle okuma yok (kaldırıldı). İnsan sesiyle kayıtlar şiir dosyasında `ses:` (düğme "Sesli dinle"; kayıtlar şairin sesi
   değil, sahibi 9 Ekim 2026'da düzeltti, "şairin sesi" denmez),
   dosyalar `public/ses/<şiir>.mp3`, düzey −18 LUFS'e eşitlenir; okuma sürerken ortam sesi ve fon müziği kısılır.
@@ -59,6 +61,8 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   3 içindekiler, şiirler 4'ten. Her şiirin başlığı var (adı yoksa ilk mısrası). Yıl ayracı yok, sayfa başında yıl yok. Düzen: şiir fotoğrafıyla tek sayfaya sığıyorsa fotoğraf
   üstte, şiir altta; sığmıyorsa aynı açık sayfada yan yana (fotoğraf solda, şiir sağda); çok uzun şiir kendi
   sayfasında iki sütun. Fotoğraf künyeleri sonda tek sayfa, iki sütun. Boş sayfa ancak kaçınılmazsa.
+  Sesli okuması olan şiirde (`ses:`/`sesler:` dolu) imzanın yanında "Sesli dinle" yazısı ve o şiirin site sayfasına
+  giden QR kod durur (kendiliğinden, kayıt eklenince kitap da günceller).
   Üretim: `python3 scripts/kitap/kitap.py && node scripts/kitap/pdf.cjs` → `kitap-cikti/` (git'e girmez):
   `ic-prova.pdf` (saman zeminli, bakmak için), `ic-acik-sayfa.pdf` (açık sayfa görünümü: 2|3, 4|5 …), `ic-baski.pdf` (zeminsiz, matbaaya), `kapak.pdf` (dış açılım), `kapak-ic.pdf` (iç açılım).
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
