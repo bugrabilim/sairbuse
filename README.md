@@ -41,6 +41,8 @@ Ortam sesleri gerçek saha kayıtları: Hollanda Ses ve Görüntü Enstitüsü'n
 
 - Şiirin sesi: şiir dosyasındaki `ortam:` alanı (panelde "Ortam sesi"). Boşsa ana duygunun sesi (`src/data/ortam-sesleri.ts` → `DUYGU_ORTAMI`).
 - Dosyalar: `public/ortam/` (her biri ~80 sn, ~1,2 MB; yalnız çalınacağı zaman iner). Künyeler `src/data/ortam-sesleri.ts` dosyasında ve Hakkında sayfasının "Haklar" bölümünde.
+- Fon müziği (varsayılan kapalı, ortam sesi menüsünden açılır): her duygunun makamında taksim gibi yavaş bir ezgi; hüzün Hicaz, özlem Uşşak, aşk Hüzzam, özgürlük Rast, karanlık Saba, ayrılık Kürdi, yalnızlık Segah. Dosyalar `public/muzik/`, üretimi `python3 scripts/muzik.py` (fluidsynth, FluidR3_GM ses kütüphanesi ve `mido` gerekir; makamın koma aralıkları perde bükmeyle çalınır).
+- Mum ışığı (varsayılan kapalı): şiir sayfasındaki "Mum ışığı" düğmesi ekranı karartır, şiir imleci ya da parmağı izleyen titrek bir ışıkta okunur.
 - Yeniden üretmek: `python3 scripts/ortam.py <klasör>` özgün kayıtları Commons'tan indirir, en dingin bölümü keser, ses düzeyini eşitler (ffmpeg ve numpy gerekir). Aynı iş GitHub Actions'ta da var ("Ortam sesleri" iş akışı, elle tetiklenebilir).
 
 ## Şiir eklemek ya da düzeltmek

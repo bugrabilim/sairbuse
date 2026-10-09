@@ -112,6 +112,7 @@ export const en: Metin = {
     hazirlanamadi: 'The card could not be made.',
     hazir: 'The card is ready.',
   },
+  mum: { ac: 'Candlelight', sondur: 'Blow out the candle' },
   ortam: {
     sessiz: 'ambient sound',
     deniz: 'sea',
@@ -124,6 +125,7 @@ export const en: Metin = {
     ev: 'home',
     siirin: (ad: string) => `this poem’s sound · ${ad}`,
     duygunun: (ad: string) => `this emotion’s sound · ${ad}`,
+    muzik: (makam: string) => `background music · ${makam} makam`,
     kapat: 'off',
     duzey: 'Volume',
     baslik: 'Ambient sound',
@@ -215,7 +217,7 @@ export const en: Metin = {
     haklarMetni:
       'All rights to the poems and texts on this site are reserved. They may not be reproduced, copied or published elsewhere without permission. If you love a poem, share its link.',
     fotoHaklar: 'The photographs are not covered by this; each belongs to the photographer named in “Photographs and credits” and is used under its own licence.',
-    sesHaklar: 'Nor are the ambient sounds. They are real field recordings from the archive of the Netherlands Institute for Sound and Vision (Beeld en Geluid), shared on Wikimedia Commons under CC BY-SA 3.0. On this site they were trimmed and their levels evened out.',
+    sesHaklar: 'Nor are the ambient sounds. They are real field recordings from the archive of the Netherlands Institute for Sound and Vision (Beeld en Geluid), shared on Wikimedia Commons under CC BY-SA 3.0. On this site they were trimmed and their levels evened out. The background music was made for this site in each emotion’s makam; the instrument sounds come from the FluidR3_GM sound library (MIT licence).',
     guncelleme: 'Last updated:',
     sssBaslik: 'Questions',
     sss: [
@@ -306,7 +308,7 @@ export const en: Metin = {
       },
       {
         baslik: 'Cookies',
-        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose, your ambient sound choice and volume, and the last line of verse you saw on the home page. They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
+        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose, your ambient sound and background music choices and volume, and the last line of verse you saw on the home page; if you light the candle, that is remembered only for that visit (sessionStorage). They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
       },
       {
         baslik: 'Content from elsewhere',

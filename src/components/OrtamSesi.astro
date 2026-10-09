@@ -4,14 +4,16 @@
 // kafe, şehir, kuşlar, ev) ve ses düzeyi. Seçim ve düzey hatırlanır (localStorage). Sesler gerçek saha kayıtları
 // (public/ortam/, künyeler src/data/ortam-sesleri.ts, çalınması scripts/ortam.ts).
 import { dilBul, metin } from '../i18n';
-import { ORTAMLAR, type Ortam } from '../data/ortam-sesleri';
+import { DUYGU_MAKAMI, ORTAMLAR, type Ortam } from '../data/ortam-sesleri';
 
 interface Props {
+  /** Fon müziği için duygu (makamı DUYGU_MAKAMI'nda) */
+  duygu: string;
   /** Bu sayfanın sesi: şiirde şiirin, duygu sayfasında duygunun sesi */
   varsayilan: Ortam;
   tur?: 'siir' | 'duygu';
 }
-const { varsayilan, tur = 'siir' } = Astro.props;
+const { varsayilan, duygu, tur = 'siir' } = Astro.props;
 const m = metin(dilBul(Astro.url)).ortam;
 const secenekler = [
   { ad: 'sessiz', etiket: m.kapat },
@@ -36,6 +38,7 @@ const yazilar = {
     aria-controls="ortam-menusu"
     data-durum="sessiz"
     data-varsayilan={varsayilan}
+    data-duygu={duygu}
     aria-label={m.kapali}
     data-metin={JSON.stringify(yazilar)}
   >
@@ -54,6 +57,10 @@ const yazilar = {
         </button>
       ))
     }
+    <button type="button" class="ortam-secenek muzik-secenek" id="muzik" aria-pressed="false">
+      <span class="isaret kare" aria-hidden="true" />
+      {m.muzik(DUYGU_MAKAMI[duygu])}
+    </button>
     <label class="ortam-duzey">
       <span>{m.duzey}</span>
       <input type="range" min="0" max="1" step="0.05" value="0.1" id="ortam-duzey" />
@@ -62,7 +69,7 @@ const yazilar = {
 </div>
 
 <script>
-  import { baslat, bitir, duzeyAyarla } from '../scripts/ortam';
+  import { baslat, bitir, duzeyAyarla, muzikBaslat, muzikBitir } from '../scripts/ortam';
   import { ORTAMLAR, type Ortam } from '../data/ortam-sesleri';
 
   const dugme = document.getElementById('ortam') as HTMLButtonElement | null;
@@ -145,16 +152,32 @@ const yazilar = {
     yaz('ortam-duzey', String(v));
   });
 
-  // Varsayılan açık: okur kapatmadıysa ses ilk dokunuşta (tarayıcı kuralı) kendiliğinden başlar
+  // Fon müziği: varsayılan kapalı; açılırsa hatırlanır ve her sayfada o duygunun makamı çalar
+  const muzikDugmesi = document.getElementById('muzik');
+  const duygu = dugme?.dataset.duygu ?? 'huzun';
+  let muzikAcik = oku('muzik') === 'acik';
+  muzikDugmesi?.setAttribute('aria-pressed', String(muzikAcik));
+  muzikDugmesi?.addEventListener('click', () => {
+    muzikAcik = !muzikAcik;
+    muzikDugmesi.setAttribute('aria-pressed', String(muzikAcik));
+    yaz('muzik', muzikAcik ? 'acik' : 'kapali');
+    if (muzikAcik) {
+      muzikBaslat(duygu);
+      window.bumbaOlay?.('fon-muzigi', { duygu });
+    } else muzikBitir();
+  });
+
+  // Ortam sesi varsayılan açık: okur kapatmadıysa ses ilk dokunuşta (tarayıcı kuralı) kendiliğinden başlar
   const kayitli = oku('ortam-tercih');
   const tercih: Tercih = gecerli(kayitli) ? kayitli : 'varsayilan';
   goster(tercih);
   const ilk = sesi(tercih);
-  if (ilk) {
+  if (ilk || muzikAcik) {
     const olaylar = ['pointerup', 'touchend', 'click', 'keydown'] as const;
     const basla = () => {
       olaylar.forEach((o) => window.removeEventListener(o, basla, true));
-      if (dugme?.dataset.durum === ilk) baslat(ilk);
+      if (ilk && dugme?.dataset.durum === ilk) baslat(ilk);
+      if (muzikAcik) muzikBaslat(duygu);
     };
     olaylar.forEach((o) => window.addEventListener(o, basla, true));
   }
@@ -237,6 +260,16 @@ const yazilar = {
     border-radius: 50%;
     border: 1px solid var(--soluk);
     flex: none;
+  }
+  /* Fon müziği ayrı bir aç/kapa: çizgiyle ayrılır, işareti kare */
+  .muzik-secenek {
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--cizgi);
+    border-radius: 0;
+    padding-top: 0.75rem;
+  }
+  .isaret.kare {
+    border-radius: 2px;
   }
   .ortam-secenek[aria-pressed='true'] .isaret {
     background: var(--vurgu);

@@ -43,6 +43,12 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   sunucunun IP'sine sınır koyduğu için GitHub Actions'ta: `.github/workflows/ortam-sesleri.yml`), künyeler
   `src/data/ortam-sesleri.ts` ve Hakkında → Haklar.
 - Telefonda arama, dil (TR/EN) ve tema düğmeleri üst şeritte değil, menünün en altında. Masaüstünde üst şeritte.
+- **Fon müziği varsayılan kapalı** (ortam sesi menüsünde "fon müziği · makam"): her duygunun makamında taksim
+  gibi bir ezgi (hüzün Hicaz, özlem Uşşak, aşk Hüzzam, özgürlük Rast, karanlık Saba, ayrılık Kürdi, yalnızlık
+  Segah). `public/muzik/<duygu>.mp3`, üretimi `scripts/muzik.py` (fluidsynth + FluidR3_GM, MIT; koma aralıkları
+  perde bükmeyle). Açılınca hatırlanır, ortam sesi biraz kısılır.
+- **Mum ışığı varsayılan kapalı:** şiir sayfasında "Mum ışığı" düğmesi; ekran kararır, şiir imleci/parmağı
+  izleyen titrek bir ışıkta okunur. Ziyaret boyunca açık kalır (sessionStorage), "Mumu söndür" ya da Esc kapatır.
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 
@@ -59,13 +65,15 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   - Son yayınlar: `curl -s -H "Authorization: Bearer $COOLIFY_API_TOKEN" "$COOLIFY_URL/api/v1/deployments/applications/x4s4woc3tff78dkjnegnoffy?take=3" | jq '.deployments[] | {status, commit, created_at, finished_at}'`
   - Hata günlüğü: aynı adres `?take=1` ve `jq -r '.deployments[0].logs | fromjson | .[] | select(.hidden | not) | .output' | tail -40`
   - Yeniden yayın: `curl -s -X POST -H "Authorization: Bearer $COOLIFY_API_TOKEN" -H "Content-Type: application/json" -d '{"uuid":"x4s4woc3tff78dkjnegnoffy"}' "$COOLIFY_URL/api/v1/deploy"`
-- HTTPS ve http→https yönlendirmesi sunucunun ortak ayarı (Traefik). www adresi DNS'te var ama sertifikası
-  yok: ana altyapı oturumu 301 ile kök adrese yönlendirmeli.
+- HTTPS ve http→https yönlendirmesi sunucunun ortak ayarı (Traefik): GET'te 301 (`curl -I` HEAD'de 308 gösterir,
+  o da kalıcı). Ölçüm: `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' http://duygularinpesinde.bumba.tr/`.
+  bumba.tr altındaki adreslerde www kullanılmaz; www.duygularinpesinde.bumba.tr'nin açılmaması beklenen durum.
 - Güvenlik başlıkları bu repoda, `nginx.conf` (yalnız server düzeyinde `add_header`).
   **HSTS 8 Ekim 2026'da `max-age=86400` ile başladı; 15 Ekim 2026'dan sonra sorun yoksa `31536000` yapılacak.**
   includeSubDomains ve preload kullanılmaz.
 - Umami: site kimliği `3cc5cb50-4663-4436-b371-92cc3feb723b`, `data-domains="duygularinpesinde.bumba.tr"`.
-  Olaylar: `tema-degistir`, `dil-degistir`, `arama`, `liste-katil`, `duygu-sec`, `paylas`, `ortam-sesi`.
+  Olaylar: `tema-degistir`, `dil-degistir`, `arama`, `liste-katil`, `duygu-sec`, `paylas`, `ortam-sesi`,
+  `fon-muzigi`, `mum-isigi`.
 - Ortak e-posta listesi anahtarı: `duygularin-pesinde` (`src/data/site.ts`).
 
 ## SEO / GEO kaydı
