@@ -1,5 +1,6 @@
 ---
 duygular: ["ask"]
+ortam: "gece"
 foto: "imge-istanbul-gogu"
 kaynak: "buz.txt"
 ---

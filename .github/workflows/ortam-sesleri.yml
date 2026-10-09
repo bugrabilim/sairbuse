@@ -1,0 +1,33 @@
+name: Ortam sesleri
+
+# Ortam seslerini Commons'taki özgün kayıtlardan yeniden üretir (scripts/ortam.py) ve public/ortam/
+# klasörüne commit eder. Betik ya da bu dosya bir claude/ dalında değişince ya da elle tetiklenince çalışır.
+on:
+  workflow_dispatch:
+  push:
+    branches: ['claude/**']
+    paths: [scripts/ortam.py, .github/workflows/ortam-sesleri.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  uret:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Araçlar
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          pip install -q numpy
+      - name: Sesleri üret
+        run: python3 scripts/ortam.py "$RUNNER_TEMP/ham"
+      - name: Commit
+        run: |
+          git add public/ortam
+          if git diff --cached --quiet; then echo "değişiklik yok"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Ortam sesleri yeniden üretildi (scripts/ortam.py)"
+          git push

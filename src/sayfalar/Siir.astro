@@ -8,6 +8,7 @@ import OrtamSesi from '../components/OrtamSesi.astro';
 import PaylasMenusu from '../components/PaylasMenusu.astro';
 import Sesler from '../components/Sesler.astro';
 import { SITE } from '../data/site';
+import { DUYGU_ORTAMI } from '../data/ortam-sesleri';
 import {
   ad,
   anaDuygu,
@@ -73,7 +74,7 @@ const kayitlar = [
         <button class="dugme" type="button" id="bastan-oku">{m.siir.bastanOku}</button>
         <button class="dugme" type="button" id="kart-dugme" aria-pressed="false">{m.siir.misraKarti}</button>
         <PaylasMenusu baslik={sayfaBasligi} />
-        <OrtamSesi />
+        <OrtamSesi varsayilan={siir.data.ortam ?? DUYGU_ORTAMI[d.slug]} />
         <button class="dugme vurgulu" type="button" id="kart-olustur" hidden>{m.siir.kartOlustur}</button>
       </div>
       <p class="durum" id="durum" role="status" aria-live="polite"></p>

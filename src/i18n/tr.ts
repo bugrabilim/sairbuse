@@ -117,6 +117,12 @@ export const tr = {
     yagmur: 'yağmur',
     vapur: 'vapur',
     gece: 'gece',
+    kafe: 'kafe',
+    sehir: 'şehir',
+    kuslar: 'kuşlar',
+    ev: 'ev',
+    siirin: (ad: string) => `şiirin sesi · ${ad}`,
+    duygunun: (ad: string) => `bu duygunun sesi · ${ad}`,
     kapat: 'kapalı',
     duzey: 'Ses düzeyi',
     baslik: 'Ortam sesi',
@@ -206,7 +212,8 @@ export const tr = {
     haklar: 'Haklar',
     haklarMetni:
       'Bu sitedeki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz. Bir şiiri sevdiysen bağlantısını paylaşabilirsin.',
-    fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri yukarıda adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
+    fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri “Fotoğraflar ve künyeleri” penceresinde adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
+    sesHaklar: 'Ortam sesleri de bu kapsamda değil. Hepsi gerçek saha kaydı: Hollanda Ses ve Görüntü Enstitüsü’nün (Beeld en Geluid) arşivinden, Wikimedia Commons’ta CC BY-SA 3.0 ile paylaşılmış. Sitede kesilip ses düzeyleri eşitlendi.',
     guncelleme: 'Son güncelleme:',
     sssBaslik: 'Sık sorulanlar',
     sss: [
@@ -297,7 +304,7 @@ export const tr = {
       },
       {
         baslik: 'Çerezler',
-        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesinin düzeyi ve ana sayfada en son gördüğünüz mısra; seçtiğiniz ortam sesi yalnız o oturum boyunca (sessionStorage) tutulur. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
+        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesi tercihiniz ve düzeyi, ana sayfada en son gördüğünüz mısra. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
       },
       {
         baslik: 'Dışarıdan gelen içerik',

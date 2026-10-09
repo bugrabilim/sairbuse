@@ -290,7 +290,7 @@ Kargayla
 - [x] Duygulara özel geçiş hareketleri
 - [x] Mısra paylaş kartı (1080×1920, tarayıcıda çizilir)
 - [x] Şairin sesiyle okuma altyapısı *(kayıtlar bekleniyor)*
-- [x] Ortam sesleri: deniz, yağmur (Web Audio ile üretilir, dosya yok)
+- [x] Ortam sesleri: deniz, yağmur, vapur, gece (Ekim 2026'dan beri gerçek saha kayıtları, Beeld en Geluid / Commons)
 - [x] Sveltia CMS paneli `/admin/` (GitHub erişim anahtarıyla giriş)
 
 ### Faz 2.5 — Atmosfer (öneri, §10)

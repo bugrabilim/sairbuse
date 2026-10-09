@@ -1,23 +1,27 @@
 ---
-// Ortam sesi: düğme küçük bir menü açar; deniz, yağmur, vapur, gece ya da kapalı, bir de ses düzeyi.
-// Seçim sekme boyunca, ses düzeyi kalıcı olarak hatırlanır. Sayfa değişince tarayıcı kuralları gereği ses
-// ilk dokunuşta yeniden başlar. Sesler scripts/ortam.ts'de tarayıcıda üretilir.
+// Ortam sesi: sayfa açılınca kısık sesle (varsayılan %10) bu şiirin ya da duygunun sesi çalar; tarayıcı kuralları
+// gereği ilk dokunuşta başlar. Düğme bir menü açar: kapalı, şiirin sesi, genel sesler (deniz, yağmur, vapur, gece,
+// kafe, şehir, kuşlar, ev) ve ses düzeyi. Seçim ve düzey hatırlanır (localStorage). Sesler gerçek saha kayıtları
+// (public/ortam/, künyeler src/data/ortam-sesleri.ts, çalınması scripts/ortam.ts).
 import { dilBul, metin } from '../i18n';
+import { ORTAMLAR, type Ortam } from '../data/ortam-sesleri';
+
+interface Props {
+  /** Bu sayfanın sesi: şiirde şiirin, duygu sayfasında duygunun sesi */
+  varsayilan: Ortam;
+  tur?: 'siir' | 'duygu';
+}
+const { varsayilan, tur = 'siir' } = Astro.props;
 const m = metin(dilBul(Astro.url)).ortam;
 const secenekler = [
   { ad: 'sessiz', etiket: m.kapat },
-  { ad: 'deniz', etiket: m.deniz },
-  { ad: 'yagmur', etiket: m.yagmur },
-  { ad: 'vapur', etiket: m.vapur },
-  { ad: 'gece', etiket: m.gece },
+  { ad: 'varsayilan', etiket: tur === 'siir' ? m.siirin(m[varsayilan]) : m.duygunun(m[varsayilan]) },
+  ...ORTAMLAR.map((o) => ({ ad: o, etiket: m[o] })),
 ];
 // Betik metinleri düğmenin üstünden okur (işlevler JSON'a girmez, açık/kapalı kalıbı ayrıca gider)
 const yazilar = {
   sessiz: m.sessiz,
-  deniz: m.deniz,
-  yagmur: m.yagmur,
-  vapur: m.vapur,
-  gece: m.gece,
+  ...Object.fromEntries(ORTAMLAR.map((o) => [o, m[o]])),
   kapali: m.kapali,
   acik: m.acik('{ad}'),
 };
@@ -31,6 +35,7 @@ const yazilar = {
     aria-expanded="false"
     aria-controls="ortam-menusu"
     data-durum="sessiz"
+    data-varsayilan={varsayilan}
     aria-label={m.kapali}
     data-metin={JSON.stringify(yazilar)}
   >
@@ -43,7 +48,7 @@ const yazilar = {
   <div class="ortam-menusu" id="ortam-menusu" role="group" aria-label={m.baslik} hidden>
     {
       secenekler.map((s) => (
-        <button type="button" class="ortam-secenek" data-ortam={s.ad} aria-pressed={s.ad === 'sessiz' ? 'true' : 'false'}>
+        <button type="button" class={s.ad === 'varsayilan' ? 'ortam-secenek bu-sayfa' : 'ortam-secenek'} data-ortam={s.ad} aria-pressed={s.ad === 'varsayilan' ? 'true' : 'false'}>
           <span class="isaret" aria-hidden="true" />
           {s.etiket}
         </button>
@@ -51,13 +56,14 @@ const yazilar = {
     }
     <label class="ortam-duzey">
       <span>{m.duzey}</span>
-      <input type="range" min="0" max="1" step="0.05" value="0.6" id="ortam-duzey" />
+      <input type="range" min="0" max="1" step="0.05" value="0.1" id="ortam-duzey" />
     </label>
   </div>
 </div>
 
 <script>
-  import { baslat, bitir, duzeyAyarla, type Ortam } from '../scripts/ortam';
+  import { baslat, bitir, duzeyAyarla } from '../scripts/ortam';
+  import { ORTAMLAR, type Ortam } from '../data/ortam-sesleri';
 
   const dugme = document.getElementById('ortam') as HTMLButtonElement | null;
   const menu = document.getElementById('ortam-menusu');
@@ -65,33 +71,44 @@ const yazilar = {
   const duzeyKutusu = document.getElementById('ortam-duzey') as HTMLInputElement | null;
   const secenekler = Array.from(menu?.querySelectorAll<HTMLButtonElement>('[data-ortam]') ?? []);
   const AD: Record<string, string> = JSON.parse(dugme?.dataset.metin ?? '{}');
-  const SESLER = ['deniz', 'yagmur', 'vapur', 'gece'];
-  type Durum = 'sessiz' | Ortam;
+  const varsayilan = (dugme?.dataset.varsayilan ?? 'deniz') as Ortam;
+  /** sessiz: kapalı · varsayilan: her sayfada o şiirin/duygunun sesi · ya da her sayfada aynı genel ses */
+  type Tercih = 'sessiz' | 'varsayilan' | Ortam;
+  const gecerli = (t: string | null): t is Tercih => t === 'sessiz' || t === 'varsayilan' || (ORTAMLAR as readonly string[]).includes(t ?? '');
+  const sesi = (t: Tercih): Ortam | null => (t === 'sessiz' ? null : t === 'varsayilan' ? varsayilan : t);
 
-  function goster(d: Durum) {
-    if (!dugme || !yazi) return;
-    dugme.dataset.durum = d;
-    dugme.setAttribute('aria-label', d === 'sessiz' ? AD.kapali : AD.acik.replace('{ad}', AD[d]));
-    yazi.textContent = AD[d];
-    secenekler.forEach((s) => s.setAttribute('aria-pressed', String(s.dataset.ortam === d)));
-  }
-
-  function kaydet(d: Durum) {
+  function oku(anahtar: string): string | null {
     try {
-      sessionStorage.setItem('ortam', d);
+      return localStorage.getItem(anahtar);
+    } catch {
+      return null;
+    }
+  }
+  function yaz(anahtar: string, deger: string) {
+    try {
+      localStorage.setItem(anahtar, deger);
     } catch {
       /* hatırlanmaz */
     }
   }
 
-  async function uygula(d: Durum) {
-    goster(d);
-    kaydet(d);
-    if (d === 'sessiz') bitir();
-    else {
-      await baslat(d);
-      window.bumbaOlay?.('ortam-sesi', { ses: d });
-    }
+  function goster(t: Tercih) {
+    if (!dugme || !yazi) return;
+    const s = sesi(t);
+    dugme.dataset.durum = s ?? 'sessiz';
+    dugme.setAttribute('aria-label', s ? AD.acik.replace('{ad}', AD[s]) : AD.kapali);
+    yazi.textContent = s ? AD[s] : AD.sessiz;
+    secenekler.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.ortam === t)));
+  }
+
+  function uygula(t: Tercih) {
+    goster(t);
+    yaz('ortam-tercih', t);
+    const s = sesi(t);
+    if (s) {
+      baslat(s);
+      window.bumbaOlay?.('ortam-sesi', { ses: s });
+    } else bitir();
   }
 
   function menuAc(acik: boolean) {
@@ -115,46 +132,31 @@ const yazilar = {
       dugme?.focus();
     }
   });
-  secenekler.forEach((s) =>
-    s.addEventListener('click', () => {
-      uygula((s.dataset.ortam ?? 'sessiz') as Durum);
-    }),
-  );
+  secenekler.forEach((x) => x.addEventListener('click', () => uygula((x.dataset.ortam ?? 'sessiz') as Tercih)));
 
-  // Ses düzeyi kalıcı olarak hatırlanır
-  let duzey = 0.6;
-  try {
-    const k = localStorage.getItem('ortam-duzey');
-    if (k !== null) duzey = Number(k);
-  } catch {
-    /* yok */
-  }
+  // Ses düzeyi: varsayılan %10, değiştirilirse hatırlanır
+  const kayitliDuzey = Number(oku('ortam-duzey') ?? '0.1');
+  const duzey = Number.isFinite(kayitliDuzey) ? kayitliDuzey : 0.1;
   if (duzeyKutusu) duzeyKutusu.value = String(duzey);
   duzeyAyarla(duzey);
   duzeyKutusu?.addEventListener('input', () => {
     const v = Number(duzeyKutusu.value);
     duzeyAyarla(v);
-    try {
-      localStorage.setItem('ortam-duzey', String(v));
-    } catch {
-      /* hatırlanmaz */
-    }
+    yaz('ortam-duzey', String(v));
   });
 
-  // Önceki sayfada açıksa: düğme açık görünür, ses ilk dokunuşta geri gelir
-  let kayitli: Durum = 'sessiz';
-  try {
-    kayitli = (sessionStorage.getItem('ortam') as Durum) ?? 'sessiz';
-  } catch {
-    /* yok */
-  }
-  if (SESLER.includes(kayitli)) {
-    goster(kayitli);
-    const devam = () => {
-      if (dugme?.dataset.durum === kayitli) baslat(kayitli as Ortam);
+  // Varsayılan açık: okur kapatmadıysa ses ilk dokunuşta (tarayıcı kuralı) kendiliğinden başlar
+  const kayitli = oku('ortam-tercih');
+  const tercih: Tercih = gecerli(kayitli) ? kayitli : 'varsayilan';
+  goster(tercih);
+  const ilk = sesi(tercih);
+  if (ilk) {
+    const olaylar = ['pointerup', 'touchend', 'click', 'keydown'] as const;
+    const basla = () => {
+      olaylar.forEach((o) => window.removeEventListener(o, basla, true));
+      if (dugme?.dataset.durum === ilk) baslat(ilk);
     };
-    window.addEventListener('pointerdown', devam, { once: true });
-    window.addEventListener('keydown', devam, { once: true });
+    olaylar.forEach((o) => window.addEventListener(o, basla, true));
   }
 </script>
 

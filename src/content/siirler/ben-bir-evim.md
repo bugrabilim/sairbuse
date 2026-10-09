@@ -1,5 +1,6 @@
 ---
 duygular: ["karanlik"]
+ortam: "gece"
 foto: "imge-mum"
 kaynak: "bus.txt"
 ---

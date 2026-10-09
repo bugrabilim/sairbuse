@@ -3,6 +3,7 @@ baslik: "Sarı"
 tarih: "2020-04-19"
 yer: "Feneryolu"
 duygular: ["huzun"]
+ortam: "vapur"
 foto: "feneryolu-kediler"
 kaynak: "şiirler.docx"
 ---

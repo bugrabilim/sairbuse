@@ -15,7 +15,7 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | `/` | Her ziyarette başka bir "renk mısrası" (*Turuncu bir gemide olsam şimdi*, *Üstünde kaldı sarı kediler*…) kendi şiirinin fotoğrafıyla açılır; sayfa açıkken mısralar 9 saniyede bir yavaşça birbirine geçer ("Durdur" ile durur, hareketi azaltılmış cihazlarda geçiş yok). Altında "Bugün neyin peşindesin?" ve 7 duygu, fotoğraflı duygu şeritleri. Bugünün tarihinde yazılmış bir şiir varsa o da gösterilir. |
 | `/duygu/…` | Bir duygunun bütün şiirleri, her biri kendi fotoğrafıyla. Her şiir ekrana girince harf harf yazılır. |
 | `/yer/…` | Bir yerde (Moda, Burgazada, Söğüt…) yazılmış şiirler. |
-| `/siir/…` | Tek bir şiir. Yazıldığı yerin fotoğrafıyla açılır (bilgisayarda fotoğraf solda sabit durur). Şiir yazılıyormuş gibi harf harf belirir; hız ve beliriş duyguya göre değişir: hüzün buğulu ve yavaş, ayrılık kesik, özgürlük akıcı. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" (bağlantı, Facebook, Instagram, WhatsApp, SMS, LinkedIn) ve ortam sesi (deniz, yağmur, vapur, gece; ses düzeyi ayarlı) düğmeleri var. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
+| `/siir/…` | Tek bir şiir. Yazıldığı yerin fotoğrafıyla açılır (bilgisayarda fotoğraf solda sabit durur). Şiir yazılıyormuş gibi harf harf belirir; hız ve beliriş duyguya göre değişir: hüzün buğulu ve yavaş, ayrılık kesik, özgürlük akıcı. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" (bağlantı, Facebook, Instagram, WhatsApp, SMS, LinkedIn) ve ortam sesi düğmeleri var; ortam sesi varsayılan olarak o şiirin sesiyle, kısık açılır. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
 | `/siirler/` | Bütün şiirlerin listesi, duyguya göre süzülebilir. |
 | `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. Altında İstanbul'un dışındaki yerler (İzmir, Marmaris Söğüt, Paris) için Paris'ten Marmaris'e uzanan ikinci bir harita. |
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |
@@ -37,7 +37,11 @@ Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi 
 
 Kendi fotoğrafınızı koymak için dosyayı aynı kimlikle `src/assets/foto/` klasörüne koyup `fotograflar.ts`'de yazarı ve lisansı güncellemeniz yeterli.
 
-Ortam sesleri bir ses dosyası değil, tarayıcıda Web Audio ile anında üretiliyor: telif sorunu ve ek ağ trafiği yok. Varsayılan olarak kapalı.
+Ortam sesleri gerçek saha kayıtları: Hollanda Ses ve Görüntü Enstitüsü'nün (Beeld en Geluid) arşivinden, Wikimedia Commons'ta CC BY-SA 3.0 ile paylaşılmış. Sekiz ses var: deniz, yağmur, vapur (arada düdüğüyle), gece, kafe, şehir, kuşlar, ev (saat tıkırtısı). Sayfa açılınca %10 düzeyde o şiirin sesi çalar (tarayıcı kuralı gereği ilk dokunuşta başlar); okur menüden kapatabilir, başka bir sesi ya da düzeyi seçebilir, seçimi hatırlanır.
+
+- Şiirin sesi: şiir dosyasındaki `ortam:` alanı (panelde "Ortam sesi"). Boşsa ana duygunun sesi (`src/data/ortam-sesleri.ts` → `DUYGU_ORTAMI`).
+- Dosyalar: `public/ortam/` (her biri ~80 sn, ~1,2 MB; yalnız çalınacağı zaman iner). Künyeler `src/data/ortam-sesleri.ts` dosyasında ve Hakkında sayfasının "Haklar" bölümünde.
+- Yeniden üretmek: `python3 scripts/ortam.py <klasör>` özgün kayıtları Commons'tan indirir, en dingin bölümü keser, ses düzeyini eşitler (ffmpeg ve numpy gerekir). Aynı iş GitHub Actions'ta da var ("Ortam sesleri" iş akışı, elle tetiklenebilir).
 
 ## Şiir eklemek ya da düzeltmek
 

@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { DUYGU_SLUGLARI } from './data/duygular';
+import { ORTAMLAR } from './data/ortam-sesleri';
 
 const siirler = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/siirler' }),
@@ -24,6 +25,8 @@ const siirler = defineCollection({
     sesler: z
       .array(z.object({ dosya: z.string(), etiket: z.string(), ornek: z.boolean().optional() }))
       .optional(),
+    /** Şiirin ortam sesi (public/ortam/). Yoksa ana duygusunun sesi çalar (src/data/ortam-sesleri.ts). */
+    ortam: z.enum(ORTAMLAR).optional(),
     /** src/data/fotograflar.ts'deki bir fotoğrafın kimliği. Yoksa yazıldığı yerin fotoğrafı kullanılır. */
     foto: z.string().optional(),
     /** Şiirin geldiği özgün dosya (kaynak/ klasöründe). */

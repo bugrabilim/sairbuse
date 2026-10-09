@@ -2,6 +2,7 @@
 tarih: "2018-02-04"
 yer: "Burgazada"
 duygular: ["ayrilik", "karanlik"]
+ortam: "ev"
 foto: "burgazada-bank"
 kaynak: "şiirler.docx"
 ---
