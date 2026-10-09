@@ -294,7 +294,7 @@ Kargayla
 - [x] Sveltia CMS paneli `/admin/` (GitHub erişim anahtarıyla giriş)
 
 ### Faz 2.5 — Atmosfer (öneri, §10)
-- [x] Mum ışığı modu (varsayılan kapalı, düğmeyle; Ekim 2026)
+- [ ] ~~Mum ışığı modu~~ (denendi, sahibi gereksiz buldu; Ekim 2026'da kaldırıldı)
 - [x] Duygunun makamında fon müziği (varsayılan kapalı; `scripts/muzik.py` ile üretilmiş taksimler, Ekim 2026)
 - [ ] Şairin ya da bir insanın sesiyle kayıtlar *(yapay ses denendi, düz okuduğu için kaldırıldı; §10.4)*
 - [ ] Yağmurlu cam, vapur salınımı gibi küçük dokunuşlar
