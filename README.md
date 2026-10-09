@@ -60,7 +60,7 @@ açık sayfaya düşecek biçimde yerleşim hesaplanır. Chromium yerelde başka
 ortam değişkenleriyle verilir.
 
 `ic-acik-sayfa.pdf` kitabın açılınca görünen hâlidir: 1. sayfa ön kapağın içinin karşısında, sonra solda çift, sağda tek
-numaralı sayfa (2|3, 4|5 …). Matbaaya `ic-baski.pdf`, `kapak.pdf` (dış yüz) ve `kapak-ic.pdf` (iç yüz: ön kapağın içinde kitabın adı) gider.
+numaralı sayfa (2|3, 4|5 …). Matbaaya `ic-baski.pdf`, `kapak.pdf` (dış yüz) ve `kapak-ic.pdf` (iç yüz: ön kapağın içinde kitabın adı, arka kapağın içinde künye) gider.
 
 Sırt kalınlığı sayfa sayısından tahmin edilir; kesin ölçü kâğıda göre matbaadan alınır (`scripts/kitap/kitap.py` → `YAPRAK_MM`).
 

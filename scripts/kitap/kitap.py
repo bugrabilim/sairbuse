@@ -6,15 +6,16 @@
     ic-acik-sayfa.pdf  kitap açılınca görünen hâli: 2|3, 4|5 … yan yana (bakmak için)
     ic-baski.pdf   iç sayfalar, zeminsiz, yalnız siyah (matbaaya)
     kapak.pdf      kapak açılımı, dış yüz: arka kapak, sırt, ön kapak (renkli, matbaaya)
-    kapak-ic.pdf   kapak açılımı, iç yüz: ön kapağın içinde kitabın adı, gerisi boş (tek renk, matbaaya)
+    kapak-ic.pdf   kapak açılımı, iç yüz: ön kapağın içinde kitabın adı, arka kapağın içinde künye (tek renk, matbaaya)
 
 Kullanım:
     python3 scripts/kitap/kitap.py && node scripts/kitap/pdf.cjs
 
 Gerekenler: ffmpeg, PyYAML, segno (QR), Chromium + playwright-core (pdf.cjs).
 
-Ölçüler: A5 (148 × 210 mm), her kenarda 3 mm kesim payı. Ön sayfalar: 1 epigraf, 2 künye, 3 başlık; kitabın adı
-ön kapağın içinde, içindekiler ve yıl ayracı yok. Şiirler 4. sayfadan başlar. Şiir fotoğrafıyla tek sayfaya sığıyorsa fotoğraf üstte, şiir altta aynı sayfada; sığmıyorsa fotoğraf ve şiir aynı açık
+Ölçüler: A5 (148 × 210 mm), her kenarda 3 mm kesim payı. Ön sayfalar: 1 başlık, 2 epigraf, 3 içindekiler; kitabın
+adı ön kapağın, künye arka kapağın içinde; yıl ayracı yok. Şiirler 4. sayfadan başlar, adı olmayan şiirde ilk mısra
+başlık olur. Şiir fotoğrafıyla tek sayfaya sığıyorsa fotoğraf üstte, şiir altta aynı sayfada; sığmıyorsa fotoğraf ve şiir aynı açık
 sayfada yan yana (fotoğraf solda, şiir sağda). Tek sütuna da sığmayan çok uzun şiir kendi sayfasında iki sütun olur.
 Şiirlerin boyu önce tarayıcıda ölçülür (scripts/kitap/olc.cjs), yerleşim ona göre yapılır.
 Sırt kalınlığı tahminidir (YAPRAK_MM); kesin ölçüyü matbaa kâğıda göre verir.
@@ -76,6 +77,11 @@ def fotograflari_oku():
                                 'odak': alan('odak') or 'center'}
     return kunyeler
 
+
+
+def ad(s):
+    """Şiirin kitaptaki başlığı: adı varsa adı, yoksa ilk mısrası (sondaki noktalama atılır)"""
+    return s['baslik'] or s['govde'].strip().splitlines()[0].strip().rstrip('.,;:!?…-–')
 
 
 def imza(s):
@@ -153,6 +159,9 @@ ORTAK_CSS = """
   .epigraf { margin: auto 0; font-style: italic; font-size: 10.5pt; line-height: 1.5; color: #5d554a; white-space: pre-line; }
   .kunye { margin-top: auto; font-size: 7.5pt; line-height: 1.55; color: #4a433a; }
   .fotolar-baslik { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 15pt; margin-bottom: 6mm; }
+  .icindekiler { list-style: none; font-size: 9pt; line-height: 1.55; }
+  .icindekiler li { display: flex; gap: 2mm; align-items: baseline; }
+  .icindekiler li .nokta { flex: 1; border-bottom: 0.25pt dotted #8a8072; transform: translateY(-1mm); }
   .fotolar-alan .fotolar-baslik { margin-bottom: 2mm; }
   .fotolar-not { font-size: 7pt; line-height: 1.4; color: #5d554a; margin-bottom: 5mm; }
   .fotolar { list-style: none; font-size: 7.6pt; line-height: 1.36; column-count: 2; column-gap: 7mm; }
@@ -179,9 +188,7 @@ def govde_html(govde):
 
 
 def siir_icerik(s):
-    p = []
-    if s['baslik']:
-        p.append(f'<div class="siir-ad">{e(s["baslik"])}</div>')
+    p = [f'<div class="siir-ad">{e(ad(s))}</div>']
     p.append(f'<div class="siir">{govde_html(s["govde"])}</div>')
     if imza(s):
         p.append(f'<div class="imza">{e(imza(s))}</div>')
@@ -239,17 +246,11 @@ def taraf(no):
 
 
 def ic_sayfalar(siirler, kunyeler, olcum):
-    on = []
-    # Ön sayfalar: 1 epigraf, 2 künye, 3 başlık. Yarım başlık ön kapağın içinde (kapak-ic), içindekiler yok.
-    on.append(sayfa('sag', '<div class="alan"><div class="epigraf">“Kim bilir belki de sen\nturuncu bir gemidesin”</div></div>'))
-    on.append(sayfa('sol', '<div class="alan"><div class="kunye">'
-                    f'© 2008–2026 {SAIR}. Tüm hakları saklıdır.<br>Bu kitaptaki şiirler izinsiz çoğaltılamaz, '
-                    'kopyalanıp başka bir yerde yayımlanamaz.<br><br>Fotoğraflar Wikimedia Commons’tan, '
-                    'fotoğrafçılarının adı ve lisansıyla kullanılmıştır; siyah beyaza çevrilmiştir. '
-                    'Künyeleri kitabın sonundadır.<br><br>Birinci baskı, 2026. Sınırlı sayıda basılmıştır.'
-                    '</div></div>'))
-    on.append(sayfa('sag', '<div class="alan ortala"><div class="buyuk-ad">Duyguların<br>Peşinde</div>'
-                    f'<div class="alt-ad">Şiirler · 2008–2021</div><div class="sair">{SAIR}</div></div>'))
+    # Ön sayfalar: 1 başlık, 2 epigraf, 3 içindekiler. Yarım başlık ön kapağın, künye arka kapağın içinde (kapak-ic).
+    on = [sayfa('sag', '<div class="alan ortala"><div class="buyuk-ad">Duyguların<br>Peşinde</div>'
+                f'<div class="alt-ad">Şiirler · 2008–2021</div><div class="sair">{SAIR}</div></div>'),
+          sayfa('sol', '<div class="alan"><div class="epigraf">“Kim bilir belki de sen\nturuncu bir gemidesin”</div></div>'),
+          None]  # içindekiler, sayfa numaraları belli olunca
 
     # Birimler: tek (fotoğraf + şiir 1 sayfa), yan (fotoğraf | şiir), cift (fotoğraf | iki sütun)
     birimler = []
@@ -260,6 +261,7 @@ def ic_sayfalar(siirler, kunyeler, olcum):
 
     yer = yerlestir(birimler, len(on) + 1)
     sayfalar = []
+    satirlar = []
     for b in yer:
         p = b['p']
         if b['tur'] == 'bos':
@@ -269,6 +271,8 @@ def ic_sayfalar(siirler, kunyeler, olcum):
             k = kunyeler.get(s['foto'], {})
             foto = gri_foto(s['foto'])
             aciklama = e(k.get('aciklama', ''))
+            siir_no = p if b['tur'] == 'tek' else p + 1
+            satirlar.append(f'<li><span>{e(ad(s))}</span><span class="nokta"></span><span>{siir_no}</span></li>')
             if b['tur'] == 'tek':
                 sayfalar.append(sayfa(taraf(p), f'<div class="alan siir-alan tek-alan"><div class="tek-foto">'
                                       f'<img src="{foto}" alt="{aciklama}" style="object-position:{k.get("odak", "center")}">'
@@ -278,6 +282,8 @@ def ic_sayfalar(siirler, kunyeler, olcum):
                                       f'<div class="alt-yazi">{aciklama}</div></div></div>', p))
                 ek = ' iki-sutun' if b['tur'] == 'cift' else ''
                 sayfalar.append(sayfa(taraf(p + 1), f'<div class="alan siir-alan{ek}">{siir_icerik(s)}</div>', p + 1))
+    on[2] = sayfa('sag', '<div class="alan siir-alan"><div class="fotolar-baslik">İçindekiler</div>'
+                  f'<ul class="icindekiler">{"".join(satirlar)}</ul></div>', 3)
     sayfalar = on + sayfalar
 
     # Son sayfa: fotoğraf künyeleri, iki sütun
@@ -303,7 +309,7 @@ UYDUR_JS = """
 // Sayfaya sığmayan şiirde önce fotoğraf (aynı sayfadaysa), sonra yazı biraz küçülür
 document.fonts.ready.then(() => {
   for (const alan of document.querySelectorAll('.siir-alan')) {
-    const yazi = alan.querySelector('.siir, .fotolar');
+    const yazi = alan.querySelector('.siir, .fotolar, .icindekiler');
     const foto = alan.querySelector('.tek-foto');
     let boy = parseFloat(getComputedStyle(yazi).fontSize) * 0.75;
     const tasiyor = () => alan.scrollHeight > alan.clientHeight + 1 || yazi.scrollWidth > yazi.clientWidth + 1;
@@ -316,9 +322,15 @@ document.fonts.ready.then(() => {
 """
 
 
-# Ön kapağın içindeki yarım başlık (eskiden 1. sayfaydı); kesilmiş 148 × 210 mm alana göre
+# Kapağın iç yüzleri, kesilmiş 148 × 210 mm alana göre: ön kapağın içinde yarım başlık, arka kapağın içinde künye
 KAPAK_ICI = ('<div style="height:100%;display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;'
              'font-style:italic;font-weight:300;font-size:16pt">Duyguların Peşinde</div>')
+ARKA_KAPAK_ICI = ('<div style="position:absolute;left:16mm;right:20mm;bottom:24mm;font-family:Newsreader,serif;'
+                  'font-size:7.5pt;line-height:1.55;color:#4a433a">'
+                  f'© 2008–2026 {SAIR}. Tüm hakları saklıdır.<br>Bu kitaptaki şiirler izinsiz çoğaltılamaz, '
+                  'kopyalanıp başka bir yerde yayımlanamaz.<br><br>Fotoğraflar Wikimedia Commons’tan, '
+                  'fotoğrafçılarının adı ve lisansıyla kullanılmıştır; siyah beyaza çevrilmiştir. '
+                  'Künyeleri kitabın sonundadır.<br><br>Birinci baskı, 2026. Sınırlı sayıda basılmıştır.</div>')
 
 
 def kapak(sayfa_sayisi):
@@ -375,9 +387,11 @@ Böyle ağlarmış”</div>
   @page {{ size: {genislik}mm 216mm; margin: 0; }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ width: {genislik}mm; height: 216mm; position: relative; overflow: hidden; color: #1c1915; }}
-  .on-ic {{ position: absolute; left: 3mm; top: 3mm; width: 148mm; height: 210mm; }}
+  .on-ic, .arka-ic {{ position: absolute; top: 3mm; width: 148mm; height: 210mm; }}
+  .on-ic {{ left: 3mm; }}
+  .arka-ic {{ left: {3 + 148 + sirt}mm; }}
 """
-    ic_govde = f'<div class="on-ic">{KAPAK_ICI}</div>'
+    ic_govde = f'<div class="on-ic">{KAPAK_ICI}</div><div class="arka-ic">{ARKA_KAPAK_ICI}</div>'
     return css, govde, sirt, ic_css, ic_govde
 
 
@@ -392,9 +406,11 @@ def main():
             f'<body class="{tur}">{"".join(sayfalar)}{UYDUR_JS}</body></html>', encoding='utf-8')
     # Kitap açılınca görünen hâli: kesilmiş sayfalar yan yana; 1. sayfa ön kapağın içinin karşısında, sonra solda çift numara,
     # sağda tek numara (2|3, 4|5 …). Yalnız bakmak için; matbaaya ic-baski gider.
-    kapak_ici = f'<section class="sayfa kapak-ici"><div style="position:absolute;left:3mm;top:3mm;width:148mm;height:210mm">{KAPAK_ICI}</div></section>'
-    yayimlar = [(kapak_ici, sayfalar[0])] + [(sayfalar[i], sayfalar[i + 1] if i + 1 < len(sayfalar) else None)
-                                        for i in range(1, len(sayfalar), 2)]
+    kapak_ici = lambda icerik: ('<section class="sayfa kapak-ici"><div style="position:absolute;left:3mm;top:3mm;'
+                                f'width:148mm;height:210mm">{icerik}</div></section>')
+    # Sayfa sayısı 4'ün katı, yani çift: son sayfa solda, karşısında arka kapağın içi
+    yayimlar = ([(kapak_ici(KAPAK_ICI), sayfalar[0])] + [(sayfalar[i], sayfalar[i + 1]) for i in range(1, len(sayfalar) - 1, 2)]
+                + [(sayfalar[-1], kapak_ici(ARKA_KAPAK_ICI))])
     acik = ''.join(f'<div class="yayim"><div class="kesik">{a or ""}</div><div class="kesik">{b or ""}</div></div>'
                    for a, b in yayimlar)
     acik_css = ORTAK_CSS.replace('@page { size: 154mm 216mm; margin: 0; }', '@page { size: 296mm 210mm; margin: 0; }') + '''
