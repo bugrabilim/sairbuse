@@ -3,6 +3,7 @@
 Çıktılar kitap-cikti/ klasörüne gider (git'e girmez):
     ic.html, kapak.html  → scripts/kitap/pdf.cjs bunları PDF'e çevirir:
     ic-prova.pdf   iç sayfalar, saman zeminle (ekranda bakmak için)
+    ic-acik-sayfa.pdf  kitap açılınca görünen hâli: 2|3, 4|5 … yan yana (bakmak için)
     ic-baski.pdf   iç sayfalar, zeminsiz, yalnız siyah (matbaaya)
     kapak.pdf      kapak açılımı: arka kapak, sırt, ön kapak (renkli, matbaaya)
 
@@ -314,7 +315,7 @@ def ic_sayfalar(siirler, kunyeler, olcum):
                 sayfalar.append(sayfa(taraf(p + 1), f'<div class="alan siir-alan{ek}">{siir_icerik(s)}</div>', p + 1))
             satirlar.append(f'<li><span>{e(ad(s))}</span><span class="nokta"></span><span>{siir_no}</span></li>')
 
-    icindekiler = sayfa('sag', '<div class="alan"><div class="icindekiler-baslik">İçindekiler</div>'
+    icindekiler = sayfa('sag', '<div class="alan siir-alan"><div class="icindekiler-baslik">İçindekiler</div>'
                         f'<ul class="icindekiler">{"".join(satirlar)}</ul></div>', 5)
     sayfalar = on + [icindekiler] + sayfalar
 
@@ -341,7 +342,7 @@ UYDUR_JS = """
 // Sayfaya sığmayan şiirde önce fotoğraf (aynı sayfadaysa), sonra yazı biraz küçülür
 document.fonts.ready.then(() => {
   for (const alan of document.querySelectorAll('.siir-alan')) {
-    const yazi = alan.querySelector('.siir, .fotolar');
+    const yazi = alan.querySelector('.siir, .fotolar, .icindekiler');
     const foto = alan.querySelector('.tek-foto');
     let boy = parseFloat(getComputedStyle(yazi).fontSize) * 0.75;
     const tasiyor = () => alan.scrollHeight > alan.clientHeight + 1 || yazi.scrollWidth > yazi.clientWidth + 1;
@@ -415,6 +416,21 @@ def main():
         (CIKTI / f'ic-{tur}.html').write_text(
             f'<!doctype html><html lang="tr"><head><meta charset="utf-8">{font_css()}<style>{ORTAK_CSS}</style></head>'
             f'<body class="{tur}">{"".join(sayfalar)}{UYDUR_JS}</body></html>', encoding='utf-8')
+    # Kitap açılınca görünen hâli: kesilmiş sayfalar yan yana; 1. sayfa tek başına sağda, sonra solda çift numara,
+    # sağda tek numara (2|3, 4|5 …). Yalnız bakmak için; matbaaya ic-baski gider.
+    yayimlar = [(None, sayfalar[0])] + [(sayfalar[i], sayfalar[i + 1] if i + 1 < len(sayfalar) else None)
+                                        for i in range(1, len(sayfalar), 2)]
+    acik = ''.join(f'<div class="yayim"><div class="kesik">{a or ""}</div><div class="kesik">{b or ""}</div></div>'
+                   for a, b in yayimlar)
+    acik_css = ORTAK_CSS.replace('@page { size: 154mm 216mm; margin: 0; }', '@page { size: 296mm 210mm; margin: 0; }') + '''
+  .yayim { width: 296mm; height: 210mm; display: flex; position: relative; break-after: page; }
+  .yayim::after { content: ''; position: absolute; left: 148mm; top: 0; bottom: 0; border-left: .3pt solid #b9ad94; }
+  .kesik { width: 148mm; height: 210mm; overflow: hidden; position: relative; }
+  .kesik .sayfa { position: absolute; left: -3mm; top: -3mm; break-after: auto; page-break-after: auto; }
+'''
+    (CIKTI / 'ic-acik.html').write_text(
+        f'<!doctype html><html lang="tr"><head><meta charset="utf-8">{font_css()}<style>{acik_css}</style></head>'
+        f'<body class="prova">{acik}{UYDUR_JS}</body></html>', encoding='utf-8')
     css, govde, sirt = kapak(len(sayfalar))
     (CIKTI / 'kapak.html').write_text(
         f'<!doctype html><html lang="tr"><head><meta charset="utf-8">{font_css()}<style>{css}</style></head>'
