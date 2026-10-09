@@ -35,9 +35,14 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - Şiir paylaşımı kendi menüsüyle: bağlantıyı kopyala, Facebook, Instagram (altında küçük not: bağlantı
   kopyalanır), WhatsApp, SMS, LinkedIn. Başka kanal eklenmez. Telefonda paylaş ve ortam sesi menüleri ekranın
   altından açılır (sayfa yana taşmaz).
-- Ortam sesi menülü: kapalı, deniz, yağmur, vapur, gece; ses düzeyi ayarlı. Sahibi sentez sesleri kalitesiz
-  buldu (9 Ekim 2026): sesler artık gerçek saha kayıtları (Beeld en Geluid, Commons, CC BY-SA 3.0),
-  `public/ortam/`, üretimi `scripts/ortam.py`, künyeler `src/data/ortam-sesleri.ts` ve Hakkında → Haklar.
+- Ortam sesi **varsayılan açık, %10 düzeyde** (9 Ekim 2026): her şiirin kendi sesi var (şiir dosyasında
+  `ortam:`; yoksa ana duygunun sesi, `DUYGU_ORTAMI`), duygu sayfasında duygunun sesi. Tarayıcı kuralı gereği ilk
+  dokunuşta başlar. Menüde kapalı, "şiirin sesi" ve genel sesler (deniz, yağmur, vapur, gece, kafe, şehir,
+  kuşlar, ev) var; seçim ve düzey hatırlanır. Sesler gerçek saha kayıtları (sentez sesler kalitesiz bulundu):
+  Beeld en Geluid, Commons, CC BY-SA 3.0. Dosyalar `public/ortam/`, üretimi `scripts/ortam.py` (Wikimedia bu
+  sunucunun IP'sine sınır koyduğu için GitHub Actions'ta: `.github/workflows/ortam-sesleri.yml`), künyeler
+  `src/data/ortam-sesleri.ts` ve Hakkında → Haklar.
+- Telefonda arama, dil (TR/EN) ve tema düğmeleri üst şeritte değil, menünün en altında. Masaüstünde üst şeritte.
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 

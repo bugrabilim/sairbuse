@@ -106,11 +106,17 @@ export async function baslat(tur: Ortam) {
   const acilis = ctx.resume();
   bitir(0.8);
   const benim = ++sira;
-  const [tampon, duduk] = await Promise.all([
-    yukle(ctx, `/ortam/${tur}.mp3`),
-    tur === 'vapur' ? yukle(ctx, DUDUK) : Promise.resolve(null),
-    acilis,
-  ]);
+  let tampon: AudioBuffer;
+  let duduk: AudioBuffer | null;
+  try {
+    [tampon, duduk] = await Promise.all([
+      yukle(ctx, `/ortam/${tur}.mp3`),
+      tur === 'vapur' ? yukle(ctx, DUDUK) : Promise.resolve(null),
+      acilis,
+    ]);
+  } catch {
+    return; // ağ yoksa ses sessizce gelmez
+  }
   if (benim !== sira) return; // bu arada başka bir ses seçildi ya da kapatıldı
   const g = ctx.createGain();
   g.gain.value = 0;
