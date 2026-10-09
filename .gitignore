@@ -8,3 +8,4 @@ dist/
 
 # Basılı kitabın çıktıları (sitede yayımlanmaz)
 kitap-cikti/
+__pycache__/

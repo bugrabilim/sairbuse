@@ -57,7 +57,7 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   Sayfa başında yıl yazmaz. Fotoğraf künyeleri sonda tek sayfa, iki sütun. Boş sayfa ancak kaçınılmazsa
   (yıl ayracından önce).
   Üretim: `python3 scripts/kitap/kitap.py && node scripts/kitap/pdf.cjs` → `kitap-cikti/` (git'e girmez):
-  `ic-prova.pdf` (saman zeminli, bakmak için), `ic-baski.pdf` (zeminsiz, matbaaya), `kapak.pdf` (açılım).
+  `ic-prova.pdf` (saman zeminli, bakmak için), `ic-acik-sayfa.pdf` (açık sayfa görünümü: 2|3, 4|5 …), `ic-baski.pdf` (zeminsiz, matbaaya), `kapak.pdf` (açılım).
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 
