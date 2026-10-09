@@ -172,7 +172,7 @@ Duygu sayfasına girildiğinde zemin bu renge doğru yavaşça kayar. Paletin hi
 
 ### 4.4 Okurla bağ (Faz 3, isteğe bağlı)
 
-- **"Bu şiir bana … hissettirdi":** Okur tek bir kelime ya da renk bırakır (Unsent Project'ten esinle). Anonim olur, şair onaylamadan görünmez.
+- ~~**"Bu şiir bana … hissettirdi":**~~ Okur tek bir kelime ya da renk bırakır fikri. **Karar (Ekim 2026): yapılmayacak**; site statik kalır, okur notu ve onay paneli yok.
 - **E-posta listesi:** Bumba ortak liste servisiyle (alt bilgideki form, çift onay). Duyurular ortak servisten gider; site kendi başına e-posta göndermez. Aydınlatma metni ortak, sitenin gizlilik sayfası ona bağlanır.
 
 ### 4.5 Ağır şiirler için nazik bir not (şairin kararı)
@@ -309,13 +309,13 @@ Kargayla
 - [ ] Şairin kendi fotoğrafları gelirse Commons fotoğraflarının yerine konması
 
 ### Faz 3 — Okurla bağ (isteğe bağlı)
-- [ ] Okurun bir şiire renk ya da kelime bırakması (moderasyonlu)
+- [ ] ~~Okurun bir şiire renk ya da kelime bırakması~~ (sahibi istemedi, Ekim 2026: site statik kalır)
 - [x] E-posta listesi (Bumba ortak liste servisi)
 - [x] Bumba Genel Standartlar 3.2: TR/EN, açık/koyu tema, arama, SEO/GEO, llms.txt, HSTS/CSP, gizlilik (CLAUDE.md)
 - [ ] Instagram hesabı ve mısra kartlarıyla düzenli paylaşım
 
 ### Faz 4 — Belki bir gün kitap
-- [ ] Siteden otomatik derlenen PDF ya da e-kitap. Site büyüdükçe baskı yeniden düşünülebilir, okur kitlesi artık hazır olur.
+- [ ] Basılı kitap, A5 (sahibinin seçimi, Ekim 2026): saman kâğıt, siyah beyaz fotoğraflar, renkli kapak; baskı dosyaları sitenin dışında üretilir, sitede yayımlanmaz. Görsel taslak aşamasında.
 
 ---
 
