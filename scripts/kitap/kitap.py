@@ -6,7 +6,7 @@
     ic-acik-sayfa.pdf  kitap açılınca görünen hâli: 2|3, 4|5 … yan yana (bakmak için)
     ic-baski.pdf   iç sayfalar, zeminsiz, yalnız siyah (matbaaya)
     kapak.pdf      kapak açılımı, dış yüz: arka kapak, sırt, ön kapak (renkli, matbaaya)
-    kapak-ic.pdf   kapak açılımı, iç yüz: ön kapağın içinde kitabın adı, arka kapağın içinde künye (tek renk, matbaaya)
+    kapak-ic.pdf   kapak açılımı, iç yüz: ön kapağın içi boş, arka kapağın içinde künye (tek renk, matbaaya)
 
 Kullanım:
     python3 scripts/kitap/kitap.py && node scripts/kitap/pdf.cjs
@@ -246,7 +246,7 @@ def taraf(no):
 
 
 def ic_sayfalar(siirler, kunyeler, olcum):
-    # Ön sayfalar: 1 başlık, 2 epigraf, 3 içindekiler. Yarım başlık ön kapağın, künye arka kapağın içinde (kapak-ic).
+    # Ön sayfalar: 1 başlık, 2 epigraf, 3 içindekiler. Ön kapağın içi boş, künye arka kapağın içinde (kapak-ic).
     on = [sayfa('sag', '<div class="alan ortala"><div class="buyuk-ad">Duyguların<br>Peşinde</div>'
                 f'<div class="alt-ad">Şiirler · 2008–2021</div><div class="sair">{SAIR}</div></div>'),
           sayfa('sol', '<div class="alan"><div class="epigraf">“Kim bilir belki de sen\nturuncu bir gemidesin”</div></div>'),
@@ -322,9 +322,7 @@ document.fonts.ready.then(() => {
 """
 
 
-# Kapağın iç yüzleri, kesilmiş 148 × 210 mm alana göre: ön kapağın içinde yarım başlık, arka kapağın içinde künye
-KAPAK_ICI = ('<div style="height:100%;display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;'
-             'font-style:italic;font-weight:300;font-size:16pt">Duyguların Peşinde</div>')
+# Kapağın iç yüzleri, kesilmiş 148 × 210 mm alana göre: ön kapağın içi boş, arka kapağın içinde künye
 ARKA_KAPAK_ICI = ('<div style="position:absolute;left:16mm;right:20mm;bottom:24mm;font-family:Newsreader,serif;'
                   'font-size:7.5pt;line-height:1.55;color:#4a433a">'
                   f'© 2008–2026 {SAIR}. Tüm hakları saklıdır.<br>Bu kitaptaki şiirler izinsiz çoğaltılamaz, '
@@ -387,11 +385,9 @@ Böyle ağlarmış”</div>
   @page {{ size: {genislik}mm 216mm; margin: 0; }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ width: {genislik}mm; height: 216mm; position: relative; overflow: hidden; color: #1c1915; }}
-  .on-ic, .arka-ic {{ position: absolute; top: 3mm; width: 148mm; height: 210mm; }}
-  .on-ic {{ left: 3mm; }}
-  .arka-ic {{ left: {3 + 148 + sirt}mm; }}
+  .arka-ic {{ position: absolute; top: 3mm; width: 148mm; height: 210mm; left: {3 + 148 + sirt}mm; }}
 """
-    ic_govde = f'<div class="on-ic">{KAPAK_ICI}</div><div class="arka-ic">{ARKA_KAPAK_ICI}</div>'
+    ic_govde = f'<div class="arka-ic">{ARKA_KAPAK_ICI}</div>'
     return css, govde, sirt, ic_css, ic_govde
 
 
@@ -409,7 +405,7 @@ def main():
     kapak_ici = lambda icerik: ('<section class="sayfa kapak-ici"><div style="position:absolute;left:3mm;top:3mm;'
                                 f'width:148mm;height:210mm">{icerik}</div></section>')
     # Sayfa sayısı 4'ün katı, yani çift: son sayfa solda, karşısında arka kapağın içi
-    yayimlar = ([(kapak_ici(KAPAK_ICI), sayfalar[0])] + [(sayfalar[i], sayfalar[i + 1]) for i in range(1, len(sayfalar) - 1, 2)]
+    yayimlar = ([(kapak_ici(''), sayfalar[0])] + [(sayfalar[i], sayfalar[i + 1]) for i in range(1, len(sayfalar) - 1, 2)]
                 + [(sayfalar[-1], kapak_ici(ARKA_KAPAK_ICI))])
     acik = ''.join(f'<div class="yayim"><div class="kesik">{a or ""}</div><div class="kesik">{b or ""}</div></div>'
                    for a, b in yayimlar)
