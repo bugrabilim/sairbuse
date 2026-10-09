@@ -30,7 +30,7 @@ const kanallar = [
     </button>
     <button type="button" class="paylas-secenek" data-kanal="instagram">
       <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="0.6" /></svg>
-      Instagram
+      <span class="secenek-metin">Instagram<small>{m.instagramKisa}</small></span>
     </button>
     {
       kanallar.map((k) => (
@@ -70,10 +70,20 @@ const kanallar = [
   const menu = document.getElementById('paylas-menusu');
   const durum = document.getElementById('durum');
 
+  /** Menü ekrandan taşmasın: geniş ekranda sağa taşarsa sola kayar (telefonda alttan açılır, CSS) */
+  function sigdir(el: HTMLElement) {
+    el.style.left = '';
+    if (getComputedStyle(el).position !== 'absolute') return;
+    const r = el.getBoundingClientRect();
+    const tasma = r.right - (document.documentElement.clientWidth - 12);
+    if (tasma > 0) el.style.left = `${-tasma}px`;
+  }
+
   function ac(acik: boolean) {
     if (!menu || !dugme) return;
     menu.hidden = !acik;
     dugme.setAttribute('aria-expanded', String(acik));
+    if (acik) sigdir(menu);
     if (acik) menu.querySelector<HTMLElement>('.paylas-secenek')?.focus();
   }
   dugme?.addEventListener('click', (e) => {
@@ -162,6 +172,27 @@ const kanallar = [
   .paylas-secenek:hover,
   .paylas-secenek:focus-visible {
     background: color-mix(in srgb, var(--vurgu) 14%, transparent);
+  }
+  .secenek-metin {
+    display: grid;
+    gap: 0.1rem;
+  }
+  .secenek-metin small {
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: var(--soluk);
+  }
+  /* Telefonda menü ekranın altından açılır; sayfa sağa taşmaz */
+  @media (max-width: 40rem) {
+    .paylas-menusu {
+      position: fixed;
+      top: auto;
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: calc(0.75rem + env(safe-area-inset-bottom));
+      z-index: 60;
+      min-width: 0;
+    }
   }
   .paylas-secenek svg {
     width: 18px;

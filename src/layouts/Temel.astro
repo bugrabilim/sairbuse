@@ -114,12 +114,13 @@ const jsonLd = noindex
 
     <script is:inline>
       // Tema sayfa çizilmeden seçilir ki yanlış tema bir an bile görünmesin.
-      // Varsayılan gece (koyu); okur düğmeyle gündüzü seçerse localStorage'da hatırlanır ("tema").
+      // Varsayılan gece (koyu); okur düğmeyle gündüzü seçerse localStorage'da hatırlanır ("tema-secimi").
+      // Eski "tema" kaydı okunmaz: eski sürüm sistem tercihini kendiliğinden yazmış olabilir.
       (function () {
         var k = document.documentElement;
         var t = null;
         try {
-          t = localStorage.getItem('tema');
+          t = localStorage.getItem('tema-secimi');
         } catch (e) {}
         if (t !== 'gece' && t !== 'gunduz') t = 'gece';
         k.setAttribute('data-theme', t);
@@ -228,7 +229,7 @@ const jsonLd = noindex
         const yeni = kok.getAttribute('data-theme') === 'gunduz' ? 'gece' : 'gunduz';
         temaUygula(yeni);
         try {
-          localStorage.setItem('tema', yeni);
+          localStorage.setItem('tema-secimi', yeni);
         } catch {}
         window.bumbaOlay?.('tema-degistir', { tema: yeni });
       });
