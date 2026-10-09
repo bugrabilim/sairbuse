@@ -95,6 +95,7 @@ export const tr = {
     paylas: 'Paylaş',
     link: 'Bağlantıyı kopyala',
     kopyalandi: 'Bağlantı kopyalandı.',
+    instagramKisa: 'Bağlantı kopyalanır, Instagram’da yapıştırırsın',
     instagramNot: 'Bağlantı kopyalandı; Instagram’da hikâyene ya da mesajına yapıştırabilirsin. Hikâye için mısra kartı da hazırlayabilirsin.',
   },
   kart: {
@@ -296,7 +297,7 @@ export const tr = {
       },
       {
         baslik: 'Çerezler',
-        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil ve ana sayfada en son gördüğünüz mısra. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
+        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesinin düzeyi ve ana sayfada en son gördüğünüz mısra; seçtiğiniz ortam sesi yalnız o oturum boyunca (sessionStorage) tutulur. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
       },
       {
         baslik: 'Dışarıdan gelen içerik',

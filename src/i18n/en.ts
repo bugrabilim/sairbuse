@@ -96,6 +96,7 @@ export const en: Metin = {
     paylas: 'Share',
     link: 'Copy link',
     kopyalandi: 'Link copied.',
+    instagramKisa: 'Copies the link for you to paste in Instagram',
     instagramNot: 'Link copied; paste it into your Instagram story or a message. You can also make a verse card for your story.',
   },
   kart: {
@@ -298,7 +299,7 @@ export const en: Metin = {
       },
       {
         baslik: 'Cookies',
-        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose and the last line of verse you saw on the home page. They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
+        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose, the ambient sound volume and the last line of verse you saw on the home page; the ambient sound you picked is kept only for that session (sessionStorage). They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
       },
       {
         baslik: 'Content from elsewhere',

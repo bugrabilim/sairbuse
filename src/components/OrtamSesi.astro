@@ -194,6 +194,18 @@ const yazilar = {
     top: auto;
     bottom: calc(100% + 0.25rem);
   }
+  @media (max-width: 40rem) {
+    .ortam-menusu,
+    :global(.sahne) .ortam-menusu {
+      position: fixed;
+      top: auto;
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: calc(0.75rem + env(safe-area-inset-bottom));
+      z-index: 60;
+      min-width: 0;
+    }
+  }
   .ortam-menusu[hidden] {
     display: none;
   }

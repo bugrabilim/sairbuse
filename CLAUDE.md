@@ -23,6 +23,8 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - Yapay sesle okuma yok (kaldırıldı).
 - **Varsayılan tema koyu (gece).** Açık tema (gündüz) yalnız düğmeyle seçilir ve hatırlanır. Standartlar §3
   "ilk açılışta sistem tercihi" der; sahibi 8 Ekim 2026'da açıkça koyu varsayılan istedi, bu karar geçerli.
+  Seçim `localStorage` `tema-secimi` anahtarında; eski `tema` anahtarı (sistem tercihini yazmış olabilir) okunmaz.
+  Sayfalar `Cache-Control: no-cache` ile gider ki eski HTML tarayıcıda takılı kalmasın.
 - Şiir sayfasında şiir **harf harf yazılarak** açılır (satır satır değil); hız duyguya göre.
 - Ana sayfada "Yazıldıkları yerler" ve "ya da niyet tut" satırı yok; duygu şeritleri dar (72rem) kalır.
 - Alt bilgi tek satır, üç sütun: solda telif, fotoğraf notu ve güncelleme tarihi; ortada e-posta listesi; sağda
@@ -30,8 +32,9 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - Hakkında'da "Fotoğraflar" ve "Gizlilik ve çerezler" düğmeyle açılan pencerelerde (`#fotograflar`,
   `#gizlilik`); "Haklar" ve "Sık sorulanlar" aşağı açılır (`#haklar`, `#sorular`). `/gizlilik/` sayfası da
   durur (KVKK bağlantıları için), metin tek yerden: `GizlilikMetni.astro`.
-- Şiir paylaşımı kendi menüsüyle: bağlantıyı kopyala, Facebook, Instagram (bağlantı kopyalanır), WhatsApp,
-  SMS, LinkedIn. Başka kanal eklenmez.
+- Şiir paylaşımı kendi menüsüyle: bağlantıyı kopyala, Facebook, Instagram (altında küçük not: bağlantı
+  kopyalanır), WhatsApp, SMS, LinkedIn. Başka kanal eklenmez. Telefonda paylaş ve ortam sesi menüleri ekranın
+  altından açılır (sayfa yana taşmaz).
 - Ortam sesi menülü: kapalı, deniz, yağmur, vapur, gece; ses düzeyi ayarlı. Hepsi Web Audio ile üretilir.
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
