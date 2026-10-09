@@ -17,6 +17,7 @@ const olcu = Object.fromEntries(
     ['ic-baski.html', 'ic-baski.pdf', '154mm', '216mm'],
     ['ic-acik.html', 'ic-acik-sayfa.pdf', '296mm', '210mm'],
     ['kapak.html', 'kapak.pdf', `${3 + 148 + Number(olcu.sirt_mm) + 148 + 3}mm`, '216mm'],
+    ['kapak-ic.html', 'kapak-ic.pdf', `${3 + 148 + Number(olcu.sirt_mm) + 148 + 3}mm`, '216mm'],
   ];
   for (const [girdi, cikti, en, boy] of isler) {
     await sayfa.goto('file://' + path.join(CIKTI, girdi));

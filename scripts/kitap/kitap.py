@@ -5,15 +5,16 @@
     ic-prova.pdf   iç sayfalar, saman zeminle (ekranda bakmak için)
     ic-acik-sayfa.pdf  kitap açılınca görünen hâli: 2|3, 4|5 … yan yana (bakmak için)
     ic-baski.pdf   iç sayfalar, zeminsiz, yalnız siyah (matbaaya)
-    kapak.pdf      kapak açılımı: arka kapak, sırt, ön kapak (renkli, matbaaya)
+    kapak.pdf      kapak açılımı, dış yüz: arka kapak, sırt, ön kapak (renkli, matbaaya)
+    kapak-ic.pdf   kapak açılımı, iç yüz: ön kapağın içinde kitabın adı, gerisi boş (tek renk, matbaaya)
 
 Kullanım:
     python3 scripts/kitap/kitap.py && node scripts/kitap/pdf.cjs
 
 Gerekenler: ffmpeg, PyYAML, segno (QR), Chromium + playwright-core (pdf.cjs).
 
-Ölçüler: A5 (148 × 210 mm), her kenarda 3 mm kesim payı. Düzen: her yılın başında bir yıl ayracı. Şiir
-fotoğrafıyla tek sayfaya sığıyorsa fotoğraf üstte, şiir altta aynı sayfada; sığmıyorsa fotoğraf ve şiir aynı açık
+Ölçüler: A5 (148 × 210 mm), her kenarda 3 mm kesim payı. Ön sayfalar: 1 epigraf, 2 künye, 3 başlık; kitabın adı
+ön kapağın içinde, içindekiler ve yıl ayracı yok. Şiirler 4. sayfadan başlar. Şiir fotoğrafıyla tek sayfaya sığıyorsa fotoğraf üstte, şiir altta aynı sayfada; sığmıyorsa fotoğraf ve şiir aynı açık
 sayfada yan yana (fotoğraf solda, şiir sağda). Tek sütuna da sığmayan çok uzun şiir kendi sayfasında iki sütun olur.
 Şiirlerin boyu önce tarayıcıda ölçülür (scripts/kitap/olc.cjs), yerleşim ona göre yapılır.
 Sırt kalınlığı tahminidir (YAPRAK_MM); kesin ölçüyü matbaa kâğıda göre verir.
@@ -76,9 +77,6 @@ def fotograflari_oku():
     return kunyeler
 
 
-def ad(s):
-    return s['baslik'] or s['govde'].splitlines()[0].rstrip('.,;:!?…')
-
 
 def imza(s):
     p = []
@@ -89,9 +87,6 @@ def imza(s):
         p.append(s['yer'])
     return ' – '.join(p)
 
-
-def yil(s):
-    return s['tarih'][:4] if s['tarih'] else 'Tarihsiz'
 
 
 def gri_foto(kimlik: str) -> str:
@@ -151,21 +146,13 @@ ORTAK_CSS = """
   .tek-alan .alt-yazi { margin: 2mm 0 7mm; text-align: left; }
   .prova .fotolu img, .prova .tek-foto img { mix-blend-mode: multiply; }
   .alt-yazi { margin-top: 4mm; font-style: italic; font-size: 7.5pt; line-height: 1.4; color: #5d554a; text-align: center; }
-  .yil-rakam { margin: auto 0; font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 72pt; line-height: 1; }
-  .yil-rakam.uzun { font-size: 40pt; }
-  .yil-alt { margin-top: 5mm; font-size: 9.5pt; font-style: italic; color: #5d554a; }
   .ortala { justify-content: center; align-items: center; text-align: center; }
   .buyuk-ad { font-family: 'Fraunces', serif; font-weight: 300; font-size: 30pt; line-height: 1.02; }
-  .yarim-ad { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 16pt; }
   .alt-ad { margin-top: 5mm; font-style: italic; font-size: 10.5pt; color: #5d554a; }
   .sair { margin-top: 18mm; font-family: 'Inter', sans-serif; font-size: 7.5pt; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; }
   .epigraf { margin: auto 0; font-style: italic; font-size: 10.5pt; line-height: 1.5; color: #5d554a; white-space: pre-line; }
   .kunye { margin-top: auto; font-size: 7.5pt; line-height: 1.55; color: #4a433a; }
-  .icindekiler-baslik, .fotolar-baslik { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 15pt; margin-bottom: 6mm; }
-  .icindekiler { list-style: none; font-size: 8.2pt; line-height: 1.32; }
-  .icindekiler li { display: flex; gap: 2mm; align-items: baseline; }
-  .icindekiler li.yil-satir { margin-top: 2.2mm; font-family: 'Inter', sans-serif; font-size: 6pt; letter-spacing: .25em; color: #6b6255; }
-  .icindekiler li .nokta { flex: 1; border-bottom: 0.25pt dotted #8a8072; transform: translateY(-1mm); }
+  .fotolar-baslik { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 15pt; margin-bottom: 6mm; }
   .fotolar-alan .fotolar-baslik { margin-bottom: 2mm; }
   .fotolar-not { font-size: 7pt; line-height: 1.4; color: #5d554a; margin-bottom: 5mm; }
   .fotolar { list-style: none; font-size: 7.6pt; line-height: 1.36; column-count: 2; column-gap: 7mm; }
@@ -214,23 +201,20 @@ def olc(siirler):
 def yerlestir(birimler, ilk):
     """Birimlere sayfa numarası verir. Yan yana birim (fotoğraf + şiir) bir açık sayfaya sığmalı, yani çift
     numaralı (sol) sayfadan başlamalı. Sıra hiç değişmez; gerekirse tek sayfalık bir şiir fotoğrafı karşısında
-    olacak şekilde iki sayfaya açılır (bedeli 1) ya da boş sayfa konur (yıl ayracından önce 5, başka yerde 20).
+    olacak şekilde iki sayfaya açılır (bedeli 1) ya da boş sayfa konur (bedeli 20).
     En az bedelli yerleşim dinamik programlamayla bulunur."""
-    BOS, BOS_AYRAC, ACMA = 20, 5, 1
+    BOS, ACMA = 20, 1
     # durum: sonraki sayfanın teklik/çiftliği → (bedel, geçmiş)
     durum = {ilk % 2: (0, [])}
     for i, b in enumerate(birimler):
         yeni = {}
         for tek, (bedel, gecmis) in durum.items():
-            bos = BOS_AYRAC if b['tur'] == 'ayrac' else BOS
-            secenekler = [(tek, bedel, gecmis), (1 - tek, bedel + bos, gecmis + [('bos', i)])]  # ya da önüne boş sayfa
+            secenekler = [(tek, bedel, gecmis), (1 - tek, bedel + BOS, gecmis + [('bos', i)])]  # ya da önüne boş sayfa
             for t0, c0, g0 in secenekler:
                 if b['tur'] in ('yan', 'cift'):
                     yollar = [(2, 0, b['tur'])] if t0 == 0 else []
                 elif b['tur'] == 'tek':
                     yollar = [(1, 0, 'tek')] + ([(2, ACMA, 'yan')] if t0 == 0 else [])
-                else:
-                    yollar = [(1, 0, b['tur'])]
                 for uzunluk, ek, tur in yollar:
                     sonraki = (t0 + uzunluk) % 2
                     aday = (c0 + ek, g0 + [(tur, i)])
@@ -256,68 +240,45 @@ def taraf(no):
 
 def ic_sayfalar(siirler, kunyeler, olcum):
     on = []
-    # Ön sayfalar: 1 yarım başlık, 2 epigraf, 3 başlık, 4 künye, 5 içindekiler
-    on.append(sayfa('sag', '<div class="alan ortala"><div class="yarim-ad">Duyguların Peşinde</div></div>'))
-    on.append(sayfa('sol', '<div class="alan"><div class="epigraf">“Kim bilir belki de sen\nturuncu bir gemidesin”</div></div>'))
-    on.append(sayfa('sag', '<div class="alan ortala"><div class="buyuk-ad">Duyguların<br>Peşinde</div>'
-                    f'<div class="alt-ad">Şiirler · 2008–2021</div><div class="sair">{SAIR}</div></div>'))
+    # Ön sayfalar: 1 epigraf, 2 künye, 3 başlık. Yarım başlık ön kapağın içinde (kapak-ic), içindekiler yok.
+    on.append(sayfa('sag', '<div class="alan"><div class="epigraf">“Kim bilir belki de sen\nturuncu bir gemidesin”</div></div>'))
     on.append(sayfa('sol', '<div class="alan"><div class="kunye">'
                     f'© 2008–2026 {SAIR}. Tüm hakları saklıdır.<br>Bu kitaptaki şiirler izinsiz çoğaltılamaz, '
                     'kopyalanıp başka bir yerde yayımlanamaz.<br><br>Fotoğraflar Wikimedia Commons’tan, '
                     'fotoğrafçılarının adı ve lisansıyla kullanılmıştır; siyah beyaza çevrilmiştir. '
                     'Künyeleri kitabın sonundadır.<br><br>Birinci baskı, 2026. Sınırlı sayıda basılmıştır.'
                     '</div></div>'))
+    on.append(sayfa('sag', '<div class="alan ortala"><div class="buyuk-ad">Duyguların<br>Peşinde</div>'
+                    f'<div class="alt-ad">Şiirler · 2008–2021</div><div class="sair">{SAIR}</div></div>'))
 
-    # Birimler: yıl ayracı (1 sayfa), tek (fotoğraf + şiir 1 sayfa), yan (fotoğraf | şiir), cift (fotoğraf | iki sütun)
+    # Birimler: tek (fotoğraf + şiir 1 sayfa), yan (fotoğraf | şiir), cift (fotoğraf | iki sütun)
     birimler = []
-    onceki_yil = None
     for s in siirler:
-        if yil(s) != onceki_yil:
-            onceki_yil = yil(s)
-            ayni = [x for x in siirler if yil(x) == onceki_yil]
-            yerler = []
-            for x in ayni:
-                if x['yer'] and x['yer'] not in yerler:
-                    yerler.append(x['yer'])
-            alt = f'{len(ayni)} şiir' + (f' · {", ".join(yerler)}' if yerler else '')
-            birimler.append({'tur': 'ayrac', 'yil': onceki_yil, 'alt': alt})
         boy = olcum[s['id']]
         tur = 'tek' if boy <= TEK_SAYFA_MM else 'yan' if boy <= ALAN_MM else 'cift'
         birimler.append({'tur': tur, 's': s})
 
-    yer = yerlestir(birimler, len(on) + 2)
+    yer = yerlestir(birimler, len(on) + 1)
     sayfalar = []
-    satirlar = []
     for b in yer:
         p = b['p']
         if b['tur'] == 'bos':
             sayfalar.append(sayfa(taraf(p), ''))
-        elif b['tur'] == 'ayrac':
-            uzun = ' uzun' if not b['yil'].isdigit() else ''
-            sayfalar.append(sayfa(taraf(p), f'<div class="alan"><div class="yil-rakam{uzun}">{e(b["yil"])}'
-                                  f'<div class="yil-alt">{e(b["alt"])}</div></div></div>', p))
-            satirlar.append(f'<li class="yil-satir">{e(b["yil"].upper())}</li>')
         else:
             s = b['s']
             k = kunyeler.get(s['foto'], {})
             foto = gri_foto(s['foto'])
             aciklama = e(k.get('aciklama', ''))
             if b['tur'] == 'tek':
-                siir_no = p
                 sayfalar.append(sayfa(taraf(p), f'<div class="alan siir-alan tek-alan"><div class="tek-foto">'
                                       f'<img src="{foto}" alt="{aciklama}" style="object-position:{k.get("odak", "center")}">'
                                       f'</div><div class="alt-yazi">{aciklama}</div>{siir_icerik(s)}</div>', p))
             else:
-                siir_no = p + 1
                 sayfalar.append(sayfa(taraf(p), f'<div class="alan"><div class="fotolu"><img src="{foto}" alt="{aciklama}">'
                                       f'<div class="alt-yazi">{aciklama}</div></div></div>', p))
                 ek = ' iki-sutun' if b['tur'] == 'cift' else ''
                 sayfalar.append(sayfa(taraf(p + 1), f'<div class="alan siir-alan{ek}">{siir_icerik(s)}</div>', p + 1))
-            satirlar.append(f'<li><span>{e(ad(s))}</span><span class="nokta"></span><span>{siir_no}</span></li>')
-
-    icindekiler = sayfa('sag', '<div class="alan siir-alan"><div class="icindekiler-baslik">İçindekiler</div>'
-                        f'<ul class="icindekiler">{"".join(satirlar)}</ul></div>', 5)
-    sayfalar = on + [icindekiler] + sayfalar
+    sayfalar = on + sayfalar
 
     # Son sayfa: fotoğraf künyeleri, iki sütun
     kullanilan = []
@@ -342,7 +303,7 @@ UYDUR_JS = """
 // Sayfaya sığmayan şiirde önce fotoğraf (aynı sayfadaysa), sonra yazı biraz küçülür
 document.fonts.ready.then(() => {
   for (const alan of document.querySelectorAll('.siir-alan')) {
-    const yazi = alan.querySelector('.siir, .fotolar, .icindekiler');
+    const yazi = alan.querySelector('.siir, .fotolar');
     const foto = alan.querySelector('.tek-foto');
     let boy = parseFloat(getComputedStyle(yazi).fontSize) * 0.75;
     const tasiyor = () => alan.scrollHeight > alan.clientHeight + 1 || yazi.scrollWidth > yazi.clientWidth + 1;
@@ -353,6 +314,11 @@ document.fonts.ready.then(() => {
 });
 </script>
 """
+
+
+# Ön kapağın içindeki yarım başlık (eskiden 1. sayfaydı); kesilmiş 148 × 210 mm alana göre
+KAPAK_ICI = ('<div style="height:100%;display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;'
+             'font-style:italic;font-weight:300;font-size:16pt">Duyguların Peşinde</div>')
 
 
 def kapak(sayfa_sayisi):
@@ -404,7 +370,15 @@ Böyle ağlarmış”</div>
 <div class="sirt"><span class="ad">Duyguların Peşinde · {SAIR}</span><div class="serit">{renkler}</div></div>
 <div class="on"><div class="foto"></div><div class="yazi"><div class="sair">{SAIR}</div><div class="ad">Duyguların<br>Peşinde</div><div class="renkler">{renkler}</div></div></div>
 """
-    return css, govde, sirt
+    # Kapağın iç yüzü: içeriden bakınca solda ön kapağın içi, ortada sırt, sağda arka kapağın içi
+    ic_css = f"""
+  @page {{ size: {genislik}mm 216mm; margin: 0; }}
+  * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  body {{ width: {genislik}mm; height: 216mm; position: relative; overflow: hidden; color: #1c1915; }}
+  .on-ic {{ position: absolute; left: 3mm; top: 3mm; width: 148mm; height: 210mm; }}
+"""
+    ic_govde = f'<div class="on-ic">{KAPAK_ICI}</div>'
+    return css, govde, sirt, ic_css, ic_govde
 
 
 def main():
@@ -416,9 +390,10 @@ def main():
         (CIKTI / f'ic-{tur}.html').write_text(
             f'<!doctype html><html lang="tr"><head><meta charset="utf-8">{font_css()}<style>{ORTAK_CSS}</style></head>'
             f'<body class="{tur}">{"".join(sayfalar)}{UYDUR_JS}</body></html>', encoding='utf-8')
-    # Kitap açılınca görünen hâli: kesilmiş sayfalar yan yana; 1. sayfa tek başına sağda, sonra solda çift numara,
+    # Kitap açılınca görünen hâli: kesilmiş sayfalar yan yana; 1. sayfa ön kapağın içinin karşısında, sonra solda çift numara,
     # sağda tek numara (2|3, 4|5 …). Yalnız bakmak için; matbaaya ic-baski gider.
-    yayimlar = [(None, sayfalar[0])] + [(sayfalar[i], sayfalar[i + 1] if i + 1 < len(sayfalar) else None)
+    kapak_ici = f'<section class="sayfa kapak-ici"><div style="position:absolute;left:3mm;top:3mm;width:148mm;height:210mm">{KAPAK_ICI}</div></section>'
+    yayimlar = [(kapak_ici, sayfalar[0])] + [(sayfalar[i], sayfalar[i + 1] if i + 1 < len(sayfalar) else None)
                                         for i in range(1, len(sayfalar), 2)]
     acik = ''.join(f'<div class="yayim"><div class="kesik">{a or ""}</div><div class="kesik">{b or ""}</div></div>'
                    for a, b in yayimlar)
@@ -427,11 +402,16 @@ def main():
   .yayim::after { content: ''; position: absolute; left: 148mm; top: 0; bottom: 0; border-left: .3pt solid #b9ad94; }
   .kesik { width: 148mm; height: 210mm; overflow: hidden; position: relative; }
   .kesik .sayfa { position: absolute; left: -3mm; top: -3mm; break-after: auto; page-break-after: auto; }
+  .prova .sayfa.kapak-ici { background: #f7f5f0; }
 '''
     (CIKTI / 'ic-acik.html').write_text(
         f'<!doctype html><html lang="tr"><head><meta charset="utf-8">{font_css()}<style>{acik_css}</style></head>'
         f'<body class="prova">{acik}{UYDUR_JS}</body></html>', encoding='utf-8')
-    css, govde, sirt = kapak(len(sayfalar))
+    css, govde, sirt, ic_css, ic_govde = kapak(len(sayfalar))
+    (CIKTI / 'kapak-ic.html').write_text(
+        f'<!doctype html><html lang="tr"><head><meta charset="utf-8">{font_css()}<style>{ic_css}</style></head>'
+        f'<body>{ic_govde}<script>document.fonts.ready.then(() => document.body.dataset.hazir = "1")</script></body></html>',
+        encoding='utf-8')
     (CIKTI / 'kapak.html').write_text(
         f'<!doctype html><html lang="tr"><head><meta charset="utf-8">{font_css()}<style>{css}</style></head>'
         f'<body>{govde}<script>document.fonts.ready.then(() => document.body.dataset.hazir = "1")</script></body></html>',
