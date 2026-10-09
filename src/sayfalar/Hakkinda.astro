@@ -5,6 +5,7 @@ import GizlilikMetni from '../components/GizlilikMetni.astro';
 import { SITE } from '../data/site';
 import { DUYGULAR, duyguAdi, renkAdi } from '../data/duygular';
 import { FOTOGRAFLAR } from '../data/fotograflar';
+import { ORTAM_KAYITLARI, ORTAM_LISANS, ORTAM_YAZAR, commonsAdresi } from '../data/ortam-sesleri';
 import { ad, imza, siirYolu, tumSiirler } from '../lib/siirler';
 import { fotoAciklama, lisansAdi, siirFotografi } from '../lib/foto';
 import { SAYFALAR, dilBul, duyguYolu, metin, sayfaYolu, type SayfaAdi } from '../i18n';
@@ -127,6 +128,19 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
       <summary>{m.haklar}</summary>
       <p>{m.haklarMetni}</p>
       <p>{m.fotoHaklar}</p>
+      <p>{m.sesHaklar}</p>
+      <ul class="kunyeler sesler">
+        {
+          ORTAM_KAYITLARI.map((k) => (
+            <li>
+              <span class="kunye-aciklama">{k[dil]}</span>
+              <span class="kunye-kim">
+                <a href={commonsAdresi(k.dosya)} rel="noopener">{ORTAM_YAZAR}</a> · <a href={ORTAM_LISANS.url} rel="noopener">{ORTAM_LISANS.ad}</a>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
     </details>
 
     <details class="acilir" id="sorular">

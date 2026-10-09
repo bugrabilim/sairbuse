@@ -1,7 +1,7 @@
 ---
 // Ortam sesi: düğme küçük bir menü açar; deniz, yağmur, vapur, gece ya da kapalı, bir de ses düzeyi.
 // Seçim sekme boyunca, ses düzeyi kalıcı olarak hatırlanır. Sayfa değişince tarayıcı kuralları gereği ses
-// ilk dokunuşta yeniden başlar. Sesler scripts/ortam.ts'de tarayıcıda üretilir.
+// ilk dokunuşta yeniden başlar. Sesler gerçek saha kayıtları (public/ortam/, çalınması scripts/ortam.ts).
 import { dilBul, metin } from '../i18n';
 const m = metin(dilBul(Astro.url)).ortam;
 const secenekler = [

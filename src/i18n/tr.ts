@@ -206,7 +206,8 @@ export const tr = {
     haklar: 'Haklar',
     haklarMetni:
       'Bu sitedeki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz. Bir şiiri sevdiysen bağlantısını paylaşabilirsin.',
-    fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri yukarıda adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
+    fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri “Fotoğraflar ve künyeleri” penceresinde adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
+    sesHaklar: 'Ortam sesleri de bu kapsamda değil. Hepsi gerçek saha kaydı: Hollanda Ses ve Görüntü Enstitüsü’nün (Beeld en Geluid) arşivinden, Wikimedia Commons’ta CC BY-SA 3.0 ile paylaşılmış. Sitede kesilip ses düzeyleri eşitlendi.',
     guncelleme: 'Son güncelleme:',
     sssBaslik: 'Sık sorulanlar',
     sss: [

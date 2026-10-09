@@ -208,7 +208,8 @@ export const en: Metin = {
     haklar: 'Rights',
     haklarMetni:
       'All rights to the poems and texts on this site are reserved. They may not be reproduced, copied or published elsewhere without permission. If you love a poem, share its link.',
-    fotoHaklar: 'The photographs are not covered by this; each belongs to the photographer named above and is used under its own licence.',
+    fotoHaklar: 'The photographs are not covered by this; each belongs to the photographer named in “Photographs and credits” and is used under its own licence.',
+    sesHaklar: 'Nor are the ambient sounds. They are real field recordings from the archive of the Netherlands Institute for Sound and Vision (Beeld en Geluid), shared on Wikimedia Commons under CC BY-SA 3.0. On this site they were trimmed and their levels evened out.',
     guncelleme: 'Last updated:',
     sssBaslik: 'Questions',
     sss: [

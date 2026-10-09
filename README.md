@@ -37,7 +37,7 @@ Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi 
 
 Kendi fotoğrafınızı koymak için dosyayı aynı kimlikle `src/assets/foto/` klasörüne koyup `fotograflar.ts`'de yazarı ve lisansı güncellemeniz yeterli.
 
-Ortam sesleri bir ses dosyası değil, tarayıcıda Web Audio ile anında üretiliyor: telif sorunu ve ek ağ trafiği yok. Varsayılan olarak kapalı.
+Ortam sesleri (deniz, yağmur, vapur, gece) gerçek saha kayıtları: Hollanda Ses ve Görüntü Enstitüsü'nün (Beeld en Geluid) arşivinden, Wikimedia Commons'ta CC BY-SA 3.0 ile paylaşılmış. Kesilmiş hâlleri `public/ortam/` klasöründe (her biri ~80 sn, ~1,2 MB; yalnız okur o sesi seçince iner), künyeleri `src/data/ortam-sesleri.ts` dosyasında ve Hakkında sayfasının "Haklar" bölümünde. Yeniden üretmek için özgün `.ogg` dosyalarını bir klasöre indirip `python3 scripts/ortam.py <klasör>` (ffmpeg ve numpy gerekir). Varsayılan olarak kapalı.
 
 ## Şiir eklemek ya da düzeltmek
 

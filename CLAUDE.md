@@ -35,7 +35,9 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - Şiir paylaşımı kendi menüsüyle: bağlantıyı kopyala, Facebook, Instagram (altında küçük not: bağlantı
   kopyalanır), WhatsApp, SMS, LinkedIn. Başka kanal eklenmez. Telefonda paylaş ve ortam sesi menüleri ekranın
   altından açılır (sayfa yana taşmaz).
-- Ortam sesi menülü: kapalı, deniz, yağmur, vapur, gece; ses düzeyi ayarlı. Hepsi Web Audio ile üretilir.
+- Ortam sesi menülü: kapalı, deniz, yağmur, vapur, gece; ses düzeyi ayarlı. Sahibi sentez sesleri kalitesiz
+  buldu (9 Ekim 2026): sesler artık gerçek saha kayıtları (Beeld en Geluid, Commons, CC BY-SA 3.0),
+  `public/ortam/`, üretimi `scripts/ortam.py`, künyeler `src/data/ortam-sesleri.ts` ve Hakkında → Haklar.
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 
