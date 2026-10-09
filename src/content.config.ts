@@ -19,7 +19,7 @@ const siirler = defineCollection({
     yerGrubu: z.string().optional(),
     /** İlki şiirin ana duygusudur, rengini o belirler. */
     duygular: z.array(z.enum(DUYGU_SLUGLARI)).min(1),
-    /** Şairin sesiyle okuma: public/ses/ altındaki dosyanın yolu, ör. "/ses/sari.mp3" */
+    /** Sesli okuma (insan sesiyle): public/ses/ altındaki dosyanın yolu, ör. "/ses/sari.mp3" */
     ses: z.string().optional(),
     /** Birden çok okuma (ör. örnek yapay sesler). ornek: true olanlar sayfada "örnek" diye belirtilir. */
     sesler: z

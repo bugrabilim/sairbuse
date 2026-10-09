@@ -75,9 +75,9 @@ Sırt kalınlığı sayfa sayısından tahmin edilir; kesin ölçü kâğıda g�
    - Permissions → Contents: **Read and write**
 4. Şiirleri listeden açıp düzenleyin ya da **Yeni** ile ekleyin. Kaydettiğiniz her değişiklik `main` dalına bir commit olarak gider ve site kendiliğinden yeniden yayınlanır.
 
-Şairin sesiyle yapılmış bir kayıt varsa şiirin **Şairin sesi** alanından yüklenebilir. Dosya `public/ses/` klasörüne gider ve şiir sayfasında "Şairin sesinden dinle" düğmesi belirir. Başka okumalar (ör. farklı sesler) **Diğer okumalar** listesine eklenir; her biri ayrı bir düğme olur.
+Bir insan sesiyle yapılmış kayıt varsa şiirin **Sesli okuma** alanından yüklenebilir. Dosya `public/ses/` klasörüne gider ve şiir sayfasında "Sesli dinle" düğmesi belirir. Başka okumalar (ör. farklı sesler) **Diğer okumalar** listesine eklenir; her biri ayrı bir düğme olur.
 
-Şu an üç şiirin kaydı var (9 Ekim 2026): "Erik ağacının" (24.05.2017, Altunizade), "Sevgimi başka bir sevgiyle sevdim" (21.12.2019, Feneryolu) ve "Şimdi daha benim değilsin ya hani" (18.07.2020, Moda). Dosyalar `public/ses/<şiir>.mp3`; ses düzeyleri eşitlendi (−18 LUFS). Okuma sürerken ortam sesi ve fon müziği kısılır. Yapay sesle denenen örnekler şiiri düz okuduğu için kaldırıldı (bkz. `PLAN.md` §10.4).
+Şu an üç şiirin kaydı var (9 Ekim 2026; okuyan şair değil): "Erik ağacının" (24.05.2017, Altunizade), "Sevgimi başka bir sevgiyle sevdim" (21.12.2019, Feneryolu) ve "Şimdi daha benim değilsin ya hani" (18.07.2020, Moda). Dosyalar `public/ses/<şiir>.mp3`; ses düzeyleri eşitlendi (−18 LUFS). Okuma sürerken ortam sesi ve fon müziği kısılır. Yapay sesle denenen örnekler şiiri düz okuduğu için kaldırıldı (bkz. `PLAN.md` §10.4).
 
 ### Dosyayı doğrudan düzenleyerek
 
@@ -91,7 +91,7 @@ yer: "Feneryolu"          # isteğe bağlı, şairin yazdığı gibi
 yerGrubu: "Burgazada"     # isteğe bağlı; "Antigoni" gibi farklı adlar aynı yer sayılsın diye
 duygular: ["huzun"]       # en az bir; ilki şiirin rengini belirler
 foto: "feneryolu-kediler" # isteğe bağlı; src/data/fotograflar.ts'deki kimlik
-ses: "/ses/sari.mp3"      # isteğe bağlı, şairin sesiyle okuma
+ses: "/ses/sari.mp3"      # isteğe bağlı, sesli okuma ("Sesli dinle" düğmesi)
 sesler:                   # isteğe bağlı, başka okumalar
   - { dosya: "/ses/sari-ornek.mp3", etiket: "Kadın sesi · örnek", ornek: true }
 ---

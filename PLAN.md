@@ -289,7 +289,7 @@ Kargayla
 - [x] Harf harf açılış (önce satır satırdı; 8 Ekim 2026'da sahibinin isteğiyle değişti): dokununca hepsi, "Baştan oku" ile yeniden
 - [x] Duygulara özel geçiş hareketleri
 - [x] Mısra paylaş kartı (1080×1920, tarayıcıda çizilir)
-- [x] Şairin sesiyle okuma altyapısı (ilk üç kayıt 9 Ekim 2026'da eklendi)
+- [x] Sesli okuma altyapısı (ilk üç kayıt 9 Ekim 2026'da eklendi; okuyan şair değil)
 - [x] Ortam sesleri: deniz, yağmur, vapur, gece (Ekim 2026'dan beri gerçek saha kayıtları, Beeld en Geluid / Commons)
 - [x] Sveltia CMS paneli `/admin/` (GitHub erişim anahtarıyla giriş)
 
@@ -395,7 +395,7 @@ Arayüz önerisi: "ortam sesi" düğmesinin yanında bir "müzik" düğmesi. İk
 
 ### 10.4 Ses kayıtları
 
-Asıl hedef, şiirlerin şairin kendi sesiyle okunması; bu iş **sürüyor**: 9 Ekim 2026'da ilk üç kayıt eklendi (Erik ağacının, Sevgimi başka bir sevgiyle sevdim, Şimdi daha benim değilsin ya hani). Kayıt sürerken ortam sesi ve fon müziği kısılır. Kayıtlar panelden ("Şairin sesi" ya da "Diğer okumalar") veya `public/ses/` klasöründen eklenebilir. Oynatıcı hazır.
+Asıl hedef, şiirlerin şairin kendi sesiyle okunması; bu iş **sürüyor**: 9 Ekim 2026'da ilk üç kayıt eklendi (Erik ağacının, Sevgimi başka bir sevgiyle sevdim, Şimdi daha benim değilsin ya hani); okuyan şair değil, düğme "Sesli dinle". Kayıt sürerken ortam sesi ve fon müziği kısılır. Kayıtlar panelden ("Şairin sesi" ya da "Diğer okumalar") veya `public/ses/` klasöründen eklenebilir. Oynatıcı hazır.
 
 **Yapay ses denendi, kaldırıldı (Ekim 2026).** Açılış şiiri açık kaynak Türkçe ses modelleriyle (Chatterbox Multilingual, Piper `tr_TR-dfki`) bir kadın ve bir erkek sesiyle okutuldu. Kelimeler doğru çıktı (Whisper ile denetlendi), ama okuma düz ve vurgusuzdu; şiir böyle okunmaz. Bu modellerle duygulu bir şiir okuması elde edilemiyor, o yüzden örnekler siteden kaldırıldı. Kayıtların bir insan sesiyle yapılması gerekiyor.
 

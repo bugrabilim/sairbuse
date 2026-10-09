@@ -17,7 +17,7 @@ backend:
 site_url: https://duygularinpesinde.bumba.tr
 logo_url: /favicon.svg
 
-# Şairin sesiyle okumalar buraya yüklenir
+# Sesli okumalar buraya yüklenir
 media_folder: public/ses
 public_folder: /ses
 
@@ -100,12 +100,12 @@ collections:
           - { label: Kuşlar ve rüzgâr, value: kuslar }
           - { label: Ev (saat tıkırtısı), value: ev }
         hint: Şiir sayfası açılınca kısık sesle çalan ortam sesi. Boş bırakılırsa ana duygunun sesi çalar.
-      - label: Şairin sesi
+      - label: Sesli okuma
         name: ses
         widget: file
         required: false
         accept: audio/*
-        hint: Şiirin şairin sesiyle okunmuş kaydı (mp3 ya da m4a).
+        hint: Şiirin bir insan sesiyle okunmuş kaydı (mp3 ya da m4a). Sayfada "Sesli dinle" düğmesi olarak görünür.
       - label: Diğer okumalar
         name: sesler
         widget: list
