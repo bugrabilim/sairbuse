@@ -51,13 +51,13 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - **Okur notu yok** (9 Ekim 2026): okur şiire renk ya da kelime bırakmaz, şair onay vermez, şair için giriş/şifre
   yok. Site statik kalır; sunucu tarafı eklenmez.
 - **Kitap (basılı, A5) siteye konmaz:** saman kâğıt, iç sayfalar tek renk (siyah), yalnız kapak renkli. Sahibinin
-  seçimleri (9 Ekim 2026): kapakta sarıya boyanmış Moda fotoğrafı; her şiirde fotoğraf; yıl ayraçları var; arka
-  kapakta adres yazısı değil QR kod. Düzen: şiir fotoğrafıyla tek sayfaya sığıyorsa fotoğraf üstte, şiir altta;
-  sığmıyorsa aynı açık sayfada yan yana (fotoğraf solda, şiir sağda); çok uzun şiir kendi sayfasında iki sütun.
-  Sayfa başında yıl yazmaz. Fotoğraf künyeleri sonda tek sayfa, iki sütun. Boş sayfa ancak kaçınılmazsa
-  (yıl ayracından önce).
+  seçimleri (9 Ekim 2026): kapakta sarıya boyanmış Moda fotoğrafı; her şiirde fotoğraf; arka kapakta adres yazısı
+  değil QR kod. Kitabın adı (yarım başlık) ön kapağın içinde; iç sayfalar 1 epigraf, 2 künye, 3 başlık, şiirler 4'ten.
+  İçindekiler yok, yıl ayracı yok, sayfa başında yıl yok. Düzen: şiir fotoğrafıyla tek sayfaya sığıyorsa fotoğraf
+  üstte, şiir altta; sığmıyorsa aynı açık sayfada yan yana (fotoğraf solda, şiir sağda); çok uzun şiir kendi
+  sayfasında iki sütun. Fotoğraf künyeleri sonda tek sayfa, iki sütun. Boş sayfa ancak kaçınılmazsa.
   Üretim: `python3 scripts/kitap/kitap.py && node scripts/kitap/pdf.cjs` → `kitap-cikti/` (git'e girmez):
-  `ic-prova.pdf` (saman zeminli, bakmak için), `ic-acik-sayfa.pdf` (açık sayfa görünümü: 2|3, 4|5 …), `ic-baski.pdf` (zeminsiz, matbaaya), `kapak.pdf` (açılım).
+  `ic-prova.pdf` (saman zeminli, bakmak için), `ic-acik-sayfa.pdf` (açık sayfa görünümü: 2|3, 4|5 …), `ic-baski.pdf` (zeminsiz, matbaaya), `kapak.pdf` (dış açılım), `kapak-ic.pdf` (iç açılım).
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 

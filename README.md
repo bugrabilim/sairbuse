@@ -51,7 +51,7 @@ Sitede yayımlanmaz. A5, saman kâğıt, iç sayfalar siyah beyaz, kapak renkli;
 ```sh
 pip install pyyaml segno
 python3 scripts/kitap/kitap.py      # kitap-cikti/ içine sayfaları hazırlar (ffmpeg gerekir)
-node scripts/kitap/pdf.cjs          # ic-prova.pdf, ic-acik-sayfa.pdf, ic-baski.pdf, kapak.pdf (playwright-core + Chromium)
+node scripts/kitap/pdf.cjs          # ic-prova.pdf, ic-acik-sayfa.pdf, ic-baski.pdf, kapak.pdf, kapak-ic.pdf
 ```
 
 `kitap.py` önce her şiirin boyunu tarayıcıda ölçer (`scripts/kitap/olc.cjs`): fotoğrafla tek sayfaya sığan şiir
@@ -59,8 +59,8 @@ fotoğrafın altına, sığmayan karşısındaki sayfaya, tek sütuna da sığma
 açık sayfaya düşecek biçimde yerleşim hesaplanır. Chromium yerelde başka yerdeyse `CHROMIUM` ve `PLAYWRIGHT_CORE`
 ortam değişkenleriyle verilir.
 
-`ic-acik-sayfa.pdf` kitabın açılınca görünen hâlidir: 1. sayfa tek başına sağda, sonra solda çift, sağda tek
-numaralı sayfa (2|3, 4|5 …). Matbaaya `ic-baski.pdf` ve `kapak.pdf` gider.
+`ic-acik-sayfa.pdf` kitabın açılınca görünen hâlidir: 1. sayfa ön kapağın içinin karşısında, sonra solda çift, sağda tek
+numaralı sayfa (2|3, 4|5 …). Matbaaya `ic-baski.pdf`, `kapak.pdf` (dış yüz) ve `kapak-ic.pdf` (iç yüz: ön kapağın içinde kitabın adı) gider.
 
 Sırt kalınlığı sayfa sayısından tahmin edilir; kesin ölçü kâğıda göre matbaadan alınır (`scripts/kitap/kitap.py` → `YAPRAK_MM`).
 
