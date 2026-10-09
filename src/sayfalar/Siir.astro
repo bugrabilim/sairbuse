@@ -42,7 +42,7 @@ const sayfaBasligi = basliksiz(siir) ? `${ilkMisra(siir)}…` : ad(siir);
 const aciklama = m.siir.aciklama(ilkMisra(siir), im);
 // Şairin kendi kaydı en başta, varsa örnekler arkada
 const kayitlar = [
-  ...(siir.data.ses ? [{ dosya: siir.data.ses, etiket: m.siir.sairinSesi }] : []),
+  ...(siir.data.ses ? [{ dosya: siir.data.ses, etiket: m.siir.sesliDinle }] : []),
   ...(siir.data.sesler ?? []),
 ];
 ---

@@ -88,7 +88,7 @@ export const en: Metin = {
     ayniDuygudan: 'Same emotion',
     ayniYerden: 'Same place',
     ayniYildan: 'Same year',
-    sairinSesi: 'Listen in the poet’s voice',
+    sesliDinle: 'Listen to it read aloud',
     ornekNot: 'This is a sample reading; the poet’s own voice is coming soon.',
     baglantiKopyalandi: 'Link copied.',
   },

@@ -87,7 +87,7 @@ export const tr = {
     ayniDuygudan: 'Aynı duygudan',
     ayniYerden: 'Aynı yerden',
     ayniYildan: 'Aynı yıldan',
-    sairinSesi: 'Şairin sesinden dinle',
+    sesliDinle: 'Sesli dinle',
     ornekNot: 'Bu bir örnek okumadır; şairin kendi sesi yakında.',
     baglantiKopyalandi: 'Bağlantı kopyalandı.',
   },
