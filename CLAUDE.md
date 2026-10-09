@@ -48,6 +48,10 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   Segah). `public/muzik/<duygu>.mp3`, üretimi `scripts/muzik.py` (fluidsynth + FluidR3_GM, MIT; koma aralıkları
   perde bükmeyle). Açılınca hatırlanır, ortam sesi biraz kısılır.
 - Mum ışığı modu denendi, sahibi gereksiz buldu (9 Ekim 2026): kaldırıldı, geri eklenmez.
+- **Okur notu yok** (9 Ekim 2026): okur şiire renk ya da kelime bırakmaz, şair onay vermez, şair için giriş/şifre
+  yok. Site statik kalır; sunucu tarafı eklenmez.
+- **Kitap (basılı, A5) siteye konmaz:** saman kâğıt, fotoğraflar siyah beyaz, yalnız kapaklar renkli. Baskı
+  dosyaları sitenin dışında üretilir ve yalnız sahibine/matbaaya verilir (taslak aşamasında).
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 
