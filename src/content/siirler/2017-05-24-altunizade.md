@@ -4,6 +4,7 @@ yer: "Altunizade"
 duygular: ["huzun", "yalnizlik"]
 ortam: "kuslar"
 foto: "altunizade-bahce"
+ses: "/ses/2017-05-24-altunizade.mp3"
 kaynak: "şiirler.docx"
 ---
 Erik ağacının
