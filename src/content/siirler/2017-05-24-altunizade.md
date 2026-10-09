@@ -2,6 +2,7 @@
 tarih: "2017-05-24"
 yer: "Altunizade"
 duygular: ["huzun", "yalnizlik"]
+ortam: "kuslar"
 foto: "altunizade-bahce"
 kaynak: "şiirler.docx"
 ---

@@ -92,7 +92,8 @@ def tik_araligi(dosya: Path, bas: float, sure: float) -> float:
     """Saat tıkırtısının aralığı (saniye): zarfın öz ilintisinden"""
     oran = 1000
     x = mono(dosya, 16000)[int(bas * 16000) : int((bas + sure) * 16000)]
-    zarf = np.abs(np.diff(x)).reshape(-1, 16).mean(axis=1)  # 1 ms çözünürlük
+    d = np.abs(np.diff(x))
+    zarf = d[: len(d) // 16 * 16].reshape(-1, 16).mean(axis=1)  # 1 ms çözünürlük
     zarf = zarf - zarf.mean()
     ilinti = np.correlate(zarf, zarf, mode='full')[len(zarf) - 1 :]
     en_az, en_cok = int(0.3 * oran), int(2.5 * oran)

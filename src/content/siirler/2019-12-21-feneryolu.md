@@ -3,6 +3,7 @@ tarih: "2019-12-21"
 yer: "Feneryolu, ev"
 yerGrubu: "Feneryolu"
 duygular: ["ayrilik"]
+ortam: "ev"
 foto: "feneryolu-kis"
 kaynak: "şiirler.docx"
 ---

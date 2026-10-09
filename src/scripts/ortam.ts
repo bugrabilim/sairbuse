@@ -2,23 +2,19 @@
 // Wikimedia Commons'tan, CC BY-SA 3.0. Kesilip temizlenmiş hâlleri public/ortam/ altında; künyeleri
 // src/data/ortam-sesleri.ts dosyasında. Dosya yalnız okur o sesi seçince indirilir.
 // Kayıt sona yaklaşınca bir sonraki kopya birkaç saniyelik çapraz geçişle başlar, dikiş duyulmaz.
-export type Ortam = 'deniz' | 'yagmur' | 'vapur' | 'gece';
+import type { Ortam } from '../data/ortam-sesleri';
+export type { Ortam };
 
-const DOSYALAR: Record<Ortam, string> = {
-  deniz: '/ortam/deniz.mp3',
-  yagmur: '/ortam/yagmur.mp3',
-  vapur: '/ortam/vapur.mp3',
-  gece: '/ortam/gece.mp3',
-};
 /** Vapurda arada bir çalan düdük */
 const DUDUK = '/ortam/vapur-duduk.mp3';
-const GECIS = 4; // saniye, döngü dikişindeki çapraz geçiş
+/** Döngü dikişindeki çapraz geçiş (sn). Saat tıkırtısında kısa: kesit tık aralığının katı + bu pay (scripts/ortam.py) */
+const gecisSuresi = (tur: Ortam) => (tur === 'ev' ? 0.25 : 4);
 const ANA_SEVIYE = 0.9;
 
 let baglam: AudioContext | null = null;
 let ana: GainNode | null = null;
 let durdur: (() => void) | null = null;
-let duzey = 0.6;
+let duzey = 0.1;
 let sira = 0; // art arda seçimlerde yalnız sonuncusu çalsın
 
 const tamponlar = new Map<string, Promise<AudioBuffer>>();
@@ -39,7 +35,7 @@ function yukle(ctx: AudioContext, adres: string): Promise<AudioBuffer> {
 }
 
 /** Tamponu çapraz geçişli, kesintisiz döngüyle çalar */
-function dongu(ctx: AudioContext, tampon: AudioBuffer, cikis: AudioNode): () => void {
+function dongu(ctx: AudioContext, tampon: AudioBuffer, cikis: AudioNode, gecis: number): () => void {
   let bitti = false;
   let sayac = 0;
   const calanlar = new Set<AudioBufferSourceNode>();
@@ -52,17 +48,17 @@ function dongu(ctx: AudioContext, tampon: AudioBuffer, cikis: AudioNode): () => 
     const g = ctx.createGain();
     k.connect(g).connect(cikis);
     // İlk kopya kaydın rastgele bir yerinden başlar; her açılış aynı saniyeyle başlamasın
-    const ofset = ilk ? Math.random() * Math.max(0, sure - GECIS * 4) : 0;
+    const ofset = ilk ? Math.random() * Math.max(0, sure - 16) : 0;
     const kalan = sure - ofset;
     g.gain.setValueAtTime(0, baslangic);
-    g.gain.linearRampToValueAtTime(1, baslangic + GECIS);
-    g.gain.setValueAtTime(1, baslangic + kalan - GECIS);
+    g.gain.linearRampToValueAtTime(1, baslangic + gecis);
+    g.gain.setValueAtTime(1, baslangic + kalan - gecis);
     g.gain.linearRampToValueAtTime(0, baslangic + kalan);
     k.start(baslangic, ofset);
     k.stop(baslangic + kalan + 0.05);
     calanlar.add(k);
     k.onended = () => calanlar.delete(k);
-    const sonraki = baslangic + kalan - GECIS;
+    const sonraki = baslangic + kalan - gecis;
     sayac = window.setTimeout(() => cal(sonraki, false), Math.max(0, (sonraki - ctx.currentTime - 1.5) * 1000));
   }
   cal(ctx.currentTime + 0.05, true);
@@ -111,7 +107,7 @@ export async function baslat(tur: Ortam) {
   bitir(0.8);
   const benim = ++sira;
   const [tampon, duduk] = await Promise.all([
-    yukle(ctx, DOSYALAR[tur]),
+    yukle(ctx, `/ortam/${tur}.mp3`),
     tur === 'vapur' ? yukle(ctx, DUDUK) : Promise.resolve(null),
     acilis,
   ]);
@@ -120,7 +116,7 @@ export async function baslat(tur: Ortam) {
   g.gain.value = 0;
   g.connect(ctx.destination);
   g.gain.setTargetAtTime(ANA_SEVIYE * duzey, ctx.currentTime, 0.8);
-  const durduranlar = [dongu(ctx, tampon, g)];
+  const durduranlar = [dongu(ctx, tampon, g, gecisSuresi(tur))];
   if (duduk) durduranlar.push(arada(ctx, duduk, g, 0.7, 75, 150));
   ana = g;
   durdur = () => durduranlar.forEach((d) => d());

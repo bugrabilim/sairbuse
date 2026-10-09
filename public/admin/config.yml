@@ -86,6 +86,20 @@ collections:
         widget: string
         required: false
         hint: Şiirin açılış fotoğrafı; src/data/fotograflar.ts'deki kimlik, ör. "moda-iskele". Boş bırakılırsa yazıldığı yerin fotoğrafı, o da yoksa duygunun renginde bir ışık kullanılır.
+      - label: Ortam sesi
+        name: ortam
+        widget: select
+        required: false
+        options:
+          - { label: Deniz (martılar, dalgalar), value: deniz }
+          - { label: Yağmur, value: yagmur }
+          - { label: Vapur, value: vapur }
+          - { label: Gece (cırcır böcekleri), value: gece }
+          - { label: Kafe, value: kafe }
+          - { label: Şehir, value: sehir }
+          - { label: Kuşlar ve rüzgâr, value: kuslar }
+          - { label: Ev (saat tıkırtısı), value: ev }
+        hint: Şiir sayfası açılınca kısık sesle çalan ortam sesi. Boş bırakılırsa ana duygunun sesi çalar.
       - label: Şairin sesi
         name: ses
         widget: file

@@ -1,7 +1,8 @@
 // Ortam seslerinin künyeleri. Kayıtlar Beeld en Geluid'in (Hollanda Ses ve Görüntü Enstitüsü) arşivinden,
 // Wikimedia Commons'ta CC BY-SA 3.0 ile paylaşılmış. Sitede kesilip düzeyleri eşitlendi (scripts/ortam.py);
 // bu hâlleri de aynı lisansla kullanılabilir.
-import type { Ortam } from '../scripts/ortam';
+export const ORTAMLAR = ['deniz', 'yagmur', 'vapur', 'gece', 'kafe', 'sehir', 'kuslar', 'ev'] as const;
+export type Ortam = (typeof ORTAMLAR)[number];
 
 export interface OrtamKaydi {
   ses: Ortam;
@@ -27,3 +28,14 @@ export const ORTAM_KAYITLARI: OrtamKaydi[] = [
 ];
 
 export const commonsAdresi = (dosya: string) => `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(dosya.replace(/ /g, '_'))}`;
+
+/** Ortam sesi seçilmemiş şiirde ve duygu sayfalarında ana duygunun sesi */
+export const DUYGU_ORTAMI: Record<string, Ortam> = {
+  ask: 'deniz',
+  ozlem: 'vapur',
+  huzun: 'yagmur',
+  yalnizlik: 'kafe',
+  ayrilik: 'sehir',
+  karanlik: 'gece',
+  ozgurluk: 'kuslar',
+};

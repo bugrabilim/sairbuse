@@ -118,6 +118,12 @@ export const en: Metin = {
     yagmur: 'rain',
     vapur: 'ferry',
     gece: 'night',
+    kafe: 'café',
+    sehir: 'city',
+    kuslar: 'birds',
+    ev: 'home',
+    siirin: (ad: string) => `this poem’s sound · ${ad}`,
+    duygunun: (ad: string) => `this emotion’s sound · ${ad}`,
     kapat: 'off',
     duzey: 'Volume',
     baslik: 'Ambient sound',
@@ -300,7 +306,7 @@ export const en: Metin = {
       },
       {
         baslik: 'Cookies',
-        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose, the ambient sound volume and the last line of verse you saw on the home page; the ambient sound you picked is kept only for that session (sessionStorage). They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
+        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose, your ambient sound choice and volume, and the last line of verse you saw on the home page. They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
       },
       {
         baslik: 'Content from elsewhere',

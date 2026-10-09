@@ -7,6 +7,7 @@ import OrtamSesi from '../components/OrtamSesi.astro';
 import { DUYGULAR, duyguAdi, renkAdi, type Duygu } from '../data/duygular';
 import { dilBul, duyguYolu, kucuk, metin } from '../i18n';
 import { koleksiyonSema } from '../lib/sema';
+import { DUYGU_ORTAMI } from '../data/ortam-sesleri';
 import { imza, siirYolu, type Siir } from '../lib/siirler';
 import { kunye, siirFotografi } from '../lib/foto';
 
@@ -45,7 +46,7 @@ const acilisFotosu = siirFotografi(acilis);
         </p>
         {kaynak && <cite><a href={siirYolu(kaynak, dil)}>{imza(kaynak, dil)}</a></cite>}
       </blockquote>
-      <div class="arac duygu-arac"><OrtamSesi /></div>
+      <div class="arac duygu-arac"><OrtamSesi varsayilan={DUYGU_ORTAMI[d.slug]} tur="duygu" /></div>
     </div>
     {
       acilisFotosu && (

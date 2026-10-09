@@ -2,6 +2,7 @@
 baslik: "Karantina Günleri 1"
 tarih: "2020-03-29"
 duygular: ["yalnizlik"]
+ortam: "ev"
 foto: "imge-istiklal-2020"
 kaynak: "karantina.txt"
 ---

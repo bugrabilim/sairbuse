@@ -117,6 +117,12 @@ export const tr = {
     yagmur: 'yağmur',
     vapur: 'vapur',
     gece: 'gece',
+    kafe: 'kafe',
+    sehir: 'şehir',
+    kuslar: 'kuşlar',
+    ev: 'ev',
+    siirin: (ad: string) => `şiirin sesi · ${ad}`,
+    duygunun: (ad: string) => `bu duygunun sesi · ${ad}`,
     kapat: 'kapalı',
     duzey: 'Ses düzeyi',
     baslik: 'Ortam sesi',
@@ -298,7 +304,7 @@ export const tr = {
       },
       {
         baslik: 'Çerezler',
-        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesinin düzeyi ve ana sayfada en son gördüğünüz mısra; seçtiğiniz ortam sesi yalnız o oturum boyunca (sessionStorage) tutulur. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
+        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesi tercihiniz ve düzeyi, ana sayfada en son gördüğünüz mısra. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
       },
       {
         baslik: 'Dışarıdan gelen içerik',
