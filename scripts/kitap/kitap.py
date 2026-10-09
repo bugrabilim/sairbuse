@@ -60,6 +60,7 @@ def siirleri_oku():
             'tarih': str(tarih) if tarih else None,
             'yer': veri.get('yer'),
             'foto': veri.get('foto'),
+            'sesli': bool(veri.get('ses') or veri.get('sesler')),
             'govde': govde.strip('\n'),
         })
     tarihli = sorted([s for s in siirler if s['tarih']], key=lambda s: s['tarih'])
@@ -142,7 +143,9 @@ ORTAK_CSS = """
   .kita:last-child { margin-bottom: 0; }
   .m { padding-left: 1.2em; text-indent: -1.2em; }
   .siir-ad { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 15pt; margin-bottom: 5mm; }
-  .imza { margin-top: auto; padding-top: 4mm; font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 9pt; color: #5d554a; }
+  .imza { margin-top: auto; padding-top: 4mm; display: flex; justify-content: space-between; align-items: flex-end; gap: 4mm; font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 9pt; color: #5d554a; }
+  .sesli-qr { flex: none; display: flex; align-items: center; gap: 1.5mm; font-family: 'Inter', sans-serif; font-style: normal; font-weight: 500; font-size: 5.8pt; letter-spacing: .2em; text-transform: uppercase; color: #5d554a; }
+  .sesli-qr img { display: block; width: 17mm; height: 17mm; }
   .iki-sutun .siir { column-count: 2; column-gap: 8mm; }
   .iki-sutun .m { break-inside: avoid; orphans: 2; widows: 2; }
   .fotolu { flex: 1; display: flex; flex-direction: column; justify-content: center; }
@@ -187,11 +190,22 @@ def govde_html(govde):
                    + '</div>' for k in kitalar)
 
 
+def siir_qr(s) -> str:
+    """Şiirin site sayfasına giden QR kod (şeffaf zeminli SVG; iç sayfalar tek renk basılır)"""
+    (CIKTI / 'qr').mkdir(parents=True, exist_ok=True)
+    hedef = CIKTI / 'qr' / f'{s["id"]}.svg'
+    segno.make(f'{SITE}/siir/{s["id"]}/', error='m').save(str(hedef), scale=4, border=2, dark='#1c1915', light=None)
+    return f'qr/{s["id"]}.svg'
+
+
 def siir_icerik(s):
     p = [f'<div class="siir-ad">{e(ad(s))}</div>']
     p.append(f'<div class="siir">{govde_html(s["govde"])}</div>')
-    if imza(s):
-        p.append(f'<div class="imza">{e(imza(s))}</div>')
+    if imza(s) or s['sesli']:
+        # Sesli okuması olan şiirin imzasının yanına "Sesli dinle" ve şiirin sayfasına giden QR kod konur
+        qr = (f'<span class="sesli-qr"><span>Sesli<br>dinle</span><img src="{siir_qr(s)}" alt="QR"></span>'
+              if s['sesli'] else '')
+        p.append(f'<div class="imza"><span>{e(imza(s))}</span>{qr}</div>')
     return ''.join(p)
 
 

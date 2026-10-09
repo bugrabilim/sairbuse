@@ -15,7 +15,7 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | `/` | Her ziyarette başka bir "renk mısrası" (*Turuncu bir gemide olsam şimdi*, *Üstünde kaldı sarı kediler*…) kendi şiirinin fotoğrafıyla açılır; sayfa açıkken mısralar 9 saniyede bir yavaşça birbirine geçer ("Durdur" ile durur, hareketi azaltılmış cihazlarda geçiş yok). Altında "Bugün neyin peşindesin?" ve 7 duygu, fotoğraflı duygu şeritleri. Bugünün tarihinde yazılmış bir şiir varsa o da gösterilir. |
 | `/duygu/…` | Bir duygunun bütün şiirleri, her biri kendi fotoğrafıyla. Her şiir ekrana girince harf harf yazılır. |
 | `/yer/…` | Bir yerde (Moda, Burgazada, Söğüt…) yazılmış şiirler. |
-| `/siir/…` | Tek bir şiir. Yazıldığı yerin fotoğrafıyla açılır (bilgisayarda fotoğraf solda sabit durur). Şiir yazılıyormuş gibi harf harf belirir; hız ve beliriş duyguya göre değişir: hüzün buğulu ve yavaş, ayrılık kesik, özgürlük akıcı. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" (bağlantı, Facebook, Instagram, WhatsApp, SMS, LinkedIn) ve ortam sesi düğmeleri var; ortam sesi varsayılan olarak o şiirin sesiyle, kısık açılır. Kayıt varsa sesli dinlenebilir. Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
+| `/siir/…` | Tek bir şiir. Yazıldığı yerin fotoğrafıyla açılır (bilgisayarda fotoğraf solda sabit durur). Şiir yazılıyormuş gibi harf harf belirir; hız ve beliriş duyguya göre değişir: hüzün buğulu ve yavaş, ayrılık kesik, özgürlük akıcı. Şiire dokununca ya da bir tuşa basınca hepsi gelir; "Baştan oku" açılışı yeniden oynatır. "Mısra kartı", "Paylaş" (bağlantı, Facebook, Instagram, WhatsApp, SMS, LinkedIn) ve ortam sesi düğmeleri var; ortam sesi varsayılan olarak o şiirin sesiyle, kısık açılır. Kayıt varsa sesli dinlenebilir (şiirler listelerinde adının yanında hoparlör işareti görünür). Altta üç kapı: aynı duygudan, aynı yerden, aynı yıldan bir şiir. |
 | `/siirler/` | Bütün şiirlerin listesi, duyguya göre süzülebilir. |
 | `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. Altında İstanbul'un dışındaki yerler (İzmir, Marmaris Söğüt, Paris) için Paris'ten Marmaris'e uzanan ikinci bir harita. |
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |
@@ -58,6 +58,9 @@ node scripts/kitap/pdf.cjs          # ic-prova.pdf, ic-acik-sayfa.pdf, ic-baski.
 fotoğrafın altına, sığmayan karşısındaki sayfaya, tek sütuna da sığmayan iki sütuna dizilir. Yan yana sayfalar hep aynı
 açık sayfaya düşecek biçimde yerleşim hesaplanır. Chromium yerelde başka yerdeyse `CHROMIUM` ve `PLAYWRIGHT_CORE`
 ortam değişkenleriyle verilir.
+
+Sesli okuması olan şiirlerin (şiir dosyasında `ses:` ya da `sesler:`) imzasının yanına "Sesli dinle" yazısı ve o şiirin
+site sayfasına giden QR kod konur; kayıt eklenince kitap yeniden üretildiğinde kendiliğinden gelir.
 
 `ic-acik-sayfa.pdf` kitabın açılınca görünen hâlidir: 1. sayfa ön kapağın içinin karşısında, sonra solda çift, sağda tek
 numaralı sayfa (2|3, 4|5 …). Matbaaya `ic-baski.pdf`, `kapak.pdf` (dış yüz) ve `kapak-ic.pdf` (iç yüz: ön kapağın içi boş, arka kapağın içinde künye) gider.
