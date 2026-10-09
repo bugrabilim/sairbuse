@@ -52,7 +52,7 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   yok. Site statik kalır; sunucu tarafı eklenmez.
 - **Kitap (basılı, A5) siteye konmaz:** saman kâğıt, iç sayfalar tek renk (siyah), yalnız kapak renkli. Sahibinin
   seçimleri (9 Ekim 2026): kapakta sarıya boyanmış Moda fotoğrafı; her şiirde fotoğraf; arka kapakta adres yazısı
-  değil QR kod. Kapağın içinde: önde kitabın adı (yarım başlık), arkada künye. İç sayfalar 1 başlık, 2 epigraf,
+  değil QR kod. Ön kapağın içi boş, arka kapağın içinde künye. İç sayfalar 1 başlık, 2 epigraf,
   3 içindekiler, şiirler 4'ten. Her şiirin başlığı var (adı yoksa ilk mısrası). Yıl ayracı yok, sayfa başında yıl yok. Düzen: şiir fotoğrafıyla tek sayfaya sığıyorsa fotoğraf
   üstte, şiir altta; sığmıyorsa aynı açık sayfada yan yana (fotoğraf solda, şiir sağda); çok uzun şiir kendi
   sayfasında iki sütun. Fotoğraf künyeleri sonda tek sayfa, iki sütun. Boş sayfa ancak kaçınılmazsa.
