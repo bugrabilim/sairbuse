@@ -306,6 +306,7 @@ Kargayla
 - [x] Ana sayfa vitrini: sayfa açıkken mısralar yavaşça birbirine geçer; durdurulabilir
 - [x] Yer sayfaları (`/yer/…`)
 - [x] Mısra kartı ve paylaşım önizlemeleri şiirin fotoğrafıyla
+- [x] Logo "Damla" (12 Ekim 2026): Peşinde'nin i noktası bir gözyaşı; üst şerit, simgeler, paylaşım görselleri, mısra kartı, kitabın kapağı ve başlık sayfası
 - [ ] Şairin kendi fotoğrafları gelirse Commons fotoğraflarının yerine konması
 
 ### Faz 3 — Okurla bağ (isteğe bağlı)
@@ -354,6 +355,7 @@ Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", 
 | Ağır şiirler | Uyarı notu yok. |
 | **Açık:** Ses kayıtları | Üç şiirin kaydı eklendi (9 Ekim 2026), diğerleri bekleniyor. Yapay sesle denenen örnekler düz okuduğu için kaldırıldı (§10.4). |
 | İmza | Alt bilgide Bumba Life rozeti var. |
+| Logo | "Damla" (12 Ekim 2026): Fraunces 300 yazı; Peşinde'nin i noktası, sayfanın duygusunun renginde bir gözyaşı damlası. Küçük işaret: koyu karede sarı damla. Dört seçenek arasından seçildi (Damla, Yedi dize, Ş, Halka). |
 | Tasarım | B "Vapur": yer fotoğrafları (§11). Varsayılan koyu; 8 Ekim 2026'dan beri açık tema düğmesi var (Standartlar §3). Arayüz Türkçe ve İngilizce; şiirler Türkçe. |
 | Fotoğraflar | Gerçek fotoğraflar, Wikimedia Commons'tan özgür lisanslı; fotoğrafçı adı ve lisans her şiirde ve Hakkında sayfasında. |
 | Yazım | TDK'ya göre düzeltildi (§8). Açık kalan tek nokta: "Uların". |

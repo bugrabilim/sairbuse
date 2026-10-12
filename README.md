@@ -25,6 +25,14 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 
 Derleme sırasında her şiir için WhatsApp ve Instagram'da görünen bir önizleme görseli, şiirin fotoğrafıyla otomatik üretilir (`/og/<şiir>.jpg`). Mısra kartı ise okurun tarayıcısında çizilir; okur seçtiği mısraları şiirin fotoğrafının üstünde, hikâye boyutunda bir görsel olarak indirir ya da paylaşır.
 
+## Logo
+
+"Duyguların Peşinde" yazısı Fraunces 300 ile dizilir; adın tek noktası, Peşinde'nin i'si, bir gözyaşı damlasıdır (açılış şiirinin ilk dizesi: "Şiir kitabım ağlıyor!"). Damla bulunduğu sayfanın duygusunun renginde durur: aşk sayfasında pembe, özgürlükte turuncu; duygusu olmayan sayfalarda hüznün sarısı. Tek renk baskıda mürekkep rengindedir.
+
+- Sitede üst şeritte: `src/components/Logo.astro`. Harf gerçek bir i olarak kalır, noktası CSS ile kırpılır ve yerine damla oturur; ekran okuyucu ve arama motorları "Peşinde" okur. Damlanın biçimi ve ölçüleri `src/data/logo.ts`'de.
+- Tek başına damla küçük işarettir: koyu karede sarı damla. Sekme simgesi, telefon ana ekranı ve uygulama simgeleri `node scripts/simgeler.mjs` ile üretilir (`public/favicon.svg`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`).
+- Paylaşım görsellerinde (`src/lib/og.ts`), mısra kartında ve basılı kitabın kapağıyla başlık sayfasında da aynı logo var.
+
 ## Fotoğraflar
 
 Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi gerçek; Wikimedia Commons'ta özgür lisansla (CC BY, CC BY-SA, CC0) paylaşılmış ve fotoğrafçısının adıyla kullanılıyor. Sitede siyah beyaza çekilip şiirin duygusunun rengine boyanıyorlar; bu renk değişikliği künyelerde belirtiliyor. Yeri belli olmayan şiirlerde fotoğraf, şiirdeki bir imgeyi gösteriyor.

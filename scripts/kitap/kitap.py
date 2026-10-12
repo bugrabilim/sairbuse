@@ -37,6 +37,19 @@ SIIRLER = KOK / 'src' / 'content' / 'siirler'
 FONT = KOK / 'node_modules' / '@fontsource'
 SITE = 'https://duygularinpesinde.bumba.tr'
 SAIR = 'Antigoni'
+# Logo "Damla": Peşinde'nin i noktası bir gözyaşı damlası. Biçim ve ölçüler src/data/logo.ts ile aynı.
+DAMLA_YOLU = 'M50 6C44 22 22 42 22 62a28 28 0 0 0 56 0C78 42 56 22 50 6Z'
+DAMLA_CSS = '''
+  .damla-i { position: relative; }
+  .damla-i > span { display: inline-block; line-height: 1; clip-path: inset(.33em 0 0 0); }
+  .damla-i svg { position: absolute; top: .172em; left: 50%; width: .25em; height: .25em; transform: translateX(-50%); }
+'''
+
+
+def logo_ad(renk: str) -> str:
+    """Kitabın adı iki satır; i gerçek harf (PDF'te metin doğru), noktası kırpılır, yerine damla oturur"""
+    damla = f'<span class="damla-i"><span>i</span><svg viewBox="0 0 100 100"><path d="{DAMLA_YOLU}" fill="{renk}"/></svg></span>'
+    return f'Duyguların<br>Peş{damla}nde'
 YAPRAK_MM = 0.11  # 80–90 g saman kâğıtta bir yaprağın yaklaşık kalınlığı
 ALAN_MM = 166      # yazı alanının yüksekliği (216 − üst 23 − alt 27)
 FOTO_EN_AZ_MM = 50  # şiirle aynı sayfadaki fotoğrafın en küçük yüksekliği
@@ -172,7 +185,7 @@ ORTAK_CSS = """
   .fotolar span { color: #5d554a; }
   .olc { width: 112mm; }
   .olc .imza { margin-top: 0; }
-"""
+""" + DAMLA_CSS
 
 
 def sayfa(sinif, icerik, no=None):
@@ -261,7 +274,7 @@ def taraf(no):
 
 def ic_sayfalar(siirler, kunyeler, olcum):
     # Ön sayfalar: 1 başlık, 2 epigraf, 3 içindekiler. Ön kapağın içi boş, künye arka kapağın içinde (kapak-ic).
-    on = [sayfa('sag', '<div class="alan ortala"><div class="buyuk-ad">Duyguların<br>Peşinde</div>'
+    on = [sayfa('sag', f'<div class="alan ortala"><div class="buyuk-ad">{logo_ad("#1c1915")}</div>'
                 f'<div class="alt-ad">Şiirler · 2008–2021</div><div class="sair">{SAIR}</div></div>'),
           sayfa('sol', '<div class="alan"><div class="epigraf">“Kim bilir belki de sen\nturuncu bir gemidesin”</div></div>'),
           None]  # içindekiler, sayfa numaraları belli olunca
@@ -378,6 +391,7 @@ def kapak(sayfa_sayisi):
   .sirt .serit {{ width: 52%; display: grid; gap: 1.2mm; }}
   .sirt .serit i {{ display: block; height: 1.2mm; border-radius: .5mm; }}
   .kilavuz {{ position: absolute; top: 0; bottom: 0; width: 0; border-left: .2pt dashed rgba(255,255,255,.35); }}
+{DAMLA_CSS}
 """
     govde = f"""
 <div class="arka"><div class="ic">
@@ -392,7 +406,7 @@ Böyle ağlarmış”</div>
   <div class="qr"><img src="qr.svg" alt="QR"><span>Şiirlerin<br>sitesi</span></div>
 </div></div>
 <div class="sirt"><span class="ad">Duyguların Peşinde · {SAIR}</span><div class="serit">{renkler}</div></div>
-<div class="on"><div class="foto"></div><div class="yazi"><div class="sair">{SAIR}</div><div class="ad">Duyguların<br>Peşinde</div><div class="renkler">{renkler}</div></div></div>
+<div class="on"><div class="foto"></div><div class="yazi"><div class="sair">{SAIR}</div><div class="ad">{logo_ad('#ebcb52')}</div><div class="renkler">{renkler}</div></div></div>
 """
     # Kapağın iç yüzü: içeriden bakınca solda ön kapağın içi, ortada sırt, sağda arka kapağın içi
     ic_css = f"""

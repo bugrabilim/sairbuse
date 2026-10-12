@@ -10,6 +10,8 @@
   --soluk: #a49c90;
   --cizgi: rgba(241, 234, 223, 0.14);
   --vurgu: #e9dcc6;
+  /* Logodaki damla: duygusu olmayan sayfada hüznün rengi (açılış şiiri "Şiir kitabım ağlıyor!") */
+  --damla: #ebcb52;
   --golge: rgba(0, 0, 0, 0.5);
   --perde: rgba(0, 0, 0, 0.45);
   color-scheme: dark;
@@ -23,6 +25,7 @@
   --soluk: #675e54;
   --cizgi: rgba(28, 24, 21, 0.16);
   --vurgu: #6b4f33;
+  --damla: #735c00;
   --golge: rgba(60, 40, 20, 0.18);
   color-scheme: light;
 }
@@ -49,10 +52,12 @@ body.duygulu,
 [data-theme='gunduz'] body.duygulu :is(.karanlik-alan, .sahne, .serit, .sahneli .ust) {
   --zemin: var(--z-gece);
   --vurgu: var(--d-gece);
+  --damla: var(--d-gece);
 }
 [data-theme='gunduz'] body.duygulu {
   --zemin: var(--z-gunduz);
   --vurgu: var(--d-gunduz);
+  --damla: var(--d-gunduz);
 }
 
 @view-transition {
@@ -195,14 +200,57 @@ h3 {
   }
 }
 
+/* Logo "Damla": Fraunces 300; adın tek noktası, Peşinde'nin i'si, bir gözyaşı damlası */
 .logo {
-  font-family: var(--etiket);
-  font-weight: 600;
-  font-size: 0.72rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+  font-family: var(--serif-baslik);
+  font-weight: 300;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  padding-block: 0.3rem;
   text-decoration: none;
   color: var(--yazi);
+}
+/* Harf gerçek bir i; noktası kırpılır, yerine damla oturur. Ölçüler Fraunces 300'den (src/data/logo.ts):
+   satır yüksekliği 1 olan kutuda nokta üstten 0.18–0.28 em, gövde 0.39 em'den aşağıda. Damla bir sözde öge ve
+   sarmalayıcı satır içi kalır: DOM'da öge ya da satır içi blok olsa Chrome ekran okuyucuya "Peş i nde" verir.
+   Satır içi kutunun üstü taban çizgisinin 0.978 em üstünde, damlanın kutusu 0.806 em üstünde. */
+.damla-i {
+  position: relative;
+}
+.damla-i > span {
+  display: inline-block;
+  line-height: 1;
+  clip-path: inset(0.33em 0 0 0);
+}
+.damla-i::after {
+  content: '';
+  position: absolute;
+  top: 0.172em;
+  left: 50%;
+  width: 0.25em;
+  height: 0.25em;
+  transform: translateX(-50%);
+  background: var(--damla);
+  -webkit-mask: var(--damla-bicim) center / contain no-repeat;
+  mask: var(--damla-bicim) center / contain no-repeat;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+:root {
+  --damla-bicim: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 6C44 22 22 42 22 62a28 28 0 0 0 56 0C78 42 56 22 50 6Z'/%3E%3C/svg%3E");
+}
+@media (forced-colors: active) {
+  .damla-i::after {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+}
+@media (max-width: 52rem) {
+  .logo {
+    font-size: 1.3rem;
+  }
 }
 
 /* Tema (ve dil, arama) düğmeleri: menünün yanında, telefonda da görünür */

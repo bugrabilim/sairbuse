@@ -1,0 +1,10 @@
+---
+// Yazı logosu: Peşinde'nin i'si gerçek harf kalır (ekran okuyucu, arama ve kopyalama "Peşinde" okur);
+// noktası CSS ile kırpılır, yerine damla oturur (.damla-i::after). Renk: --damla (global.css).
+import { SITE } from '../data/site';
+import { logoParcalari } from '../data/logo';
+
+const [bas, son] = logoParcalari(SITE.ad);
+---
+
+<span class="logo-yazi">{bas}<span class="damla-i"><span>i</span></span>{son}</span>
