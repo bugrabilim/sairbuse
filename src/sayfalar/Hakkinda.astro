@@ -81,6 +81,8 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
     <p class="pencere-dugmeleri">
       <button class="dugme vurgulu" type="button" id="fotograflar" data-pencere="foto-pencere" aria-haspopup="dialog">{m.fotograflariGor}</button>
       <button class="dugme vurgulu" type="button" id="gizlilik" data-pencere="gizlilik-pencere" aria-haspopup="dialog">{m.gizlilikGor}</button>
+      <button class="dugme vurgulu" type="button" id="haklar" data-pencere="haklar-pencere" aria-haspopup="dialog">{m.haklar}</button>
+      <button class="dugme vurgulu" type="button" id="sorular" data-pencere="sorular-pencere" aria-haspopup="dialog">{m.sssBaslik}</button>
     </p>
 
     <dialog class="pencere" id="foto-pencere" aria-labelledby="foto-baslik">
@@ -124,8 +126,11 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
       <GizlilikMetni seviye="h3" />
     </dialog>
 
-    <details class="acilir" id="haklar">
-      <summary>{m.haklar}</summary>
+    <dialog class="pencere" id="haklar-pencere" aria-labelledby="haklar-baslik">
+      <div class="pencere-bas">
+        <h2 id="haklar-baslik">{m.haklar}</h2>
+        <button class="dugme pencere-kapat" type="button">{M.kart.kapat}</button>
+      </div>
       <p>{m.haklarMetni}</p>
       <p>{m.fotoHaklar}</p>
       <p>{m.sesHaklar}</p>
@@ -141,10 +146,13 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
           ))
         }
       </ul>
-    </details>
+    </dialog>
 
-    <details class="acilir" id="sorular">
-      <summary>{m.sssBaslik}</summary>
+    <dialog class="pencere" id="sorular-pencere" aria-labelledby="sorular-baslik">
+      <div class="pencere-bas">
+        <h2 id="sorular-baslik">{m.sssBaslik}</h2>
+        <button class="dugme pencere-kapat" type="button">{M.kart.kapat}</button>
+      </div>
       <dl class="sss">
         {
           m.sss.map((x) => (
@@ -155,14 +163,19 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
           ))
         }
       </dl>
-    </details>
+    </dialog>
   </article>
 </Temel>
 
 <script>
-  // Fotoğraflar ve gizlilik birer pencerede; "Haklar" ve "Sık sorulanlar" açılır-kapanır.
-  // Adresteki #fotograflar, #gizlilik, #haklar, #sorular ilgili bölümü açar (alt bilgideki "künyeler" gibi).
-  const pencereler: Record<string, string> = { '#fotograflar': 'foto-pencere', '#gizlilik': 'gizlilik-pencere' };
+  // Fotoğraflar, gizlilik, haklar ve sık sorulanlar birer pencerede (düğmeyle açılır).
+  // Adresteki #fotograflar, #gizlilik, #haklar, #sorular ilgili pencereyi açar.
+  const pencereler: Record<string, string> = {
+    '#fotograflar': 'foto-pencere',
+    '#gizlilik': 'gizlilik-pencere',
+    '#haklar': 'haklar-pencere',
+    '#sorular': 'sorular-pencere',
+  };
   document.querySelectorAll<HTMLButtonElement>('[data-pencere]').forEach((b) =>
     b.addEventListener('click', () => (document.getElementById(b.dataset.pencere ?? '') as HTMLDialogElement | null)?.showModal()),
   );
@@ -175,8 +188,6 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
   function hashKontrol() {
     const pencere = document.getElementById(pencereler[location.hash] ?? '') as HTMLDialogElement | null;
     if (pencere && !pencere.open) pencere.showModal();
-    const acilir = document.querySelector<HTMLDetailsElement>(`details${location.hash || '#yok'}`);
-    if (acilir) acilir.open = true;
   }
   hashKontrol();
   window.addEventListener('hashchange', hashKontrol);
@@ -227,7 +238,7 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
   .pencere-bas h2 {
     margin: 0 !important;
   }
-  /* JavaScript yoksa künyeler sayfada açık durur */
+  /* JavaScript yoksa pencerelerin içeriği sayfada açık durur */
   :global(html:not(.js)) .pencere {
     display: block;
     position: static;
@@ -242,44 +253,6 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
   }
   .hakkinda {
     max-width: 38rem;
-  }
-  /* Haklar ve sık sorulanlar: açılır-kapanır */
-  .acilir {
-    border-top: 1px solid var(--cizgi);
-    padding: 0.4rem 0;
-  }
-  .acilir:last-of-type {
-    border-bottom: 1px solid var(--cizgi);
-  }
-  .acilir summary {
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.8rem 0;
-    font-family: var(--serif-baslik);
-    font-style: italic;
-    font-weight: 300;
-    font-size: 1.8rem;
-  }
-  .acilir summary::-webkit-details-marker {
-    display: none;
-  }
-  .acilir summary::after {
-    content: '+';
-    font-family: var(--etiket);
-    font-style: normal;
-    font-size: 1.2rem;
-    color: var(--soluk);
-    transition: transform 0.3s;
-  }
-  .acilir[open] summary::after {
-    transform: rotate(45deg);
-  }
-  .acilir > :not(summary) {
-    margin-top: 0;
   }
   .hakkinda h2 {
     font-size: 2.2rem;

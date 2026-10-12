@@ -1,7 +1,9 @@
 ---
 // Bumba ortak e-posta listesine katılma formu (Bumba Genel Standartlar §6).
 // Çift onayı, rıza kaydını, onay/çıkış e-postalarını ve bot korumasını ortak servis yapar; burada yalnız form var.
-// JavaScript yoksa form servise gider ve sonuç #liste-tamam / #liste-hata ile bu sayfaya döner.
+// Alt bilgide yalnız adres ve "Katıl" durur; Katıl'a basınca açılan pencerede kısa aydınlatma özeti, önceden
+// işaretsiz rıza kutusu ve asıl gönderme düğmesi var. JavaScript yoksa pencerenin içeriği formun altında açık durur;
+// form servise gider ve sonuç #liste-tamam / #liste-hata ile bu sayfaya döner.
 import { SITE } from '../data/site';
 import { dilBul, metin } from '../i18n';
 
@@ -15,7 +17,6 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
 
 <section class="liste-kutusu" aria-labelledby="liste-baslik">
   <h2 id="liste-baslik" class="liste-baslik">{m.baslik}</h2>
-  <p class="liste-aciklama">{m.aciklama}</p>
   <form class="liste-formu" action="https://bumbagroup.com/api/liste/katil" method="post" data-metin={JSON.stringify(yazilar)}>
     <input type="hidden" name="site" value={SITE.liste} />
     <input type="hidden" name="dil" value={dil} />
@@ -24,12 +25,20 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
     <div class="liste-satir">
       <label class="gorunmez" for="liste-eposta">{m.eposta}</label>
       <input id="liste-eposta" type="email" name="eposta" required autocomplete="email" placeholder={m.eposta} />
-      <button class="dugme" type="submit">{m.katil}</button>
+      <button class="dugme liste-ac" type="button" aria-haspopup="dialog">{m.katil}</button>
     </div>
-    <label class="liste-riza">
-      <input type="checkbox" name="riza" value="on" required />
-      <span>{rizaOnce}<a href={aydinlatma} rel="noopener">{m.aydinlatma}</a>{rizaSonra}</span>
-    </label>
+    <dialog class="liste-onay" aria-labelledby="liste-onay-baslik">
+      <h3 id="liste-onay-baslik">{m.onayBaslik}</h3>
+      <p>{m.onayMetni}</p>
+      <label class="liste-riza">
+        <input type="checkbox" name="riza" value="on" required />
+        <span>{rizaOnce}<a href={aydinlatma} rel="noopener">{m.aydinlatma}</a>{rizaSonra}</span>
+      </label>
+      <div class="liste-onay-dugmeler">
+        <button class="dugme liste-vazgec" type="button">{m.vazgec}</button>
+        <button class="dugme vurgulu" type="submit">{m.katil}</button>
+      </div>
+    </dialog>
     <input class="bot-tuzagi" type="text" name="web_sitesi" tabindex="-1" autocomplete="off" aria-hidden="true" />
     <p class="liste-durum" role="status" aria-live="polite"></p>
   </form>
@@ -38,6 +47,9 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
 <script>
   const form = document.querySelector<HTMLFormElement>('.liste-formu');
   const durum = form?.querySelector<HTMLElement>('.liste-durum');
+  const eposta = form?.querySelector<HTMLInputElement>('input[type="email"]');
+  const ac = form?.querySelector<HTMLButtonElement>('.liste-ac');
+  const onay = form?.querySelector<HTMLDialogElement>('.liste-onay');
   const M = JSON.parse(form?.dataset.metin ?? '{}');
 
   function goster(metin: string, iyi: boolean) {
@@ -49,6 +61,23 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
   // JS'siz gönderimden dönüşte sonucu göster
   if (location.hash === '#liste-tamam') goster(M.tamam, true);
   else if (location.hash === '#liste-hata') goster(M.hatalar.hata, false);
+
+  // Katıl: adres geçerliyse onay penceresi açılır; rıza orada, önceden işaretsiz kutuyla verilir
+  function pencereyiAc() {
+    if (!eposta?.reportValidity()) return;
+    onay?.showModal();
+  }
+  ac?.addEventListener('click', pencereyiAc);
+  // Adres kutusunda Enter da pencereyi açar (form doğrudan gönderilmez)
+  eposta?.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    pencereyiAc();
+  });
+  onay?.querySelector('.liste-vazgec')?.addEventListener('click', () => onay.close());
+  onay?.addEventListener('click', (e) => {
+    if (e.target === onay) onay.close();
+  });
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -76,6 +105,7 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
     } catch {
       goster(M.hatalar.hata, false);
     } finally {
+      onay?.close();
       if (dugme) {
         dugme.disabled = false;
         dugme.textContent = M.katil;
@@ -85,21 +115,29 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
 </script>
 
 <style>
+  /* Masaüstünde başlık ve form yan yana, tek satır; dar ekranda başlık üstte */
   .liste-kutusu {
     margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 1.25rem;
   }
   .liste-baslik {
-    font-size: 1.35rem;
+    margin: 0;
+    font-size: 1.15rem;
     color: var(--yazi);
   }
-  .liste-aciklama {
-    margin: 0.3rem 0 0.75rem !important;
-    font-size: 0.85rem;
+  /* Genişlik açıkça verilir: alt bilginin ızgarası bu genişliği bilmezse başlığı forma sığdıramaz */
+  .liste-formu {
+    flex: 0 1 17rem;
+    width: 17rem;
+    min-width: 14rem;
   }
   .liste-satir {
     display: flex;
     gap: 0.75rem;
-    max-width: 30rem;
   }
   .liste-satir input {
     flex: 1;
@@ -119,17 +157,72 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
   .liste-satir input::placeholder {
     color: var(--soluk);
   }
+  /* Telefonda alt bilginin geri kalanı gibi sola yaslı, adres kutusu tam genişlikte */
+  @media (max-width: 40rem) {
+    .liste-kutusu {
+      justify-content: flex-start;
+    }
+    .liste-formu {
+      flex-basis: 100%;
+      width: auto;
+    }
+  }
+  /* Onay penceresi */
+  .liste-onay {
+    width: min(30rem, calc(100vw - 2rem));
+    padding: 1.6rem clamp(1.25rem, 4vw, 2rem) 1.5rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 4px;
+    background: var(--zemin);
+    color: var(--yazi);
+    font-size: 0.95rem;
+  }
+  .liste-onay::backdrop {
+    background: rgba(0, 0, 0, 0.72);
+  }
+  .liste-onay h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.6rem;
+  }
+  .liste-onay p {
+    margin: 0;
+    color: var(--soluk);
+  }
   .liste-riza {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem;
     align-items: flex-start;
-    margin-top: 0.75rem;
-    font-size: 0.85rem;
-    max-width: 34rem;
+    margin-top: 1.1rem;
   }
   .liste-riza input {
     margin-top: 0.3rem;
     accent-color: var(--vurgu);
+  }
+  .liste-riza a {
+    color: var(--yazi);
+  }
+  .liste-onay-dugmeler {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.4rem;
+  }
+  /* JavaScript yoksa pencere açılamaz: içeriği formun altında açık durur, gönderme düğmesi oradadır */
+  :global(html:not(.js)) .liste-onay {
+    display: block;
+    position: static;
+    width: auto;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: inherit;
+  }
+  :global(html:not(.js)) .liste-onay h3,
+  :global(html:not(.js)) .liste-ac,
+  :global(html:not(.js)) .liste-vazgec {
+    display: none;
   }
   .bot-tuzagi {
     position: absolute;
@@ -142,7 +235,7 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
     display: none;
   }
   .liste-durum {
-    margin-top: 0.75rem !important;
+    margin: 0.6rem 0 0;
     font-style: italic;
     min-height: 1.2em;
   }

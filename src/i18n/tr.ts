@@ -1,6 +1,17 @@
 // Arayüzün Türkçe metinleri. en.ts aynı yapıda olmak zorunda (tür denetimi bunu bekler).
 // Uzun metinlerde (hakkında, gizlilik) bağlantılar {ad} yer tutucularıyla gelir; sayfa bunları doldurur.
 
+/** Yılın ayrılma eki, okunuşuna göre: 2008'den, 2006'dan, 2005'ten, 2010'dan */
+function yildan(yil: string): string {
+  const n = Number(yil);
+  const birler = ['', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'];
+  const onlar = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan'];
+  const son = birler[n % 10] || onlar[Math.floor(n / 10) % 10] || (Math.floor(n / 100) % 10 ? 'yüz' : 'bin');
+  const unluler = son.match(/[aıouöüei]/g) ?? ['e'];
+  const kalin = 'aıou'.includes(unluler[unluler.length - 1]);
+  return `${yil}'${/[çfhkpsşt]$/.test(son) ? 't' : 'd'}${kalin ? 'a' : 'e'}n`;
+}
+
 export const tr = {
   dil: { ad: 'Türkçe', kisa: 'TR', obur: 'English', oburKisa: 'EN', degistir: 'Read in English' },
   site: {
@@ -23,12 +34,10 @@ export const tr = {
     altMenu: 'Alt menü',
     ozet: (n: number) => `${n} şiir; duygu, yer ve zaman üzerinden okunmak için.`,
     ilkSiir: 'İlk şiir:',
-    telif: (yillar: string, sair: string) => `© ${yillar} ${sair}. Şiirlerin tüm hakları saklıdır.`,
-    fotoNot: 'Fotoğraflar kendi lisanslarıyla kullanılıyor;',
-    kunyeler: 'künyeler',
+    // Telif ilk şiirin yılından başlar; bitiş yılı yazılmaz
+    telif: (yil: string, sair: string) => `© ${yildan(yil)} itibaren ${sair}. Şiirlerin tüm hakları saklıdır.`,
     haklar: 'Haklar',
     gizlilik: 'Gizlilik',
-    guncelleme: 'Son güncelleme',
     rozetBaslik: 'Bumba Life, bir Bumba Group kolu',
     rozetAlt: 'Bir Bumba Life ürünü',
   },
@@ -263,8 +272,12 @@ export const tr = {
   },
   liste: {
     baslik: 'Yeni şiir gelince haber ver',
-    aciklama: 'Yeni şiirler ve sitedeki yenilikler için e-posta listesine katılın.',
     eposta: 'E-posta adresiniz',
+    // Katıl'a basınca açılan onay penceresi (rıza kutusu burada, önceden işaretsiz)
+    onayBaslik: 'Listeye katılmadan önce',
+    onayMetni:
+      'Adresiniz Bumba Group’un ortak liste servisinde tutulur ve yalnızca yeni şiirleri ve sitedeki yenilikleri duyurmak için kullanılır. Önce bir onay e-postası gelir; adresiniz ancak oradaki bağlantıya tıklarsanız listeye eklenir. Her e-postadaki bağlantıyla tek tıkla çıkabilirsiniz.',
+    vazgec: 'Vazgeç',
     riza: '{aydinlatma} okudum, e-posta almayı kabul ediyorum.',
     aydinlatma: 'Aydınlatma metnini',
     katil: 'Katıl',

@@ -30,6 +30,8 @@ export function ortakSema(dil: Dil): Sema[] {
       url: tam(sayfaYolu('ana', dil)),
       description: metin(dil).site.aciklama,
       inLanguage: ['tr', 'en'],
+      // Sitenin son derlendiği gün (GEO: güncelleme tarihi; alt bilgide gösterilmiyor)
+      dateModified: new Date().toISOString().slice(0, 10),
       publisher: { '@id': `${KOK}/#kurulus` },
       potentialAction: {
         '@type': 'SearchAction',
