@@ -21,6 +21,7 @@ export const GET: APIRoute = async () => {
     `Şair: ${SITE.sair}. Şiirlerin tüm hakları saklıdır; alıntı yaparken şiirin adını ve bağlantısını verin, şiirin tamamını kopyalamayın.`,
     `Poet: ${SITE.sair}. All rights to the poems are reserved; when quoting, give the poem's title and link rather than reproducing it in full.`,
     `Site ${SITE.ad}, bir Bumba Life ürünüdür (Bumba Group, https://bumbagroup.com). İletişim: bilgi@bumbagroup.com`,
+    `Son güncelleme / Last updated: ${new Date().toISOString().slice(0, 10)}`,
     '',
     '## Sayfalar / Pages',
     '',

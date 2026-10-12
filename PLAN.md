@@ -173,7 +173,7 @@ Duygu sayfasına girildiğinde zemin bu renge doğru yavaşça kayar. Paletin hi
 ### 4.4 Okurla bağ (Faz 3, isteğe bağlı)
 
 - ~~**"Bu şiir bana … hissettirdi":**~~ Okur tek bir kelime ya da renk bırakır fikri. **Karar (Ekim 2026): yapılmayacak**; site statik kalır, okur notu ve onay paneli yok.
-- **E-posta listesi:** Bumba ortak liste servisiyle (alt bilgideki form, çift onay). Duyurular ortak servisten gider; site kendi başına e-posta göndermez. Aydınlatma metni ortak, sitenin gizlilik sayfası ona bağlanır.
+- **E-posta listesi:** Bumba ortak liste servisiyle (alt bilgideki form, çift onay; rıza Katıl'a basınca açılan pencerede verilir). Duyurular ortak servisten gider; site kendi başına e-posta göndermez. Aydınlatma metni ortak, sitenin gizlilik sayfası ona bağlanır.
 
 ### 4.5 Ağır şiirler için nazik bir not (şairin kararı)
 

@@ -32,11 +32,17 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   Sayfalar `Cache-Control: no-cache` ile gider ki eski HTML tarayıcıda takılı kalmasın.
 - Şiir sayfasında şiir **harf harf yazılarak** açılır (satır satır değil); hız duyguya göre.
 - Ana sayfada "Yazıldıkları yerler" ve "ya da niyet tut" satırı yok; duygu şeritleri dar (72rem) kalır.
-- Alt bilgi tek satır, üç sütun: solda telif, fotoğraf notu ve güncelleme tarihi; ortada e-posta listesi; sağda
-  Bumba rozeti. Gizlilik ve "Haklar" bağlantısı alt bilgide yok.
-- Hakkında'da "Fotoğraflar" ve "Gizlilik ve çerezler" düğmeyle açılan pencerelerde (`#fotograflar`,
-  `#gizlilik`); "Haklar" ve "Sık sorulanlar" aşağı açılır (`#haklar`, `#sorular`). `/gizlilik/` sayfası da
-  durur (KVKK bağlantıları için), metin tek yerden: `GizlilikMetni.astro`.
+- **Alt bilgi masaüstünde tek satır** (12 Ekim 2026): solda telif ("© 2008'den itibaren Antigoni. Şiirlerin tüm
+  hakları saklıdır."; ilk şiirin yılı, bitiş yılı yazılmaz), ortada e-posta listesi (başlık, adres, Katıl;
+  açıklama yok), sağda Bumba rozeti. Fotoğraf notu ve son güncelleme tarihi alt bilgide yok; güncelleme tarihi
+  makineler için JSON-LD `dateModified` ve llms.txt'de. Orta genişlikte iki satır, telefonda alt alta. Gizlilik ve
+  "Haklar" bağlantısı alt bilgide yok.
+- **E-posta listesinde rıza kutusu alt bilgide değil:** Katıl'a basınca açılan pencerede kısa aydınlatma özeti,
+  önceden işaretsiz rıza kutusu ve asıl Katıl düğmesi (`ListeFormu.astro`; Standartlar §6 böyle karşılanır).
+  JavaScript yoksa pencerenin içeriği formun altında açık durur, form yine çalışır.
+- Hakkında'da "Fotoğraflar", "Gizlilik ve çerezler", "Haklar" ve "Sık sorulanlar" düğmeyle açılan pencerelerde
+  (`#fotograflar`, `#gizlilik`, `#haklar`, `#sorular` adresleri pencereyi açar; JS yoksa içerik sayfada açık).
+  `/gizlilik/` sayfası da durur (KVKK bağlantıları için), metin tek yerden: `GizlilikMetni.astro`.
 - Şiir paylaşımı kendi menüsüyle: bağlantıyı kopyala, Facebook, Instagram (altında küçük not: bağlantı
   kopyalanır), WhatsApp, SMS, LinkedIn. Başka kanal eklenmez. Telefonda paylaş ve ortam sesi menüleri ekranın
   altından açılır (sayfa yana taşmaz).
@@ -125,7 +131,7 @@ eki, şiirlerde "· poem by Antigoni"):
 **Şemalar (JSON-LD, `src/lib/sema.ts`):** her sayfada Organization (parentOrganization: Bumba Group),
 WebSite (SearchAction → arama sayfası), Person (Antigoni); alt sayfalarda BreadcrumbList; şiirde
 CreativeWork (genre Şiir/Poetry, author, dateCreated, locationCreated, copyrightNotice); duygu, yer ve bütün
-şiirler sayfalarında CollectionPage; Hakkında'da FAQPage (sayfada görünen "Sık sorulanlar" ile aynı); ana
+şiirler sayfalarında CollectionPage; Hakkında'da FAQPage ("Sık sorulanlar" penceresindekiyle aynı); ana
 sayfada WebPage. Sosyal hesap yok, `sameAs` yok.
 
 **Kararlar:**
@@ -136,8 +142,9 @@ sayfada WebPage. Sosyal hesap yok, `sameAs` yok.
   hakları saklı olduğu için yalnız model eğitimi botları kapalı (GPTBot, ClaudeBot, Google-Extended,
   Applebot-Extended, CCBot, Meta-ExternalAgent); bu, yapay zekâ aramalarında görünürlüğü etkilemez.
 - `/llms.txt` derlemede üretilir (`src/pages/llms.txt.ts`): iki dilde özet, sayfalar, duygular, yerler, şiirler.
-- Ana sayfanın başında sitenin kısa özeti (`site.ozet`), Hakkında'da soru-cevap blokları, alt bilgide son
-  güncelleme tarihi (derleme günü).
+- Ana sayfanın başında sitenin kısa özeti (`site.ozet`), Hakkında'da soru-cevap blokları (Sık sorulanlar
+  penceresi). Son güncelleme tarihi (derleme günü) WebSite şemasında `dateModified` ve llms.txt'de; sahibinin
+  isteğiyle alt bilgide gösterilmiyor (12 Ekim 2026).
 - Paylaşım görselleri derlemede üretilir: `/og/<id>.jpg`, `/og/en/<id>.jpg`, `/og/site.jpg`, `/og/en/site.jpg`.
 
 ## Genel Standartlar

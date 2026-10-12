@@ -1,32 +1,20 @@
 ---
-// Sitenin alt bilgisi. Telif yılı ilk şiirin yılından başlar.
+// Sitenin alt bilgisi: masaüstünde tek satır. Solda telif (ilk şiirin yılından itibaren, bitiş yılı yok),
+// ortada e-posta listesi, sağda Bumba imzası. Güncelleme tarihi JSON-LD ve llms.txt'de (GEO), burada değil.
 import { SITE } from '../data/site';
 import ListeFormu from './ListeFormu.astro';
 import { tumSiirler } from '../lib/siirler';
-import { dilBul, metin, sayfaYolu, uzunTarihDil } from '../i18n';
+import { dilBul, metin } from '../i18n';
 
 const dil = dilBul(Astro.url);
 const m = metin(dil).alt;
 const tum = await tumSiirler();
-const ilk = tum.find((s) => s.data.tarih);
-const ilkYil = ilk?.data.tarih?.slice(0, 4);
-const buYil = String(new Date().getFullYear());
-const yillar = ilkYil && ilkYil !== buYil ? `${ilkYil}–${buYil}` : buYil;
-// Sitenin en son derlendiği gün (her yayında yenilenir)
-const bugun = new Date().toISOString().slice(0, 10);
+const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(new Date().getFullYear());
 ---
 
 <footer class="alt">
   <div class="alt-izgara">
-    <div class="alt-sol">
-      <p>{m.telif(yillar, SITE.sair)}</p>
-      <p>
-        {m.fotoNot} <a href={`${sayfaYolu('hakkinda', dil)}#fotograflar`}>{m.kunyeler}</a>.
-      </p>
-      <p>
-        {m.guncelleme}: <time datetime={bugun}>{uzunTarihDil(bugun, dil)}</time>.
-      </p>
-    </div>
+    <p class="alt-sol">{m.telif(ilkYil, SITE.sair)}</p>
     <div class="alt-orta">
       <ListeFormu />
     </div>
@@ -43,22 +31,23 @@ const bugun = new Date().toISOString().slice(0, 10);
 <style>
   .alt {
     margin-top: 3rem;
-    padding: 2.5rem var(--kenar) 2.5rem;
+    padding: 1.4rem var(--kenar);
     border-top: 1px solid var(--cizgi);
     color: var(--soluk);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
-  /* Tek satır: solda telif, ortada e-posta listesi, sağda imza */
+  /* Tek satır: solda telif, ortada e-posta listesi, sağda imza; yan sütunlar eşit, liste ortada durur */
   .alt-izgara {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr);
-    gap: 2rem 3rem;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 1rem 2rem;
     align-items: center;
-    max-width: 72rem;
+    max-width: 80rem;
     margin: 0 auto;
   }
-  .alt-sol p {
-    margin: 0 0 0.3rem;
+  .alt-sol {
+    margin: 0;
+    text-wrap: balance;
   }
   .alt-sag {
     justify-self: end;
@@ -68,10 +57,6 @@ const bugun = new Date().toISOString().slice(0, 10);
   }
   .alt a:hover {
     color: var(--yazi);
-  }
-  .alt-sol a {
-    text-decoration: underline;
-    text-decoration-color: var(--cizgi);
   }
   .bumba-imza {
     display: inline-flex;
@@ -85,14 +70,20 @@ const bugun = new Date().toISOString().slice(0, 10);
   :global([data-theme='gunduz']) .rozet-koyu {
     display: none;
   }
-  /* Telefonda alt alta: önce liste, sonra telif, en sonda imza */
-  @media (max-width: 52rem) {
+  /* Orta genişlikte iki satır: üstte liste, altta telif ve imza */
+  @media (max-width: 72rem) {
     .alt-izgara {
-      grid-template-columns: 1fr;
-      gap: 1.75rem;
+      grid-template-columns: minmax(0, 1fr) auto;
     }
     .alt-orta {
+      grid-column: 1 / -1;
       order: -1;
+    }
+  }
+  /* Telefonda alt alta: önce liste, sonra telif, en sonda imza */
+  @media (max-width: 40rem) {
+    .alt-izgara {
+      grid-template-columns: 1fr;
     }
     .alt-sag {
       justify-self: start;

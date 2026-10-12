@@ -20,8 +20,10 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. Altında İstanbul'un dışındaki yerler (İzmir, Marmaris Söğüt, Paris) için Paris'ten Marmaris'e uzanan ikinci bir harita. |
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |
 | `/fal/` | Şiir falı: fincanı kapat ya da duygu × yer çarkını çevir, bir şiir çıksın. |
-| `/hakkinda/` | Kitabın hikâyesi, renklerin şiirlerdeki kaynağı, imza; fotoğraf künyeleri ve gizlilik düğmeyle açılan pencerelerde, haklar ve sık sorulanlar aşağı açılır. |
+| `/hakkinda/` | Kitabın hikâyesi, renklerin şiirlerdeki kaynağı, imza; fotoğraf künyeleri, gizlilik, haklar ve sık sorulanlar düğmeyle açılan pencerelerde. |
 | `/admin/` | Şiir paneli: kod bilmeden şiir ekleme ve düzenleme (aşağıda). |
+
+Alt bilgi masaüstünde tek satırdır: solda telif, ortada e-posta listesi, sağda Bumba rozeti. Listeye katılmak isteyen adresini yazıp Katıl'a basar; açılan pencerede aydınlatma özetini okuyup rıza kutusunu işaretler ve orada katılır.
 
 Derleme sırasında her şiir için WhatsApp ve Instagram'da görünen bir önizleme görseli, şiirin fotoğrafıyla otomatik üretilir (`/og/<şiir>.jpg`). Mısra kartı ise okurun tarayıcısında çizilir; okur seçtiği mısraları şiirin fotoğrafının üstünde, hikâye boyutunda bir görsel olarak indirir ya da paylaşır.
 
