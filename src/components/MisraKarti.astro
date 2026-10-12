@@ -55,6 +55,8 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
 </dialog>
 
 <script>
+  import { DAMLA, DAMLA_YOLU, logoParcalari } from '../data/logo';
+
   const W = 1080;
   const H = 1920;
   const YAZI = '#f1eadf';
@@ -190,6 +192,22 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
     x.globalCompositeOperation = 'source-over';
   }
 
+  /** Yazı logosu: Fraunces 300; Peşinde'nin i'si noktasız, noktanın yerinde duygunun renginde bir damla */
+  function logoCiz(x: CanvasRenderingContext2D, ad: string, sol: number, taban: number, boyut: number, renk: string) {
+    const [bas, son] = logoParcalari(ad);
+    x.font = `300 ${boyut}px "Fraunces"`;
+    x.fillStyle = YAZI;
+    x.fillText(`${bas}ı${son}`, sol, taban);
+    const kenar = DAMLA.boy * boyut;
+    const orta = sol + x.measureText(bas).width + x.measureText('ı').width / 2;
+    x.save();
+    x.translate(orta - kenar / 2, taban - DAMLA.ust * boyut);
+    x.scale(kenar / 100, kenar / 100);
+    x.fillStyle = renk;
+    x.fill(new Path2D(DAMLA_YOLU));
+    x.restore();
+  }
+
   async function ciz(satirlar: string[]): Promise<Blob> {
     const tumMetin = satirlar.join(' ') + (veri.baslik ?? '') + (veri.sair ?? '') + (veri.site ?? '');
     const [img] = await Promise.all([
@@ -220,10 +238,9 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
 
     const SOL = 96;
     x.textBaseline = 'alphabetic';
-    x.fillStyle = YAZI;
+    logoCiz(x, veri.site ?? '', SOL, 150, 48, renk);
     x.font = '600 26px "Inter"';
     if ('letterSpacing' in x) (x as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '6px';
-    x.fillText((veri.site ?? '').toLocaleUpperCase('tr'), SOL, 150);
     x.textAlign = 'right';
     x.fillStyle = renk;
     x.fillText((veri.duygu ?? '').toLocaleUpperCase('tr'), W - SOL, 150);

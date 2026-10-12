@@ -53,6 +53,13 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   Segah). `public/muzik/<duygu>.mp3`, üretimi `scripts/muzik.py` (fluidsynth + FluidR3_GM, MIT; koma aralıkları
   perde bükmeyle). Açılınca hatırlanır, ortam sesi biraz kısılır.
 - Mum ışığı modu denendi, sahibi gereksiz buldu (9 Ekim 2026): kaldırıldı, geri eklenmez.
+- **Logo "Damla"** (12 Ekim 2026, sahibinin seçimi): "Duyguların Peşinde" Fraunces 300; adın tek noktası,
+  Peşinde'nin i'si, bir gözyaşı damlası (açılış dizesi "Şiir kitabım ağlıyor!"). Damla sayfanın duygusunun
+  renginde (`--damla`; duygusuz sayfada hüznün sarısı), tek renk baskıda mürekkep. Harf gerçek i kalır, noktası
+  CSS ile kırpılır, damla sözde öge (ekran okuyucu "Peşinde" okusun): `Logo.astro`, `.damla-i`, ölçüler
+  `src/data/logo.ts`. Tek başına damla küçük işarettir: koyu karede sarı damla (`favicon.svg`, uygulama
+  simgeleri; üretimi `node scripts/simgeler.mjs`). Üst şeritte, paylaşım görsellerinde, mısra kartında, kitabın
+  kapağında ve başlık sayfasında; kitabın sırtında yok (yedi renk noktası kalır).
 - **Okur notu yok** (9 Ekim 2026): okur şiire renk ya da kelime bırakmaz, şair onay vermez, şair için giriş/şifre
   yok. Site statik kalır; sunucu tarafı eklenmez.
 - **Kitap (basılı, A5) siteye konmaz:** saman kâğıt, iç sayfalar tek renk (siyah), yalnız kapak renkli. Sahibinin

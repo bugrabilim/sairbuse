@@ -6,6 +6,7 @@ import satori from 'satori';
 import sharp from 'sharp';
 import { SITE } from '../data/site';
 import { duyguAdi, type Duygu } from '../data/duygular';
+import { DAMLA, DAMLA_YOLU, logoParcalari } from '../data/logo';
 import { buyuk, type Dil } from '../i18n';
 import { anaDuygu, kitalar, sahneBasligi, type Siir } from './siirler';
 import { kunye, siirFotografi } from './foto';
@@ -108,6 +109,31 @@ function etiket(metin: string, renk = YAZI): Dugum {
   return h('div', { display: 'flex', fontFamily: INTER, fontWeight: 600, fontSize: 20, letterSpacing: 5, color: renk }, metin);
 }
 
+/** Logodaki ı ve noktasının yerindeki damla (src/data/logo.ts). Satır yüksekliği 1: taban çizgisi bilinen yerde. */
+function damlaliI(boyut: number, renk: string): Dugum {
+  const kenar = DAMLA.boy * boyut;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="${DAMLA_YOLU}" fill="${renk}"/></svg>`;
+  const damla = {
+    type: 'img',
+    props: {
+      src: `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`,
+      width: kenar,
+      height: kenar,
+      style: { position: 'absolute', top: (DAMLA.taban - DAMLA.ust) * boyut, left: '50%', marginLeft: -kenar / 2, width: kenar, height: kenar },
+    },
+  };
+  return h('div', { display: 'flex', position: 'relative', lineHeight: 1 }, ['ı', damla]);
+}
+
+/** Yazı logosu, Fraunces 300: önü ve arkası ile damlalı ı ("Peş" + ı + "nde") */
+function logoSatiri(bas: string, son: string, boyut: number, renk: string, harfAraligi = -0.01): Dugum {
+  return h(
+    'div',
+    { display: 'flex', fontFamily: FRAUNCES, fontWeight: 300, fontSize: boyut, lineHeight: 1, letterSpacing: harfAraligi * boyut },
+    [h('div', { display: 'flex' }, bas), damlaliI(boyut, renk), h('div', { display: 'flex' }, son)],
+  );
+}
+
 export async function siirGorseli(s: Siir, dil: Dil = 'tr'): Promise<Uint8Array> {
   const d = anaDuygu(s);
   const foto = siirFotografi(s);
@@ -129,10 +155,11 @@ export async function siirGorseli(s: Siir, dil: Dil = 'tr'): Promise<Uint8Array>
         backgroundImage: `linear-gradient(90deg, ${d.zeminGece}f2 0%, ${d.zeminGece}b3 45%, ${d.zeminGece}00 80%)`,
       },
       [
+        // Logo (damla şiirin duygusunun renginde) ve duygunun adı
         h('div', { display: 'flex', alignItems: 'center' }, [
-          etiket(SITE.ad.toLocaleUpperCase('tr')),
-          h('div', { display: 'flex', width: 12, height: 12, borderRadius: 6, background: d.nokta, margin: '0 16px', border: `1px solid ${YAZI}55` }),
-          etiket(buyuk(duyguAdi(d, dil), dil)),
+          logoSatiri(...logoParcalari(SITE.ad), 36, d.gece),
+          h('div', { display: 'flex', width: 1, height: 26, background: `${YAZI}55`, margin: '0 20px' }),
+          etiket(buyuk(duyguAdi(d, dil), dil), d.gece),
         ]),
         h('div', { display: 'flex', flexDirection: 'column', maxWidth: 760 }, [
           h(
@@ -193,9 +220,10 @@ export async function siteGorseli(acilis?: Siir, dil: Dil = 'tr'): Promise<Uint8
       },
       [
         etiket('ANTİGONİ · 2008–2021'),
+        // Logo iki satır; damla hüznün sarısı (açılış şiiri)
         h('div', { display: 'flex', flexDirection: 'column' }, [
-          h('div', { display: 'flex', fontFamily: FRAUNCES, fontWeight: 300, fontSize: 112, lineHeight: 0.95, letterSpacing: -3 }, 'Duyguların'),
-          h('div', { display: 'flex', fontFamily: FRAUNCES, fontStyle: 'italic', fontSize: 112, lineHeight: 1.05, letterSpacing: -3 }, 'Peşinde'),
+          h('div', { display: 'flex', fontFamily: FRAUNCES, fontWeight: 300, fontSize: 112, lineHeight: 1, letterSpacing: -0.015 * 112 }, 'Duyguların'),
+          h('div', { display: 'flex', marginTop: 4 }, [logoSatiri('Peş', 'nde', 112, '#ebcb52', -0.015)]),
           h(
             'div',
             { display: 'flex', fontFamily: FRAUNCES, fontStyle: 'italic', fontSize: 36, color: SOLUK, marginTop: 22 },
