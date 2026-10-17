@@ -107,7 +107,7 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   o da kalıcı). Ölçüm: `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' http://duygularinpesinde.bumba.tr/`.
   bumba.tr altındaki adreslerde www kullanılmaz; www.duygularinpesinde.bumba.tr'nin açılmaması beklenen durum.
 - Güvenlik başlıkları bu repoda, `nginx.conf` (yalnız server düzeyinde `add_header`).
-  **HSTS 8 Ekim 2026'da `max-age=86400` ile başladı; 15 Ekim 2026'dan sonra sorun yoksa `31536000` yapılacak.**
+  **HSTS `max-age=31536000` (1 yıl):** 8 Ekim 2026'da 1 günle başladı, sorunsuz geçen bir haftadan sonra 17 Ekim 2026'da 1 yıla çıktı.
   includeSubDomains ve preload kullanılmaz.
 - Umami: site kimliği `3cc5cb50-4663-4436-b371-92cc3feb723b`, `data-domains="duygularinpesinde.bumba.tr"`.
   Olaylar: `tema-degistir`, `dil-degistir`, `arama`, `liste-katil`, `duygu-sec`, `paylas`, `ortam-sesi`,
