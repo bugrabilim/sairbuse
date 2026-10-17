@@ -315,6 +315,11 @@ Kargayla
 - [x] Bumba Genel Standartlar 3.2: TR/EN, açık/koyu tema, arama, SEO/GEO, llms.txt, HSTS/CSP, gizlilik (CLAUDE.md)
 - [ ] Instagram hesabı ve mısra kartlarıyla düzenli paylaşım
 
+### Faz 3.5 — Mobil uygulama
+- [x] iPhone uygulaması (Capacitor, çevrimdışı, Günün şiiri bildirimi, iOS paylaşım ekranı); simülatör derlemesi CI'da (17 Ekim 2026)
+- [ ] App Store: API anahtarı ve sırlar (sahibi), TestFlight, inceleme, yayın (`uygulama/README.md`)
+- [ ] Google Play
+
 ### Faz 4 — Belki bir gün kitap
 - [ ] Basılı kitap, A5 (sahibinin seçimi, Ekim 2026): saman kâğıt, siyah beyaz fotoğraflar, renkli kapak; baskı dosyaları sitenin dışında üretilir, sitede yayımlanmaz. Seçimler yapıldı (Moda kapağı, ön kapağın içi boş, künye arka kapağın içinde, her şiirde fotoğraf ve başlık, içindekiler var, yıl ayracı yok, arka kapakta QR; sığan şiir fotoğrafıyla aynı sayfada, sığmayan karşısında, çok uzun olan iki sütun; künyeler tek sayfa; sesli şiirlerde "Sesli dinle" + QR kod); son hâl 9 Ekim 2026'da onaylandı (48 sayfa); `scripts/kitap/` ile üretiliyor, matbaa seçimi bekleniyor.
 

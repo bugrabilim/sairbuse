@@ -7,10 +7,18 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "uygulama": "PUBLIC_UYGULAMA=1 astro build && node scripts/uygulama/hazirla.mjs && cap sync ios"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/local-notifications": "^8.3.1",
+    "@capacitor/share": "^8.0.3",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4",
     "@fontsource/fraunces": "^5.3.0",
     "@fontsource/inter": "^5.3.0",
     "@fontsource/newsreader": "^5.3.0",
@@ -20,6 +28,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@capacitor/cli": "^8.5.3",
     "typescript": "^6.0.3"
   },
   "engines": {

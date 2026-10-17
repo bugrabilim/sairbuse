@@ -56,6 +56,7 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
 
 <script>
   import { DAMLA, DAMLA_YOLU, logoParcalari } from '../data/logo';
+  import { yerelUygulama } from '../data/uygulama';
 
   const W = 1080;
   const H = 1920;
@@ -305,7 +306,9 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
       gorsel.src = adres;
       indir.href = adres;
       indir.download = veri.dosya ?? 'misra.png';
-      if (paylasBtn) paylasBtn.hidden = !(navigator.canShare && navigator.canShare({ files: [dosya] }));
+      if (paylasBtn) paylasBtn.hidden = !yerelUygulama() && !(navigator.canShare && navigator.canShare({ files: [dosya] }));
+      // Uygulamada indirme bağlantısı çalışmaz; kaydetmek için paylaşım ekranındaki "Görüntüyü Kaydet" kullanılır
+      if (yerelUygulama()) indir.hidden = true;
       if (durum) durum.textContent = '';
       pencere.showModal();
     } catch {
@@ -315,8 +318,26 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
     }
   });
 
+  /** iOS uygulamasında kart önce telefonun geçici klasörüne yazılır, sonra paylaşım ekranı açılır */
+  async function yerelPaylas(f: File) {
+    const { Filesystem, Directory } = await import('@capacitor/filesystem');
+    const { Share } = await import('@capacitor/share');
+    const veri64 = await new Promise<string>((coz, red) => {
+      const okuyucu = new FileReader();
+      okuyucu.onload = () => coz(String(okuyucu.result).split(',')[1] ?? '');
+      okuyucu.onerror = () => red(okuyucu.error);
+      okuyucu.readAsDataURL(f);
+    });
+    const { uri } = await Filesystem.writeFile({ path: f.name, data: veri64, directory: Directory.Cache });
+    await Share.share({ files: [uri], url: `https://${veri.adres}` });
+  }
+
   paylasBtn?.addEventListener('click', async () => {
     if (!dosya) return;
+    if (yerelUygulama()) {
+      await yerelPaylas(dosya).catch(() => {});
+      return;
+    }
     try {
       await navigator.share({ files: [dosya], text: `https://${veri.adres}` });
     } catch {

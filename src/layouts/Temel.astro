@@ -18,6 +18,8 @@ import '@fontsource/inter/latin-ext-600.css';
 import '../styles/global.css';
 import AltBilgi from '../components/AltBilgi.astro';
 import Logo from '../components/Logo.astro';
+import UygulamaKopru from '../components/UygulamaKopru.astro';
+import { UYGULAMA } from '../data/uygulama';
 import { SITE } from '../data/site';
 import { DUYGULAR, duyguAdi, duyguStili, type Duygu } from '../data/duygular';
 import { DILLER, OG_YEREL, dilBul, duyguYolu, karsilik, kucuk, metin, sayfaYolu } from '../i18n';
@@ -145,7 +147,8 @@ const jsonLd = noindex
         if (secili && secili !== dil && !icerden) location.replace(oburYol + location.search + location.hash);
       })();
     </script>
-    <script defer src="https://istatistik.bumba.tr/script.js" data-website-id={umami} data-domains={SITE.alan}></script>
+    {/* Ziyaret sayacı yalnız sitede; iOS uygulaması istatistik tutmaz */}
+    {!UYGULAMA && <script defer src="https://istatistik.bumba.tr/script.js" data-website-id={umami} data-domains={SITE.alan} />}
   </head>
   <body class={govdeSinifi} style={duygu ? duyguStili(duygu) : undefined} data-duygu={duygu?.slug}>
     <a class="atla" href="#icerik">{m.ust.icerigeGec}</a>
@@ -204,6 +207,7 @@ const jsonLd = noindex
             <svg class="ikon-ay" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" /></svg>
             <span class="tema-yazi">{m.ust.gunduzeGec}</span>
           </button>
+          {UYGULAMA && <UygulamaKopru />}
         </div>
       </nav>
     </header>

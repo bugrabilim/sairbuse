@@ -1,6 +1,6 @@
 // Sekme ve uygulama simgeleri: koyu karede hüznün sarısı bir damla (logo "Damla", src/data/logo.ts).
 // Çalıştırma: node scripts/simgeler.mjs → public/favicon.svg, apple-touch-icon.png, icon-192.png,
-// icon-512.png, icon-maskable-512.png
+// icon-512.png, icon-maskable-512.png; iOS uygulamasının simgesi (1024, saydamlıksız) ve açılış görseli
 import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -38,4 +38,11 @@ const pngler = [
 for (const [ad, svg] of pngler) {
   await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(fileURLToPath(new URL(ad, hedef)));
 }
+
+// iOS uygulaması: App Store simgesi saydamlık içeremez; açılış ekranında koyu zeminde küçük bir damla
+const ios = new URL('../uygulama/ios/App/App/Assets.xcassets/', import.meta.url);
+const yaz = (svg, ad) => sharp(Buffer.from(svg)).flatten({ background: ZEMIN }).removeAlpha().png({ compressionLevel: 9 }).toFile(fileURLToPath(new URL(ad, ios)));
+await yaz(simge(1024, 0, 0.58), 'AppIcon.appiconset/AppIcon-512@2x.png');
+for (const ek of ['', '-1', '-2']) await yaz(simge(2732, 0, 0.07), `Splash.imageset/splash-2732x2732${ek}.png`);
+
 console.log('simgeler yazıldı:', ['favicon.svg', ...pngler.map(([ad]) => ad)].join(', '));

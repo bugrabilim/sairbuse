@@ -7,6 +7,8 @@ const SITE = 'https://duygularinpesinde.bumba.tr';
 
 export default defineConfig({
   site: SITE,
+  // iOS uygulaması ayrı klasöre derlenir (npm run uygulama); site dist/'e
+  outDir: process.env.PUBLIC_UYGULAMA === '1' ? './dist-uygulama' : './dist',
   integrations: [
     sitemap({
       // Hata sayfaları ve içerik paneli haritaya girmez

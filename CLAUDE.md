@@ -78,6 +78,15 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   giden QR kod durur (kendiliğinden, kayıt eklenince kitap da günceller).
   Üretim: `python3 scripts/kitap/kitap.py && node scripts/kitap/pdf.cjs` → `kitap-cikti/` (git'e girmez):
   `ic-prova.pdf` (saman zeminli, bakmak için), `ic-acik-sayfa.pdf` (açık sayfa görünümü: 2|3, 4|5 …), `ic-baski.pdf` (zeminsiz, matbaaya), `kapak.pdf` (dış açılım), `kapak-ic.pdf` (iç açılım).
+- **iPhone uygulaması** (17 Ekim 2026, sahibinin isteği; önce Apple, sonra Google Play): Capacitor 8, sitenin
+  derlenmiş hâli uygulamanın içinde (çevrimdışı). Paket kimliği `tr.bumba.duygularinpesinde`, yalnız iPhone,
+  dikey. `npm run uygulama` (PUBLIC_UYGULAMA=1 → `dist-uygulama/` → `cap sync ios`); iOS projesi `uygulama/ios/`.
+  Uygulamada: sayaç yok (veri toplanmaz), e-posta listesi siteyi Safari'de açar, paylaşım iOS'un kendi paylaşım
+  ekranıyla (sitedeki kanal menüsü kuralının uygulamadaki istisnası), menüde "Günün şiiri" yerel bildirimi
+  (09.00, telefonda zamanlanır, sunucu yok). Yeni şiir ya da düzeltme uygulamaya ancak yeni sürümle gelir.
+  Denetim: `.github/workflows/ios.yml` (simülatör derlemesi, her PR). Yayın: `ios-yayin.yml` elle tetiklenir,
+  App Store Connect API anahtarı ve sertifika anahtarı GitHub sırlarında (değerleri hiçbir yere yazılmaz).
+  Kurulum, mağaza metinleri, ekran görüntüleri: `uygulama/README.md`, `uygulama/magaza/`.
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 
@@ -197,3 +206,4 @@ veritabanı, kalıcı disk, zamanlanmış görev, Umami kaydı, ortak liste, e-p
 - Mobil uyum ve erişilebilirlik
 - Alt bilgide Bumba rozeti (birleştirmelerde kaybolmadı mı)
 - Push'lar toplu mu, derleme yalnız repodakiyle mi çalışıyor
+- iOS uygulaması: `npm run uygulama` derleniyor mu, uygulama kipindeki farklar (sayaç, liste, paylaşım) bozulmadı mı

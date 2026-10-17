@@ -15,7 +15,7 @@ const [rizaOnce, rizaSonra] = m.riza.split('{aydinlatma}');
 const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, hatalar: m.hatalar };
 ---
 
-<section class="liste-kutusu" aria-labelledby="liste-baslik">
+<section class="liste-kutusu" id="liste" aria-labelledby="liste-baslik">
   <h2 id="liste-baslik" class="liste-baslik">{m.baslik}</h2>
   <form class="liste-formu" action="https://bumbagroup.com/api/liste/katil" method="post" data-metin={JSON.stringify(yazilar)}>
     <input type="hidden" name="site" value={SITE.liste} />
