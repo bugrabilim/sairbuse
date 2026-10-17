@@ -22,7 +22,6 @@ jobs:
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
       PROJE: uygulama/ios/App/App.xcodeproj
-      ARSIV: ${{ runner.temp }}/App.xcarchive
     steps:
       - name: Anahtar denetimi
         run: |
@@ -42,6 +41,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/asc"
           printf '%s\n' "$ASC_KEY_P8" > "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
           echo "ASC_KEY_PATH=$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8" >> "$GITHUB_ENV"
+          echo "ARSIV=$RUNNER_TEMP/App.xcarchive" >> "$GITHUB_ENV"
           xcodebuild -version
       - name: Arşivle
         run: |
