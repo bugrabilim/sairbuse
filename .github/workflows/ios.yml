@@ -1,0 +1,52 @@
+name: iOS
+
+# iOS uygulamasının derlendiğini denetler: site uygulama kipinde derlenir, iOS projesine kopyalanır ve
+# simülatör için imzasız derlenir; sonra simülatörde açılıp ekran görüntüsü alınır (indirilebilir çıktı).
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'uygulama/**'
+      - 'capacitor.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/uygulama/**'
+      - '.github/workflows/ios.yml'
+  workflow_dispatch:
+
+jobs:
+  simulator:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Site (uygulama kipi) ve iOS projesine kopyalama
+        run: npm run uygulama
+      - name: Simülatör için derleme (imzasız)
+        run: |
+          xcodebuild -project uygulama/ios/App/App.xcodeproj -scheme App -configuration Debug \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -n 40
+          test -d build/Build/Products/Debug-iphonesimulator/App.app
+      - name: Simülatörde aç ve ekran görüntüsü al
+        run: |
+          set -e
+          AYGIT=$(xcrun simctl list devices available | grep -E 'iPhone 1[5-7] Pro Max' | head -1 | sed -E 's/.*\(([0-9A-F-]{36})\).*/\1/')
+          echo "aygıt: $AYGIT"
+          xcrun simctl boot "$AYGIT"
+          xcrun simctl bootstatus "$AYGIT" -b
+          xcrun simctl install "$AYGIT" build/Build/Products/Debug-iphonesimulator/App.app
+          xcrun simctl launch "$AYGIT" tr.bumba.duygularinpesinde
+          sleep 15
+          mkdir -p ekran
+          xcrun simctl io "$AYGIT" screenshot ekran/ana-sayfa.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-ekran
+          path: ekran/

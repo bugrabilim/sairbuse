@@ -9,3 +9,6 @@ dist/
 # Basılı kitabın çıktıları (sitede yayımlanmaz)
 kitap-cikti/
 __pycache__/
+
+# iOS uygulamasına gömülen site (npm run uygulama)
+dist-uygulama/

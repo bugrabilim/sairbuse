@@ -4,10 +4,12 @@
 import { SITE } from '../data/site';
 import ListeFormu from './ListeFormu.astro';
 import { tumSiirler } from '../lib/siirler';
-import { dilBul, metin } from '../i18n';
+import { dilBul, metin, sayfaYolu } from '../i18n';
+import { SITE_KOK, UYGULAMA } from '../data/uygulama';
 
 const dil = dilBul(Astro.url);
 const m = metin(dil).alt;
+const mu = metin(dil).uygulama;
 const tum = await tumSiirler();
 const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(new Date().getFullYear());
 ---
@@ -16,7 +18,8 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
   <div class="alt-izgara">
     <p class="alt-sol">{m.telif(ilkYil, SITE.sair)}</p>
     <div class="alt-orta">
-      <ListeFormu />
+      {/* Uygulamada liste formu yok: katılmak için site Safari'de açılır (rıza akışı tek yerde kalır) */}
+      {UYGULAMA ? <a class="liste-site" href={`${SITE_KOK}${sayfaYolu('ana', dil)}#liste`}>{mu.listeyeKatil}</a> : <ListeFormu />}
     </div>
     <div class="alt-sag">
       {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}
@@ -31,7 +34,7 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
 <style>
   .alt {
     margin-top: 3rem;
-    padding: 1.4rem var(--kenar);
+    padding: 1.4rem var(--kenar) max(1.4rem, env(safe-area-inset-bottom));
     border-top: 1px solid var(--cizgi);
     color: var(--soluk);
     font-size: 0.85rem;
@@ -57,6 +60,12 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
   }
   .alt a:hover {
     color: var(--yazi);
+  }
+  .liste-site {
+    font-family: var(--serif-baslik);
+    font-size: 1.1rem;
+    color: var(--yazi) !important;
+    text-decoration: none;
   }
   .bumba-imza {
     display: inline-flex;

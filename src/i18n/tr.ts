@@ -270,6 +270,14 @@ export const tr = {
     turler: { siir: 'şiir', duygu: 'duygu', yer: 'yer', sayfa: 'sayfa' } as Record<string, string>,
     jsYok: 'Arama için tarayıcında JavaScript açık olmalı. Bu arada {siirler} göz atabilirsin.',
   },
+  // iOS uygulamasına özgü metinler
+  uygulama: {
+    gununSiiri: 'Günün şiiri',
+    acik: 'her sabah 09.00',
+    kapali: 'kapalı',
+    izinYok: 'bildirim izni yok; Ayarlar’dan açabilirsiniz',
+    listeyeKatil: 'E-posta listesine sitede katılın ↗',
+  },
   liste: {
     baslik: 'Yeni şiir gelince haber ver',
     eposta: 'E-posta adresiniz',
@@ -295,7 +303,7 @@ export const tr = {
     baslik: 'Gizlilik ve çerezler',
     aciklama: 'Duyguların Peşinde hangi verileri işler, hangilerini işlemez: istatistik, e-posta listesi, çerezler ve haklarınız.',
     etiket: 'KVKK aydınlatma metni',
-    guncelleme: 'Son güncelleme: 8 Ekim 2026',
+    guncelleme: 'Son güncelleme: 17 Ekim 2026',
     bolumler: [
       {
         baslik: 'Veri sorumlusu',
@@ -324,6 +332,10 @@ export const tr = {
       {
         baslik: 'Dışarıdan gelen içerik',
         metin: 'Yazı tipleri ve fotoğraflar sitenin kendi sunucusundan gelir. Alt bilgideki Bumba rozeti bumbagroup.com’dan yüklenir; bu sırada tarayıcınız o sunucuya bağlanır.',
+      },
+      {
+        baslik: 'iPhone uygulaması',
+        metin: 'Uygulama şiirleri, fotoğrafları ve sesleri telefonun içinde taşır; ziyaret istatistiği tutmaz ve kişisel veri toplamaz. "Günün şiiri" bildirimini açarsanız bildirimler telefonda zamanlanır, sunucuya bilgi gitmez. E-posta listesine katılmak için uygulama bu siteyi açar.',
       },
       {
         baslik: 'Haklarınız',

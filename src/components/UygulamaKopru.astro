@@ -1,0 +1,133 @@
+---
+// Yalnız iOS uygulamasında (PUBLIC_UYGULAMA=1) menünün araçlarına eklenir: "Günün şiiri" bildirimi düğmesi ve
+// uygulamanın yerel parçalarıyla köprü (durum çubuğu, bildirime dokununca şiirin açılması).
+// Bildirimler telefonda zamanlanır, sunucu yok: her sabah 09.00'da bir şiir; o gün yazılmış şiir varsa o.
+import { metin, dilBul } from '../i18n';
+
+const m = metin(dilBul(Astro.url)).uygulama;
+const yazilar = { baslik: m.gununSiiri, acik: m.acik, kapali: m.kapali, izinYok: m.izinYok };
+---
+
+<button class="menu-arac gunun-siiri" type="button" aria-pressed="false" hidden data-metin={JSON.stringify(yazilar)}>
+  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" /><path d="M10 20a2 2 0 0 0 4 0" /></svg>
+  {m.gununSiiri}: <span class="gunun-siiri-durum">{m.kapali}</span>
+</button>
+
+<script>
+  import { Capacitor } from '@capacitor/core';
+  import { LocalNotifications, type LocalNotificationSchema } from '@capacitor/local-notifications';
+  import { StatusBar, Style } from '@capacitor/status-bar';
+
+  type Kayit = { tur: string; baslik: Record<string, string>; href: Record<string, string>; satirlar: string[]; tarih?: string | null };
+
+  const ANAHTAR = 'gunun-siiri';
+  const SON_PLAN = 'gunun-siiri-plan';
+  const GUN = 60; // iOS en çok 64 bekleyen bildirim tutar
+  const dugme = document.querySelector<HTMLButtonElement>('.gunun-siiri');
+  const durum = dugme?.querySelector<HTMLElement>('.gunun-siiri-durum');
+  const M = JSON.parse(dugme?.dataset.metin ?? '{}');
+  const dil = document.documentElement.lang === 'en' ? 'en' : 'tr';
+
+  const oku = (k: string) => {
+    try {
+      return localStorage.getItem(k);
+    } catch {
+      return null;
+    }
+  };
+  const yaz = (k: string, v: string | null) => {
+    try {
+      if (v === null) localStorage.removeItem(k);
+      else localStorage.setItem(k, v);
+    } catch {
+      /* depo kapalı */
+    }
+  };
+  const acikMi = () => oku(ANAHTAR) === '1';
+  function goster() {
+    if (!dugme || !durum) return;
+    durum.textContent = acikMi() ? M.acik : M.kapali;
+    dugme.setAttribute('aria-pressed', String(acikMi()));
+  }
+
+  const iki = (n: number) => String(n).padStart(2, '0');
+  /** O günün şiiri: aynı gün (ay-gün) yazılmış şiir varsa o, yoksa günlere göre sırayla */
+  function gununSiiri(siirler: Kayit[], gun: Date): Kayit {
+    const ayGun = `${iki(gun.getMonth() + 1)}-${iki(gun.getDate())}`;
+    const ayni = siirler.filter((s) => s.tarih?.slice(5) === ayGun);
+    if (ayni.length) return ayni[gun.getFullYear() % ayni.length];
+    const sira = Math.floor(Date.UTC(gun.getFullYear(), gun.getMonth(), gun.getDate()) / 864e5);
+    return siirler[sira % siirler.length];
+  }
+
+  async function iptal() {
+    const bekleyen = await LocalNotifications.getPending();
+    if (bekleyen.notifications.length) await LocalNotifications.cancel({ notifications: bekleyen.notifications.map((n) => ({ id: n.id })) });
+  }
+
+  /** Önümüzdeki 60 sabahı yeniden planlar */
+  async function planla() {
+    const kayitlar: Kayit[] = await (await fetch('/arama.json')).json();
+    const siirler = kayitlar.filter((k) => k.tur === 'siir');
+    if (!siirler.length) return;
+    await iptal();
+    const ilk = new Date();
+    const simdi = ilk.getTime();
+    ilk.setHours(9, 0, 0, 0);
+    if (ilk.getTime() <= simdi) ilk.setDate(ilk.getDate() + 1);
+    const bildirimler: LocalNotificationSchema[] = [];
+    for (let i = 0; i < GUN; i++) {
+      const gun = new Date(ilk);
+      gun.setDate(ilk.getDate() + i);
+      const s = gununSiiri(siirler, gun);
+      const ad = s.baslik[dil];
+      const ilkMisra = s.satirlar[0] ?? ad;
+      bildirimler.push({
+        id: i + 1,
+        title: M.baslik,
+        body: ilkMisra === ad ? `“${ilkMisra}”` : `“${ilkMisra}” — ${ad}`,
+        schedule: { at: gun, allowWhileIdle: true },
+        extra: { yol: s.href[dil] },
+      });
+    }
+    await LocalNotifications.schedule({ notifications: bildirimler });
+    yaz(SON_PLAN, new Date().toISOString().slice(0, 10));
+  }
+
+  if (Capacitor.isNativePlatform()) {
+    if (dugme) dugme.hidden = false;
+    goster();
+    StatusBar.setStyle({ style: Style.Dark }).catch(() => {});
+    // Bildirime dokununca o günün şiiri açılır
+    LocalNotifications.addListener('localNotificationActionPerformed', (e) => {
+      const yol = e.notification.extra?.yol;
+      if (typeof yol === 'string' && yol.startsWith('/')) location.href = yol;
+    });
+    // Açıksa günde bir kez önümüzdeki günleri tazele (her sayfa açılışında değil)
+    if (acikMi() && oku(SON_PLAN) !== new Date().toISOString().slice(0, 10)) planla().catch(() => {});
+
+    dugme?.addEventListener('click', async () => {
+      if (acikMi()) {
+        yaz(ANAHTAR, null);
+        await iptal().catch(() => {});
+        goster();
+        return;
+      }
+      let izin = await LocalNotifications.checkPermissions();
+      if (izin.display !== 'granted') izin = await LocalNotifications.requestPermissions();
+      if (izin.display !== 'granted') {
+        if (durum) durum.textContent = M.izinYok;
+        return;
+      }
+      yaz(ANAHTAR, '1');
+      await planla().catch(() => {});
+      goster();
+    });
+  }
+</script>
+
+<style>
+  .gunun-siiri[hidden] {
+    display: none;
+  }
+</style>

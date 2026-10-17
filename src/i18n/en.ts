@@ -260,6 +260,13 @@ export const en: Metin = {
     turler: { siir: 'poem', duygu: 'emotion', yer: 'place', sayfa: 'page' },
     jsYok: 'Search needs JavaScript turned on in your browser. Meanwhile you can browse {siirler}.',
   },
+  uygulama: {
+    gununSiiri: 'Poem of the day',
+    acik: 'every morning at 9:00',
+    kapali: 'off',
+    izinYok: 'notifications are off; turn them on in Settings',
+    listeyeKatil: 'Join the mailing list on the website ↗',
+  },
   liste: {
     baslik: 'Tell me when a new poem arrives',
     eposta: 'Your email address',
@@ -284,7 +291,7 @@ export const en: Metin = {
     baslik: 'Privacy and cookies',
     aciklama: 'What data Duyguların Peşinde processes and what it doesn’t: statistics, the mailing list, cookies and your rights.',
     etiket: 'Privacy notice (KVKK)',
-    guncelleme: 'Last updated: 8 October 2026',
+    guncelleme: 'Last updated: 17 October 2026',
     bolumler: [
       {
         baslik: 'Data controller',
@@ -313,6 +320,10 @@ export const en: Metin = {
       {
         baslik: 'Content from elsewhere',
         metin: 'Fonts and photographs are served from the site’s own server. The Bumba badge in the footer is loaded from bumbagroup.com, so your browser connects to that server.',
+      },
+      {
+        baslik: 'iPhone app',
+        metin: 'The app carries the poems, photographs and sounds inside the phone; it keeps no visit statistics and collects no personal data. If you turn on “Poem of the day”, the notifications are scheduled on the phone and nothing is sent to a server. To join the mailing list, the app opens this website.',
       },
       {
         baslik: 'Your rights',

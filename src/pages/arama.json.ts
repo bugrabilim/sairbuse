@@ -20,6 +20,7 @@ export const GET: APIRoute = async () => {
         alt: iki((dil) => [imza(s, dil), duyguAdi(d, dil)].filter(Boolean).join(' · ')),
         href: iki((dil) => siirYolu(s, dil)),
         renk: d.nokta,
+        tarih: s.data.tarih ?? null,
         satirlar: kitalar(s).flat(),
         // aranan metin: ad, şiirin tamamı, yer, tarih, duygular (iki dilde)
         metin: [

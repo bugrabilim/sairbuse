@@ -8,3 +8,6 @@ dist
 kaynak
 *.md
 !src/content/**/*.md
+dist-uygulama
+uygulama
+kitap-cikti
