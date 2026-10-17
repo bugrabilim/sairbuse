@@ -1,26 +1,32 @@
 name: iOS yayın (TestFlight)
 
-# Elle tetiklenir: uygulamayı App Store için imzalar ve App Store Connect'e yükler. Yükleme bitince sürüm
-# TestFlight'ta görünür; App Store'a gönderme App Store Connect'ten yapılır. Gereken sırlar ve ilk kurulum:
-# uygulama/README.md. Mac gerekmez: imzalama App Store Connect API anahtarıyla bu makinede yapılır.
+# Elle tetiklenir: uygulamayı imzalayıp App Store Connect'e yükler; yapı TestFlight'ta görünür, App Store'a
+# gönderme App Store Connect'ten yapılır. Saat Tarih (bugrabilim/datetimehour) ile aynı yol: sertifika ve
+# profil depoda ya da sırlarda yok. Arşiv imzasız alınır (geliştirme imzası kayıtlı cihaz ister, hesapta cihaz
+# yok); dağıtım imzasını dışa aktarımda Xcode'un bulut imzalaması App Store Connect API anahtarıyla atar.
+# Gereken sırlar: ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8 (uygulama/README.md).
 on:
   workflow_dispatch:
 
-env:
-  PAKET: tr.bumba.duygularinpesinde
-  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-  APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
-  APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
-  CERTIFICATE_PRIVATE_KEY: ${{ secrets.CERTIFICATE_PRIVATE_KEY }}
+concurrency:
+  group: ios-yayin
+  cancel-in-progress: false
 
 jobs:
   testflight:
+    name: TestFlight'a yükle
     runs-on: macos-15
     timeout-minutes: 60
+    env:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+      PROJE: uygulama/ios/App/App.xcodeproj
+      ARSIV: ${{ runner.temp }}/App.xcarchive
     steps:
-      - name: Sırlar tanımlı mı
+      - name: Anahtar denetimi
         run: |
-          for s in APP_STORE_CONNECT_ISSUER_ID APP_STORE_CONNECT_KEY_IDENTIFIER APP_STORE_CONNECT_PRIVATE_KEY CERTIFICATE_PRIVATE_KEY; do
+          for s in ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_P8; do
             if [ -z "${!s}" ]; then echo "::error::$s sırrı tanımlı değil (uygulama/README.md)"; exit 1; fi
           done
       - uses: actions/checkout@v5
@@ -31,28 +37,32 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - name: Site (uygulama kipi) ve iOS projesine kopyalama
         run: npm run uygulama
-      - name: İmzalama araçları
-        run: pip3 install --break-system-packages codemagic-cli-tools
-      - name: Paket kimliği, sertifika ve profil
+      - name: API anahtarı
         run: |
-          set -e
-          keychain initialize
-          if ! app-store-connect bundle-ids list --bundle-id-identifier "$PAKET" --strict-match-identifier | grep -q "$PAKET"; then
-            app-store-connect bundle-ids create "$PAKET" --name "Duygularin Pesinde" --platform IOS
-          fi
-          app-store-connect fetch-signing-files "$PAKET" --platform IOS --type IOS_APP_STORE --create \
-            --certificate-key=@env:CERTIFICATE_PRIVATE_KEY
-          keychain add-certificates
-          xcode-project use-profiles --project uygulama/ios/App/App.xcodeproj
-      - name: Yapı numarası
-        run: sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = ${{ github.run_number }};/" uygulama/ios/App/App.xcodeproj/project.pbxproj
-      - name: Arşiv ve ipa
-        run: xcode-project build-ipa --project uygulama/ios/App/App.xcodeproj --scheme App
-      - name: App Store Connect'e yükleme
-        run: app-store-connect publish --path "$(ls build/ios/ipa/*.ipa | head -1)"
-      - uses: actions/upload-artifact@v4
+          mkdir -p "$RUNNER_TEMP/asc"
+          printf '%s\n' "$ASC_KEY_P8" > "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
+          echo "ASC_KEY_PATH=$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8" >> "$GITHUB_ENV"
+          xcodebuild -version
+      - name: Arşivle
+        run: |
+          xcodebuild -project "$PROJE" -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$ARSIV" \
+            CODE_SIGNING_ALLOWED=NO CURRENT_PROJECT_VERSION=${{ github.run_number }} -quiet archive
+      - name: Geçici imza
+        # Dağıtım imzası mevcut imzanın üstüne atılır; imzasız arşivde önce gömülü çerçeveler (Capacitor),
+        # sonra uygulama geçici (ad hoc) imzalanır. Uygulamanın ek yetkisi (entitlement) yok.
+        run: |
+          APP="$ARSIV/Products/Applications/App.app"
+          for X in "$APP"/Frameworks/*; do [ -e "$X" ] && codesign --force --sign - "$X"; done
+          codesign --force --sign - "$APP"
+          codesign -dv "$APP"
+      - name: Yükle
+        run: |
+          xcodebuild -exportArchive -archivePath "$ARSIV" \
+            -exportOptionsPlist uygulama/ios/ExportOptions.plist -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+          echo "Yüklenen yapı numarası: ${{ github.run_number }}"
+      - name: Anahtarı sil
         if: always()
-        with:
-          name: ios-ipa
-          path: build/ios/ipa/
-          if-no-files-found: ignore
+        run: rm -rf "$RUNNER_TEMP/asc"

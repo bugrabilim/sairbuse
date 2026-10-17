@@ -39,18 +39,16 @@ ekran görüntüsünü indirilebilir çıktı olarak bırakır (Actions → iOS 
    ad "Duyguların Peşinde", ana dil Türkçe, paket kimliği yukarıdaki, SKU `duygularinpesinde-ios`, erişim tam.
    (Ad başka bir uygulamada kullanılıyorsa App Store kabul etmez; o zaman "Duyguların Peşinde · Şiirler" gibi.)
 3. **API anahtarı:** App Store Connect → Kullanıcılar ve Erişim → Entegrasyonlar → App Store Connect API →
-   Ekip Anahtarları → **+** : ad "GitHub", erişim **Admin** (sertifika ve profil oluşturabilmesi için).
-   **Issuer ID** ve **Key ID**'yi not edin, `.p8` dosyasını indirin (yalnız bir kez indirilebilir).
-4. **Sertifika anahtarı:** dağıtım sertifikasının özel anahtarı. Bir terminalde (Mac/Linux; Windows'ta Git Bash)
-   `ssh-keygen -t rsa -b 2048 -m PEM -f sertifika_anahtari -q -N ""` çalıştırın; `sertifika_anahtari` dosyası
-   (`.pub` olmayan) anahtardır. Bu dosyayı saklayın: her yayında aynı sertifika bununla kullanılır.
-5. **GitHub sırları:** https://github.com/bugrabilim/sairbuse/settings/secrets/actions → New repository secret:
+   Ekip Anahtarları. Saat Tarih için oluşturulan anahtar burada da kullanılabilir (aynı ekip). Yeni anahtar
+   gerekirse **+** : erişim **Admin** (bulut imzalama ve profil için). **Issuer ID** ve **Key ID**'yi not edin,
+   `.p8` dosyasını indirin (yalnız bir kez indirilebilir).
+4. **GitHub sırları:** https://github.com/bugrabilim/sairbuse/settings/secrets/actions → New repository secret
+   (Saat Tarih'tekiyle aynı adlar ve aynı değerler):
    | Ad | Değer |
    |---|---|
-   | `APP_STORE_CONNECT_ISSUER_ID` | Issuer ID |
-   | `APP_STORE_CONNECT_KEY_IDENTIFIER` | Key ID |
-   | `APP_STORE_CONNECT_PRIVATE_KEY` | `.p8` dosyasının tamamı (BEGIN/END satırlarıyla) |
-   | `CERTIFICATE_PRIVATE_KEY` | `sertifika_anahtari` dosyasının tamamı |
+   | `ASC_KEY_ID` | Key ID |
+   | `ASC_ISSUER_ID` | Issuer ID |
+   | `ASC_KEY_P8` | `.p8` dosyasının tamamı (BEGIN/END satırlarıyla) |
 
    Bu değerler kimseyle (Claude dahil) paylaşılmaz, yalnız GitHub'a girilir.
 
@@ -58,6 +56,9 @@ ekran görüntüsünü indirilebilir çıktı olarak bırakır (Actions → iOS 
 
 1. GitHub → Actions → **iOS yayın (TestFlight)** → Run workflow (dal: `main`). İş akışı uygulamayı derler,
    imzalar ve App Store Connect'e yükler (~15–20 dk). Yapı numarası iş akışının sıra numarasıdır.
+   İmzalama Saat Tarih'teki gibi bulut imzalamayla: sertifika ya da `.p12` yok. Arşiv imzasız alınır,
+   `xcodebuild -exportArchive -allowProvisioningUpdates` API anahtarıyla dağıtım imzasını atıp yükler
+   (`ExportOptions.plist`, ekip `3J9XN2P93D`).
 2. Yükleme işlenince (birkaç dakika–yarım saat) App Store Connect → TestFlight'ta görünür. iPhone'a TestFlight
    uygulamasını kurup kendinizi iç test kullanıcısı olarak ekleyin ve deneyin.
 3. App Store Connect → uygulama → iOS sürümü 1.0: `magaza/bilgiler.md`'deki metinleri girin, `magaza/ekran/`'daki

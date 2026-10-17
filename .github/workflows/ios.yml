@@ -46,6 +46,18 @@ jobs:
           sleep 15
           mkdir -p ekran
           xcrun simctl io "$AYGIT" screenshot ekran/ana-sayfa.png
+      - name: Yayın arşivi (imzasız) ve geçici imza
+        # ios-yayin.yml'deki adımların anahtarsız kısmı: aygıt için Release arşivi ve ad hoc imza
+        run: |
+          set -e
+          ARSIV="$RUNNER_TEMP/App.xcarchive"
+          xcodebuild -project uygulama/ios/App/App.xcodeproj -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$ARSIV" CODE_SIGNING_ALLOWED=NO -quiet archive
+          APP="$ARSIV/Products/Applications/App.app"
+          for X in "$APP"/Frameworks/*; do [ -e "$X" ] && codesign --force --sign - "$X"; done
+          codesign --force --sign - "$APP"
+          codesign --verify --deep --strict "$APP"
+          ls "$APP/Frameworks" || true
       - uses: actions/upload-artifact@v4
         with:
           name: ios-simulator-ekran
