@@ -84,8 +84,10 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   Uygulamada: sayaç yok (veri toplanmaz), e-posta listesi siteyi Safari'de açar, paylaşım iOS'un kendi paylaşım
   ekranıyla (sitedeki kanal menüsü kuralının uygulamadaki istisnası), menüde "Günün şiiri" yerel bildirimi
   (09.00, telefonda zamanlanır, sunucu yok). Yeni şiir ya da düzeltme uygulamaya ancak yeni sürümle gelir.
-  Denetim: `.github/workflows/ios.yml` (simülatör derlemesi, her PR). Yayın: `ios-yayin.yml` elle tetiklenir,
-  App Store Connect API anahtarı ve sertifika anahtarı GitHub sırlarında (değerleri hiçbir yere yazılmaz).
+  Denetim: `.github/workflows/ios.yml` (simülatör derlemesi, her PR). Yayın: `ios-yayin.yml` elle tetiklenir;
+  Saat Tarih'teki gibi bulut imzalama (sertifika ya da .p12 yok; imzasız arşiv, `-exportArchive
+  -allowProvisioningUpdates`, `uygulama/ios/ExportOptions.plist`). Sırlar `ASC_KEY_ID`, `ASC_ISSUER_ID`,
+  `ASC_KEY_P8` GitHub'da (değerleri hiçbir yere yazılmaz).
   Kurulum, mağaza metinleri, ekran görüntüleri: `uygulama/README.md`, `uygulama/magaza/`.
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
