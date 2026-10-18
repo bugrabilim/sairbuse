@@ -1,0 +1,63 @@
+name: Android
+
+# Android uygulamasının derlendiğini ve çalıştığını denetler: site uygulama kipinde derlenir, Android projesine
+# kopyalanır, hata ayıklama APK'sı üretilir; emülatörde açılıp WebView'de ana sayfa, şiir sayfası (dizin yönlendirici),
+# 404 ve ortam sesi denenir (scripts/uygulama/android-dene.*). APK ve ekran görüntüleri indirilebilir çıktı.
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'uygulama/android/**'
+      - 'capacitor.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/uygulama/**'
+      - 'scripts/simgeler.mjs'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+
+jobs:
+  emulator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci --no-audit --no-fund
+      - name: Site (uygulama kipi) ve Android projesine kopyalama
+        run: npm run uygulama:android
+      - name: Hata ayıklama APK'sı
+        working-directory: uygulama/android
+        run: ./gradlew --no-daemon assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: uygulama/android/app/build/outputs/apk/debug/app-debug.apk
+      - name: KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Emülatörde deneme
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          disable-animations: true
+          script: bash scripts/uygulama/android-dene.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-emulator-ekran
+          path: ekran/
+          if-no-files-found: ignore

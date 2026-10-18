@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Site (uygulama kipi) ve iOS projesine kopyalama
-        run: npm run uygulama
+        run: npm run uygulama:ios
       - name: Xcode 26
         # App Store Connect yalnız iOS 26 SDK'sıyla (Xcode 26) derlenmiş yapıları kabul ediyor; beta Xcode da kabul edilmez
         run: |
