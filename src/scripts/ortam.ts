@@ -3,16 +3,9 @@
 // src/data/ortam-sesleri.ts dosyasında. Dosya yalnız okur o sesi seçince indirilir.
 // Kayıt sona yaklaşınca bir sonraki kopya birkaç saniyelik çapraz geçişle başlar, dikiş duyulmaz.
 import type { Ortam } from '../data/ortam-sesleri';
-import { yerelUygulama } from '../data/uygulama';
 export type { Ortam };
-
-/** iPhone sessiz moddayken Web Audio susar ("Sesli dinle"deki <audio> çalmaya devam eder). Ses oturumu
- *  'playback' olunca ortam sesi ve fon müziği sessiz modda da duyulur (Audio Session API, iOS 16.4+).
- *  Sitede yalnız okur sesi kendisi seçince; uygulamada her zaman (varsayılan açık ortam sesi duyulsun). */
-function sesOturumu(secildi: boolean) {
-  const o = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
-  if (o && (secildi || yerelUygulama())) o.type = 'playback';
-}
+// iPhone sessiz moddayken ortam sesi ve fon müziği (Web Audio) susar; bu bilerek böyle (18 Ekim 2026).
+// "Sesli dinle" okurun bastığı bir oynatıcı (<audio>) olduğu için sessiz modda da çalar.
 
 /** Vapurda arada bir çalan düdük */
 const DUDUK = '/ortam/vapur-duduk.mp3';
@@ -110,9 +103,8 @@ function arada(ctx: AudioContext, tampon: AudioBuffer, cikis: AudioNode, seviye:
   };
 }
 
-export async function baslat(tur: Ortam, secildi = false) {
+export async function baslat(tur: Ortam) {
   // Bağlam dokunuşun içinde kurulup açılmalı (iOS); indirme ondan sonra
-  sesOturumu(secildi);
   baglam ??= new AudioContext();
   const ctx = baglam;
   const acilis = ctx.resume();
@@ -185,8 +177,7 @@ let muzik: GainNode | null = null;
 let muzikDurdur: (() => void) | null = null;
 let muzikSira = 0;
 
-export async function muzikBaslat(duygu: string, secildi = false) {
-  sesOturumu(secildi);
+export async function muzikBaslat(duygu: string) {
   baglam ??= new AudioContext();
   const ctx = baglam;
   const acilis = ctx.resume();
