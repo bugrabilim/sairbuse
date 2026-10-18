@@ -31,9 +31,11 @@ const tamponlar = new Map<string, Promise<AudioBuffer>>();
 function yukle(ctx: AudioContext, adres: string): Promise<AudioBuffer> {
   let p = tamponlar.get(adres);
   if (!p) {
+    // Uygulamada (Capacitor) mp3 HTTP olmayan bir yanıtla gelir: durum kodu 0, r.ok yanlış ama veri tam.
+    // Bu yüzden yalnız gerçek hata kodlarında vazgeçilir.
     p = fetch(adres)
       .then((r) => {
-        if (!r.ok) throw new Error(adres);
+        if (r.status >= 400) throw new Error(adres);
         return r.arrayBuffer();
       })
       .then((b) => ctx.decodeAudioData(b));
