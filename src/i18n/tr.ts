@@ -40,6 +40,7 @@ export const tr = {
     gizlilik: 'Gizlilik',
     rozetBaslik: 'Bumba Life, bir Bumba Group kolu',
     rozetAlt: 'Bir Bumba Life ürünü',
+    uygulama: "App Store'dan indir",
   },
   genel: {
     tarihsiz: 'tarihsiz',

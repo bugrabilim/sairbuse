@@ -5,7 +5,7 @@ import { SITE } from '../data/site';
 import ListeFormu from './ListeFormu.astro';
 import { tumSiirler } from '../lib/siirler';
 import { dilBul, metin, sayfaYolu } from '../i18n';
-import { SITE_KOK, UYGULAMA } from '../data/uygulama';
+import { MAGAZA_GORUNUR, SITE_KOK, UYGULAMA, appStoreAdresi } from '../data/uygulama';
 
 const dil = dilBul(Astro.url);
 const m = metin(dil).alt;
@@ -22,6 +22,8 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
       {UYGULAMA ? <a class="liste-site" href={`${SITE_KOK}${sayfaYolu('ana', dil)}#liste`}>{mu.listeyeKatil}</a> : <ListeFormu />}
     </div>
     <div class="alt-sag">
+      {/* App Store bağlantısı uygulama mağazada yayına girince görünür (src/data/uygulama.ts → APP_STORE) */}
+      {MAGAZA_GORUNUR && <a class="magaza" href={appStoreAdresi(dil)} rel="noopener">{m.uygulama}</a>}
       {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}
       <a class="bumba-imza" href="https://bumbagroup.com/life" rel="noopener" title={m.rozetBaslik}>
         <img class="rozet-acik" src="https://bumbagroup.com/rozet/life.svg" width="164" height="28" alt={m.rozetAlt} loading="lazy" />
@@ -54,6 +56,15 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
   }
   .alt-sag {
     justify-self: end;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.6rem 1.25rem;
+  }
+  .magaza {
+    text-decoration: none;
+    white-space: nowrap;
   }
   .alt a {
     color: var(--soluk);
@@ -96,6 +107,7 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
     }
     .alt-sag {
       justify-self: start;
+      justify-content: flex-start;
     }
   }
 </style>

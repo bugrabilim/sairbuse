@@ -19,7 +19,7 @@ import '../styles/global.css';
 import AltBilgi from '../components/AltBilgi.astro';
 import Logo from '../components/Logo.astro';
 import UygulamaKopru from '../components/UygulamaKopru.astro';
-import { UYGULAMA } from '../data/uygulama';
+import { APP_STORE, MAGAZA_GORUNUR, UYGULAMA } from '../data/uygulama';
 import { SITE } from '../data/site';
 import { DUYGULAR, duyguAdi, duyguStili, type Duygu } from '../data/duygular';
 import { DILLER, OG_YEREL, dilBul, duyguYolu, karsilik, kucuk, metin, sayfaYolu } from '../i18n';
@@ -97,6 +97,8 @@ const jsonLd = noindex
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    {/* iPhone'da Safari'nin kendi "uygulamayı aç / indir" şeridi; uygulama App Store'a girince */}
+    {MAGAZA_GORUNUR && <meta name="apple-itunes-app" content={`app-id=${APP_STORE.kimlik}`} />}
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content={temaRengi} data-gece={temaRengi} data-gunduz={temaRengiGunduz} />
     <meta name="author" content={SITE.sair} />

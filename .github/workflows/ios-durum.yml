@@ -1,0 +1,46 @@
+name: iOS mağaza durumu
+
+# Elle tetiklenir: App Store Connect API anahtarıyla uygulamanın App Store kimliğini (Apple ID) ve sürümlerinin
+# mağaza durumunu yazar (ör. PREPARE_FOR_SUBMISSION, WAITING_FOR_REVIEW, READY_FOR_SALE). Yalnız okur.
+# Sitedeki App Store bağlantısı uygulama yayına girince açılır (src/data/uygulama.ts → APP_STORE).
+on:
+  workflow_dispatch:
+
+jobs:
+  durum:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+      PAKET: tr.bumba.duygularinpesinde
+    steps:
+      - run: pip install --quiet pyjwt cryptography
+      - name: App Store Connect
+        shell: python
+        run: |
+          import json, os, time, urllib.request, jwt
+          simdi = int(time.time())
+          belirtec = jwt.encode(
+              {"iss": os.environ["ASC_ISSUER_ID"], "iat": simdi, "exp": simdi + 600, "aud": "appstoreconnect-v1"},
+              os.environ["ASC_KEY_P8"], algorithm="ES256", headers={"kid": os.environ["ASC_KEY_ID"]},
+          )
+          def al(yol):
+              istek = urllib.request.Request("https://api.appstoreconnect.apple.com" + yol, headers={"Authorization": "Bearer " + belirtec})
+              with urllib.request.urlopen(istek) as y:
+                  return json.load(y)
+          uygulamalar = al("/v1/apps?filter[bundleId]=" + os.environ["PAKET"])["data"]
+          satirlar = []
+          for u in uygulamalar:
+              satirlar.append(f"Uygulama: {u['attributes']['name']} · App Store kimliği (Apple ID): {u['id']}")
+              satirlar.append(f"Bağlantı: https://apps.apple.com/tr/app/id{u['id']}")
+              for s in al(f"/v1/apps/{u['id']}/appStoreVersions?fields[appStoreVersions]=versionString,appStoreState")["data"]:
+                  a = s["attributes"]
+                  satirlar.append(f"Sürüm {a['versionString']}: {a['appStoreState']}")
+          if not uygulamalar:
+              satirlar.append("Bu paket kimliğiyle uygulama bulunamadı.")
+          metin = "\n".join(satirlar)
+          print(metin)
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+              f.write("```\n" + metin + "\n```\n")
