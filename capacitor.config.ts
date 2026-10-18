@@ -16,10 +16,8 @@ const config: CapacitorConfig = {
     path: 'uygulama/android',
     backgroundColor: '#0d0c0b',
   },
-  // Site çok sayfalı: uzantısız adresleri ana sayfaya çeviren tek sayfa kipi kapalı; /siir/x/ → siir/x/index.html
-  // eşlemesini Android'de DizinYonlendirici (MainActivity), iOS'ta AppDelegate.swift yapar. html5mode'u Capacitor'ın
-  // Android tarafı okur (CapConfig, server.html5mode) ama tip tanımında yok; bu yüzden tür dönüşümü
-  server: { html5mode: false } as CapacitorConfig['server'],
+  // Site çok sayfalı: /siir/x/ → siir/x/index.html eşlemesini Android'de DizinYonlendirici (MainActivity.java),
+  // iOS'ta AppDelegate.swift yapar
   plugins: {
     SplashScreen: { launchShowDuration: 600, backgroundColor: '#0d0c0b', showSpinner: false },
   },
