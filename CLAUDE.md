@@ -99,6 +99,12 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   Bumba rozetinin yanında "App Store'dan indir" bağlantısı ve iPhone Safari'de uygulama şeridi (`apple-itunes-app`)
   var; uygulama App Store'da yayına girince `src/data/uygulama.ts` → `APP_STORE.yayinda: true` ile açılır
   (yayında olmayan uygulamanın sayfası açılmadığı için o zamana dek kapalı). Uygulamanın içinde gösterilmez.
+- **Android uygulaması** (18 Ekim 2026, sahibinin isteği): iOS'la aynı site ve aynı uygulama kipi, `uygulama/android/`
+  (Capacitor 8, paket `tr.bumba.duygularinpesinde`, yalnız dikey). `/siir/x/` → `siir/x/index.html` eşlemesi
+  `MainActivity.java` → `DizinYonlendirici` (istek Capacitor'a gitmeden adres dosya adına çevrilir). Ekran açık kalır
+  (`FLAG_KEEP_SCREEN_ON`). Tam saatli alarm izni kaldırıldı (Play politikası; Günün şiiri yaklaşık 09.00).
+  `npm run uygulama:android`; denetim `.github/workflows/android.yml` (APK + emülatörde deneme, her PR). Google Play
+  yayını için Play Console hesabı ve imza anahtarı gerekiyor (`uygulama/README.md`).
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 

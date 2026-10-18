@@ -8,10 +8,13 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "uygulama": "PUBLIC_UYGULAMA=1 astro build && node scripts/uygulama/hazirla.mjs && cap sync ios"
+    "uygulama": "PUBLIC_UYGULAMA=1 astro build && node scripts/uygulama/hazirla.mjs && cap sync ios && cap sync android",
+    "uygulama:ios": "PUBLIC_UYGULAMA=1 astro build && node scripts/uygulama/hazirla.mjs && cap sync ios",
+    "uygulama:android": "PUBLIC_UYGULAMA=1 astro build && node scripts/uygulama/hazirla.mjs && cap sync android"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
+    "@capacitor/android": "^8.5.3",
     "@capacitor/core": "^8.5.3",
     "@capacitor/filesystem": "^8.1.5",
     "@capacitor/ios": "^8.5.3",

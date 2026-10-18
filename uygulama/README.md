@@ -1,4 +1,4 @@
-# Duyguların Peşinde · iPhone uygulaması
+# Duyguların Peşinde · iPhone ve Android uygulaması
 
 Uygulama, sitenin derlenmiş hâlini içinde taşır (Capacitor). Şiirler, fotoğraflar ve sesler telefondadır;
 internet gerekmez. Mac gerekmez: derleme, imzalama ve App Store Connect'e yükleme GitHub Actions'ın Mac
@@ -74,6 +74,24 @@ bağlantısı ve iPhone Safari'deki uygulama şeridi açılır.
 
 Sonraki sürümler: `uygulama/ios/App/App.xcodeproj/project.pbxproj` içindeki `MARKETING_VERSION`'ı artırın
 (1.0 → 1.1), iş akışını çalıştırın, App Store Connect'te yeni sürüm açıp yapıyı seçin.
+
+## Android (Google Play)
+
+Aynı site Android'de de uygulamanın içinde (`uygulama/android/`, Capacitor 8, paket kimliği `tr.bumba.duygularinpesinde`).
+`npm run uygulama:android` siteyi derler ve Android projesine kopyalar; `npm run uygulama` iOS ve Android'i birlikte.
+
+- Site çok sayfalı: `/siir/x/` adresini `siir/x/index.html`'e `MainActivity.java` → `DizinYonlendirici` bağlar
+  (bulamazsa `404.html`). Capacitor uzantısız adresleri ya ana sayfaya (tek sayfa kipi) bağlar ya da hiç sunmaz;
+  yönlendirici isteği Capacitor'a gitmeden önce dosya adına çevirir.
+- Uygulama açıkken ekran kararmaz (`FLAG_KEEP_SCREEN_ON`), yalnız dikey; koyu tema ve koyu durum çubuğu.
+- Simgeler (uyarlanabilir simge: koyu zeminde sarı damla) ve açılış görselleri `node scripts/simgeler.mjs` ile üretilir.
+- Günün şiiri bildirimi yaklaşık 09.00'da gelir: Google Play tam saatli alarm iznini yalnız alarm ve takvim uygulamalarına
+  verdiği için o izin manifestten çıkarıldı.
+- Denetim: her PR'da **Android** iş akışı (`.github/workflows/android.yml`) hata ayıklama APK'sını derler, emülatörde açar ve
+  `scripts/uygulama/android-dene.mjs` ile ana sayfayı, şiir sayfasını, 404'ü ve ortam sesini dener. APK (`android-apk`) bir
+  Android telefona kurulup denenebilir ("bilinmeyen kaynaklardan yükleme" izniyle); ekran görüntüleri `android-emulator-ekran`.
+
+Yerelde: Android Studio ile `npx cap open android`, ya da `uygulama/android` içinde `./gradlew assembleDebug`.
 
 ## Yerelde (Mac varsa)
 
