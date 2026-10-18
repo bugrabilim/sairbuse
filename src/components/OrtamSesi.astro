@@ -5,6 +5,7 @@
 // (public/ortam/, künyeler src/data/ortam-sesleri.ts, çalınması scripts/ortam.ts).
 import { dilBul, metin } from '../i18n';
 import { DUYGU_MAKAMI, ORTAMLAR, type Ortam } from '../data/ortam-sesleri';
+import { UYGULAMA } from '../data/uygulama';
 
 interface Props {
   /** Fon müziği için duygu (makamı DUYGU_MAKAMI'nda) */
@@ -61,10 +62,15 @@ const yazilar = {
       <span class="isaret kare" aria-hidden="true" />
       {m.muzik(DUYGU_MAKAMI[duygu])}
     </button>
-    <label class="ortam-duzey">
-      <span>{m.duzey}</span>
-      <input type="range" min="0" max="1" step="0.05" value="0.1" id="ortam-duzey" />
-    </label>
+    {/* Uygulamada ses düzeyi kaydırıcısı yok: düzeyi telefonun ses tuşları belirler */}
+    {
+      !UYGULAMA && (
+        <label class="ortam-duzey">
+          <span>{m.duzey}</span>
+          <input type="range" min="0" max="1" step="0.05" value="0.1" id="ortam-duzey" />
+        </label>
+      )
+    }
   </div>
 </div>
 
@@ -113,7 +119,7 @@ const yazilar = {
     yaz('ortam-tercih', t);
     const s = sesi(t);
     if (s) {
-      baslat(s, true);
+      baslat(s);
       window.bumbaOlay?.('ortam-sesi', { ses: s });
     } else bitir();
   }
@@ -141,8 +147,8 @@ const yazilar = {
   });
   secenekler.forEach((x) => x.addEventListener('click', () => uygula((x.dataset.ortam ?? 'sessiz') as Tercih)));
 
-  // Ses düzeyi: varsayılan %10, değiştirilirse hatırlanır
-  const kayitliDuzey = Number(oku('ortam-duzey') ?? '0.1');
+  // Ses düzeyi: varsayılan %10, değiştirilirse hatırlanır. Kaydırıcı yoksa (uygulama) hep %10
+  const kayitliDuzey = duzeyKutusu ? Number(oku('ortam-duzey') ?? '0.1') : 0.1;
   const duzey = Number.isFinite(kayitliDuzey) ? kayitliDuzey : 0.1;
   if (duzeyKutusu) duzeyKutusu.value = String(duzey);
   duzeyAyarla(duzey);
@@ -162,7 +168,7 @@ const yazilar = {
     muzikDugmesi.setAttribute('aria-pressed', String(muzikAcik));
     yaz('muzik', muzikAcik ? 'acik' : 'kapali');
     if (muzikAcik) {
-      muzikBaslat(duygu, true);
+      muzikBaslat(duygu);
       window.bumbaOlay?.('fon-muzigi', { duygu });
     } else muzikBitir();
   });
