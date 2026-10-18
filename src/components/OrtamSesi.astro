@@ -113,7 +113,7 @@ const yazilar = {
     yaz('ortam-tercih', t);
     const s = sesi(t);
     if (s) {
-      baslat(s);
+      baslat(s, true);
       window.bumbaOlay?.('ortam-sesi', { ses: s });
     } else bitir();
   }
@@ -162,7 +162,7 @@ const yazilar = {
     muzikDugmesi.setAttribute('aria-pressed', String(muzikAcik));
     yaz('muzik', muzikAcik ? 'acik' : 'kapali');
     if (muzikAcik) {
-      muzikBaslat(duygu);
+      muzikBaslat(duygu, true);
       window.bumbaOlay?.('fon-muzigi', { duygu });
     } else muzikBitir();
   });

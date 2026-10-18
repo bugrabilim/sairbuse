@@ -32,6 +32,8 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   Sayfalar `Cache-Control: no-cache` ile gider ki eski HTML tarayıcıda takılı kalmasın.
 - Şiir sayfasında şiir **harf harf yazılarak** açılır (satır satır değil); hız duyguya göre.
 - Ana sayfada "Yazıldıkları yerler" ve "ya da niyet tut" satırı yok; duygu şeritleri dar (72rem) kalır.
+- Ana sayfa vitrininin (hero) tamamı tıklanır ve o mısranın şiirine gider (18 Ekim 2026; sitede ve uygulamada).
+  Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
 - **Alt bilgi masaüstünde tek satır** (12 Ekim 2026): solda telif ("© 2008'den itibaren Antigoni. Şiirlerin tüm
   hakları saklıdır."; ilk şiirin yılı, bitiş yılı yazılmaz), ortada e-posta listesi (başlık, adres, Katıl;
   açıklama yok), sağda Bumba rozeti. Fotoğraf notu ve son güncelleme tarihi alt bilgide yok; güncelleme tarihi
@@ -49,7 +51,8 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - Ortam sesi **varsayılan açık, %10 düzeyde** (9 Ekim 2026): her şiirin kendi sesi var (şiir dosyasında
   `ortam:`; yoksa ana duygunun sesi, `DUYGU_ORTAMI`), duygu sayfasında duygunun sesi. Tarayıcı kuralı gereği ilk
   dokunuşta başlar. Menüde kapalı, "şiirin sesi" ve genel sesler (deniz, yağmur, vapur, gece, kafe, şehir,
-  kuşlar, ev) var; seçim ve düzey hatırlanır. Sesler gerçek saha kayıtları (sentez sesler kalitesiz bulundu):
+  kuşlar, ev) var; seçim ve düzey hatırlanır. iPhone sessiz moddayken de duyulsun diye ses oturumu `playback`
+  (`navigator.audioSession`; uygulamada her zaman, sitede okur sesi menüden seçince). Sesler gerçek saha kayıtları (sentez sesler kalitesiz bulundu):
   Beeld en Geluid, Commons, CC BY-SA 3.0. Dosyalar `public/ortam/`, üretimi `scripts/ortam.py` (Wikimedia bu
   sunucunun IP'sine sınır koyduğu için GitHub Actions'ta: `.github/workflows/ortam-sesleri.yml`), künyeler
   `src/data/ortam-sesleri.ts` ve Hakkında → Haklar.

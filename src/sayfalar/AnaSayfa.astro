@@ -86,6 +86,8 @@ const takvim = tum
         return (
           <div class="vitrin-oge" data-i={i} data-secili={i === 0 ? '' : undefined} style={`--vurgu:${v.duygu.gece}`}>
             <SiirFotosu siir={v.siir} duygu={v.duygu} sizes="100vw" />
+            {/* Vitrinin tamamı şiire gider; klavye ve ekran okuyucu için asıl bağlantı "Şiiri oku" */}
+            <a class="vitrin-kapla" href={siirYolu(v.siir, dil)} tabindex="-1" aria-hidden="true" />
             <div class="sahne-ic vitrin-ic">
               <p class="etiket vitrin-etiket">
                 {v.renk ? `${duyguAdi(v.duygu, dil)} · ${renkAdi(v.duygu, dil)}` : m.ana.ilkMisra}
@@ -458,6 +460,19 @@ const takvim = tum
   }
   .vitrin-ic {
     padding-bottom: 3rem;
+  }
+  /* Fotoğrafın üstünde görünmez bağlantı: fotoğrafa ya da yazıya dokununca şiir açılır. Yazı katmanı tıklamayı
+     geçirir; içindeki bağlantılar, künye ve Durdur düğmesi kendi işini yapar */
+  .vitrin-kapla {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .vitrin-ic {
+    pointer-events: none;
+  }
+  .vitrin-ic a {
+    pointer-events: auto;
   }
   .vitrin-etiket {
     color: var(--vurgu);
