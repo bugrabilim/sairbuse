@@ -9,6 +9,7 @@ Her bölüm ayrı denenir; biri hata verirse sonrakiler sürer, sonda özet yaz�
 import hashlib
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -119,7 +120,7 @@ def _():
     evet_hayir = {'gambling', 'lootBox', 'unrestrictedWebAccess', 'messagingAndChat', 'userGeneratedContent', 'advertising',
                   'parentalControls', 'ageAssurance', 'healthOrWellnessTopics'}
     atla = {'kidsAgeBand', 'seventeenPlus', 'ageRatingOverride', 'ageRatingOverrideV2', 'koreaAgeRatingOverride',
-            'developerAgeRatingInfoUrl'}
+            'developerAgeRatingInfoUrl', 'gracRatingClassificationNumber'}
     oz = {}
     for k, v in beyan['attributes'].items():
         if k in atla:
@@ -130,8 +131,21 @@ def _():
             oz[k] = False
         else:
             oz[k] = 'NONE'
-    print('Yaş beyanı alanları:', json.dumps(oz, ensure_ascii=False))
-    api('PATCH', f'/v1/ageRatingDeclarations/{beyan["id"]}', nesne('ageRatingDeclarations', beyan['id'], oz))
+    # Henüz doldurulmamış (boş) alanların türü bilinmez; Apple "BOOLEAN bekleniyor" derse o alan hayır yapılıp yeniden denenir
+    for _deneme in range(15):
+        try:
+            api('PATCH', f'/v1/ageRatingDeclarations/{beyan["id"]}', nesne('ageRatingDeclarations', beyan['id'], oz))
+            break
+        except RuntimeError as h:
+            m = re.search(r"attribute '(\w+)'\. Expected a (\w+)", str(h))
+            if not m or m.group(1) not in oz:
+                raise
+            alan, tur = m.groups()
+            if tur == 'BOOLEAN':
+                oz[alan] = False
+            else:
+                del oz[alan]  # başka türdeki bilinmeyen alana dokunulmaz
+    print('Yaş beyanı:', json.dumps(oz, ensure_ascii=False))
 
 
 @bolum('Sürüm: telif')
