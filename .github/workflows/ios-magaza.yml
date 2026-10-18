@@ -1,0 +1,24 @@
+name: iOS mağaza bilgileri
+
+# Elle tetiklenir: uygulama/magaza/metinler.json'daki metinleri, ekran/ klasöründeki görüntüleri, kategorileri, telifi,
+# yaş derecelendirmesini, inceleme notunu ve son yapıyı App Store Connect'e yükler (scripts/uygulama/magaza.py).
+# İncelemeye göndermez. Yeniden çalıştırılabilir: var olanı günceller, ekran görüntülerini yeniler.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ios-magaza
+  cancel-in-progress: false
+
+jobs:
+  magaza:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+    steps:
+      - uses: actions/checkout@v5
+      - run: pip install --quiet pyjwt cryptography
+      - run: python3 scripts/uygulama/magaza.py
