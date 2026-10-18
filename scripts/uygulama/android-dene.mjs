@@ -38,8 +38,10 @@ const ses = JSON.parse(
   await deger(`(async () => {
     const r = await fetch('/ortam/deniz.mp3');
     const b = await r.arrayBuffer();
+    // decodeAudioData tamponu devralır (byteLength 0'a düşer); boyut önce okunur
+    const bayt = b.byteLength;
     const t = await new AudioContext().decodeAudioData(b);
-    return JSON.stringify({ durum: r.status, ok: r.ok, bayt: b.byteLength, saniye: Math.round(t.duration) });
+    return JSON.stringify({ durum: r.status, ok: r.ok, bayt, saniye: Math.round(t.duration) });
   })().catch((h) => JSON.stringify({ hata: String(h) }))`),
 );
 dene('Ortam sesi (fetch + çözme)', ses.bayt > 100000 && ses.saniye > 60 && !(ses.durum >= 400), JSON.stringify(ses));
