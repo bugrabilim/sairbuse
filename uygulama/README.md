@@ -61,9 +61,11 @@ ekran görüntüsünü indirilebilir çıktı olarak bırakır (Actions → iOS 
    (`ExportOptions.plist`, ekip `3J9XN2P93D`).
 2. Yükleme işlenince (birkaç dakika–yarım saat) App Store Connect → TestFlight'ta görünür. iPhone'a TestFlight
    uygulamasını kurup kendinizi iç test kullanıcısı olarak ekleyin ve deneyin.
-3. App Store Connect → uygulama → iOS sürümü 1.0: `magaza/bilgiler.md`'deki metinleri girin, `magaza/ekran/`'daki
-   görüntüleri 6,9" iPhone alanına yükleyin (Türkçe sayfaya `tr-*`, İngilizce sayfaya `en-*`), yapıyı seçin,
-   Uygulama Gizliliği'nde "Veri toplanmıyor", yaş derecelendirmesi anketini doldurun → **İncelemeye Gönder**.
+3. GitHub → Actions → **iOS mağaza bilgileri** → Run workflow: metinler (`magaza/metinler.json`; tr, en-US, en-GB),
+   ekran görüntüleri, kategoriler, telif, yaş derecelendirmesi, üçüncü taraf içerik beyanı, ücretsiz fiyat, bütün
+   ülkeler ve son yapı App Store Connect'e yazılır (`scripts/uygulama/magaza.py`). Elle kalanlar: Uygulama
+   Gizliliği'nde "Veri toplanmıyor" (API yok) ve App Review Information'da iletişim kişisi (ad, telefon, e-posta) ile
+   not (`magaza/bilgiler.md`). Sonra sürüm sayfasında **İncelemeye Ekle → İncelemeye Gönder**.
 
 Durum: GitHub → Actions → **iOS mağaza durumu** → Run workflow. Uygulamanın App Store kimliğini (6824072247) ve
 sürümlerin durumunu yazar (`PREPARE_FOR_SUBMISSION`, `WAITING_FOR_REVIEW`, `READY_FOR_SALE` …). Sürüm 1.0

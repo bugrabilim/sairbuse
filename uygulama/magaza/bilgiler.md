@@ -1,6 +1,8 @@
 # App Store bilgileri
 
-App Store Connect'te uygulamanın sayfasına girilecek metinler. Ekran görüntüleri `ekran/` klasöründe
+App Store Connect'te uygulamanın sayfasına girilecek metinler. Yüklenen hâlleri `metinler.json`'da; GitHub → Actions →
+**iOS mağaza bilgileri** onları, ekran görüntülerini, kategorileri, telifi, yaş derecelendirmesini, inceleme notunu ve son
+yapıyı App Store Connect'e yükler (`scripts/uygulama/magaza.py`). Metin değişince ikisi birlikte güncellenir. Ekran görüntüleri `ekran/` klasöründe
 (6,9" iPhone, 1290×2796; `tr-*` Türkçe, `en-*` İngilizce sayfa için). Ana dil: Türkçe.
 
 ## Genel
