@@ -1,0 +1,15 @@
+<!doctype html><meta charset="utf-8"><script>
+(async () => {
+  const s = [];
+  try {
+    const r = await fetch('/ortam/deniz.mp3');
+    s.push('status=' + r.status, 'ok=' + r.ok, 'eski_kod=' + (r.ok ? 'çalar' : 'VAZGEÇER'), 'yeni_kod=' + (r.status >= 400 ? 'VAZGEÇER' : 'çalar'));
+    const b = await r.arrayBuffer();
+    s.push('bayt=' + b.byteLength);
+    const ctx = new AudioContext();
+    const t = await ctx.decodeAudioData(b);
+    s.push('cozuldu_sn=' + t.duration.toFixed(1), 'kanal=' + t.numberOfChannels);
+  } catch (e) { s.push('HATA=' + e); }
+  webkit.messageHandlers.yaz.postMessage(s.join(' '));
+})();
+</script>

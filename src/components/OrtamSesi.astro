@@ -234,6 +234,10 @@ const yazilar = {
   .ortam-menusu[hidden] {
     display: none;
   }
+  /* Açık menü, içinde durduğu fotoğraflı başlıkla birlikte fotoğraf künyesinin üstüne çıkar */
+  :global(.sahne-ic:has(.ortam-menusu:not([hidden]))) {
+    z-index: 5;
+  }
   .ortam-secenek {
     appearance: none;
     display: flex;
