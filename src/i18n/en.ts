@@ -29,6 +29,7 @@ export const en: Metin = {
     gizlilik: 'Privacy',
     rozetBaslik: 'Bumba Life, part of Bumba Group',
     rozetAlt: 'A Bumba Life product',
+    uygulama: 'Get the iPhone app',
   },
   genel: {
     tarihsiz: 'undated',

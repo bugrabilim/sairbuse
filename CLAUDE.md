@@ -93,6 +93,11 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   -allowProvisioningUpdates`, `uygulama/ios/ExportOptions.plist`). Sırlar `ASC_KEY_ID`, `ASC_ISSUER_ID`,
   `ASC_KEY_P8` GitHub'da (değerleri hiçbir yere yazılmaz).
   Kurulum, mağaza metinleri, ekran görüntüleri: `uygulama/README.md`, `uygulama/magaza/`.
+  Uygulama açıkken ekran kararmaz (`isIdleTimerDisabled`, `SceneDelegate.swift`; 18 Ekim 2026).
+  App Store kimliği (Apple ID) **6824072247**; mağaza durumu `ios-durum.yml` ile okunur. Sitede alt bilginin sağında,
+  Bumba rozetinin yanında "App Store'dan indir" bağlantısı ve iPhone Safari'de uygulama şeridi (`apple-itunes-app`)
+  var; uygulama App Store'da yayına girince `src/data/uygulama.ts` → `APP_STORE.yayinda: true` ile açılır
+  (yayında olmayan uygulamanın sayfası açılmadığı için o zamana dek kapalı). Uygulamanın içinde gösterilmez.
 - **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
   geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 

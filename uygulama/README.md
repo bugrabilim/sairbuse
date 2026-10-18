@@ -65,6 +65,11 @@ ekran görüntüsünü indirilebilir çıktı olarak bırakır (Actions → iOS 
    görüntüleri 6,9" iPhone alanına yükleyin (Türkçe sayfaya `tr-*`, İngilizce sayfaya `en-*`), yapıyı seçin,
    Uygulama Gizliliği'nde "Veri toplanmıyor", yaş derecelendirmesi anketini doldurun → **İncelemeye Gönder**.
 
+Durum: GitHub → Actions → **iOS mağaza durumu** → Run workflow. Uygulamanın App Store kimliğini (6824072247) ve
+sürümlerin durumunu yazar (`PREPARE_FOR_SUBMISSION`, `WAITING_FOR_REVIEW`, `READY_FOR_SALE` …). Sürüm 1.0
+`READY_FOR_SALE` olunca `src/data/uygulama.ts` → `APP_STORE.yayinda: true` yapılır; sitede "App Store'dan indir"
+bağlantısı ve iPhone Safari'deki uygulama şeridi açılır.
+
 Sonraki sürümler: `uygulama/ios/App/App.xcodeproj/project.pbxproj` içindeki `MARKETING_VERSION`'ı artırın
 (1.0 → 1.1), iş akışını çalıştırın, App Store Connect'te yeni sürüm açıp yapıyı seçin.
 
