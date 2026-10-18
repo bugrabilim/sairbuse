@@ -1,5 +1,6 @@
 """App Store Connect'e mağaza bilgilerini yükler: uygulama adı ve alt başlık, açıklama, anahtar kelimeler, tanıtım
-metni, adresler, kategoriler, telif, yaş derecelendirmesi, inceleme notu, ekran görüntüleri ve son yapı.
+metni, adresler, kategoriler, telif, yaş derecelendirmesi, inceleme notu, üçüncü taraf içerik beyanı, fiyat
+(ücretsiz), satış ülkeleri (hepsi), ekran görüntüleri ve son yapı.
 Metinler uygulama/magaza/metinler.json, görüntüler uygulama/magaza/ekran/. İncelemeye göndermez; gizlilik etiketi
 (App Privacy) ve inceleme iletişim bilgileri App Store Connect'te elle girilir (API'de yok ya da kişisel bilgi).
 
@@ -64,11 +65,17 @@ def nesne(tur, kimlik, oz=None, iliski=None):
 sonuc = []
 
 
+class Atlandi(Exception):
+    """Bölüm hata değil, bilerek atlandı (ör. elle girilecek bilgi)"""
+
+
 def bolum(ad):
     def sar(f):
         try:
             f()
             sonuc.append(f'✓ {ad}')
+        except Atlandi as e:
+            sonuc.append(f'– {ad}: {e}')
         except Exception as e:  # noqa: BLE001 — her bölüm ayrı raporlanır
             sonuc.append(f'✗ {ad}: {e}')
         return f
@@ -202,16 +209,52 @@ def _():
 
 @bolum('İnceleme notu')
 def _():
+    # Not, iletişim kişisinin adı, soyadı, telefonu ve e-postasıyla birlikte kaydedilir; bunlar kişisel bilgi olduğu için
+    # App Store Connect'te elle girilir. Girildiyse not burada güncellenir, girilmediyse bölüm atlanır.
     oz = {'notes': METIN['inceleme_notu'], 'demoAccountRequired': False}
+    var = api('GET', f'/v1/appStoreVersions/{SURUM}/appStoreReviewDetail').get('data')
+    kisi = var and all(var['attributes'].get(k) for k in ('contactFirstName', 'contactLastName', 'contactPhone', 'contactEmail'))
+    if not kisi:
+        raise Atlandi('iletişim kişisi App Store Connect\'te girilince not da yazılır (ya da not elle yapıştırılır)')
+    api('PATCH', f'/v1/appStoreReviewDetails/{var["id"]}', nesne('appStoreReviewDetails', var['id'], oz))
+
+
+@bolum('Üçüncü taraf içerik beyanı (Commons fotoğrafları, Beeld en Geluid sesleri; lisanslı)')
+def _():
+    api('PATCH', f'/v1/apps/{UYG}', nesne('apps', UYG, {'contentRightsDeclaration': 'USES_THIRD_PARTY_CONTENT'}))
+
+
+@bolum('Fiyat: ücretsiz')
+def _():
+    noktalar = api('GET', f'/v1/apps/{UYG}/appPricePoints?filter[territory]=USA&limit=200')['data']
+    bedava = next(n for n in noktalar if float(n['attributes']['customerPrice']) == 0)
+    api('POST', '/v1/appPriceSchedules', {
+        'data': {'type': 'appPriceSchedules', 'relationships': {
+            'app': {'data': {'type': 'apps', 'id': UYG}},
+            'baseTerritory': {'data': {'type': 'territories', 'id': 'USA'}},
+            'manualPrices': {'data': [{'type': 'appPrices', 'id': '${fiyat}'}]}}},
+        'included': [{'type': 'appPrices', 'id': '${fiyat}', 'attributes': {'startDate': None},
+                      'relationships': {'appPricePoint': {'data': {'type': 'appPricePoints', 'id': bedava['id']}}}}],
+    })
+
+
+@bolum('Satış ülkeleri: hepsi, yeni ülkeler de')
+def _():
     try:
-        var = api('GET', f'/v1/appStoreVersions/{SURUM}/appStoreReviewDetail')['data']
-    except RuntimeError:
+        var = api('GET', f'/v1/apps/{UYG}/appAvailabilityV2').get('data')
+    except RuntimeError:  # yeni uygulamada henüz yok (404)
         var = None
     if var:
-        api('PATCH', f'/v1/appStoreReviewDetails/{var["id"]}', nesne('appStoreReviewDetails', var['id'], oz))
-    else:
-        api('POST', '/v1/appStoreReviewDetails', {'data': {'type': 'appStoreReviewDetails', 'attributes': oz,
-            'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': SURUM}}}}})
+        raise Atlandi('zaten ayarlı')
+    ulkeler = api('GET', '/v1/territories?limit=200')['data']
+    api('POST', '/v2/appAvailabilities', {
+        'data': {'type': 'appAvailabilities', 'attributes': {'availableInNewTerritories': True}, 'relationships': {
+            'app': {'data': {'type': 'apps', 'id': UYG}},
+            'territoryAvailabilities': {'data': [{'type': 'territoryAvailabilities', 'id': f'${{{u["id"]}}}'} for u in ulkeler]}}},
+        'included': [{'type': 'territoryAvailabilities', 'id': f'${{{u["id"]}}}', 'attributes': {'available': True},
+                      'relationships': {'territory': {'data': {'type': 'territories', 'id': u['id']}}}} for u in ulkeler],
+    })
+    print(len(ulkeler), 'ülke')
 
 
 @bolum('Yapı: en son işlenmiş yapı sürüme bağlandı')
@@ -227,4 +270,4 @@ def _():
 print('\n'.join(sonuc))
 with open(os.environ.get('GITHUB_STEP_SUMMARY', os.devnull), 'a') as f:
     f.write('```\n' + '\n'.join(sonuc) + '\n```\n')
-sys.exit(0 if all(s.startswith('✓') for s in sonuc) else 1)
+sys.exit(1 if any(s.startswith('✗') for s in sonuc) else 0)
