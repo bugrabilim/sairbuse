@@ -72,6 +72,12 @@ sürümlerin durumunu yazar (`PREPARE_FOR_SUBMISSION`, `WAITING_FOR_REVIEW`, `RE
 `READY_FOR_SALE` olunca `src/data/uygulama.ts` → `APP_STORE.yayinda: true` yapılır; sitede "App Store'dan indir"
 bağlantısı ve iPhone Safari'deki uygulama şeridi açılır.
 
+İnceleme: GitHub → Actions → **iOS inceleme** → Run workflow (`scripts/uygulama/inceleme.py`). `durum` gönderimin ve
+öğelerinin durumunu yazar; `yeniden-gonder` reddedilen öğeyi çözüldü sayıp gönderimi yeniden incelemeye yollar. App
+Review bilgi istediğinde (Guideline 2.1) cevap App Store Connect'te yazılır, ama gönderim "Unresolved Issues"ta kalır
+ve "Resubmit to App Review" düğmesi kapalı durur; cevaptan sonra bu iş akışı yeterli (22 Ekim 2026'da böyle
+yeniden gönderildi). Apple'a verilen tanıtım notu `magaza/metinler.json` → `inceleme_notu`.
+
 Sonraki sürümler: `uygulama/ios/App/App.xcodeproj/project.pbxproj` içindeki `MARKETING_VERSION`'ı artırın
 (1.0 → 1.1), iş akışını çalıştırın, App Store Connect'te yeni sürüm açıp yapıyı seçin.
 
