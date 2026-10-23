@@ -20,6 +20,7 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | `/harita/` | Şiirlerin yazıldığı yerler İstanbul haritasında; her nokta bir şiir, rengi o şiirin duygusu. Altında İstanbul'un dışındaki yerler (İzmir, Marmaris Söğüt, Paris) için Paris'ten Marmaris'e uzanan ikinci bir harita. |
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |
 | `/fal/` | Şiir falı: fincanı kapat ya da duygu × yer çarkını çevir, bir şiir çıksın. |
+| `/cek/` | Rastgele bir şiir açar (armağan kartındaki QR bu adrese gider; aynı telefona aynı şiir tekrar gelmez). Arama motorlarına kapalı. |
 | `/hakkinda/` | Kitabın hikâyesi, renklerin şiirlerdeki kaynağı, imza; fotoğraf künyeleri, gizlilik, haklar ve sık sorulanlar düğmeyle açılan pencerelerde. |
 | `/admin/` | Şiir paneli: kod bilmeden şiir ekleme ve düzenleme (aşağıda). |
 

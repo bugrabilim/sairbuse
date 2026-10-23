@@ -354,6 +354,15 @@ export const tr = {
     hakkinda: 'Hakkında',
     arama: 'Arama',
     gizlilik: 'Gizlilik',
+    cek: 'Şiir çek',
+  },
+  cek: {
+    baslik: 'Bir şiir çek',
+    aciklama: 'Her açılışta rastgele bir şiir.',
+    metin: 'Bir şiir çekiliyor…',
+    yedek: 'Şiir açılmadıysa {fal} ya da {siirler}.',
+    fal: 'niyet tutup çek',
+    siirler: 'bütün şiirlere göz at',
   },
   yok: {
     baslik: 'Bulunamadı',

@@ -47,6 +47,8 @@ export const SAYFALAR = {
   hakkinda: { tr: '/hakkinda/', en: '/en/about/' },
   arama: { tr: '/arama/', en: '/en/search/' },
   gizlilik: { tr: '/gizlilik/', en: '/en/privacy/' },
+  // Hediye kartındaki QR'ın adresi: her açılışta rastgele bir şiire gider (arama, harita ve llms.txt'de yok)
+  cek: { tr: '/cek/', en: '/en/draw/' },
 } as const;
 export type SayfaAdi = keyof typeof SAYFALAR;
 

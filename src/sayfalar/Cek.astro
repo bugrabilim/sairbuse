@@ -1,0 +1,88 @@
+---
+// Hediye kartındaki QR'ın adresi: her açılışta rastgele bir şiire gider. Seçim telefonda yapılır (site statik);
+// aynı telefon gördüğü şiiri, hepsi bitene dek bir daha çekmez. Arama motorlarına kapalı, site haritasında yok.
+import Temel from '../layouts/Temel.astro';
+import { dilBul, metin, sayfaYolu } from '../i18n';
+import { siirYolu, tumSiirler } from '../lib/siirler';
+
+const dil = dilBul(Astro.url);
+const m = metin(dil).cek;
+const adresler = (await tumSiirler()).map((s) => siirYolu(s, dil));
+const yedek = m.yedek.split(/(\{fal\}|\{siirler\})/);
+---
+
+<Temel baslik={m.baslik} aciklama={m.aciklama} noindex>
+  <section class="sayfa cek" data-adresler={JSON.stringify(adresler)}>
+    <p class="cekiliyor" role="status">{m.metin}</p>
+    <p class="cek-yedek">
+      {yedek.map((p) =>
+        p === '{fal}' ? <a href={sayfaYolu('fal', dil)}>{m.fal}</a> : p === '{siirler}' ? <a href={sayfaYolu('siirler', dil)}>{m.siirler}</a> : p,
+      )}
+    </p>
+  </section>
+</Temel>
+
+<script>
+  const kutu = document.querySelector<HTMLElement>('.cek');
+  const adresler: string[] = JSON.parse(kutu?.dataset.adresler ?? '[]');
+  if (adresler.length) {
+    let gorulen: string[] = [];
+    try {
+      gorulen = JSON.parse(localStorage.getItem('cekilenler') ?? '[]');
+    } catch {}
+    let adaylar = adresler.filter((a) => !gorulen.includes(a));
+    // Bu telefon bütün şiirleri çektiyse baştan
+    if (!adaylar.length) {
+      gorulen = [];
+      adaylar = adresler;
+    }
+    const secilen = adaylar[Math.floor(Math.random() * adaylar.length)];
+    try {
+      localStorage.setItem('cekilenler', JSON.stringify([...gorulen, secilen]));
+    } catch {}
+    // Sayaç yüklendiyse olayı yaz, sonra git; yüklenmezse en geç 700 ms beklenir
+    let gitti = false;
+    const git = () => {
+      if (gitti) return;
+      gitti = true;
+      location.replace(secilen);
+    };
+    window.addEventListener('load', () => {
+      (window as unknown as { bumbaOlay?: (ad: string) => void }).bumbaOlay?.('siir-cek');
+      setTimeout(git, 150);
+    });
+    setTimeout(git, 700);
+  }
+</script>
+
+<style>
+  .cek {
+    min-height: 50vh;
+    display: grid;
+    align-content: center;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  .cekiliyor {
+    font-family: var(--serif-baslik);
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    margin: 0;
+  }
+  .cek-yedek {
+    color: var(--soluk);
+    margin: 0;
+  }
+  :global(html.js) .cek-yedek {
+    animation: cek-gec 0s 2.5s both;
+  }
+  @keyframes cek-gec {
+    from {
+      visibility: hidden;
+    }
+    to {
+      visibility: visible;
+    }
+  }
+</style>
