@@ -66,7 +66,7 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   rastgele bir şiire gider, aynı telefon gördüğü şiiri hepsi bitene dek tekrar çekmez (`localStorage`
   `cekilenler`). Farklı telefonlara farklı şiir garanti değil (sunucu yok). noindex; haritada, aramada, llms.txt'de
   yok. Umami olayı `siir-cek`. Adres basılı QR'da olduğu için değiştirilmez: `src/sayfalar/Cek.astro`.
-  Kart (55 × 85 mm dikey, tek yüz: bir cümle ve QR; sitede yok): `python3 scripts/kart/kart.py && node scripts/kart/pdf.cjs` → `kart-cikti/`.
+  Kart (55 × 85 mm dikey, tek yüz: şairin adı, logo, künye, duygu renkleri, ana sayfaya QR; gece ve saman zemin; sitede yok): `python3 scripts/kart/kart.py && node scripts/kart/pdf.cjs` → `kart-cikti/`.
 - Mum ışığı modu denendi, sahibi gereksiz buldu (9 Ekim 2026): kaldırıldı, geri eklenmez.
 - **Logo "Damla"** (12 Ekim 2026, sahibinin seçimi): "Duyguların Peşinde" Fraunces 300; adın tek noktası,
   Peşinde'nin i'si, bir gözyaşı damlası (açılış dizesi "Şiir kitabım ağlıyor!"). Damla sayfanın duygusunun
