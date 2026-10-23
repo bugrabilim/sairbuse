@@ -1,6 +1,6 @@
-"""Şaire armağan kutusundaki kartı üretir: tek yüz, kartvizit boyu (85 × 55 mm, her kenarda 3 mm kesim payı).
+"""Şaire armağan kutusundaki kartı üretir: tek yüz, dikey kartvizit boyu (55 × 85 mm, her kenarda 3 mm kesim payı).
 
-Saman zeminde tek bir cümle ve rastgele şiir adresine (/cek/) giden QR, altında adres yazıyla.
+Saman zeminde üstte tek bir cümle, altta rastgele şiir adresine (/cek/) giden QR ve adres yazıyla.
 Kart sitede yayımlanmaz; çıktılar kart-cikti/ klasörüne gider (git'e girmez).
 
 Kullanım:
@@ -16,10 +16,9 @@ KOK = Path(__file__).resolve().parents[2]
 CIKTI = KOK / 'kart-cikti'
 FONT = KOK / 'node_modules' / '@fontsource'
 ADRES = 'https://duygularinpesinde.bumba.tr/cek/'
-EN_MM, BOY_MM, PAY_MM = 85, 55, 3  # kesim ölçüsü ve her kenardaki kesim payı
+EN_MM, BOY_MM, PAY_MM = 55, 85, 3  # kesim ölçüsü ve her kenardaki kesim payı
 SAMAN, MUREKKEP = '#efe6cf', '#1c1915'
-# Açılış dizesine ("Şiir kitabım ağlıyor!", 18.07.2011, Moda) karşılık
-CUMLE = 'Şiir kitabın artık ağlamıyor.'
+CUMLE = 'Basılamayan kitabın burada.'
 
 
 def font_css() -> str:
@@ -38,10 +37,10 @@ def main():
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   html, body {{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
   .yuz {{ width: {en}mm; height: {boy}mm; position: relative; overflow: hidden; background: {SAMAN}; color: {MUREKKEP}; }}
-  .ic {{ position: absolute; inset: {ic}mm; display: flex; align-items: center; gap: 6mm; }}
-  .cumle {{ flex: 1; font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 15pt; line-height: 1.12; letter-spacing: -.005em; }}
-  .qr {{ flex: none; width: 25mm; display: flex; flex-direction: column; align-items: center; gap: 1.4mm; }}
-  .qr img {{ width: 25mm; height: 25mm; display: block; }}
+  .ic {{ position: absolute; inset: {ic + 2}mm {ic}mm {ic}mm; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 13mm; }}
+  .cumle {{ font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: 15pt; line-height: 1.12; letter-spacing: -.005em; text-align: center; }}
+  .qr {{ flex: none; width: 28mm; display: flex; flex-direction: column; align-items: center; gap: 1.4mm; }}
+  .qr img {{ width: 28mm; height: 28mm; display: block; }}
   .qr span {{ font-family: 'Inter', sans-serif; font-weight: 500; font-size: 4.2pt; letter-spacing: .02em; color: #5d554a; white-space: nowrap; }}
 </style></head><body>
 <section class="yuz"><div class="ic">
