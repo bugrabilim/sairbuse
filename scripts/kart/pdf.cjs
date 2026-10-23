@@ -1,4 +1,4 @@
-// kart-cikti/kart.html → kart.pdf (iki sayfa: ön, arka; kesim paylı) ve önizleme için on.png, arka.png (kesilmiş hâli).
+// kart-cikti/kart.html → kart.pdf (tek sayfa, kesim paylı) ve önizleme için kart.png (kesilmiş hâli).
 // Önce scripts/kart/kart.py çalışmalı. playwright-core yerelde yoksa PLAYWRIGHT_CORE, Chromium yolu CHROMIUM ile verilir.
 const path = require('path');
 const fs = require('fs');
@@ -17,10 +17,8 @@ const MM = 96 / 25.4; // CSS pikseli / mm
   await sayfa.waitForFunction(() => document.body.dataset.hazir === '1', null, { timeout: 30000 });
   await sayfa.pdf({ path: path.join(CIKTI, 'kart.pdf'), width: `${olcu.en_mm}mm`, height: `${olcu.boy_mm}mm`, printBackground: true, preferCSSPageSize: true });
   const pay = Number(olcu.pay_mm) * MM;
-  for (const [sinif, ad] of [['.on', 'on.png'], ['.arka', 'arka.png']]) {
-    const k = await sayfa.locator(sinif).boundingBox();
-    await sayfa.screenshot({ path: path.join(CIKTI, ad), clip: { x: k.x + pay, y: k.y + pay, width: k.width - 2 * pay, height: k.height - 2 * pay } });
-  }
-  console.log('kart.pdf, on.png, arka.png');
+  const k = await sayfa.locator('.yuz').boundingBox();
+  await sayfa.screenshot({ path: path.join(CIKTI, 'kart.png'), clip: { x: k.x + pay, y: k.y + pay, width: k.width - 2 * pay, height: k.height - 2 * pay } });
+  console.log('kart.pdf, kart.png');
   await tarayici.close();
 })();
