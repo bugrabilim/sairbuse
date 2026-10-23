@@ -1,7 +1,7 @@
 """Şaire armağan kartını üretir: tek yüz, dikey kartvizit boyu (55 × 85 mm, her kenarda 3 mm kesim payı).
 
-Kitabı tanıtan bir kart; şair arkadaşlarına gösterebilsin diye: şairin adı, Damla logosuyla kitabın adı ve
-sitenin ana sayfasına giden QR. İki zemin üretilir, biri seçilir:
+Kitabı tanıtan bir kart; şair arkadaşlarına gösterebilsin diye: şairin adı, Damla logosuyla kitabın adı, kısa
+şiirlerin yazıldığı yıllar, yedi duygunun renkleri ve sitenin ana sayfasına giden QR. İki zemin üretilir, biri seçilir:
 gece (sitenin koyu zemini) ve saman (kitabın kâğıdı). QR her iki kartta da açık zeminde koyu basılır ki her
 telefon okusun. Kart sitede yayımlanmaz; çıktılar kart-cikti/ klasörüne gider (git'e girmez).
 
@@ -20,10 +20,13 @@ FONT = KOK / 'node_modules' / '@fontsource'
 ADRES = 'https://duygularinpesinde.bumba.tr'
 EN_MM, BOY_MM, PAY_MM = 55, 85, 3  # kesim ölçüsü ve her kenardaki kesim payı
 SAIR = 'Antigoni'
+KUNYE = '2008–2021'
 SAMAN, MUREKKEP, SARI = '#efe6cf', '#1c1915', '#ebcb52'
+# Duygu renkleri (aşk, özlem, hüzün, yalnızlık, ayrılık, karanlık, özgürlük), kitabın kapağındaki gibi
+RENKLER = ['#e891b2', '#f2a766', SARI, '#9aa1a9', '#000000', '#a77ade', '#f4874f']
 ZEMINLER = {
-    'gece': {'zemin': '#12100e', 'yazi': '#efe9df', 'soluk': '#a49c90', 'damla': SARI},
-    'saman': {'zemin': SAMAN, 'yazi': MUREKKEP, 'soluk': '#6b6255', 'damla': '#d4a91f'},
+    'gece': {'zemin': '#12100e', 'yazi': '#efe9df', 'soluk': '#a49c90', 'damla': SARI, 'ayrilik': '#4a4540'},
+    'saman': {'zemin': SAMAN, 'yazi': MUREKKEP, 'soluk': '#6b6255', 'damla': '#d4a91f', 'ayrilik': '#000000'},
 }
 # Logo "Damla": biçim ve ölçüler src/data/logo.ts ve scripts/kitap/kitap.py ile aynı
 DAMLA_YOLU = 'M50 6C44 22 22 42 22 62a28 28 0 0 0 56 0C78 42 56 22 50 6Z'
@@ -35,13 +38,14 @@ def logo(renk: str) -> str:
 
 
 def font_css() -> str:
-    dosyalar = ['fraunces/300.css', 'inter/500.css']
+    dosyalar = ['fraunces/300.css', 'newsreader/400-italic.css', 'inter/500.css']
     return '\n'.join(f'<link rel="stylesheet" href="{(FONT / d).as_uri()}">' for d in dosyalar)
 
 
 def kart(ad: str, z: dict) -> str:
     en, boy = EN_MM + 2 * PAY_MM, BOY_MM + 2 * PAY_MM
     ic = PAY_MM + 5  # yazılar kesim çizgisinden en az 5 mm içeride
+    renkler = ''.join(f'<i style="background:{z["ayrilik"] if r == "#000000" else r}"></i>' for r in RENKLER)
     return f"""<!doctype html><html lang="tr"><head><meta charset="utf-8">{font_css()}<style>
   @page {{ size: {en}mm {boy}mm; margin: 0; }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -53,6 +57,9 @@ def kart(ad: str, z: dict) -> str:
   .damla-i svg {{ position: absolute; top: .172em; left: 50%; width: .25em; height: .25em; transform: translateX(-50%); }}
   .sair {{ font-family: 'Inter', sans-serif; font-weight: 500; font-size: 5.6pt; letter-spacing: .34em; text-transform: uppercase; color: {z['soluk']}; padding-left: .34em; }}
   .ad {{ margin-top: 3.2mm; font-family: 'Fraunces', serif; font-weight: 300; font-size: 21pt; line-height: .98; letter-spacing: -.015em; }}
+  .kunye {{ margin-top: 3mm; font-family: 'Newsreader', serif; font-style: italic; font-size: 7.6pt; color: {z['soluk']}; }}
+  .renkler {{ margin-top: 3.4mm; display: flex; gap: 1.2mm; }}
+  .renkler i {{ width: 1.6mm; height: 1.6mm; border-radius: 50%; }}
   .qr {{ margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 2mm; }}
   .qr img {{ width: 24mm; height: 24mm; display: block; border-radius: 1.6mm; }}
   .qr span {{ font-family: 'Inter', sans-serif; font-weight: 500; font-size: 5pt; letter-spacing: .03em; color: {z['soluk']}; }}
@@ -60,6 +67,8 @@ def kart(ad: str, z: dict) -> str:
 <section class="yuz"><div class="ic">
   <div class="sair">{SAIR}</div>
   <div class="ad">{logo(z['damla'])}</div>
+  <div class="kunye">{KUNYE}</div>
+  <div class="renkler">{renkler}</div>
   <div class="qr"><img src="qr.svg" alt=""><span>duygularinpesinde.bumba.tr</span></div>
 </div></section>
 <script>document.fonts.ready.then(() => {{ document.body.dataset.hazir = '1'; }});</script>
