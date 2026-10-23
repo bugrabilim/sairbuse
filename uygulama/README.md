@@ -75,7 +75,8 @@ bağlantısı ve iPhone Safari'deki uygulama şeridi açılır.
 İnceleme: GitHub → Actions → **iOS inceleme** → Run workflow (`scripts/uygulama/inceleme.py`). `durum` gönderimin ve
 öğelerinin durumunu yazar; `yeniden-gonder` reddedilen öğeyi çözüldü sayıp gönderimi yeniden incelemeye yollar. App
 Review bilgi istediğinde (Guideline 2.1) cevap App Store Connect'te yazılır, ama gönderim "Unresolved Issues"ta kalır
-ve "Resubmit to App Review" düğmesi kapalı durur; cevaptan sonra bu iş akışı yeterli (22 Ekim 2026'da böyle
+ve "Resubmit to App Review" düğmesi kapalı durur. Arayüzdeki yolu sürüm sayfasındaki mavi **Update Review**
+düğmesidir (gri ise Notes'ta bir şey değiştirip Save); bu iş akışı aynı işi API'den yapar (22 Ekim 2026'da böyle
 yeniden gönderildi). Apple'a verilen tanıtım notu `magaza/metinler.json` → `inceleme_notu`.
 
 Sonraki sürümler: `uygulama/ios/App/App.xcodeproj/project.pbxproj` içindeki `MARKETING_VERSION`'ı artırın

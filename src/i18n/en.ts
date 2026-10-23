@@ -342,6 +342,15 @@ export const en: Metin = {
     hakkinda: 'About',
     arama: 'Search',
     gizlilik: 'Privacy',
+    cek: 'Draw a poem',
+  },
+  cek: {
+    baslik: 'Draw a poem',
+    aciklama: 'A random poem every time.',
+    metin: 'Drawing a poem…',
+    yedek: 'If no poem opened, {fal} or {siirler}.',
+    fal: 'make a wish and draw one',
+    siirler: 'browse all poems',
   },
   yok: {
     baslik: 'Not found',

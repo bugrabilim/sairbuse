@@ -62,6 +62,10 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   gibi bir ezgi (hüzün Hicaz, özlem Uşşak, aşk Hüzzam, özgürlük Rast, karanlık Saba, ayrılık Kürdi, yalnızlık
   Segah). `public/muzik/<duygu>.mp3`, üretimi `scripts/muzik.py` (fluidsynth + FluidR3_GM, MIT; koma aralıkları
   perde bükmeyle). Açılınca hatırlanır, ortam sesi biraz kısılır.
+- **Rastgele şiir adresi `/cek/`** (`/en/draw/`; 23 Ekim 2026, şaire armağan kutusundaki QR için): her açılışta
+  rastgele bir şiire gider, aynı telefon gördüğü şiiri hepsi bitene dek tekrar çekmez (`localStorage`
+  `cekilenler`). Farklı telefonlara farklı şiir garanti değil (sunucu yok). noindex; haritada, aramada, llms.txt'de
+  yok. Umami olayı `siir-cek`. Adres basılı QR'da olduğu için değiştirilmez: `src/sayfalar/Cek.astro`.
 - Mum ışığı modu denendi, sahibi gereksiz buldu (9 Ekim 2026): kaldırıldı, geri eklenmez.
 - **Logo "Damla"** (12 Ekim 2026, sahibinin seçimi): "Duyguların Peşinde" Fraunces 300; adın tek noktası,
   Peşinde'nin i'si, bir gözyaşı damlası (açılış dizesi "Şiir kitabım ağlıyor!"). Damla sayfanın duygusunun
@@ -130,7 +134,7 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   includeSubDomains ve preload kullanılmaz.
 - Umami: site kimliği `3cc5cb50-4663-4436-b371-92cc3feb723b`, `data-domains="duygularinpesinde.bumba.tr"`.
   Olaylar: `tema-degistir`, `dil-degistir`, `arama`, `liste-katil`, `duygu-sec`, `paylas`, `ortam-sesi`,
-  `fon-muzigi`.
+  `fon-muzigi`, `siir-cek`.
 - Ortak e-posta listesi anahtarı: `duygularin-pesinde` (`src/data/site.ts`).
 
 ## SEO / GEO kaydı
