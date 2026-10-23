@@ -1,7 +1,7 @@
 """Şaire armağan kartını üretir: tek yüz, dikey kartvizit boyu (55 × 85 mm, her kenarda 3 mm kesim payı).
 
 Kitabı tanıtan bir kart; şair arkadaşlarına gösterebilsin diye: şairin adı, Damla logosuyla kitabın adı, kısa
-şiirlerin yazıldığı yıllar, yedi duygunun renkleri ve sitenin ana sayfasına giden QR. İki zemin üretilir, biri seçilir:
+şiirlerin yazıldığı yıllar, yedi duygunun renkleri ve sitenin ana sayfasına giden QR (`?utm_source=kart`: Umami'de kart okutuşları ayrı görünür). İki zemin üretilir, biri seçilir:
 gece (sitenin koyu zemini) ve saman (kitabın kâğıdı). QR her iki kartta da açık zeminde koyu basılır ki her
 telefon okusun. Kart sitede yayımlanmaz; çıktılar kart-cikti/ klasörüne gider (git'e girmez).
 
@@ -17,7 +17,7 @@ import segno
 KOK = Path(__file__).resolve().parents[2]
 CIKTI = KOK / 'kart-cikti'
 FONT = KOK / 'node_modules' / '@fontsource'
-ADRES = 'https://duygularinpesinde.bumba.tr'
+ADRES = 'https://duygularinpesinde.bumba.tr/?utm_source=kart'  # Umami'de kart okutuşları ayrı görünsün diye
 EN_MM, BOY_MM, PAY_MM = 55, 85, 3  # kesim ölçüsü ve her kenardaki kesim payı
 SAIR = 'Antigoni'
 KUNYE = '2008–2021'
