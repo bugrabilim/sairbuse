@@ -1,0 +1,11 @@
+---
+// Kazanım rozetleri yalnız telefon uygulamasında (sahibinin kararı): sitede bu sayfa üretilmez.
+import Sayfa from '../sayfalar/Rozetler.astro';
+import { UYGULAMA } from '../data/uygulama';
+
+export function getStaticPaths() {
+  return UYGULAMA ? [{ params: { rozetler: 'rozetler' } }] : [];
+}
+---
+
+<Sayfa />

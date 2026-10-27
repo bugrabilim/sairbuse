@@ -1,4 +1,4 @@
-// Kazanım rozetleri (Bumba Genel Standartlar §13). Veri yalnız bu tarayıcıda, localStorage'daki tek bir kayıtta
+// Kazanım rozetleri (Bumba Genel Standartlar §13; yalnız telefon uygulamasında, sahibinin kararı). Veri yalnız cihazda, localStorage'daki tek bir kayıtta
 // ("rozetler") tutulur ve hiçbir yolla sunucuya gitmez: kazanılan rozetin kimliği ve günü (saat yok), koşulları
 // hesaplamaya yeten sayaçlar (okunan ve dinlenen şiirlerin kimlikleri, yapılmış eylemler, okuma serisinin son günü ve
 // gün sayısı). Eylem günlüğü ve zaman damgası tutulmaz. Sayfalar eylemi `rozet` olayıyla bildirir:

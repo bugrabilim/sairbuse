@@ -318,7 +318,7 @@ export const tr = {
       },
       {
         baslik: 'Ziyaret istatistikleri',
-        metin: 'Kaç kişinin hangi sayfayı okuduğunu görmek için kendi sunucumuzda çalışan Umami’yi (istatistik.bumba.tr) kullanıyoruz. Umami yalnızca çerez bandında ya da alt bilgideki “Çerez tercihleri”nde istatistiğe izin verirseniz yüklenir; izin vermezseniz hiç çalışmaz. Umami çerez kullanmaz ve IP adresinizi saklamaz; ziyaretiniz takma adlı bir oturuma bağlanır ve şunlar işlenir: okunan sayfa, yönlendiren site, tarayıcı, cihaz türü, dil ve IP adresinden çıkarılan ülke ve şehir. Ayrıca şu işlemler sayılır: arama (yazılan kelime ve sonuç sayısı), tema ve dil değişikliği, duygu seçimi, paylaşım kanalı, ortam sesi ve fon müziği seçimi, rastgele şiir çekme, e-posta listesine katılma (adresiniz gönderilmez) ve bir kazanım rozetinin ilk kez kazanılması (yalnız rozetin kimliği). Hukuki sebep açık rızanızdır; izninizi “Çerez tercihleri”nden her an geri alabilirsiniz.',
+        metin: 'Kaç kişinin hangi sayfayı okuduğunu görmek için kendi sunucumuzda çalışan Umami’yi (istatistik.bumba.tr) kullanıyoruz. Umami yalnızca çerez bandında ya da alt bilgideki “Çerez tercihleri”nde istatistiğe izin verirseniz yüklenir; izin vermezseniz hiç çalışmaz. Umami çerez kullanmaz ve IP adresinizi saklamaz; ziyaretiniz takma adlı bir oturuma bağlanır ve şunlar işlenir: okunan sayfa, yönlendiren site, tarayıcı, cihaz türü, dil ve IP adresinden çıkarılan ülke ve şehir. Ayrıca şu işlemler sayılır: arama (yazılan kelime ve sonuç sayısı), tema ve dil değişikliği, duygu seçimi, paylaşım kanalı, ortam sesi ve fon müziği seçimi, rastgele şiir çekme ve e-posta listesine katılma (adresiniz gönderilmez). Hukuki sebep açık rızanızdır; izninizi “Çerez tercihleri”nden her an geri alabilirsiniz.',
       },
       {
         baslik: 'E-posta listesi',
@@ -330,11 +330,11 @@ export const tr = {
       },
       {
         baslik: 'Çerezler ve tarayıcı depolaması',
-        metin: 'Bu site çerez kullanmaz. Sitenin çalışması için tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: çerez seçiminiz (“bumba-cerez”), tema ve dil seçiminiz, ortam sesi ve fon müziği tercihiniz ve düzeyi, “şiir çek” adresinde gösterilmiş şiirler ve kazanım rozetleriniz (aşağıda); ana sayfada son gösterilen mısra yalnız oturum boyunca (sessionStorage) tutulur. Bunlar sunucuya gönderilmez, tarayıcı ayarlarından silinebilir ve çerez bandında “Zorunlu” grupta bilgi olarak gösterilir. Çerez politikası: {cerez}.',
+        metin: 'Bu site çerez kullanmaz. Sitenin çalışması için tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: çerez seçiminiz (“bumba-cerez”), tema ve dil seçiminiz, ortam sesi ve fon müziği tercihiniz ve düzeyi ve “şiir çek” adresinde gösterilmiş şiirler; ana sayfada son gösterilen mısra yalnız oturum boyunca (sessionStorage) tutulur. Bunlar sunucuya gönderilmez, tarayıcı ayarlarından silinebilir ve çerez bandında “Zorunlu” grupta bilgi olarak gösterilir. Çerez politikası: {cerez}.',
       },
       {
         baslik: 'Kazanım rozetleri',
-        metin: 'Şiir okudukça, sesli okuma dinledikçe ve fal baktıkça kazanılan rozetler yalnız bu tarayıcıda, localStorage’daki tek bir kayıtta (“rozetler”) tutulur: kazanılan rozetin kimliği ve kazanma günü (saat yok) ile koşulları hesaplamaya yeten sayaçlar (okunan ve dinlenen şiirler, yapılan eylemler, okuma serisinin son günü ve gün sayısı). Bu veri birinci taraftır, sunucuya gönderilmez ve siz silene kadar saklanır; Rozetler sayfasındaki “Rozetleri sil” düğmesiyle ya da tarayıcı verilerini temizleyerek silebilirsiniz. Hukuki sebep KVKK md. 5/2-f’dir (meşru menfaat: veri cihazınızdan çıkmaz, görür ve silersiniz). İstatistiğe izin verdiyseniz bir rozet ilk kazanıldığında hangi rozet olduğu, sayfa ziyaretleri gibi tarayıcı, cihaz, ülke ve şehir bilgisiyle sayılır; ad, e-posta ve ilerleme gönderilmez.',
+        metin: 'Kazanım rozetleri yalnız telefon uygulamasında var; bu sitede rozet tutulmaz. Uygulamada şiir okudukça, sesli okuma dinledikçe ve fal baktıkça kazanılan rozetler yalnız telefonda, tek bir kayıtta (“rozetler”) tutulur: kazanılan rozetin kimliği ve kazanma günü (saat yok) ile koşulları hesaplamaya yeten sayaçlar (okunan ve dinlenen şiirler, yapılan eylemler, okuma serisinin son günü ve gün sayısı). Bu veri telefondan çıkmaz, hiçbir sunucuya ya da istatistiğe gönderilmez ve siz silene kadar saklanır; uygulamadaki Rozetler ekranında “Rozetleri sil” düğmesiyle ya da uygulamayı silerek silebilirsiniz. Hukuki sebep KVKK md. 5/2-f’dir (meşru menfaat: veri cihazınızdan çıkmaz, görür ve silersiniz).',
       },
       {
         baslik: 'Dışarıdan gelen içerik',
@@ -426,7 +426,7 @@ export const tr = {
     pencereBaslik: 'Çerez tercihleri',
     zorunlu: 'Zorunlu',
     zorunluMetin:
-      'Her zaman açık. Çerez seçiminiz, tema, dil, ortam sesi ve fon müziği tercihi, ana sayfada son gösterilen mısra, şiir çekerken okunan şiirler ve kazanım rozetleriniz tarayıcınızda tutulur; sunucuya gönderilmez.',
+      'Her zaman açık. Çerez seçiminiz, tema, dil, ortam sesi ve fon müziği tercihi, ana sayfada son gösterilen mısra ve şiir çekerken okunan şiirler tarayıcınızda tutulur; sunucuya gönderilmez.',
     istatistik: 'İstatistik',
     istatistikMetin:
       'Umami (istatistik.bumba.tr): hangi sayfaların okunduğu, tarayıcı, cihaz, dil ve IP adresinden çıkarılan ülke ve şehir. Çerez kullanmaz, IP adresini saklamaz. Varsayılan kapalı.',

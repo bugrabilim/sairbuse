@@ -72,7 +72,9 @@ const umami = import.meta.env.PUBLIC_UMAMI_ID || SITE.umami;
 // Her dilde aynı sayfanın adresi (hreflang ve dil değiştirici)
 const diller = DILLER.map((d) => ({ dil: d, href: karsilikYok ? sayfaYolu('ana', d) : karsilik(yol, d) }));
 const oburYol = diller.find((x) => x.dil === obur)!.href;
-const menu = (['siirler', 'harita', 'zaman', 'fal', 'hakkinda', 'rozetler'] as const).map((s) => ({ href: sayfaYolu(s, dil), ad: m.menu[s] }));
+// Rozetler yalnız uygulamada (sahibinin kararı)
+const menuSayfalari: (keyof typeof m.menu)[] = ['siirler', 'harita', 'zaman', 'fal', 'hakkinda', ...(UYGULAMA ? (['rozetler'] as const) : [])];
+const menu = menuSayfalari.map((s) => ({ href: sayfaYolu(s, dil), ad: m.menu[s] }));
 const govdeSinifi = [duygu ? 'duygulu' : '', sahne ? 'sahneli' : '', sinif].filter(Boolean).join(' ');
 const temaRengi = duygu ? duygu.zeminGece : '#0d0c0b';
 const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
@@ -132,8 +134,9 @@ const jsonLd = noindex
     <slot name="bas" />
 
     <script is:inline>
-      // Tema sayfa çizilmeden seçilir ki yanlış tema bir an bile görünmesin. İlk açılışta sistem tercihi
-      // (Bumba Genel Standartlar §3); okur düğmeyle seçerse localStorage'da hatırlanır ("tema-secimi").
+      // Tema sayfa çizilmeden seçilir ki yanlış tema bir an bile görünmesin.
+      // Varsayılan gece (koyu; sahibinin kararı, standarda projeye özel istisna); okur düğmeyle gündüzü seçerse
+      // localStorage'da hatırlanır ("tema-secimi").
       // Eski "tema" kaydı okunmaz: eski sürüm sistem tercihini kendiliğinden yazmış olabilir.
       (function () {
         var k = document.documentElement;
@@ -141,7 +144,7 @@ const jsonLd = noindex
         try {
           t = localStorage.getItem('tema-secimi');
         } catch (e) {}
-        if (t !== 'gece' && t !== 'gunduz') t = matchMedia('(prefers-color-scheme: light)').matches ? 'gunduz' : 'gece';
+        if (t !== 'gece' && t !== 'gunduz') t = 'gece';
         k.setAttribute('data-theme', t);
         k.classList.add('js');
       })();
@@ -254,7 +257,8 @@ const jsonLd = noindex
 
     <AltBilgi />
     {!UYGULAMA && <CerezBandi />}
-    <script type="application/json" id="rozet-veri" set:html={rozetVerisi} />
+    {/* Rozet verisi yalnız uygulamada; sitede yoksa src/scripts/rozetler.ts hiçbir şey yapmaz */}
+    {UYGULAMA && <script type="application/json" id="rozet-veri" set:html={rozetVerisi} />}
 
     <script>
       import '../scripts/rozetler';
@@ -290,14 +294,6 @@ const jsonLd = noindex
         if (temaMeta) temaMeta.content = temaMeta.dataset[t] ?? temaMeta.content;
       }
       temaUygula(kok.getAttribute('data-theme') ?? 'gece');
-      // Okur seçim yapmadıysa tema sistem tercihini izler
-      matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-        let secim: string | null = null;
-        try {
-          secim = localStorage.getItem('tema-secimi');
-        } catch {}
-        if (!secim) temaUygula(e.matches ? 'gunduz' : 'gece');
-      });
       temaDugmeleri.forEach((b) =>
         b.addEventListener('click', () => {
           const yeni = kok.getAttribute('data-theme') === 'gunduz' ? 'gece' : 'gunduz';

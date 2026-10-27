@@ -38,20 +38,22 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   değil, sahibi 9 Ekim 2026'da düzeltti, "şairin sesi" denmez),
   dosyalar `public/ses/<şiir>.mp3`, düzey −18 LUFS'e eşitlenir; okuma sürerken ortam sesi ve fon müziği kısılır.
   9 Ekim 2026: üç şiirin kaydı var (2017-05-24-altunizade, 2019-12-21-feneryolu, 2020-07-18-moda).
-- **Tema ilk açılışta sistem tercihi** (Standartlar §3; 27 Ekim 2026'da 8 Ekim'deki "varsayılan koyu" kararının
-  yerine geçti): sistem açıksa gündüz, değilse gece. Düğmeyle seçilen tema `localStorage` `tema-secimi` anahtarında
-  hatırlanır; seçim yokken sistem tercihi değişirse sayfa da değişir. Eski `tema` anahtarı okunmaz.
+- **Varsayılan tema koyu (gece)** (sahibinin kararı, 8 Ekim 2026; 27 Ekim 2026'da yinelendi): Standartlar §3'teki
+  "ilk açılışta sistem tercihi" bu projede uygulanmaz, istisnanın standarda eklenmesi ana altyapı oturumundan
+  istendi. Açık tema (gündüz) yalnız düğmeyle seçilir; seçim `localStorage` `tema-secimi` anahtarında hatırlanır.
+  Eski `tema` anahtarı (sistem tercihini yazmış olabilir) okunmaz.
   Sayfalar `Cache-Control: no-cache` ile gider ki eski HTML tarayıcıda takılı kalmasın.
 - Şiir sayfasında şiir **harf harf yazılarak** açılır (satır satır değil); hız duyguya göre.
 - Ana sayfada "Yazıldıkları yerler" ve "ya da niyet tut" satırı yok; duygu şeritleri dar (72rem) kalır.
 - Ana sayfa vitrininin (hero) tamamı tıklanır ve o mısranın şiirine gider (18 Ekim 2026; sitede ve uygulamada).
   Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
-- **Alt bilgi** (Standartlar §1; 27 Ekim 2026'da 12 Ekim'deki tek satır düzeninin yerine geçti): solda çerçevesiz
-  e-posta listesi (başlık, adres, Katıl), sağda "App Store'dan indir" (yayına girince) ve Bumba Life rozeti; altında
-  tek satır telif ("© 2008'den itibaren Eylül Bitse. Şiirlerin tüm hakları saklıdır."; bitiş yılı yazılmaz),
-  "Gizlilik" bağlantısı ve "Çerez tercihleri" düğmesi. Telefonda alt alta. Uygulamada liste yerine siteyi Safari'de
-  açan bağlantı, çerez düğmesi yok. Görünür son güncelleme tarihi Hakkında'nın sonunda (derleme günü); makineler için
-  JSON-LD `dateModified` ve llms.txt.
+- **Alt bilgi masaüstünde tek satır** (sahibinin kararı, 12 Ekim 2026; 27 Ekim 2026'da yinelendi, Standartlar §1'deki
+  "solda liste, sağda imza" düzeni bu projede uygulanmaz, istisnanın standarda eklenmesi ana altyapı oturumundan
+  istendi): solda telif ("© 2008'den itibaren Eylül Bitse. Şiirlerin tüm hakları saklıdır."; bitiş yılı yazılmaz) ve
+  altında küçük "Gizlilik" bağlantısı ile "Çerez tercihleri" düğmesi (§9, §14), ortada e-posta listesi (başlık, adres,
+  Katıl), sağda "App Store'dan indir" (yayına girince) ve Bumba Life rozeti. Orta genişlikte iki satır, telefonda alt
+  alta. Uygulamada liste yerine siteyi Safari'de açan bağlantı, çerez düğmesi yok. Görünür son güncelleme tarihi
+  Hakkında'nın sonunda (derleme günü); makineler için JSON-LD `dateModified` ve llms.txt.
 - **E-posta listesi Katıl penceresi** (Standartlar §6): Katıl'a basınca pencere açılır, aydınlatma metni ortak
   servisten (`/api/liste/aydinlatma?dil=`) yüklenir, "Tam metin" bağlantısı ve asıl "Kabul ediyorum" düğmesi
   (metin yüklenene dek kapalı) orada. JavaScript yoksa formun altında işaretsiz rıza kutusu durur, form yine çalışır
@@ -59,11 +61,12 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
 - **Çerez bandı** (Standartlar §14): ilk ziyarette altta Kabul et, Reddet, Tercihler (eşit). Umami "İstatistik"
   grubunda, yalnız izinle yüklenir; seçim `bumba-cerez` anahtarında (politika sürümü `src/data/cerez.ts`).
   Politika merkezde (bumbagroup.com/cerez-politikasi). Uygulamada bant yok (sayaç da yok). `CerezBandi.astro`.
-- **Kazanım rozetleri** (Standartlar §13; 27 Ekim 2026): 18 rozet (`src/data/rozetler.ts`, adlar ve koşullar
-  sözlükte), hesap `src/scripts/rozetler.ts`. Veri yalnız tarayıcıda (`localStorage` `rozetler`: rozet kimliği,
+- **Kazanım rozetleri yalnız telefon uygulamasında** (Standartlar §13; sahibinin kararı, 27 Ekim 2026: sitede yok).
+  Sitede `/rozetler/` sayfası üretilmez, menüde yok, rozet verisi sayfaya konmaz (`UYGULAMA` ile). 18 rozet (`src/data/rozetler.ts`, adlar ve koşullar
+  sözlükte), hesap `src/scripts/rozetler.ts`. Veri yalnız telefonda (`localStorage` `rozetler`: rozet kimliği,
   kazanma günü, okunan/dinlenen şiir kimlikleri, eylemler, seri); sunucuya gitmez. İlk kazanımda kısa bildirim ve
-  bir kez not; `/rozetler/` (`/en/badges/`, noindex, haritada yok) listesi ve "Rozetleri sil". Umami
-  `rozet-kazanildi` yalnız ilk kazanımda, yalnız kimlikle. Sayfalar eylemi `rozet` olayıyla bildirir (şiir 5 sn
+  bir kez not; `/rozetler/` (`/en/badges/`, `src/pages/[rozetler].astro`) listesi ve "Rozetleri sil". Uygulamada
+  sayaç olmadığı için `rozet-kazanildi` olayı hiçbir yere gitmez. Sayfalar eylemi `rozet` olayıyla bildirir (şiir 5 sn
   açık kalınca okuma, kaydın %80'i dinlenince dinleme, fal, çark, paylaş, mısra kartı).
 - Hakkında'da "Fotoğraflar", "Gizlilik ve çerezler", "Haklar" ve "Sık sorulanlar" düğmeyle açılan pencerelerde
   (`#fotograflar`, `#gizlilik`, `#haklar`, `#sorular` adresleri pencereyi açar; JS yoksa içerik sayfada açık).
@@ -158,7 +161,7 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
 - Umami: site kimliği `3cc5cb50-4663-4436-b371-92cc3feb723b`, `data-domains="duygularinpesinde.bumba.tr"`;
   betik yalnız çerez bandında istatistiğe izin verilince yüklenir (`window.bumbaIstatistik`, `Temel.astro`).
   Olaylar: `tema-degistir`, `dil-degistir`, `arama`, `liste-katil`, `duygu-sec`, `paylas`, `ortam-sesi`,
-  `fon-muzigi`, `siir-cek`, `rozet-kazanildi`.
+  `fon-muzigi`, `siir-cek` (`rozet-kazanildi` tanımlı ama rozetler yalnız sayaçsız uygulamada).
 - Node: `.nvmrc` ve `Dockerfile` 22.23.4 (22 hattının son güvenlik sürümü, 20 Ekim 2026). Coolify bu uygulamada
   Dockerfile ile derlediği için Node sürümünü `Dockerfile` belirler; derleme değişkeni gerekmez.
 - Ortak e-posta listesi anahtarı: `duygularin-pesinde` (`src/data/site.ts`).

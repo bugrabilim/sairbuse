@@ -21,15 +21,14 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | `/zaman/` | 2008–2021 duygu tayfı, yıl yıl şiirler ve takvimde kesişen günler. |
 | `/fal/` | Şiir falı: fincanı kapat ya da duygu × yer çarkını çevir, bir şiir çıksın. |
 | `/cek/` | Rastgele bir şiir açar (armağan kartındaki QR bu adrese gider; aynı telefona aynı şiir tekrar gelmez). Arama motorlarına kapalı. |
-| `/rozetler/` | Kazanım rozetleri: kazanılanlar günüyle, kalanlar koşulu ve ilerlemesiyle; "Rozetleri sil" düğmesi. Arama motorlarına kapalı. |
 | `/hakkinda/` | Kitabın hikâyesi, renklerin şiirlerdeki kaynağı, imza; fotoğraf künyeleri, gizlilik, haklar ve sık sorulanlar düğmeyle açılan pencerelerde. |
 | `/admin/` | Şiir paneli: kod bilmeden şiir ekleme ve düzenleme (aşağıda). |
 
-Alt bilgide solda e-posta listesi, sağda Bumba Life rozeti; altında telif, Gizlilik bağlantısı ve "Çerez tercihleri" düğmesi. Listeye katılmak isteyen adresini yazıp Katıl'a basar; açılan pencerede ortak servisin aydınlatma metnini okur ve "Kabul ediyorum" ile katılır.
+Alt bilgi masaüstünde tek satırdır: solda telif (altında Gizlilik bağlantısı ve "Çerez tercihleri"), ortada e-posta listesi, sağda Bumba Life rozeti. Listeye katılmak isteyen adresini yazıp Katıl'a basar; açılan pencerede ortak servisin aydınlatma metnini okur ve "Kabul ediyorum" ile katılır.
 
 İlk ziyarette altta çerez bandı çıkar (Kabul et, Reddet, Tercihler). Ziyaretçi sayacı (Umami) yalnız istatistiğe izin verilirse yüklenir; politika https://bumbagroup.com/cerez-politikasi.
 
-Okur siteyi gezdikçe 18 kazanım rozeti kazanır (ilk şiir, üç yer, yedi duygu, üst üste yedi gün…). Rozetler yalnız okurun tarayıcısında tutulur, sunucuya gitmez; `/rozetler/` sayfasında görünür ve oradan silinebilir. Rozetlerin listesi `src/data/rozetler.ts`, adları ve koşulları `src/i18n/*.ts` → `rozet`, hesabı `src/scripts/rozetler.ts`.
+Telefon uygulamasında okur gezdikçe 18 kazanım rozeti kazanır (ilk şiir, üç yer, yedi duygu, üst üste yedi gün…); sitede rozet yok. Rozetler yalnız telefonda tutulur, sunucuya gitmez; uygulamanın Rozetler ekranında görünür ve oradan silinebilir. Rozetlerin listesi `src/data/rozetler.ts`, adları ve koşulları `src/i18n/*.ts` → `rozet`, hesabı `src/scripts/rozetler.ts`.
 
 Derleme sırasında her şiir için WhatsApp ve Instagram'da görünen bir önizleme görseli, şiirin fotoğrafıyla otomatik üretilir (`/og/<şiir>.jpg`). Mısra kartı ise okurun tarayıcısında çizilir; okur seçtiği mısraları şiirin fotoğrafının üstünde, hikâye boyutunda bir görsel olarak indirir ya da paylaşır.
 

@@ -304,7 +304,7 @@ export const en: Metin = {
       },
       {
         baslik: 'Visitor statistics',
-        metin: 'To see how many people read which page, we use Umami running on our own server (istatistik.bumba.tr). Umami loads only if you allow statistics in the cookie banner or under “Cookie preferences” in the footer; otherwise it doesn’t run at all. Umami uses no cookies and doesn’t store your IP address; your visit is linked to a pseudonymous session and the following is processed: the page read, the referring site, browser, device type, language, and the country and city derived from your IP address. These actions are also counted: searches (the words typed and the number of results), theme and language changes, choosing an emotion, the sharing channel, ambient sound and music choices, drawing a random poem, joining the mailing list (your address is not sent) and earning a badge for the first time (only the badge’s ID). The legal basis is your explicit consent; you can withdraw it at any time under “Cookie preferences”.',
+        metin: 'To see how many people read which page, we use Umami running on our own server (istatistik.bumba.tr). Umami loads only if you allow statistics in the cookie banner or under “Cookie preferences” in the footer; otherwise it doesn’t run at all. Umami uses no cookies and doesn’t store your IP address; your visit is linked to a pseudonymous session and the following is processed: the page read, the referring site, browser, device type, language, and the country and city derived from your IP address. These actions are also counted: searches (the words typed and the number of results), theme and language changes, choosing an emotion, the sharing channel, ambient sound and music choices, drawing a random poem and joining the mailing list (your address is not sent). The legal basis is your explicit consent; you can withdraw it at any time under “Cookie preferences”.',
       },
       {
         baslik: 'Mailing list',
@@ -316,11 +316,11 @@ export const en: Metin = {
       },
       {
         baslik: 'Cookies and browser storage',
-        metin: 'This site uses no cookies. For the site to work, these entries are kept in your browser’s own storage (localStorage): your cookie choice (“bumba-cerez”), your theme and language, your ambient sound and music settings and volume, the poems already shown at the “draw a poem” address and your badges (below); the last verse shown on the home page is kept only for the session (sessionStorage). They are never sent to the server, can be cleared in your browser settings and are listed as “Necessary” in the cookie banner. Cookie policy: {cerez}.',
+        metin: 'This site uses no cookies. For the site to work, these entries are kept in your browser’s own storage (localStorage): your cookie choice (“bumba-cerez”), your theme and language, your ambient sound and music settings and volume and the poems already shown at the “draw a poem” address; the last verse shown on the home page is kept only for the session (sessionStorage). They are never sent to the server, can be cleared in your browser settings and are listed as “Necessary” in the cookie banner. Cookie policy: {cerez}.',
       },
       {
         baslik: 'Badges',
-        metin: 'Badges you earn by reading poems, listening to recordings and trying the poem fortune are kept only in this browser, in a single localStorage entry (“rozetler”): the ID of each badge and the day it was earned (no time), plus the counters needed to work out the conditions (poems read and listened to, actions taken, the last day and length of your reading streak). This is first-party data, never sent to the server and kept until you delete it, with the “Delete badges” button on the Badges page or by clearing your browser data. The legal basis is Article 5(2)(f) of the KVKK (legitimate interest: the data never leaves your device, and you can see and delete it). If you allowed statistics, the first time a badge is earned we count which badge it was, along with browser, device, country and city as for page visits; no name, email or progress is sent.',
+        metin: 'Badges exist only in the phone app; this website keeps no badges. In the app, badges you earn by reading poems, listening to recordings and trying the poem fortune are kept only on the phone, in a single entry (“rozetler”): the ID of each badge and the day it was earned (no time), plus the counters needed to work out the conditions (poems read and listened to, actions taken, the last day and length of your reading streak). This data never leaves the phone, is never sent to any server or statistics service, and is kept until you delete it, with the “Delete badges” button on the app’s Badges screen or by deleting the app. The legal basis is Article 5(2)(f) of the KVKK (legitimate interest: the data never leaves your device, and you can see and delete it).',
       },
       {
         baslik: 'Content from elsewhere',
@@ -410,7 +410,7 @@ export const en: Metin = {
     pencereBaslik: 'Cookie preferences',
     zorunlu: 'Necessary',
     zorunluMetin:
-      'Always on. Your cookie choice, theme, language, ambient sound and music settings, the last verse shown on the home page, the poems already drawn and your badges are kept in your browser and never sent to the server.',
+      'Always on. Your cookie choice, theme, language, ambient sound and music settings, the last verse shown on the home page and the poems already drawn are kept in your browser and never sent to the server.',
     istatistik: 'Statistics',
     istatistikMetin:
       'Umami (istatistik.bumba.tr): which pages are read, browser, device, language, and the country and city derived from your IP address. No cookies; IP addresses are not stored. Off by default.',
