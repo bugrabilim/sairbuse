@@ -121,6 +121,7 @@ const kanallar = [
     s.addEventListener('click', async (e) => {
       const kanal = s.dataset.kanal ?? '';
       window.bumbaOlay?.('paylas', { kanal });
+      document.dispatchEvent(new CustomEvent('rozet', { detail: { tur: 'paylas' } }));
       if (kanal === 'link') {
         const tamam = await kopyala();
         if (durum) durum.textContent = tamam ? (menu.dataset.kopyalandi ?? '') : (menu.dataset.adres ?? '');

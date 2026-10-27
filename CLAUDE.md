@@ -1,6 +1,6 @@
 # Duyguların Peşinde — master dosya
 
-Antigoni imzalı, basılamamış bir şiir kitabının sitesi: 30 şiir; duygu, yer ve zaman üzerinden okunuyor.
+Eylül Bitse imzalı, basılamamış bir şiir kitabının sitesi: 30 şiir; duygu, yer ve zaman üzerinden okunuyor.
 Canlı adres: https://duygularinpesinde.bumba.tr · Bumba Life ürünü (Bumba Group).
 Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: @README.md
 
@@ -16,8 +16,20 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - **Kontroller:** `npx astro check` (0 hata), `npm run build`. Derleme yalnız repodakiyle çalışır.
 - **İçerik paneli:** `/admin/` (Sveltia CMS, noindex, kendi gevşek CSP'si).
 
-## Sahibin kalıcı kararları
+# Genel Standartlar
 
+Bu proje Bumba Genel Standartlar'a tabidir. Metin tek yerde durur: https://bumbagroup.com/standartlar.md
+(düz metin). Her oturumun başında oku (`curl -s https://bumbagroup.com/standartlar.md` ya da web getirme
+aracı) ve ona göre çalış; metni bu dosyaya kopyalama. Okunamazsa uydurma, sahibine bildir.
+Uygulanan sürüm: 5.5 (25 Ekim 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
+Sunucuya basmanın (izlenen dala birleştirme ya da push, Coolify yayını) zamanı her seferinde sahibine sorulur.
+Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahmini süre ve kullanımla sahibine sorulur.
+
+## Bu projeye özel kararlar ve sapmalar
+
+- **Mahlas "Eylül Bitse"** (27 Ekim 2026, sahibinin bildirdiği; önceki geçici imza "Antigoni" idi): tek yerden
+  `src/data/site.ts` → `SITE.sair`; kart ve kitap betiklerinde `SAIR`. "Antigoni" yalnız yer adı olarak kalır
+  (Burgazada'nın eski adı, 24.10.2011 şiirinin yeri).
 - Şiirlerin tüm hakları saklıdır; lisans yok. Şiirler çevrilmez: İngilizce sayfalarda Türkçe kalır, `lang="tr"`.
 - "sevgimiz percinlensin-aşkmetni.txt" şiir değildir, sitede yayımlanmaz.
 - Şiirler listesinde (Bütün şiirler, Harita, Zaman) sesli okuması olan şiirin adının yanında hoparlör işareti var
@@ -26,22 +38,36 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   değil, sahibi 9 Ekim 2026'da düzeltti, "şairin sesi" denmez),
   dosyalar `public/ses/<şiir>.mp3`, düzey −18 LUFS'e eşitlenir; okuma sürerken ortam sesi ve fon müziği kısılır.
   9 Ekim 2026: üç şiirin kaydı var (2017-05-24-altunizade, 2019-12-21-feneryolu, 2020-07-18-moda).
-- **Varsayılan tema koyu (gece).** Açık tema (gündüz) yalnız düğmeyle seçilir ve hatırlanır. Standartlar §3
-  "ilk açılışta sistem tercihi" der; sahibi 8 Ekim 2026'da açıkça koyu varsayılan istedi, bu karar geçerli.
-  Seçim `localStorage` `tema-secimi` anahtarında; eski `tema` anahtarı (sistem tercihini yazmış olabilir) okunmaz.
+- **Varsayılan tema koyu (gece)** (sahibinin kararı, 8 Ekim 2026; 27 Ekim 2026'da yinelendi): Standartlar §3'teki
+  "ilk açılışta sistem tercihi" bu projede uygulanmaz, istisnanın standarda eklenmesi ana altyapı oturumundan
+  istendi. Açık tema (gündüz) yalnız düğmeyle seçilir; seçim `localStorage` `tema-secimi` anahtarında hatırlanır.
+  Eski `tema` anahtarı (sistem tercihini yazmış olabilir) okunmaz.
   Sayfalar `Cache-Control: no-cache` ile gider ki eski HTML tarayıcıda takılı kalmasın.
 - Şiir sayfasında şiir **harf harf yazılarak** açılır (satır satır değil); hız duyguya göre.
 - Ana sayfada "Yazıldıkları yerler" ve "ya da niyet tut" satırı yok; duygu şeritleri dar (72rem) kalır.
 - Ana sayfa vitrininin (hero) tamamı tıklanır ve o mısranın şiirine gider (18 Ekim 2026; sitede ve uygulamada).
   Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
-- **Alt bilgi masaüstünde tek satır** (12 Ekim 2026): solda telif ("© 2008'den itibaren Antigoni. Şiirlerin tüm
-  hakları saklıdır."; ilk şiirin yılı, bitiş yılı yazılmaz), ortada e-posta listesi (başlık, adres, Katıl;
-  açıklama yok), sağda Bumba rozeti. Fotoğraf notu ve son güncelleme tarihi alt bilgide yok; güncelleme tarihi
-  makineler için JSON-LD `dateModified` ve llms.txt'de. Orta genişlikte iki satır, telefonda alt alta. Gizlilik ve
-  "Haklar" bağlantısı alt bilgide yok.
-- **E-posta listesinde rıza kutusu alt bilgide değil:** Katıl'a basınca açılan pencerede kısa aydınlatma özeti,
-  önceden işaretsiz rıza kutusu ve asıl Katıl düğmesi (`ListeFormu.astro`; Standartlar §6 böyle karşılanır).
-  JavaScript yoksa pencerenin içeriği formun altında açık durur, form yine çalışır.
+- **Alt bilgi masaüstünde tek satır** (sahibinin kararı, 12 Ekim 2026; 27 Ekim 2026'da yinelendi, Standartlar §1'deki
+  "solda liste, sağda imza" düzeni bu projede uygulanmaz, istisnanın standarda eklenmesi ana altyapı oturumundan
+  istendi): solda telif ("© 2008'den itibaren Eylül Bitse. Şiirlerin tüm hakları saklıdır."; bitiş yılı yazılmaz) ve
+  altında küçük "Gizlilik" bağlantısı ile "Çerez tercihleri" düğmesi (§9, §14), ortada e-posta listesi (başlık, adres,
+  Katıl), sağda "App Store'dan indir" (yayına girince) ve Bumba Life rozeti. Orta genişlikte iki satır, telefonda alt
+  alta. Uygulamada liste yerine siteyi Safari'de açan bağlantı, çerez düğmesi yok. Görünür son güncelleme tarihi
+  Hakkında'nın sonunda (derleme günü); makineler için JSON-LD `dateModified` ve llms.txt.
+- **E-posta listesi Katıl penceresi** (Standartlar §6): Katıl'a basınca pencere açılır, aydınlatma metni ortak
+  servisten (`/api/liste/aydinlatma?dil=`) yüklenir, "Tam metin" bağlantısı ve asıl "Kabul ediyorum" düğmesi
+  (metin yüklenene dek kapalı) orada. JavaScript yoksa formun altında işaretsiz rıza kutusu durur, form yine çalışır
+  (`ListeFormu.astro`).
+- **Çerez bandı** (Standartlar §14): ilk ziyarette altta Kabul et, Reddet, Tercihler (eşit). Umami "İstatistik"
+  grubunda, yalnız izinle yüklenir; seçim `bumba-cerez` anahtarında (politika sürümü `src/data/cerez.ts`).
+  Politika merkezde (bumbagroup.com/cerez-politikasi). Uygulamada bant yok (sayaç da yok). `CerezBandi.astro`.
+- **Kazanım rozetleri yalnız telefon uygulamasında** (Standartlar §13; sahibinin kararı, 27 Ekim 2026: sitede yok).
+  Sitede `/rozetler/` sayfası üretilmez, menüde yok, rozet verisi sayfaya konmaz (`UYGULAMA` ile). 18 rozet (`src/data/rozetler.ts`, adlar ve koşullar
+  sözlükte), hesap `src/scripts/rozetler.ts`. Veri yalnız telefonda (`localStorage` `rozetler`: rozet kimliği,
+  kazanma günü, okunan/dinlenen şiir kimlikleri, eylemler, seri); sunucuya gitmez. İlk kazanımda kısa bildirim ve
+  bir kez not; `/rozetler/` (`/en/badges/`, `src/pages/[rozetler].astro`) listesi ve "Rozetleri sil". Uygulamada
+  sayaç olmadığı için `rozet-kazanildi` olayı hiçbir yere gitmez. Sayfalar eylemi `rozet` olayıyla bildirir (şiir 5 sn
+  açık kalınca okuma, kaydın %80'i dinlenince dinleme, fal, çark, paylaş, mısra kartı).
 - Hakkında'da "Fotoğraflar", "Gizlilik ve çerezler", "Haklar" ve "Sık sorulanlar" düğmeyle açılan pencerelerde
   (`#fotograflar`, `#gizlilik`, `#haklar`, `#sorular` adresleri pencereyi açar; JS yoksa içerik sayfada açık).
   `/gizlilik/` sayfası da durur (KVKK bağlantıları için), metin tek yerden: `GizlilikMetni.astro`.
@@ -90,7 +116,7 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - **iPhone uygulaması** (17 Ekim 2026, sahibinin isteği; önce Apple, sonra Google Play): Capacitor 8, sitenin
   derlenmiş hâli uygulamanın içinde (çevrimdışı). Paket kimliği `tr.bumba.duygularinpesinde`, yalnız iPhone,
   dikey. `npm run uygulama` (PUBLIC_UYGULAMA=1 → `dist-uygulama/` → `cap sync ios`); iOS projesi `uygulama/ios/`.
-  Uygulamada: sayaç yok (veri toplanmaz), e-posta listesi siteyi Safari'de açar, paylaşım iOS'un kendi paylaşım
+  Uygulamada: sayaç ve çerez bandı yok (veri toplanmaz), e-posta listesi siteyi Safari'de açar, paylaşım iOS'un kendi paylaşım
   ekranıyla (sitedeki kanal menüsü kuralının uygulamadaki istisnası), menüde "Günün şiiri" yerel bildirimi
   (09.00, telefonda zamanlanır, sunucu yok). Yeni şiir ya da düzeltme uygulamaya ancak yeni sürümle gelir.
   Denetim: `.github/workflows/ios.yml` (simülatör derlemesi, her PR). Yayın: `ios-yayin.yml` elle tetiklenir;
@@ -111,8 +137,6 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   (`FLAG_KEEP_SCREEN_ON`). Tam saatli alarm izni kaldırıldı (Play politikası; Günün şiiri yaklaşık 09.00).
   `npm run uygulama:android`; denetim `.github/workflows/android.yml` (APK + emülatörde deneme, her PR). Google Play
   yayını için Play Console hesabı ve imza anahtarı gerekiyor (`uygulama/README.md`).
-- **Standart işleri için birleştirme yetkisi:** Bumba Genel Standartlar işlerinde PR açılır, kontroller
-  geçince sormadan main'e birleştirilir ve yayın izlenir. Diğer işlerde de sahibi "herşeye yetkin var" dedi.
 
 ## Sunucu ve yayın
 
@@ -120,7 +144,8 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
   Vercel/Netlify/Supabase'de yayın yok.
 - Coolify uygulaması: ad `duygularinpesinde`, **uuid `x4s4woc3tff78dkjnegnoffy`**, derleme `dockerfile`,
   izlenen dal `main`, port 80, adres https://duygularinpesinde.bumba.tr.
-- main'e her push kendiliğinden yayına girer. Sunucu aynı anda tek derleme yapar; sırada beklemek normal
+- main'e her push kendiliğinden yayına girer; bu yüzden birleştirme, push ve yeniden yayın zamanı her seferinde
+  sahibine sorulur (Standartlar "Yayın zamanı onayı"). Sunucu aynı anda tek derleme yapar; sırada beklemek normal
   (sıra: https://durum.bumba.tr "Canlı" kartı). Yeniden yayından önce sıraya bak, aynı commit'i iki kez sokma.
 - `COOLIFY_URL` ve `COOLIFY_API_TOKEN` ortamda; yalnız okuma ve yeniden yayın için. Anahtarı ve `/envs`
   değerlerini asla yazdırma.
@@ -133,36 +158,39 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 - Güvenlik başlıkları bu repoda, `nginx.conf` (yalnız server düzeyinde `add_header`).
   **HSTS `max-age=31536000` (1 yıl):** 8 Ekim 2026'da 1 günle başladı, sorunsuz geçen bir haftadan sonra 17 Ekim 2026'da 1 yıla çıktı.
   includeSubDomains ve preload kullanılmaz.
-- Umami: site kimliği `3cc5cb50-4663-4436-b371-92cc3feb723b`, `data-domains="duygularinpesinde.bumba.tr"`.
+- Umami: site kimliği `3cc5cb50-4663-4436-b371-92cc3feb723b`, `data-domains="duygularinpesinde.bumba.tr"`;
+  betik yalnız çerez bandında istatistiğe izin verilince yüklenir (`window.bumbaIstatistik`, `Temel.astro`).
   Olaylar: `tema-degistir`, `dil-degistir`, `arama`, `liste-katil`, `duygu-sec`, `paylas`, `ortam-sesi`,
-  `fon-muzigi`, `siir-cek`.
+  `fon-muzigi`, `siir-cek` (`rozet-kazanildi` tanımlı ama rozetler yalnız sayaçsız uygulamada).
+- Node: `.nvmrc` ve `Dockerfile` 22.23.4 (22 hattının son güvenlik sürümü, 20 Ekim 2026). Coolify bu uygulamada
+  Dockerfile ile derlediği için Node sürümünü `Dockerfile` belirler; derleme değişkeni gerekmez.
 - Ortak e-posta listesi anahtarı: `duygularin-pesinde` (`src/data/site.ts`).
 
 ## SEO / GEO kaydı
 
-**Hedef sorgular:** "Duyguların Peşinde", "Antigoni şiirleri", "İstanbul şiirleri", "Moda şiiri", "Kadıköy
-şiiri", "vapur şiiri", "aşk şiiri", "özlem şiiri", "hüzünlü şiirler", "ayrılık şiiri", "Burgazada Antigoni",
+**Hedef sorgular:** "Duyguların Peşinde", "Eylül Bitse şiirleri", "İstanbul şiirleri", "Moda şiiri", "Kadıköy
+şiiri", "vapur şiiri", "aşk şiiri", "özlem şiiri", "hüzünlü şiirler", "ayrılık şiiri", "Burgazada şiiri",
 "Turkish poems Istanbul".
 
 **Sayfa başlıkları ve açıklamaları** (kaynak: `src/i18n/*.ts`; İngilizce başlıklarda "(In Pursuit of Emotions)"
-eki, şiirlerde "· poem by Antigoni"):
+eki, şiirlerde "· poem by Eylül Bitse"):
 
 | Sayfa | TR başlık / açıklama | EN başlık / açıklama |
 |---|---|---|
 | Ana sayfa | Duyguların Peşinde / `site.aciklama` | Duyguların Peşinde — In Pursuit of Emotions / `site.aciklama` |
 | Bütün şiirler | Bütün şiirler / "30 şiir, yazıldıkları sırayla." | All poems / "30 poems in the order they were written. The poems are in Turkish." |
-| Şiir | ad ya da ilk mısra… / "ilk mısra — tarih – yer" | … · poem by Antigoni / "A poem in Turkish by Antigoni: “…” (tarih – yer)." |
+| Şiir | ad ya da ilk mısra… / "ilk mısra — tarih – yer" | … · poem by Eylül Bitse / "A poem in Turkish by Eylül Bitse: “…” (tarih – yer)." |
 | Duygu | Aşk… / "Aşk üzerine N şiir. Rengi pembe; …" | Love… / "N poems of love. Its colour is pink, …" |
 | Yer | Moda… / "Moda'da yazılmış N şiir." | Moda… / "N poems written in Moda." |
 | Harita | Harita / "Şiirlerin yazıldığı yerler: …" | Map / "Where the poems were written: …" |
 | Zaman | Zaman / "2008–2021 arasında yazılmış N tarihli şiir." | Time / "N dated poems written between 2008 and 2021." |
 | Fal | Şiir falı / "Bir niyet tut: …" | Poem fortune / "Make a wish: …" |
-| Hakkında | Hakkında / "Antigoni imzalı, basılamamış …" | About / "The home of an unpublished book of poems …" |
+| Hakkında | Hakkında / "Eylül Bitse imzalı, basılamamış …" | About / "The home of an unpublished book of poems …" |
 | Arama | Arama / "Şiirlerde, duygularda ve yerlerde ara." | Search / "Search the poems, emotions and places." |
 | Gizlilik | Gizlilik ve çerezler / KVKK özeti | Privacy and cookies / KVKK özeti |
 
 **Şemalar (JSON-LD, `src/lib/sema.ts`):** her sayfada Organization (parentOrganization: Bumba Group),
-WebSite (SearchAction → arama sayfası), Person (Antigoni); alt sayfalarda BreadcrumbList; şiirde
+WebSite (SearchAction → arama sayfası), Person (Eylül Bitse); alt sayfalarda BreadcrumbList; şiirde
 CreativeWork (genre Şiir/Poetry, author, dateCreated, locationCreated, copyrightNotice); duygu, yer ve bütün
 şiirler sayfalarında CollectionPage; Hakkında'da FAQPage ("Sık sorulanlar" penceresindekiyle aynı); ana
 sayfada WebPage. Sosyal hesap yok, `sameAs` yok.
@@ -176,58 +204,6 @@ sayfada WebPage. Sosyal hesap yok, `sameAs` yok.
   Applebot-Extended, CCBot, Meta-ExternalAgent); bu, yapay zekâ aramalarında görünürlüğü etkilemez.
 - `/llms.txt` derlemede üretilir (`src/pages/llms.txt.ts`): iki dilde özet, sayfalar, duygular, yerler, şiirler.
 - Ana sayfanın başında sitenin kısa özeti (`site.ozet`), Hakkında'da soru-cevap blokları (Sık sorulanlar
-  penceresi). Son güncelleme tarihi (derleme günü) WebSite şemasında `dateModified` ve llms.txt'de; sahibinin
-  isteğiyle alt bilgide gösterilmiyor (12 Ekim 2026).
+  penceresi). Son güncelleme tarihi (derleme günü) WebSite şemasında `dateModified`, llms.txt'de ve Hakkında'nın
+  sonunda görünür; alt bilgide yok (12 Ekim 2026).
 - Paylaşım görselleri derlemede üretilir: `/og/<id>.jpg`, `/og/en/<id>.jpg`, `/og/site.jpg`, `/og/en/site.jpg`.
-
-## Genel Standartlar
-
-Bumba Genel Standartlar · Sürüm 3.2 · 8 Ekim 2026
-
-Yeni sürüm gelirse bu bölüm bütünüyle onunla değiştirilir; sürüm satırı korunur. Maddeler zorunludur; varsa
-korunur, eksikse tamamlanır, yoksa oluşturulur. Tasarım ya da eski bir karar engel olursa karar değişir
-(gizlilik kararları hariç). Bumba Group bilgilerinde tek kaynak https://bumbagroup.com.
-
-Sabit bilgiler: veri sorumlusu Bumba Teknoloji Limited Şirketi (Ataşehir / İstanbul); iletişim, KVKK ve
-yönetici e-postası bilgi@bumbagroup.com; Umami https://istatistik.bumba.tr; ortak liste
-https://bumbagroup.com/api/liste/katil; marka kiti https://bumbagroup.com/marka.
-
-1. **Bumba imzası:** her sayfanın alt bilgisinde Bumba Life rozeti (açık + koyu, temaya göre biri görünür).
-   Birleştirmelerde kaybolmasın.
-2. **SEO/GEO:** benzersiz title/description (iki dil), tek H1, canonical, hreflang, OG/Twitter, ikonlar,
-   sitemap + robots (Sitemap satırı), JSON-LD (Organization + parentOrganization Bumba Group, WebSite,
-   BreadcrumbList, içeriğe göre diğerleri), alt metin, gerçek 404. GEO: içerik JS'siz okunur, AI arama botları
-   açık, /llms.txt, sayfa başında özet, soru-cevap, güncelleme tarihi. Kayıt bu dosyada.
-3. **Tema:** açık ve koyu, görünür düğme, seçim hatırlanır, flash yok, renkler tek merkezden (CSS
-   değişkenleri), iki temada WCAG AA. (Varsayılan koyu: sahibin kararı, yukarıda.)
-4. **Arama:** bütün içerik, Türkçe harf ve büyük/küçük harf duyarsız, klavyeyle kullanılır, anlamlı boş
-   durum. Statik sitede derleme dizini + istemci araması.
-5. **TR/EN:** bütün metinler çeviri dosyalarından, her sayfada dil değiştirici (karşılığa gider, hatırlar),
-   dile özgü adres, doğru `<html lang>`, dile göre tarih/sayı, doğal İngilizce.
-6. **E-posta listesi:** ortak servis formu (JS'siz çalışır), önceden işaretsiz rıza kutusu, bot tuzağı,
-   iki dilde mesajlar, Umami `liste-katil`. Siteler kendi başına duyuru e-postası göndermez.
-7. Üyelik ve 10. Panel: statik site, uygulanmaz.
-8. **HTTPS:** http→https 301 ve www→kök 301 sunucuda (ana oturum); HSTS (1 gün → bir hafta sonra 1 yıl),
-   nosniff, Referrer-Policy, CSP (istatistik.bumba.tr script/connect; bumbagroup.com img/connect/form-action).
-9. **Umami:** her herkese açık sayfada, `data-domains` asıl adres; olaylar: arama, dil, tema, liste-katil.
-   Kişisel bilgi gönderilmez. Çerez yok, çerez bandı yok; gizlilik metninde anlatılır.
-11. **Taban kalite:** mobil uyum, erişilebilirlik, 404/500 iki dilde ve iki temada, anahtarlar repoda yok,
-   KVKK aydınlatma/gizlilik/çerez metni.
-12. **Kalıcılık:** bu dosya master; çelişen eski kararlar güncellenir.
-
-Ana altyapı oturumunun işleri (kendin yapma): yeni uygulama, alan adı/DNS, www yönlendirmesi, ortam değişkeni,
-veritabanı, kalıcı disk, zamanlanmış görev, Umami kaydı, ortak liste, e-posta anahtarı, duyuru e-postası, İYS.
-
-### Her geliştirmede kontrol listesi
-
-- TR ve EN metin (bütün ekranlar)
-- Açık ve koyu tema
-- SEO/GEO: meta, şema, sitemap, hreflang, llms.txt ve bu dosyadaki kayıt
-- Erişim: herkese açık mı, yöneticiye özel mi; buna göre index ya da noindex
-- Arama dizini (`src/pages/arama.json.ts`)
-- Umami: sayfa sayılıyor mu, yeni önemli eylem için olay tanımlı mı
-- E-posta listesi formu
-- Mobil uyum ve erişilebilirlik
-- Alt bilgide Bumba rozeti (birleştirmelerde kaybolmadı mı)
-- Push'lar toplu mu, derleme yalnız repodakiyle mi çalışıyor
-- iOS uygulaması: `npm run uygulama` derleniyor mu, uygulama kipindeki farklar (sayaç, liste, paylaşım) bozulmadı mı

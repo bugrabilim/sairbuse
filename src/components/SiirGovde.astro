@@ -6,14 +6,16 @@ interface Props {
   id?: string;
   /** 'hemen': sayfa açılınca satır satır; 'gec': ekrana girince; yoksa düz */
   acilis?: 'hemen' | 'gec';
+  /** şiirin kimliği (kazanım rozetleri okumayı buradan sayar) */
+  'data-siir'?: string;
 }
 
-const { siir, id, acilis } = Astro.props;
+const { siir, id, acilis, 'data-siir': veriSiir } = Astro.props;
 const sinif = ['govde', acilis === 'hemen' && 'satir-satir', acilis === 'gec' && 'gec'].filter(Boolean).join(' ');
 let sira = 0;
 ---
 
-<div class={sinif} id={id} lang="tr">
+<div class={sinif} id={id} lang="tr" data-siir={veriSiir}>
   {
     kitalar(siir).map((kita) => (
       <p class="kita">

@@ -311,6 +311,7 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
       if (yerelUygulama()) indir.hidden = true;
       if (durum) durum.textContent = '';
       pencere.showModal();
+      document.dispatchEvent(new CustomEvent('rozet', { detail: { tur: 'misra-karti' } }));
     } catch {
       if (durum) durum.textContent = M.hazirlanamadi;
     } finally {

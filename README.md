@@ -24,7 +24,11 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | `/hakkinda/` | Kitabın hikâyesi, renklerin şiirlerdeki kaynağı, imza; fotoğraf künyeleri, gizlilik, haklar ve sık sorulanlar düğmeyle açılan pencerelerde. |
 | `/admin/` | Şiir paneli: kod bilmeden şiir ekleme ve düzenleme (aşağıda). |
 
-Alt bilgi masaüstünde tek satırdır: solda telif, ortada e-posta listesi, sağda Bumba rozeti. Listeye katılmak isteyen adresini yazıp Katıl'a basar; açılan pencerede aydınlatma özetini okuyup rıza kutusunu işaretler ve orada katılır.
+Alt bilgi masaüstünde tek satırdır: solda telif (altında Gizlilik bağlantısı ve "Çerez tercihleri"), ortada e-posta listesi, sağda Bumba Life rozeti. Listeye katılmak isteyen adresini yazıp Katıl'a basar; açılan pencerede ortak servisin aydınlatma metnini okur ve "Kabul ediyorum" ile katılır.
+
+İlk ziyarette altta çerez bandı çıkar (Kabul et, Reddet, Tercihler). Ziyaretçi sayacı (Umami) yalnız istatistiğe izin verilirse yüklenir; politika https://bumbagroup.com/cerez-politikasi.
+
+Telefon uygulamasında okur gezdikçe 18 kazanım rozeti kazanır (ilk şiir, üç yer, yedi duygu, üst üste yedi gün…); sitede rozet yok. Rozetler yalnız telefonda tutulur, sunucuya gitmez; uygulamanın Rozetler ekranında görünür ve oradan silinebilir. Rozetlerin listesi `src/data/rozetler.ts`, adları ve koşulları `src/i18n/*.ts` → `rozet`, hesabı `src/scripts/rozetler.ts`.
 
 Derleme sırasında her şiir için WhatsApp ve Instagram'da görünen bir önizleme görseli, şiirin fotoğrafıyla otomatik üretilir (`/og/<şiir>.jpg`). Mısra kartı ise okurun tarayıcısında çizilir; okur seçtiği mısraları şiirin fotoğrafının üstünde, hikâye boyutunda bir görsel olarak indirir ya da paylaşır.
 
@@ -120,11 +124,11 @@ Rakıyla
 - Dosyanın adı şiirin adresi olur: `sari.md` dosyası `/siir/sari/` adresinde yayınlanır.
 - Yeni bir yer haritada görünsün isterseniz konumunu `src/data/yerler.ts` dosyasına ekleyin; o yerin varsayılan fotoğrafı `src/data/fotograflar.ts` → `YER_FOTOGRAFLARI`.
 
-Şairin imzası (şu an *Antigoni*) `src/data/site.ts` dosyasında tek satırda tanımlı.
+Şairin imzası (mahlas *Eylül Bitse*) `src/data/site.ts` dosyasında tek satırda tanımlı.
 
 ## Yerelde çalıştırmak
 
-Node 22.12 veya üstü gerekir.
+Node 22.23.4 veya üstü gerekir (`.nvmrc`).
 
 ```sh
 npm install
@@ -175,6 +179,6 @@ python3 scripts/harita.py <klasör>/simplified_land_polygons.shp --genis   # Par
 
 ## Haklar
 
-© 2008–2026 Antigoni. Bu depodaki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz.
+© 2008–2026 Eylül Bitse. Bu depodaki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz.
 
 `src/assets/foto/` klasöründeki fotoğraflar bu kapsamda değildir; her biri `src/data/fotograflar.ts`'de adı geçen fotoğrafçıya aittir ve kendi lisansıyla (CC BY, CC BY-SA ya da CC0) kullanılmaktadır.

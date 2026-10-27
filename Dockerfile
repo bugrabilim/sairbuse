@@ -1,7 +1,7 @@
 # Siteyi derler ve nginx ile sunar. Coolify'da "Dockerfile" derleme paketiyle kullanılır;
 # başka bir Docker sunucusunda da aynen çalışır (port 80).
 
-FROM node:22-bookworm-slim AS derleme
+FROM node:22.23.4-bookworm-slim AS derleme
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund

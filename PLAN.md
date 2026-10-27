@@ -125,7 +125,7 @@ Her şiir sayfasının altında üç kapı olur: **"aynı duygudan bir şiir"**,
 2. **Bir ekran, bir şiir:** Bol boşluk, büyük ve okunaklı yazı, mısra kırılımları aynen korunur.
 3. **Yavaşlık isteğe bağlı:** "Yavaş oku" modunda mısralar tek tek gelir. Varsayılanda şiirin tamamı görünür (erişilebilirlik), cihazında "hareketi azalt" ayarı açık olana animasyon yok.
 4. **Önce telefon:** Okurların çoğu Instagram ve WhatsApp'tan telefonla gelecek.
-5. **Gece gibi:** Site koyu (gece) temayla açılıyor; okur isterse düğmeyle açık (gündüz) temaya geçebilir (8 Ekim 2026, Bumba Standartları §3). Her şiir yazıldığı yerin fotoğrafıyla açılıyor (§11).
+5. **Gece gibi:** Site koyu (gece) temayla açılıyor; okur isterse düğmeyle açık (gündüz) temaya geçebilir, seçimi hatırlanır (sahibinin kararı; Bumba Standartları §3'e projeye özel istisna). Her şiir yazıldığı yerin fotoğrafıyla açılıyor (§11).
 
 ---
 
@@ -268,7 +268,7 @@ Kargayla
 - [x] Her şiire 1–2 duygu etiketi (§1.1'deki öneriler; şair değiştirebilir)
 - [x] Yayından çıkacaklar: aşk metni çıkarıldı, `bus.txt` yayında.
 - [ ] Tarihsiz üç şiire tarih ve yer (biliniyorsa)
-- [x] Mahlas: *Antigoni* (öneri, `src/data/site.ts`). "Hakkında" metni yazıldı. Lisans: tüm hakları saklıdır.
+- [x] Mahlas: *Eylül Bitse* (27 Ekim 2026; önce geçici olarak *Antigoni*, `src/data/site.ts`). "Hakkında" metni yazıldı. Lisans: tüm hakları saklıdır.
 - [x] Alt alan adı: `duygularinpesinde.bumba.tr`
 
 ### Faz 1 — İlk yayın (MVP)
@@ -313,6 +313,7 @@ Kargayla
 - [ ] ~~Okurun bir şiire renk ya da kelime bırakması~~ (sahibi istemedi, Ekim 2026: site statik kalır)
 - [x] E-posta listesi (Bumba ortak liste servisi)
 - [x] Bumba Genel Standartlar 3.2: TR/EN, açık/koyu tema, arama, SEO/GEO, llms.txt, HSTS/CSP, gizlilik (CLAUDE.md)
+- [x] Bumba Genel Standartlar 5.5 (27 Ekim 2026): çerez bandı, Umami yalnız izinle, Katıl penceresi, 18 kazanım rozeti (yalnız uygulamada); alt bilgi ve koyu tema sahibinin kararıyla önceki gibi
 - [ ] Instagram hesabı ve mısra kartlarıyla düzenli paylaşım
 
 ### Faz 3.5 — Mobil uygulama
@@ -334,7 +335,7 @@ Kargayla
 |---|---|
 | Harf hataları | Sabah ~~lur~~ olur · ~~Bıçalar~~ Bıçaklar · ~~büüyk~~ büyük · ne ~~hissedileblirse~~ hissedilebilirse · ~~araların~~ aralarında |
 | Ayrı / bitişik yazım | ~~birses~~ bir ses · ~~birbir~~ bir bir · ~~onbir~~ on bir · ~~onik~~ on iki · ~~yazgelir~~ yaz gelir · ~~budenli~~ bu denli · ~~oysa ki~~ oysaki · ~~baş parmağında~~ başparmağında · ~~Göz yaşlarım~~ Gözyaşlarım · ~~yalnızkalmam gereksadece~~ yalnız kalmam gerek sadece |
-| de/da bağlacı, mi soru eki | onlar da (2 yerde) · ~~değimliydin~~ değil miydin · ~~edemememi~~ edemememe mi |
+| de/da bağlacı, mi soru eki | onlar da (2 yerde) · ~~değimliydin~~ değil miydin · ~~edemememi~~ edemememe mi (27 Ekim 2026'da sahibi düzeltti: "Belli edemeyişime mi yanıyorum yoksa"; bir önceki dize "Özledin mi?" yerine "Özledim mi?") |
 | Düzeltme işareti | hikâye · rüzgâr (2 yerde) · hâlâ · hâle |
 | Özel adlar | Kalamış’a · Burgaz’a · Antigoni’de · Karaköy’de |
 | İkilemeler | ~~Senli-sensiz~~ Senli sensiz · ~~yaz-kış~~ yaz kış |
@@ -353,7 +354,7 @@ Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", 
 
 | Soru | Karar |
 |---|---|
-| Şair adı | *Antigoni* (şimdilik böyle kalıyor). Burgazada'nın eski adı, "İçimdeki savaş" orada yazıldı. Değiştirmek için `src/data/site.ts` dosyasında tek satır. |
+| Şair adı | Mahlas *Eylül Bitse* (27 Ekim 2026). Önceki geçici imza *Antigoni* (Burgazada'nın eski adı) idi. Değiştirmek için `src/data/site.ts` dosyasında tek satır. |
 | Başlıklar | Ad, tarih, yer. Adı olmayan şiirde başlık yerine şairin kendi "tarih – yer" imzası duruyor. |
 | Yayından çıkacaklar | Aşk metni çıkarıldı. `bus.txt` yayında. |
 | Adres | `duygularinpesinde.bumba.tr` |
@@ -362,7 +363,7 @@ Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", 
 | **Açık:** Ses kayıtları | Üç şiirin kaydı eklendi (9 Ekim 2026), diğerleri bekleniyor. Yapay sesle denenen örnekler düz okuduğu için kaldırıldı (§10.4). |
 | İmza | Alt bilgide Bumba Life rozeti var. |
 | Logo | "Damla" (12 Ekim 2026): Fraunces 300 yazı; Peşinde'nin i noktası, sayfanın duygusunun renginde bir gözyaşı damlası. Küçük işaret: koyu karede sarı damla. Dört seçenek arasından seçildi (Damla, Yedi dize, Ş, Halka). |
-| Tasarım | B "Vapur": yer fotoğrafları (§11). Varsayılan koyu; 8 Ekim 2026'dan beri açık tema düğmesi var (Standartlar §3). Arayüz Türkçe ve İngilizce; şiirler Türkçe. |
+| Tasarım | B "Vapur": yer fotoğrafları (§11). Varsayılan koyu; açık tema düğmesi var (Standartlar §3'e projeye özel istisna, sahibinin kararı). Arayüz Türkçe ve İngilizce; şiirler Türkçe. |
 | Fotoğraflar | Gerçek fotoğraflar, Wikimedia Commons'tan özgür lisanslı; fotoğrafçı adı ve lisans her şiirde ve Hakkında sayfasında. |
 | Yazım | TDK'ya göre düzeltildi (§8). Açık kalan tek nokta: "Uların". |
 

@@ -11,8 +11,8 @@ export default defineConfig({
   outDir: process.env.PUBLIC_UYGULAMA === '1' ? './dist-uygulama' : './dist',
   integrations: [
     sitemap({
-      // Hata sayfaları, içerik paneli ve rastgele şiir adresi (/cek/, hediye kartındaki QR) haritaya girmez
-      filter: (url) => !/\/(404|500|cek|draw)\/?$/.test(new URL(url).pathname) && !new URL(url).pathname.startsWith('/admin'),
+      // Hata sayfaları, içerik paneli, rastgele şiir adresi (/cek/) ve kişiye özel Rozetler haritaya girmez
+      filter: (url) => !/\/(404|500|cek|draw|rozetler|badges)\/?$/.test(new URL(url).pathname) && !new URL(url).pathname.startsWith('/admin'),
       // Her sayfanın iki dildeki karşılığı (hreflang), Google'ın beklediği biçimde
       serialize(oge) {
         const yol = new URL(oge.url).pathname;

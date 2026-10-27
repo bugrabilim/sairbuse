@@ -36,7 +36,7 @@ FOTO = KOK / 'src' / 'assets' / 'foto'
 SIIRLER = KOK / 'src' / 'content' / 'siirler'
 FONT = KOK / 'node_modules' / '@fontsource'
 SITE = 'https://duygularinpesinde.bumba.tr'
-SAIR = 'Antigoni'
+SAIR = 'Eylül Bitse'
 # Logo "Damla": Peşinde'nin i noktası bir gözyaşı damlası. Biçim ve ölçüler src/data/logo.ts ile aynı.
 DAMLA_YOLU = 'M50 6C44 22 22 42 22 62a28 28 0 0 0 56 0C78 42 56 22 50 6Z'
 DAMLA_CSS = '''

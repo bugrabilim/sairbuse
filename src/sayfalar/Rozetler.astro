@@ -1,0 +1,225 @@
+---
+// Kazanım rozetleri (Bumba Genel Standartlar §13): bütün rozetler, kazanılanlar günüyle, kazanılmayanlar koşulu ve
+// ilerlemesiyle. Kişiye özel: noindex; site haritasında, aramada ve llms.txt'de yok. Veri yalnız bu tarayıcıda.
+import Temel from '../layouts/Temel.astro';
+import SayfaSahnesi from '../components/SayfaSahnesi.astro';
+import { ROZETLER } from '../data/rozetler';
+import { YEREL, dilBul, metin, sayfaYolu } from '../i18n';
+
+const dil = dilBul(Astro.url);
+const m = metin(dil).rozet;
+const yazilar = {
+  // -1 kazanılan, -2 toplam yerine (cümlenin sırası dile göre değişir)
+  ozet: m.ozet(-1, -2),
+  kazanildi: m.kazanildi('{tarih}'),
+  kilitli: m.kilitli,
+  silindi: m.silindi,
+  yerel: YEREL[dil],
+};
+---
+
+<Temel baslik={m.baslik} aciklama={m.aciklama} sahne noindex>
+  <SayfaSahnesi foto="imge-istanbul-gogu" duygu="ozgurluk" etiket={m.etiket} baslik={m.baslik}>
+    {m.giris}
+  </SayfaSahnesi>
+  <section class="sayfa rozetler" data-metin={JSON.stringify(yazilar)}>
+    <p class="rozet-notu">
+      {m.not} <a href={sayfaYolu('gizlilik', dil)}>{m.gizlilikBag}</a>
+    </p>
+    <p class="rozet-ozet" aria-live="polite"></p>
+    <noscript><p>{m.jsYok}</p></noscript>
+    <ol class="rozet-listesi">
+      {
+        ROZETLER.map((id) => (
+          <li class="rozet" data-rozet={id}>
+            <span class="rozet-isaret" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22">
+                <circle cx="12" cy="12" r="9" />
+                <path class="tik" d="M7.5 12.5l3 3 6-6.5" />
+                <path class="kilit" d="M9 11V9a3 3 0 0 1 6 0v2M8 11h8v6H8z" />
+              </svg>
+            </span>
+            <div class="rozet-govde">
+              <h2 class="rozet-ad">{m.liste[id].ad}</h2>
+              <p class="rozet-kosul">{m.liste[id].kosul}</p>
+              <p class="rozet-durum">{m.kilitli}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="rozet-sil-satir">
+      <button class="dugme" type="button" id="rozet-sil">{m.sil}</button>
+      <span class="rozet-sil-durum" role="status"></span>
+    </p>
+    <dialog class="rozet-pencere" aria-labelledby="rozet-sil-baslik">
+      <h2 id="rozet-sil-baslik">{m.silBaslik}</h2>
+      <p>{m.silMetin}</p>
+      <div class="rozet-pencere-dugmeler">
+        <button class="dugme" type="button" data-sil="vazgec">{m.vazgec}</button>
+        <button class="dugme vurgulu" type="button" data-sil="onay">{m.silOnay}</button>
+      </div>
+    </dialog>
+  </section>
+</Temel>
+
+<script>
+  import { ROZETLER } from '../data/rozetler';
+  import { durumOku, ilerleme, rozetleriSil, veriOku } from '../scripts/rozetler';
+
+  const kutu = document.querySelector<HTMLElement>('.rozetler');
+  const M = JSON.parse(kutu?.dataset.metin ?? '{}');
+  const ozet = document.querySelector<HTMLElement>('.rozet-ozet');
+  const pencere = document.querySelector<HTMLDialogElement>('.rozet-pencere');
+  const silDurum = document.querySelector<HTMLElement>('.rozet-sil-durum');
+
+  function ciz() {
+    const v = veriOku();
+    if (!v) return;
+    const d = durumOku();
+    let kazanilan = 0;
+    for (const id of ROZETLER) {
+      const li = document.querySelector<HTMLElement>(`[data-rozet="${id}"]`);
+      const durum = li?.querySelector('.rozet-durum');
+      if (!li || !durum) continue;
+      const gun = d.k[id];
+      li.classList.toggle('kazanildi', Boolean(gun));
+      if (gun) {
+        kazanilan++;
+        const tarih = new Date(`${gun}T12:00:00`).toLocaleDateString(M.yerel, { day: 'numeric', month: 'long', year: 'numeric' });
+        durum.textContent = M.kazanildi.replace('{tarih}', tarih);
+      } else {
+        const p = ilerleme(id, d, v);
+        durum.textContent = p.hedef > 1 ? `${M.kilitli} · ${p.deger} / ${p.hedef}` : M.kilitli;
+      }
+    }
+    if (ozet) ozet.textContent = M.ozet.replace('-1', String(kazanilan)).replace('-2', String(ROZETLER.length));
+  }
+  ciz();
+
+  document.getElementById('rozet-sil')?.addEventListener('click', () => pencere?.showModal());
+  pencere?.addEventListener('click', (e) => {
+    const hedef = e.target as HTMLElement;
+    if (hedef === pencere || hedef.dataset.sil === 'vazgec') pencere.close();
+    if (hedef.dataset.sil === 'onay') {
+      rozetleriSil();
+      pencere.close();
+      ciz();
+      if (silDurum) silDurum.textContent = M.silindi;
+    }
+  });
+</script>
+
+<style>
+  .rozetler {
+    max-width: 44rem;
+  }
+  .rozet-notu {
+    color: var(--soluk);
+    font-size: 0.95rem;
+  }
+  .rozet-notu a {
+    color: var(--yazi);
+  }
+  .rozet-ozet {
+    font-family: var(--etiket);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--soluk);
+  }
+  .rozet-listesi {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.25rem;
+  }
+  .rozet {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.9rem;
+    align-items: start;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--cizgi);
+  }
+  .rozet-isaret svg {
+    fill: none;
+    stroke: var(--soluk);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    margin-top: 0.2rem;
+  }
+  .rozet .tik {
+    display: none;
+  }
+  .rozet.kazanildi .tik {
+    display: inline;
+  }
+  .rozet.kazanildi .kilit {
+    display: none;
+  }
+  .rozet.kazanildi .rozet-isaret svg {
+    stroke: var(--vurgu);
+  }
+  .rozet-ad {
+    margin: 0;
+    font-size: 1.35rem;
+    font-style: normal;
+  }
+  .rozet:not(.kazanildi) .rozet-ad {
+    color: var(--soluk);
+  }
+  .rozet-kosul,
+  .rozet-durum {
+    margin: 0.2rem 0 0;
+    font-size: 0.95rem;
+  }
+  .rozet-durum {
+    font-family: var(--etiket);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--soluk);
+  }
+  .rozet.kazanildi .rozet-durum {
+    color: var(--yazi);
+  }
+  .rozet-sil-satir {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .rozet-sil-durum {
+    color: var(--soluk);
+    font-style: italic;
+  }
+  .rozet-pencere {
+    width: min(28rem, calc(100vw - 2rem));
+    padding: 1.6rem clamp(1.25rem, 4vw, 2rem) 1.5rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 4px;
+    background: var(--zemin);
+    color: var(--yazi);
+  }
+  .rozet-pencere::backdrop {
+    background: rgba(0, 0, 0, 0.72);
+  }
+  .rozet-pencere h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+  }
+  .rozet-pencere p {
+    color: var(--soluk);
+    margin: 0;
+  }
+  .rozet-pencere-dugmeler {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.4rem;
+  }
+</style>

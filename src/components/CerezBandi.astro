@@ -1,0 +1,213 @@
+---
+// Çerez onayı (Bumba Genel Standartlar §14): ilk ziyarette sayfanın altında içeriği kapatmayan bir bant; "Kabul et",
+// "Reddet" ve "Tercihler" eşit. Zorunlu grup (tercihler, rozetler) yalnız bilgi olarak görünür; İstatistik (Umami)
+// varsayılan kapalı, yalnız izinle yüklenir (Temel.astro → bumbaIstatistik). Seçim "bumba-cerez" anahtarında.
+// Alt bilgideki "Çerez tercihleri" (.cerez-ac) pencereyi yeniden açar. Uygulamada yok: istatistik tutmaz.
+import { CEREZ_ANAHTARI, CEREZ_SURUMU, cerezPolitikasi } from '../data/cerez';
+import { dilBul, metin } from '../i18n';
+
+const dil = dilBul(Astro.url);
+const m = metin(dil).cerez;
+---
+
+<section class="cerez-bandi" aria-label={m.bolge} data-surum={CEREZ_SURUMU} data-anahtar={CEREZ_ANAHTARI} hidden>
+  <p class="cerez-metin">
+    {m.metin} <a href={cerezPolitikasi(dil)} rel="noopener">{m.politika}</a>
+  </p>
+  <div class="cerez-dugmeler">
+    <button class="dugme" type="button" data-cerez="kabul">{m.kabul}</button>
+    <button class="dugme" type="button" data-cerez="reddet">{m.reddet}</button>
+    <button class="dugme" type="button" data-cerez="tercihler">{m.tercihler}</button>
+  </div>
+</section>
+
+<dialog class="cerez-pencere" aria-labelledby="cerez-baslik">
+  <h2 id="cerez-baslik">{m.pencereBaslik}</h2>
+  <div class="cerez-grup">
+    <label>
+      <input type="checkbox" checked disabled />
+      <strong>{m.zorunlu}</strong>
+    </label>
+    <p>{m.zorunluMetin}</p>
+  </div>
+  <div class="cerez-grup">
+    <label>
+      <input type="checkbox" id="cerez-istatistik" />
+      <strong>{m.istatistik}</strong>
+    </label>
+    <p>{m.istatistikMetin}</p>
+  </div>
+  <p class="cerez-politika"><a href={cerezPolitikasi(dil)} rel="noopener">{m.politika}</a></p>
+  <div class="cerez-pencere-dugmeler">
+    <button class="dugme" type="button" data-cerez="kapat">{m.kapat}</button>
+    <button class="dugme vurgulu" type="button" data-cerez="kaydet">{m.kaydet}</button>
+  </div>
+</dialog>
+
+<script>
+  type Secim = { surum: string; istatistik: boolean };
+  const bant = document.querySelector<HTMLElement>('.cerez-bandi');
+  const pencere = document.querySelector<HTMLDialogElement>('.cerez-pencere');
+  const kutu = document.getElementById('cerez-istatistik') as HTMLInputElement | null;
+  const surum = bant?.dataset.surum ?? '';
+  const anahtar = bant?.dataset.anahtar ?? 'bumba-cerez';
+
+  function oku(): Secim | null {
+    try {
+      const s = JSON.parse(localStorage.getItem(anahtar) ?? 'null');
+      return s && s.surum === surum && typeof s.istatistik === 'boolean' ? s : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function bantGoster(acik: boolean) {
+    if (!bant) return;
+    bant.hidden = !acik;
+    // Bant içeriğin üstüne binmesin: sayfanın altında onun boyu kadar yer açılır
+    document.body.style.paddingBottom = acik ? `${bant.offsetHeight}px` : '';
+  }
+
+  function kaydet(istatistik: boolean) {
+    try {
+      localStorage.setItem(anahtar, JSON.stringify({ surum, istatistik }));
+    } catch {}
+    bantGoster(false);
+    // İzin verildiyse sayaç hemen yüklenir; geri alınırsa bir sonraki sayfadan itibaren yüklenmez
+    if (istatistik) (window as unknown as { bumbaIstatistik?: () => void }).bumbaIstatistik?.();
+  }
+
+  function pencereyiAc() {
+    if (kutu) kutu.checked = oku()?.istatistik ?? false;
+    pencere?.showModal();
+  }
+
+  if (!oku()) bantGoster(true);
+  addEventListener('resize', () => {
+    if (bant && !bant.hidden) bantGoster(true);
+  });
+
+  document.addEventListener('click', (e) => {
+    const hedef = (e.target as HTMLElement).closest<HTMLElement>('[data-cerez], .cerez-ac');
+    if (!hedef) return;
+    if (hedef.classList.contains('cerez-ac')) {
+      e.preventDefault();
+      pencereyiAc();
+      return;
+    }
+    switch (hedef.dataset.cerez) {
+      case 'kabul':
+        kaydet(true);
+        break;
+      case 'reddet':
+        kaydet(false);
+        break;
+      case 'tercihler':
+        pencereyiAc();
+        break;
+      case 'kaydet':
+        kaydet(kutu?.checked ?? false);
+        pencere?.close();
+        break;
+      case 'kapat':
+        pencere?.close();
+        break;
+    }
+  });
+  pencere?.addEventListener('click', (e) => {
+    if (e.target === pencere) pencere.close();
+  });
+</script>
+
+<style>
+  .cerez-bandi {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1.5rem;
+    padding: 0.9rem var(--kenar) max(0.9rem, env(safe-area-inset-bottom));
+    background: var(--zemin);
+    color: var(--yazi);
+    border-top: 1px solid var(--cizgi);
+    font-size: 0.9rem;
+  }
+  .cerez-bandi[hidden] {
+    display: none;
+  }
+  .cerez-metin {
+    margin: 0;
+    max-width: 46rem;
+    color: var(--soluk);
+  }
+  .cerez-metin a,
+  .cerez-politika a {
+    color: var(--yazi);
+  }
+  /* Üç düğme aynı boyda ve görünürlükte */
+  .cerez-dugmeler {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    flex: 0 1 24rem;
+  }
+  .cerez-dugmeler .dugme {
+    width: 100%;
+    justify-content: center;
+  }
+  @media (max-width: 40rem) {
+    .cerez-dugmeler {
+      flex-basis: 100%;
+    }
+  }
+  .cerez-pencere {
+    width: min(32rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    padding: 1.6rem clamp(1.25rem, 4vw, 2rem) 1.5rem;
+    border: 1px solid var(--cizgi);
+    border-radius: 4px;
+    background: var(--zemin);
+    color: var(--yazi);
+    font-size: 0.95rem;
+  }
+  .cerez-pencere::backdrop {
+    background: rgba(0, 0, 0, 0.72);
+  }
+  .cerez-pencere h2 {
+    margin: 0 0 1rem;
+    font-size: 1.6rem;
+  }
+  .cerez-grup {
+    margin-top: 1rem;
+  }
+  .cerez-grup label {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+  }
+  .cerez-grup input {
+    accent-color: var(--vurgu);
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  .cerez-grup p {
+    margin: 0.35rem 0 0 1.7rem;
+    color: var(--soluk);
+  }
+  .cerez-politika {
+    margin: 1.2rem 0 0;
+  }
+  .cerez-pencere-dugmeler {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.4rem;
+  }
+</style>

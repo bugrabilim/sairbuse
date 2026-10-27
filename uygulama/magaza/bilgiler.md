@@ -14,7 +14,7 @@ yapıyı App Store Connect'e yükler (`scripts/uygulama/magaza.py`). Metin deği
 | SKU | duygularinpesinde-ios |
 | Birincil kategori | Kitaplar (Books) |
 | İkincil kategori | Yaşam Tarzı (Lifestyle) |
-| Telif (Copyright) | 2008 Antigoni |
+| Telif (Copyright) | 2008 Eylül Bitse |
 | Destek adresi (Support URL) | https://duygularinpesinde.bumba.tr/hakkinda/ |
 | Pazarlama adresi (Marketing URL) | https://duygularinpesinde.bumba.tr/ |
 | Gizlilik politikası (Privacy Policy URL) | https://duygularinpesinde.bumba.tr/gizlilik/ (İngilizce: /en/privacy/) |
@@ -29,7 +29,7 @@ yapıyı App Store Connect'e yükler (`scripts/uygulama/magaza.py`). Metin deği
 
 **Açıklama:**
 
-Bir şiir kitabı olacaktı, basılamadı. Duyguların Peşinde, Antigoni imzalı 30 şiiri telefonunuza getiriyor: 2008–2021 arasında İstanbul'un vapurlarında, adalarında, sokaklarında; İzmir'de, Paris'te ve Söğüt'te yazılmış şiirler.
+Bir şiir kitabı olacaktı, basılamadı. Duyguların Peşinde, Eylül Bitse imzalı 30 şiiri telefonunuza getiriyor: 2008–2021 arasında İstanbul'un vapurlarında, adalarında, sokaklarında; İzmir'de, Paris'te ve Söğüt'te yazılmış şiirler.
 
 Şiirler sayfa sayfa okunmuyor. Okur bir duygunun, bir yerin ya da bir tarihin peşine düşüyor:
 
@@ -47,7 +47,7 @@ Bir şiir kitabı olacaktı, basılamadı. Duyguların Peşinde, Antigoni imzal�
 
 Şiirlerin tüm hakları saklıdır. Fotoğraflar Wikimedia Commons'tan, fotoğrafçılarının adıyla ve kendi lisanslarıyla kullanılıyor.
 
-**Anahtar kelimeler (100):** şiir,şiirler,Antigoni,İstanbul,Moda,Kadıköy,vapur,aşk,özlem,hüzün,ayrılık,edebiyat,Burgazada
+**Anahtar kelimeler (100):** şiir,şiirler,Eylül Bitse,İstanbul,Moda,Kadıköy,vapur,aşk,özlem,hüzün,ayrılık,edebiyat,Burgazada
 
 **Bu sürümde yeni:** İlk sürüm.
 
@@ -59,7 +59,7 @@ Bir şiir kitabı olacaktı, basılamadı. Duyguların Peşinde, Antigoni imzal�
 
 **Description:**
 
-It was meant to be a book of poems, but it was never published. Duyguların Peşinde (In Pursuit of Emotions) brings 30 poems signed Antigoni to your phone, written between 2008 and 2021 on the ferries, islands and streets of Istanbul, and in İzmir, Paris and Söğüt.
+It was meant to be a book of poems, but it was never published. Duyguların Peşinde (In Pursuit of Emotions) brings 30 poems signed Eylül Bitse to your phone, written between 2008 and 2021 on the ferries, islands and streets of Istanbul, and in İzmir, Paris and Söğüt.
 
 The poems are not read page by page. You follow an emotion, a place or a date:
 
@@ -77,7 +77,7 @@ No internet needed: all the poems, photographs and sounds are inside the app. No
 
 The poems are in Turkish, the language they were written in; the app's interface is in Turkish and English. All rights to the poems are reserved. The photographs come from Wikimedia Commons and are used under their own licences, credited to their photographers.
 
-**Keywords (100):** poetry,poems,Turkish,Istanbul,Antigoni,love,longing,ferry,Moda,literature,Bosphorus
+**Keywords (100):** poetry,poems,Turkish,Istanbul,Eylül Bitse,love,longing,ferry,Moda,literature,Bosphorus
 
 **What's new:** First release.
 

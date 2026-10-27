@@ -219,7 +219,7 @@ export async function siteGorseli(acilis?: Siir, dil: Dil = 'tr'): Promise<Uint8
         backgroundImage: 'linear-gradient(90deg, #0d0c0bf2 0%, #0d0c0b99 50%, #0d0c0b00 85%)',
       },
       [
-        etiket('ANTİGONİ · 2008–2021'),
+        etiket(`${SITE.sair.toLocaleUpperCase('tr')} · 2008–2021`),
         // Logo iki satır; damla hüznün sarısı (açılış şiiri)
         h('div', { display: 'flex', flexDirection: 'column' }, [
           h('div', { display: 'flex', fontFamily: FRAUNCES, fontWeight: 300, fontSize: 112, lineHeight: 1, letterSpacing: -0.015 * 112 }, 'Duyguların'),

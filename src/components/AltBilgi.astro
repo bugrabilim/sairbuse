@@ -1,6 +1,7 @@
 ---
 // Sitenin alt bilgisi: masaüstünde tek satır. Solda telif (ilk şiirin yılından itibaren, bitiş yılı yok),
-// ortada e-posta listesi, sağda Bumba imzası. Güncelleme tarihi JSON-LD ve llms.txt'de (GEO), burada değil.
+// ortada e-posta listesi, sağda Bumba imzası (sahibinin kararı, standarda projeye özel istisna). Telifin altında
+// gizlilik bağlantısı ve çerez tercihleri (Standartlar §9, §14). Güncelleme tarihi Hakkında'da, JSON-LD ve llms.txt'de.
 import { SITE } from '../data/site';
 import ListeFormu from './ListeFormu.astro';
 import { tumSiirler } from '../lib/siirler';
@@ -16,7 +17,13 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
 
 <footer class="alt">
   <div class="alt-izgara">
-    <p class="alt-sol">{m.telif(ilkYil, SITE.sair)}</p>
+    <div class="alt-sol">
+      <p>{m.telif(ilkYil, SITE.sair)}</p>
+      <p class="alt-baglar">
+        <a href={UYGULAMA ? `${SITE_KOK}${sayfaYolu('gizlilik', dil)}` : sayfaYolu('gizlilik', dil)}>{m.gizlilik}</a>
+        {!UYGULAMA && <button class="cerez-ac" type="button">{m.cerez}</button>}
+      </p>
+    </div>
     <div class="alt-orta">
       {/* Uygulamada liste formu yok: katılmak için site Safari'de açılır (rıza akışı tek yerde kalır) */}
       {UYGULAMA ? <a class="liste-site" href={`${SITE_KOK}${sayfaYolu('ana', dil)}#liste`}>{mu.listeyeKatil}</a> : <ListeFormu />}
@@ -50,9 +57,31 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
     max-width: 80rem;
     margin: 0 auto;
   }
-  .alt-sol {
+  .alt-sol p {
     margin: 0;
     text-wrap: balance;
+  }
+  .alt-baglar {
+    margin-top: 0.35rem !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1rem;
+  }
+  .alt-baglar a {
+    color: var(--soluk);
+  }
+  .cerez-ac {
+    font: inherit;
+    color: var(--soluk);
+    background: none;
+    border: 0;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .alt-baglar a:hover,
+  .cerez-ac:hover {
+    color: var(--yazi);
   }
   .alt-sag {
     justify-self: end;
