@@ -335,7 +335,7 @@ Kargayla
 |---|---|
 | Harf hataları | Sabah ~~lur~~ olur · ~~Bıçalar~~ Bıçaklar · ~~büüyk~~ büyük · ne ~~hissedileblirse~~ hissedilebilirse · ~~araların~~ aralarında |
 | Ayrı / bitişik yazım | ~~birses~~ bir ses · ~~birbir~~ bir bir · ~~onbir~~ on bir · ~~onik~~ on iki · ~~yazgelir~~ yaz gelir · ~~budenli~~ bu denli · ~~oysa ki~~ oysaki · ~~baş parmağında~~ başparmağında · ~~Göz yaşlarım~~ Gözyaşlarım · ~~yalnızkalmam gereksadece~~ yalnız kalmam gerek sadece |
-| de/da bağlacı, mi soru eki | onlar da (2 yerde) · ~~değimliydin~~ değil miydin · ~~edemememi~~ edemememe mi (27 Ekim 2026'da sahibi dizeyi "Belli “edemeyişime” mi?" olarak düzeltti; bir önceki dize “Özledin” mi?) |
+| de/da bağlacı, mi soru eki | onlar da (2 yerde) · ~~değimliydin~~ değil miydin · ~~edemememi~~ edemememe mi (27 Ekim 2026'da sahibi düzeltti: "Belli edemeyişime mi yanıyorum yoksa"; bir önceki dize "Özledin mi?" yerine "Özledim mi?") |
 | Düzeltme işareti | hikâye · rüzgâr (2 yerde) · hâlâ · hâle |
 | Özel adlar | Kalamış’a · Burgaz’a · Antigoni’de · Karaköy’de |
 | İkilemeler | ~~Senli-sensiz~~ Senli sensiz · ~~yaz-kış~~ yaz kış |
