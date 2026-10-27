@@ -1,5 +1,5 @@
 ---
-// Şiirin sesli okumaları: şairin kendi kaydı (ses) ve varsa başka okumalar (sesler).
+// Şiirin sesli okumaları: insan sesiyle kayıt (ses) ve varsa başka okumalar (sesler).
 import { dilBul, metin } from '../i18n';
 interface Kayit {
   dosya: string;
@@ -8,13 +8,15 @@ interface Kayit {
 }
 interface Props {
   kayitlar: Kayit[];
+  /** şiirin kimliği (kazanım rozetleri dinlemeyi buradan sayar) */
+  siir?: string;
 }
-const { kayitlar } = Astro.props;
+const { kayitlar, siir } = Astro.props;
 const ornekVar = kayitlar.some((k) => k.ornek);
 const m = metin(dilBul(Astro.url)).siir;
 ---
 
-<div class="sesler">
+<div class="sesler" data-siir={siir}>
   <div class="ses-dugmeleri">
     {
       kayitlar.map((k, i) => (
@@ -59,8 +61,15 @@ const m = metin(dilBul(Astro.url)).siir;
       d.setAttribute('aria-pressed', 'false');
       if (sesler.every((s) => s.paused)) bildir(false);
     });
+    let dinlendi = false;
     ses.addEventListener('timeupdate', () => {
       if (ilerleme && ses.duration) ilerleme.style.width = `${(ses.currentTime / ses.duration) * 100}%`;
+      // Kazanım rozetleri: okumanın büyük kısmı dinlenince dinlenmiş sayılır
+      const kimlik = document.querySelector<HTMLElement>('.sesler')?.dataset.siir;
+      if (!dinlendi && kimlik && ses.duration && ses.currentTime / ses.duration >= 0.8) {
+        dinlendi = true;
+        document.dispatchEvent(new CustomEvent('rozet', { detail: { tur: 'dinleme', id: kimlik } }));
+      }
     });
   }
 </script>

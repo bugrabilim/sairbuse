@@ -19,7 +19,7 @@ export const en: Metin = {
     geceyeGec: 'Switch to dark theme',
     ara: 'Search the poems',
   },
-  menu: { siirler: 'poems', harita: 'map', zaman: 'time', fal: 'fortune', hakkinda: 'about' },
+  menu: { siirler: 'poems', harita: 'map', zaman: 'time', fal: 'fortune', hakkinda: 'about', rozetler: 'badges' },
   alt: {
     altMenu: 'Footer menu',
     ozet: (n: number) => `${n} poems, to be read by emotion, place and time.`,
@@ -30,6 +30,7 @@ export const en: Metin = {
     rozetBaslik: 'Bumba Life, part of Bumba Group',
     rozetAlt: 'A Bumba Life product',
     uygulama: 'Get the iPhone app',
+    cerez: 'Cookie preferences',
   },
   genel: {
     tarihsiz: 'undated',
@@ -193,6 +194,7 @@ export const en: Metin = {
   },
   hakkinda: {
     baslik: 'About',
+    guncelleme: (t: string) => `Last updated: ${t}`,
     aciklama: 'The home of an unpublished book of poems signed Antigoni: who wrote it, where the colours come from, the photographs and the rights.',
     giris1:
       'These poems were written between 2008 and 2021: in Moda, in Kalkedon, in Cihangir, on the islands, on the Eminönü ferry, under a plum tree, in a crowded café, at home. They were meant to be a book. It was never published.',
@@ -216,7 +218,6 @@ export const en: Metin = {
       'All rights to the poems and texts on this site are reserved. They may not be reproduced, copied or published elsewhere without permission. If you love a poem, share its link.',
     fotoHaklar: 'The photographs are not covered by this; each belongs to the photographer named in “Photographs and credits” and is used under its own licence.',
     sesHaklar: 'Nor are the ambient sounds. They are real field recordings from the archive of the Netherlands Institute for Sound and Vision (Beeld en Geluid), shared on Wikimedia Commons under CC BY-SA 3.0. On this site they were trimmed and their levels evened out. The background music was made for this site in each emotion’s makam; the instrument sounds come from the FluidR3_GM sound library (MIT licence).',
-    guncelleme: 'Last updated:',
     sssBaslik: 'Questions',
     sss: [
       {
@@ -271,11 +272,12 @@ export const en: Metin = {
   liste: {
     baslik: 'Tell me when a new poem arrives',
     eposta: 'Your email address',
-    onayBaslik: 'Before you join',
-    onayMetni:
-      'Your address is kept by Bumba Group’s shared mailing list service and used only to announce new poems and news from the site. You’ll first get a confirmation email; your address is added only if you click the link in it. Every email has a link to leave with one click.',
+    yukleniyor: 'Loading the privacy notice…',
+    yuklenemedi: 'The notice could not be loaded. You can read the full text at the link below.',
+    tamMetin: 'Full text',
+    kabul: 'I agree',
     vazgec: 'Cancel',
-    riza: 'I have read the {aydinlatma} and agree to receive emails.',
+    riza: 'I have read and accept the {aydinlatma}.',
     aydinlatma: 'privacy notice',
     katil: 'Join',
     gonderiliyor: 'Sending…',
@@ -292,7 +294,7 @@ export const en: Metin = {
     baslik: 'Privacy and cookies',
     aciklama: 'What data Duyguların Peşinde processes and what it doesn’t: statistics, the mailing list, cookies and your rights.',
     etiket: 'Privacy notice (KVKK)',
-    guncelleme: 'Last updated: 17 October 2026',
+    guncelleme: 'Last updated: 27 October 2026',
     bolumler: [
       {
         baslik: 'Data controller',
@@ -300,31 +302,35 @@ export const en: Metin = {
       },
       {
         baslik: 'In short',
-        metin: 'This is a poetry site. There are no accounts, comments or contact forms, and you don’t have to give any information to read. The site itself doesn’t collect personal data.',
+        metin: 'This is a poetry site. There are no accounts, comments or contact forms, and you don’t have to give any information to read. Visitor statistics are kept only if you allow them; your email address is processed only if you join the mailing list.',
       },
       {
         baslik: 'Visitor statistics',
-        metin: 'To see how many people read which page, we use Umami running on our own server (istatistik.bumba.tr). Umami uses no cookies, doesn’t follow you across sites and doesn’t store your IP address; it keeps only totals: page, referring site, country, browser and device type. Actions such as the words you type into search and your theme and language choices are counted as anonymous events.',
+        metin: 'To see how many people read which page, we use Umami running on our own server (istatistik.bumba.tr). Umami loads only if you allow statistics in the cookie banner or under “Cookie preferences” in the footer; otherwise it doesn’t run at all. Umami uses no cookies and doesn’t store your IP address; your visit is linked to a pseudonymous session and the following is processed: the page read, the referring site, browser, device type, language, and the country and city derived from your IP address. These actions are also counted: searches (the words typed and the number of results), theme and language changes, choosing an emotion, the sharing channel, ambient sound and music choices, drawing a random poem, joining the mailing list (your address is not sent) and earning a badge for the first time (only the badge’s ID). The legal basis is your explicit consent; you can withdraw it at any time under “Cookie preferences”.',
       },
       {
         baslik: 'Mailing list',
-        metin: 'With the form at the bottom of the pages you can leave your email address to hear about new poems. The list is run by Bumba Group’s shared mailing list service: your address is only added once you click the link in the confirmation email, and every email has a one-click unsubscribe link. Details: {liste}.',
+        metin: 'With the form at the bottom of the pages you can leave your email address to hear about new poems. The list is run by Bumba Group’s shared mailing list service: when you press “Join”, a window shows the privacy notice; your address is sent only if you press “I agree”, and it is added only once you click the link in the confirmation email. Every email has a one-click unsubscribe link. Details: {liste}.',
       },
       {
         baslik: 'Technical logs',
         metin: 'The server that hosts the site keeps short-lived technical logs of each request, such as IP address, time and requested address, for security and troubleshooting. They are not used for anything else and not shared with anyone.',
       },
       {
-        baslik: 'Cookies',
-        metin: 'This site uses no cookies. To remember your preferences, only these entries are kept in your browser’s own storage (localStorage): the theme you chose (dark/light), the language you chose, your ambient sound and background music choices and volume, and the last line of verse you saw on the home page. They are never sent to the server, and you can clear them in your browser settings. That is why there is no cookie banner.',
+        baslik: 'Cookies and browser storage',
+        metin: 'This site uses no cookies. For the site to work, these entries are kept in your browser’s own storage (localStorage): your cookie choice (“bumba-cerez”), your theme and language, your ambient sound and music settings and volume, the poems already shown at the “draw a poem” address and your badges (below); the last verse shown on the home page is kept only for the session (sessionStorage). They are never sent to the server, can be cleared in your browser settings and are listed as “Necessary” in the cookie banner. Cookie policy: {cerez}.',
+      },
+      {
+        baslik: 'Badges',
+        metin: 'Badges you earn by reading poems, listening to recordings and trying the poem fortune are kept only in this browser, in a single localStorage entry (“rozetler”): the ID of each badge and the day it was earned (no time), plus the counters needed to work out the conditions (poems read and listened to, actions taken, the last day and length of your reading streak). This is first-party data, never sent to the server and kept until you delete it, with the “Delete badges” button on the Badges page or by clearing your browser data. The legal basis is Article 5(2)(f) of the KVKK (legitimate interest: the data never leaves your device, and you can see and delete it). If you allowed statistics, the first time a badge is earned we count which badge it was, along with browser, device, country and city as for page visits; no name, email or progress is sent.',
       },
       {
         baslik: 'Content from elsewhere',
-        metin: 'Fonts and photographs are served from the site’s own server. The Bumba badge in the footer is loaded from bumbagroup.com, so your browser connects to that server.',
+        metin: 'Fonts and photographs are served from the site’s own server. The Bumba badge in the footer and the mailing list’s privacy notice are loaded from bumbagroup.com, so your browser connects to that server.',
       },
       {
-        baslik: 'iPhone app',
-        metin: 'The app carries the poems, photographs and sounds inside the phone; it keeps no visit statistics and collects no personal data. If you turn on “Poem of the day”, the notifications are scheduled on the phone and nothing is sent to a server. To join the mailing list, the app opens this website.',
+        baslik: 'Phone apps',
+        metin: 'The iPhone and Android apps carry the poems, photographs and sounds inside the phone; they keep no visit statistics and collect no personal data. Your settings and badges are kept only on the phone. If you turn on “Poem of the day”, the notifications are scheduled on the phone and nothing is sent to a server. To join the mailing list, the app opens this website.',
       },
       {
         baslik: 'Your rights',
@@ -332,6 +338,7 @@ export const en: Metin = {
       },
     ],
     listeBag: 'mailing list privacy notice',
+    cerezBag: 'Bumba Group cookie policy',
   },
   sayfaAdlari: {
     ana: 'Home',
@@ -343,6 +350,7 @@ export const en: Metin = {
     arama: 'Search',
     gizlilik: 'Privacy',
     cek: 'Draw a poem',
+    rozetler: 'Badges',
   },
   cek: {
     baslik: 'Draw a poem',
@@ -351,6 +359,65 @@ export const en: Metin = {
     yedek: 'If no poem opened, {fal} or {siirler}.',
     fal: 'make a wish and draw one',
     siirler: 'browse all poems',
+  },
+  rozet: {
+    baslik: 'Badges',
+    aciklama: 'Badges you earn as you read, listen and try the poem fortune.',
+    etiket: 'Badges',
+    giris: 'You earn badges as you read the poems, listen to the recordings and try the poem fortune. They are all below; the ones you haven’t earned yet say how to earn them.',
+    not: 'Your badges and progress are stored only in this browser until you delete them.',
+    gizlilikBag: 'Privacy',
+    ozet: (a: number, b: number) => `${a} of ${b} badges earned.`,
+    kazanildi: (tarih: string) => `Earned · ${tarih}`,
+    kilitli: 'Not earned yet',
+    ilerleme: (a: number, b: number) => `${a} / ${b}`,
+    bildirim: 'Badge earned',
+    bildirimBag: 'Badges',
+    sil: 'Delete badges',
+    silBaslik: 'Delete your badges?',
+    silMetin: 'Your badges and the counters behind them (poems read and listened to, reading streak) will be deleted from this browser.',
+    silOnay: 'Delete',
+    vazgec: 'Cancel',
+    silindi: 'Badges deleted.',
+    jsYok: 'Badges are kept in your browser, so this page needs JavaScript.',
+    liste: {
+      'ilk-siir': { ad: 'First lines', kosul: 'Open a poem and read it.' },
+      'ilk-ses': { ad: 'First voice', kosul: 'Listen to a poem being read aloud.' },
+      fal: { ad: 'A wish', kosul: 'Turn the cup over in the poem fortune.' },
+      cark: { ad: 'The wheel', kosul: 'Spin the emotion × place wheel in the poem fortune.' },
+      paylas: { ad: 'Passing it on', kosul: 'Share a poem.' },
+      'misra-karti': { ad: 'Verse card', kosul: 'Make a verse card from a poem.' },
+      'uc-yer': { ad: 'Three stops', kosul: 'Read poems written in three different places.' },
+      'bes-siir': { ad: 'Five poems', kosul: 'Read five different poems.' },
+      'yedi-duygu': { ad: 'Seven colours', kosul: 'Read a poem from each of the seven emotions.' },
+      'seri-3': { ad: 'Three days', kosul: 'Read a poem three days in a row.' },
+      gece: { ad: 'Night reader', kosul: 'Read a poem between midnight and five in the morning.' },
+      'bir-duygu': { ad: 'In pursuit of one emotion', kosul: 'Read every poem of one emotion.' },
+      'on-bes-siir': { ad: 'Halfway', kosul: 'Read fifteen different poems.' },
+      'on-yer': { ad: 'Across the map', kosul: 'Read poems written in ten different places.' },
+      'butun-sesler': { ad: 'Every voice', kosul: 'Listen to every poem that has a recorded reading.' },
+      'seri-7': { ad: 'A whole week', kosul: 'Read a poem seven days in a row.' },
+      bugun: { ad: 'Same day', kosul: 'Read a poem on the day and month it was written.' },
+      'butun-siirler': { ad: 'The whole book', kosul: 'Read every poem.' },
+    } as Record<string, { ad: string; kosul: string }>,
+  },
+  cerez: {
+    bolge: 'Cookie preferences',
+    metin:
+      'This site keeps a few records in your browser to remember your theme, language and sound settings. With your permission we also count which pages are read, using visitor statistics.',
+    politika: 'Cookie policy',
+    kabul: 'Accept',
+    reddet: 'Reject',
+    tercihler: 'Preferences',
+    pencereBaslik: 'Cookie preferences',
+    zorunlu: 'Necessary',
+    zorunluMetin:
+      'Always on. Your cookie choice, theme, language, ambient sound and music settings, the last verse shown on the home page, the poems already drawn and your badges are kept in your browser and never sent to the server.',
+    istatistik: 'Statistics',
+    istatistikMetin:
+      'Umami (istatistik.bumba.tr): which pages are read, browser, device, language, and the country and city derived from your IP address. No cookies; IP addresses are not stored. Off by default.',
+    kaydet: 'Save',
+    kapat: 'Close',
   },
   yok: {
     baslik: 'Not found',

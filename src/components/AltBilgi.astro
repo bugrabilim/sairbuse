@@ -1,6 +1,6 @@
 ---
-// Sitenin alt bilgisi: masaüstünde tek satır. Solda telif (ilk şiirin yılından itibaren, bitiş yılı yok),
-// ortada e-posta listesi, sağda Bumba imzası. Güncelleme tarihi JSON-LD ve llms.txt'de (GEO), burada değil.
+// Sitenin alt bilgisi (Bumba Genel Standartlar §1): üst satırda solda e-posta listesi, sağda Bumba imzası; altında
+// telif (ilk şiirin yılından itibaren, bitiş yılı yok), gizlilik ve çerez tercihleri. Telefonda alt alta.
 import { SITE } from '../data/site';
 import ListeFormu from './ListeFormu.astro';
 import { tumSiirler } from '../lib/siirler';
@@ -16,8 +16,7 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
 
 <footer class="alt">
   <div class="alt-izgara">
-    <p class="alt-sol">{m.telif(ilkYil, SITE.sair)}</p>
-    <div class="alt-orta">
+    <div class="alt-sol">
       {/* Uygulamada liste formu yok: katılmak için site Safari'de açılır (rıza akışı tek yerde kalır) */}
       {UYGULAMA ? <a class="liste-site" href={`${SITE_KOK}${sayfaYolu('ana', dil)}#liste`}>{mu.listeyeKatil}</a> : <ListeFormu />}
     </div>
@@ -30,6 +29,11 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
         <img class="rozet-koyu" src="https://bumbagroup.com/rozet/life-koyu.svg" width="164" height="28" alt={m.rozetAlt} loading="lazy" />
       </a>
     </div>
+    <p class="alt-telif">
+      <span>{m.telif(ilkYil, SITE.sair)}</span>
+      <a href={UYGULAMA ? `${SITE_KOK}${sayfaYolu('gizlilik', dil)}` : sayfaYolu('gizlilik', dil)}>{m.gizlilik}</a>
+      {!UYGULAMA && <button class="cerez-ac" type="button">{m.cerez}</button>}
+    </p>
   </div>
 </footer>
 
@@ -41,18 +45,37 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
     color: var(--soluk);
     font-size: 0.85rem;
   }
-  /* Tek satır: solda telif, ortada e-posta listesi, sağda imza; yan sütunlar eşit, liste ortada durur */
+  /* Üst satır: solda e-posta listesi, sağda imza; altında telif ve bağlantılar */
   .alt-izgara {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    gap: 1rem 2rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.1rem 2rem;
     align-items: center;
     max-width: 80rem;
     margin: 0 auto;
   }
-  .alt-sol {
+  .alt-telif {
+    grid-column: 1 / -1;
     margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    align-items: baseline;
+  }
+  .alt-telif span {
     text-wrap: balance;
+  }
+  .cerez-ac {
+    font: inherit;
+    color: var(--soluk);
+    background: none;
+    border: 0;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .cerez-ac:hover {
+    color: var(--yazi);
   }
   .alt-sag {
     justify-self: end;
@@ -90,17 +113,7 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
   :global([data-theme='gunduz']) .rozet-koyu {
     display: none;
   }
-  /* Orta genişlikte iki satır: üstte liste, altta telif ve imza */
-  @media (max-width: 72rem) {
-    .alt-izgara {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-    .alt-orta {
-      grid-column: 1 / -1;
-      order: -1;
-    }
-  }
-  /* Telefonda alt alta: önce liste, sonra telif, en sonda imza */
+  /* Telefonda alt alta: önce liste, sonra imza, en sonda telif */
   @media (max-width: 40rem) {
     .alt-izgara {
       grid-template-columns: 1fr;

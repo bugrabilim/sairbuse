@@ -1113,3 +1113,44 @@ body[data-duygu='ozgurluk'] {
   font-style: italic;
   color: var(--soluk);
 }
+
+/* Kazanım rozeti bildirimi (src/scripts/rozetler.ts): akışı bölmez, birkaç saniye sonra kaybolur */
+.rozet-bildirim {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 60;
+  max-width: min(22rem, calc(100vw - 2rem));
+  padding: 0.9rem 1.1rem;
+  background: var(--zemin);
+  color: var(--yazi);
+  border: 1px solid var(--cizgi);
+  border-left: 3px solid var(--vurgu);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition:
+    opacity 0.4s,
+    transform 0.4s;
+}
+.rozet-bildirim.acik {
+  opacity: 1;
+  transform: none;
+}
+.rozet-bildirim p {
+  margin: 0 0 0.4rem;
+}
+.rozet-bildirim .rozet-not {
+  color: var(--soluk);
+  font-size: 0.85rem;
+}
+.rozet-bildirim a {
+  color: var(--yazi);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rozet-bildirim {
+    transition: none;
+    transform: none;
+  }
+}

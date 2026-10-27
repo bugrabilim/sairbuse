@@ -19,6 +19,10 @@ import '../styles/global.css';
 import AltBilgi from '../components/AltBilgi.astro';
 import Logo from '../components/Logo.astro';
 import UygulamaKopru from '../components/UygulamaKopru.astro';
+import CerezBandi from '../components/CerezBandi.astro';
+import { CEREZ_SURUMU } from '../data/cerez';
+import { gercekYer } from '../data/yerler';
+import { sesli, tumSiirler, yerGrubu } from '../lib/siirler';
 import { APP_STORE, MAGAZA_GORUNUR, UYGULAMA } from '../data/uygulama';
 import { SITE } from '../data/site';
 import { DUYGULAR, duyguAdi, duyguStili, type Duygu } from '../data/duygular';
@@ -68,10 +72,20 @@ const umami = import.meta.env.PUBLIC_UMAMI_ID || SITE.umami;
 // Her dilde aynı sayfanın adresi (hreflang ve dil değiştirici)
 const diller = DILLER.map((d) => ({ dil: d, href: karsilikYok ? sayfaYolu('ana', d) : karsilik(yol, d) }));
 const oburYol = diller.find((x) => x.dil === obur)!.href;
-const menu = (['siirler', 'harita', 'zaman', 'fal', 'hakkinda'] as const).map((s) => ({ href: sayfaYolu(s, dil), ad: m.menu[s] }));
+const menu = (['siirler', 'harita', 'zaman', 'fal', 'hakkinda', 'rozetler'] as const).map((s) => ({ href: sayfaYolu(s, dil), ad: m.menu[s] }));
 const govdeSinifi = [duygu ? 'duygulu' : '', sahne ? 'sahneli' : '', sinif].filter(Boolean).join(' ');
 const temaRengi = duygu ? duygu.zeminGece : '#0d0c0b';
 const temaRengiGunduz = duygu ? duygu.zeminGunduz : '#f3eee5';
+// Kazanım rozetlerinin hesabı için şiirlerin kısa listesi (src/scripts/rozetler.ts); adlar etkin dilde
+const rozetVerisi = JSON.stringify({
+  siirler: (await tumSiirler()).map((s) => {
+    const y = yerGrubu(s);
+    return { i: s.id, d: s.data.duygular, y: gercekYer(y) ? y : null, s: sesli(s), t: s.data.tarih?.slice(5) ?? null };
+  }),
+  adlar: Object.fromEntries(Object.entries(m.rozet.liste).map(([k, v]) => [k, v.ad])),
+  metin: { bildirim: m.rozet.bildirim, bildirimBag: m.rozet.bildirimBag, not: m.rozet.not },
+  sayfa: sayfaYolu('rozetler', dil),
+});
 const jsonLd = noindex
   ? null
   : JSON.stringify({ '@context': 'https://schema.org', '@graph': [...ortakSema(dil), ...(kirinti ? [kirintiSema(dil, kirinti)] : []), ...sema] });
@@ -118,8 +132,8 @@ const jsonLd = noindex
     <slot name="bas" />
 
     <script is:inline>
-      // Tema sayfa çizilmeden seçilir ki yanlış tema bir an bile görünmesin.
-      // Varsayılan gece (koyu); okur düğmeyle gündüzü seçerse localStorage'da hatırlanır ("tema-secimi").
+      // Tema sayfa çizilmeden seçilir ki yanlış tema bir an bile görünmesin. İlk açılışta sistem tercihi
+      // (Bumba Genel Standartlar §3); okur düğmeyle seçerse localStorage'da hatırlanır ("tema-secimi").
       // Eski "tema" kaydı okunmaz: eski sürüm sistem tercihini kendiliğinden yazmış olabilir.
       (function () {
         var k = document.documentElement;
@@ -127,11 +141,11 @@ const jsonLd = noindex
         try {
           t = localStorage.getItem('tema-secimi');
         } catch (e) {}
-        if (t !== 'gece' && t !== 'gunduz') t = 'gece';
+        if (t !== 'gece' && t !== 'gunduz') t = matchMedia('(prefers-color-scheme: light)').matches ? 'gunduz' : 'gece';
         k.setAttribute('data-theme', t);
         k.classList.add('js');
       })();
-      // Umami olayı; sayaç yüklenmediyse sessizce geçer. Olay verisine kişisel bilgi konmaz.
+      // Umami olayı; sayaç yüklenmediyse (izin yoksa) sessizce geçer. Olay verisine kişisel bilgi konmaz.
       window.bumbaOlay = function (ad, veri) {
         try {
           if (window.umami) window.umami.track(ad, veri);
@@ -149,8 +163,28 @@ const jsonLd = noindex
         if (secili && secili !== dil && !icerden) location.replace(oburYol + location.search + location.hash);
       })();
     </script>
-    {/* Ziyaret sayacı yalnız sitede; iOS uygulaması istatistik tutmaz */}
-    {!UYGULAMA && <script defer src="https://istatistik.bumba.tr/script.js" data-website-id={umami} data-domains={SITE.alan} />}
+    {/* Ziyaret sayacı yalnız sitede ve yalnız çerez bandında istatistiğe izin verilince yüklenir (Standartlar §9, §14);
+        uygulama istatistik tutmaz */}
+    {
+      !UYGULAMA && (
+        <script is:inline define:vars={{ umami, alan: SITE.alan, surum: CEREZ_SURUMU }}>
+          window.bumbaIstatistik = function () {
+            if (document.getElementById('umami')) return;
+            var b = document.createElement('script');
+            b.id = 'umami';
+            b.defer = true;
+            b.src = 'https://istatistik.bumba.tr/script.js';
+            b.setAttribute('data-website-id', umami);
+            b.setAttribute('data-domains', alan);
+            document.head.appendChild(b);
+          };
+          try {
+            var c = JSON.parse(localStorage.getItem('bumba-cerez') || 'null');
+            if (c && c.surum === surum && c.istatistik === true) window.bumbaIstatistik();
+          } catch (e) {}
+        </script>
+      )
+    }
   </head>
   <body class={govdeSinifi} style={duygu ? duyguStili(duygu) : undefined} data-duygu={duygu?.slug}>
     <a class="atla" href="#icerik">{m.ust.icerigeGec}</a>
@@ -219,8 +253,11 @@ const jsonLd = noindex
     </main>
 
     <AltBilgi />
+    {!UYGULAMA && <CerezBandi />}
+    <script type="application/json" id="rozet-veri" set:html={rozetVerisi} />
 
     <script>
+      import '../scripts/rozetler';
       const dugme = document.querySelector<HTMLButtonElement>('.menu-dugmesi');
       const kok = document.documentElement;
       function kapat() {
@@ -253,6 +290,14 @@ const jsonLd = noindex
         if (temaMeta) temaMeta.content = temaMeta.dataset[t] ?? temaMeta.content;
       }
       temaUygula(kok.getAttribute('data-theme') ?? 'gece');
+      // Okur seçim yapmadıysa tema sistem tercihini izler
+      matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+        let secim: string | null = null;
+        try {
+          secim = localStorage.getItem('tema-secimi');
+        } catch {}
+        if (!secim) temaUygula(e.matches ? 'gunduz' : 'gece');
+      });
       temaDugmeleri.forEach((b) =>
         b.addEventListener('click', () => {
           const yeni = kok.getAttribute('data-theme') === 'gunduz' ? 'gece' : 'gunduz';

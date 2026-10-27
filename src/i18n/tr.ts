@@ -29,7 +29,7 @@ export const tr = {
     geceyeGec: 'Gece temasına geç',
     ara: 'Şiirlerde ara',
   },
-  menu: { siirler: 'şiirler', harita: 'harita', zaman: 'zaman', fal: 'fal', hakkinda: 'hakkında' },
+  menu: { siirler: 'şiirler', harita: 'harita', zaman: 'zaman', fal: 'fal', hakkinda: 'hakkında', rozetler: 'rozetler' },
   alt: {
     altMenu: 'Alt menü',
     ozet: (n: number) => `${n} şiir; duygu, yer ve zaman üzerinden okunmak için.`,
@@ -41,6 +41,7 @@ export const tr = {
     rozetBaslik: 'Bumba Life, bir Bumba Group kolu',
     rozetAlt: 'Bir Bumba Life ürünü',
     uygulama: "App Store'dan indir",
+    cerez: 'Çerez tercihleri',
   },
   genel: {
     tarihsiz: 'tarihsiz',
@@ -203,6 +204,8 @@ export const tr = {
   },
   hakkinda: {
     baslik: 'Hakkında',
+    // Sitenin son güncellemesi (derleme günü); GEO için içerikte görünür (Standartlar §2)
+    guncelleme: (t: string) => `Son güncelleme: ${t}`,
     aciklama: 'Antigoni imzalı, basılamamış bir şiir kitabının sitesi: kim yazdı, renkler nereden geliyor, fotoğraflar ve haklar.',
     giris1:
       'Bu şiirler 2008’den 2021’e kadar yazıldı: Moda’da, Kalkedon’da, Cihangir’de, adalarda, Eminönü vapurunda, bir erik ağacının altında, bir kafenin kalabalığında, evde. Bir kitap olmaları gerekiyordu. Basılamadılar.',
@@ -226,7 +229,6 @@ export const tr = {
       'Bu sitedeki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz. Bir şiiri sevdiysen bağlantısını paylaşabilirsin.',
     fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri “Fotoğraflar ve künyeleri” penceresinde adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
     sesHaklar: 'Ortam sesleri de bu kapsamda değil. Hepsi gerçek saha kaydı: Hollanda Ses ve Görüntü Enstitüsü’nün (Beeld en Geluid) arşivinden, Wikimedia Commons’ta CC BY-SA 3.0 ile paylaşılmış. Sitede kesilip ses düzeyleri eşitlendi. Fon müzikleri bu site için makamlarına göre üretildi; çalgı sesleri FluidR3_GM ses kütüphanesinden (MIT lisanslı).',
-    guncelleme: 'Son güncelleme:',
     sssBaslik: 'Sık sorulanlar',
     sss: [
       {
@@ -282,12 +284,14 @@ export const tr = {
   liste: {
     baslik: 'Yeni şiir gelince haber ver',
     eposta: 'E-posta adresiniz',
-    // Katıl'a basınca açılan onay penceresi (rıza kutusu burada, önceden işaretsiz)
-    onayBaslik: 'Listeye katılmadan önce',
-    onayMetni:
-      'Adresiniz Bumba Group’un ortak liste servisinde tutulur ve yalnızca yeni şiirleri ve sitedeki yenilikleri duyurmak için kullanılır. Önce bir onay e-postası gelir; adresiniz ancak oradaki bağlantıya tıklarsanız listeye eklenir. Her e-postadaki bağlantıyla tek tıkla çıkabilirsiniz.',
+    // Katıl'a basınca açılan pencere: ortak aydınlatma metni bumbagroup.com'dan gelir; rıza "Kabul ediyorum"la
+    yukleniyor: 'Aydınlatma metni yükleniyor…',
+    yuklenemedi: 'Metin yüklenemedi. Tam metni aşağıdaki bağlantıdan okuyabilirsiniz.',
+    tamMetin: 'Tam metin',
+    kabul: 'Kabul ediyorum',
     vazgec: 'Vazgeç',
-    riza: '{aydinlatma} okudum, e-posta almayı kabul ediyorum.',
+    // JavaScript yoksa pencere açılamaz; onay kutusu formda görünür
+    riza: '{aydinlatma} okudum, kabul ediyorum.',
     aydinlatma: 'Aydınlatma metnini',
     katil: 'Katıl',
     gonderiliyor: 'Gönderiliyor…',
@@ -304,7 +308,7 @@ export const tr = {
     baslik: 'Gizlilik ve çerezler',
     aciklama: 'Duyguların Peşinde hangi verileri işler, hangilerini işlemez: istatistik, e-posta listesi, çerezler ve haklarınız.',
     etiket: 'KVKK aydınlatma metni',
-    guncelleme: 'Son güncelleme: 17 Ekim 2026',
+    guncelleme: 'Son güncelleme: 27 Ekim 2026',
     bolumler: [
       {
         baslik: 'Veri sorumlusu',
@@ -312,37 +316,42 @@ export const tr = {
       },
       {
         baslik: 'Kısaca',
-        metin: 'Bu bir şiir sitesi. Üyelik, yorum ya da iletişim formu yok; okumak için hiçbir bilgi vermeniz gerekmiyor. Sitenin kendisi kişisel veri toplamaz.',
+        metin: 'Bu bir şiir sitesi. Üyelik, yorum ya da iletişim formu yok; okumak için hiçbir bilgi vermeniz gerekmiyor. Ziyaret istatistiği yalnız izin verirseniz tutulur; e-posta listesine yalnız siz katılırsanız adresiniz işlenir.',
       },
       {
         baslik: 'Ziyaret istatistikleri',
-        metin: 'Kaç kişinin hangi sayfayı okuduğunu görmek için kendi sunucumuzda çalışan Umami’yi (istatistik.bumba.tr) kullanıyoruz. Umami çerez kullanmaz, sizi siteden siteye izlemez ve IP adresinizi saklamaz; yalnızca toplu sayılar tutar: sayfa, yönlendiren site, ülke, tarayıcı ve cihaz türü. Arama kutusuna yazdığınız kelime, tema ve dil seçimi gibi işlemler de adsız olay olarak sayılır.',
+        metin: 'Kaç kişinin hangi sayfayı okuduğunu görmek için kendi sunucumuzda çalışan Umami’yi (istatistik.bumba.tr) kullanıyoruz. Umami yalnızca çerez bandında ya da alt bilgideki “Çerez tercihleri”nde istatistiğe izin verirseniz yüklenir; izin vermezseniz hiç çalışmaz. Umami çerez kullanmaz ve IP adresinizi saklamaz; ziyaretiniz takma adlı bir oturuma bağlanır ve şunlar işlenir: okunan sayfa, yönlendiren site, tarayıcı, cihaz türü, dil ve IP adresinden çıkarılan ülke ve şehir. Ayrıca şu işlemler sayılır: arama (yazılan kelime ve sonuç sayısı), tema ve dil değişikliği, duygu seçimi, paylaşım kanalı, ortam sesi ve fon müziği seçimi, rastgele şiir çekme, e-posta listesine katılma (adresiniz gönderilmez) ve bir kazanım rozetinin ilk kez kazanılması (yalnız rozetin kimliği). Hukuki sebep açık rızanızdır; izninizi “Çerez tercihleri”nden her an geri alabilirsiniz.',
       },
       {
         baslik: 'E-posta listesi',
-        metin: 'Sayfaların altındaki formla yeni şiirlerden haberdar olmak için e-posta adresinizi bırakabilirsiniz. Bu liste Bumba Group’un ortak liste servisiyle yönetilir: adresiniz ancak gelen onay e-postasındaki bağlantıya tıklarsanız listeye eklenir, her e-postadaki bağlantıyla tek tıkla çıkabilirsiniz. Ayrıntılar: {liste}.',
+        metin: 'Sayfaların altındaki formla yeni şiirlerden haberdar olmak için e-posta adresinizi bırakabilirsiniz. Bu liste Bumba Group’un ortak liste servisiyle yönetilir: “Katıl”a basınca açılan pencerede aydınlatma metnini okuyup “Kabul ediyorum” derseniz adresiniz gönderilir ve ancak gelen onay e-postasındaki bağlantıya tıklarsanız listeye eklenir; her e-postadaki bağlantıyla tek tıkla çıkabilirsiniz. Ayrıntılar: {liste}.',
       },
       {
         baslik: 'Teknik kayıtlar',
         metin: 'Siteyi sunan sunucu, her istek için IP adresi, tarih ve istenen adres gibi teknik kayıtları güvenlik ve arıza takibi amacıyla kısa süre tutar. Bu kayıtlar başka bir amaçla kullanılmaz ve kimseyle paylaşılmaz.',
       },
       {
-        baslik: 'Çerezler',
-        metin: 'Bu site çerez kullanmaz. Tercihlerinizi hatırlamak için yalnızca tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: seçtiğiniz tema (gece/gündüz), seçtiğiniz dil, ortam sesi ve fon müziği tercihiniz ve düzeyi, ana sayfada en son gördüğünüz mısra. Bunlar sunucuya gönderilmez; tarayıcı ayarlarından silebilirsiniz. Bu yüzden çerez onay penceresi göstermiyoruz.',
+        baslik: 'Çerezler ve tarayıcı depolaması',
+        metin: 'Bu site çerez kullanmaz. Sitenin çalışması için tarayıcınızın kendi deposunda (localStorage) şu kayıtlar tutulur: çerez seçiminiz (“bumba-cerez”), tema ve dil seçiminiz, ortam sesi ve fon müziği tercihiniz ve düzeyi, “şiir çek” adresinde gösterilmiş şiirler ve kazanım rozetleriniz (aşağıda); ana sayfada son gösterilen mısra yalnız oturum boyunca (sessionStorage) tutulur. Bunlar sunucuya gönderilmez, tarayıcı ayarlarından silinebilir ve çerez bandında “Zorunlu” grupta bilgi olarak gösterilir. Çerez politikası: {cerez}.',
+      },
+      {
+        baslik: 'Kazanım rozetleri',
+        metin: 'Şiir okudukça, sesli okuma dinledikçe ve fal baktıkça kazanılan rozetler yalnız bu tarayıcıda, localStorage’daki tek bir kayıtta (“rozetler”) tutulur: kazanılan rozetin kimliği ve kazanma günü (saat yok) ile koşulları hesaplamaya yeten sayaçlar (okunan ve dinlenen şiirler, yapılan eylemler, okuma serisinin son günü ve gün sayısı). Bu veri birinci taraftır, sunucuya gönderilmez ve siz silene kadar saklanır; Rozetler sayfasındaki “Rozetleri sil” düğmesiyle ya da tarayıcı verilerini temizleyerek silebilirsiniz. Hukuki sebep KVKK md. 5/2-f’dir (meşru menfaat: veri cihazınızdan çıkmaz, görür ve silersiniz). İstatistiğe izin verdiyseniz bir rozet ilk kazanıldığında hangi rozet olduğu, sayfa ziyaretleri gibi tarayıcı, cihaz, ülke ve şehir bilgisiyle sayılır; ad, e-posta ve ilerleme gönderilmez.',
       },
       {
         baslik: 'Dışarıdan gelen içerik',
-        metin: 'Yazı tipleri ve fotoğraflar sitenin kendi sunucusundan gelir. Alt bilgideki Bumba rozeti bumbagroup.com’dan yüklenir; bu sırada tarayıcınız o sunucuya bağlanır.',
+        metin: 'Yazı tipleri ve fotoğraflar sitenin kendi sunucusundan gelir. Alt bilgideki Bumba rozeti ve e-posta listesinin aydınlatma metni bumbagroup.com’dan yüklenir; bu sırada tarayıcınız o sunucuya bağlanır.',
       },
       {
-        baslik: 'iPhone uygulaması',
-        metin: 'Uygulama şiirleri, fotoğrafları ve sesleri telefonun içinde taşır; ziyaret istatistiği tutmaz ve kişisel veri toplamaz. "Günün şiiri" bildirimini açarsanız bildirimler telefonda zamanlanır, sunucuya bilgi gitmez. E-posta listesine katılmak için uygulama bu siteyi açar.',
+        baslik: 'Telefon uygulaması',
+        metin: 'iPhone ve Android uygulaması şiirleri, fotoğrafları ve sesleri telefonun içinde taşır; ziyaret istatistiği tutmaz ve kişisel veri toplamaz. Tercihleriniz ve kazanım rozetleriniz yalnız telefonda tutulur. “Günün şiiri” bildirimini açarsanız bildirimler telefonda zamanlanır, sunucuya bilgi gitmez. E-posta listesine katılmak için uygulama bu siteyi açar.',
       },
       {
         baslik: 'Haklarınız',
         metin: 'KVKK’nın 11. maddesi uyarınca verilerinizin işlenip işlenmediğini öğrenme, düzeltilmesini ya da silinmesini isteme ve itiraz etme haklarınız var. Başvurunuzu {eposta} adresine yazabilirsiniz.',
       },
     ],
+    cerezBag: 'Bumba Group çerez politikası',
     listeBag: 'e-posta listesi aydınlatma metni',
   },
   sayfaAdlari: {
@@ -355,6 +364,7 @@ export const tr = {
     arama: 'Arama',
     gizlilik: 'Gizlilik',
     cek: 'Şiir çek',
+    rozetler: 'Rozetler',
   },
   cek: {
     baslik: 'Bir şiir çek',
@@ -363,6 +373,67 @@ export const tr = {
     yedek: 'Şiir açılmadıysa {fal} ya da {siirler}.',
     fal: 'niyet tutup çek',
     siirler: 'bütün şiirlere göz at',
+  },
+  // Kazanım rozetleri (Standartlar §13): yalnız bu tarayıcıda tutulur; ad ve nasıl kazanıldığı
+  rozet: {
+    baslik: 'Rozetler',
+    aciklama: 'Okudukça, dinledikçe ve fal baktıkça kazandığın rozetler.',
+    etiket: 'Kazanım rozetleri',
+    giris: 'Şiirleri okudukça, sesli okumaları dinledikçe ve fal baktıkça rozet kazanırsın. Hepsi aşağıda; kazanmadıklarının yanında nasıl kazanılacağı yazar.',
+    not: 'Rozetlerin ve ilerlemen yalnız bu tarayıcıda, sen silene kadar saklanır.',
+    gizlilikBag: 'Gizlilik',
+    ozet: (a: number, b: number) => `${b} rozetten ${a} tanesi kazanıldı.`,
+    kazanildi: (tarih: string) => `Kazanıldı · ${tarih}`,
+    kilitli: 'Henüz kazanılmadı',
+    ilerleme: (a: number, b: number) => `${a} / ${b}`,
+    bildirim: 'Rozet kazandın',
+    bildirimBag: 'Rozetler',
+    sil: 'Rozetleri sil',
+    silBaslik: 'Rozetler silinsin mi?',
+    silMetin: 'Kazandığın rozetler ve onları hesaplayan sayaçlar (okunan ve dinlenen şiirler, okuma serisi) bu tarayıcıdan silinir.',
+    silOnay: 'Sil',
+    vazgec: 'Vazgeç',
+    silindi: 'Rozetler silindi.',
+    jsYok: 'Rozetler tarayıcında tutulduğu için bu sayfa JavaScript ister.',
+    liste: {
+      'ilk-siir': { ad: 'İlk mısra', kosul: 'Bir şiirin sayfasını açıp oku.' },
+      'ilk-ses': { ad: 'İlk ses', kosul: 'Bir şiirin sesli okumasını dinle.' },
+      fal: { ad: 'Niyet', kosul: 'Şiir falında fincanı kapat.' },
+      cark: { ad: 'Çark', kosul: 'Şiir falında duygu × yer çarkını çevir.' },
+      paylas: { ad: 'Paylaşan', kosul: 'Bir şiiri paylaş.' },
+      'misra-karti': { ad: 'Mısra kartı', kosul: 'Bir şiirden mısra kartı hazırla.' },
+      'uc-yer': { ad: 'Üç durak', kosul: 'Üç ayrı yerde yazılmış şiir oku.' },
+      'bes-siir': { ad: 'Beş şiir', kosul: 'Beş ayrı şiir oku.' },
+      'yedi-duygu': { ad: 'Yedi renk', kosul: 'Yedi duygunun her birinden bir şiir oku.' },
+      'seri-3': { ad: 'Üç gün', kosul: 'Üç gün üst üste şiir oku.' },
+      gece: { ad: 'Gece okuru', kosul: 'Gece yarısından sonra, sabah beşe kadar bir şiir oku.' },
+      'bir-duygu': { ad: 'Bir duygunun peşinde', kosul: 'Bir duygunun bütün şiirlerini oku.' },
+      'on-bes-siir': { ad: 'Yarı yol', kosul: 'On beş ayrı şiir oku.' },
+      'on-yer': { ad: 'Haritanın peşinde', kosul: 'On ayrı yerde yazılmış şiir oku.' },
+      'butun-sesler': { ad: 'Bütün sesler', kosul: 'Sesli okuması olan bütün şiirleri dinle.' },
+      'seri-7': { ad: 'Bir hafta', kosul: 'Yedi gün üst üste şiir oku.' },
+      bugun: { ad: 'Aynı gün', kosul: 'Bir şiiri, yazıldığı gün ve ayda oku.' },
+      'butun-siirler': { ad: 'Kitabın tamamı', kosul: 'Bütün şiirleri oku.' },
+    } as Record<string, { ad: string; kosul: string }>,
+  },
+  // Çerez bandı ve tercihler penceresi (Standartlar §14)
+  cerez: {
+    bolge: 'Çerez tercihleri',
+    metin:
+      'Bu site tema, dil ve ses tercihlerinizi hatırlamak için tarayıcınızda birkaç kayıt tutar. İzin verirseniz hangi sayfaların okunduğunu saymak için ziyaret istatistiği de toplarız.',
+    politika: 'Çerez politikası',
+    kabul: 'Kabul et',
+    reddet: 'Reddet',
+    tercihler: 'Tercihler',
+    pencereBaslik: 'Çerez tercihleri',
+    zorunlu: 'Zorunlu',
+    zorunluMetin:
+      'Her zaman açık. Çerez seçiminiz, tema, dil, ortam sesi ve fon müziği tercihi, ana sayfada son gösterilen mısra, şiir çekerken okunan şiirler ve kazanım rozetleriniz tarayıcınızda tutulur; sunucuya gönderilmez.',
+    istatistik: 'İstatistik',
+    istatistikMetin:
+      'Umami (istatistik.bumba.tr): hangi sayfaların okunduğu, tarayıcı, cihaz, dil ve IP adresinden çıkarılan ülke ve şehir. Çerez kullanmaz, IP adresini saklamaz. Varsayılan kapalı.',
+    kaydet: 'Kaydet',
+    kapat: 'Kapat',
   },
   yok: {
     baslik: 'Bulunamadı',

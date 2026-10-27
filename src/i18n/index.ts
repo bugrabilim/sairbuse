@@ -49,6 +49,8 @@ export const SAYFALAR = {
   gizlilik: { tr: '/gizlilik/', en: '/en/privacy/' },
   // Hediye kartındaki QR'ın adresi: her açılışta rastgele bir şiire gider (arama, harita ve llms.txt'de yok)
   cek: { tr: '/cek/', en: '/en/draw/' },
+  // Kazanım rozetleri: kişiye özel, noindex; haritada, aramada ve llms.txt'de yok
+  rozetler: { tr: '/rozetler/', en: '/en/badges/' },
 } as const;
 export type SayfaAdi = keyof typeof SAYFALAR;
 

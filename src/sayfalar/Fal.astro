@@ -282,6 +282,7 @@ const [jsOnce, jsSonra] = m.jsYok.split('{siirler}');
       () => {
         if (durum) durum.textContent = `${veri.duygular[secilen.duygu].ad} × ${secilen.yer}`;
         goster(secilen);
+        document.dispatchEvent(new CustomEvent('rozet', { detail: { tur: 'cark' } }));
         cevir.textContent = M.birDahaCevir;
         cevir.disabled = false;
       },
@@ -301,6 +302,7 @@ const [jsOnce, jsSonra] = m.jsYok.split('{siirler}');
         if (durum) durum.textContent = '';
         fincan?.classList.remove('kapali');
         goster(secilen);
+        document.dispatchEvent(new CustomEvent('rozet', { detail: { tur: 'fal' } }));
         dugme.textContent = M.birDahaKapat;
         dugme.disabled = false;
       },

@@ -1,7 +1,8 @@
 ---
 // KVKK aydınlatma metni, gizlilik ve çerez politikası. Hem /gizlilik/ sayfasında hem Hakkında'daki pencerede.
-// Metin kodun gerçekte yaptığına dayanır: site kişisel veri toplamaz; Umami çerezsiz; e-posta listesi ortak
-// servisle; tercihler localStorage'da.
+// Metin kodun gerçekte yaptığına dayanır: Umami yalnız izinle (açık rıza) yüklenir; e-posta listesi ortak servisle;
+// tercihler ve kazanım rozetleri localStorage'da. Çerez politikası merkezde (Standartlar §11, §14).
+import { cerezPolitikasi } from '../data/cerez';
 import { dilBul, metin } from '../i18n';
 
 interface Props {
@@ -13,8 +14,8 @@ const Baslik = seviye;
 const dil = dilBul(Astro.url);
 const m = metin(dil).gizlilik;
 const listeAdres = dil === 'en' ? 'https://bumbagroup.com/liste/aydinlatma?dil=en' : 'https://bumbagroup.com/liste/aydinlatma';
-/** "{eposta}" ve "{liste}" yer tutucularını bağlantıya çevirir */
-const parcala = (s: string) => s.split(/(\{eposta\}|\{liste\})/);
+/** "{eposta}", "{liste}" ve "{cerez}" yer tutucularını bağlantıya çevirir */
+const parcala = (s: string) => s.split(/(\{eposta\}|\{liste\}|\{cerez\})/);
 ---
 
 <div class="gizlilik-metni">
@@ -29,6 +30,10 @@ const parcala = (s: string) => s.split(/(\{eposta\}|\{liste\})/);
             ) : p === '{liste}' ? (
               <a href={listeAdres} rel="noopener">
                 {m.listeBag}
+              </a>
+            ) : p === '{cerez}' ? (
+              <a href={cerezPolitikasi(dil)} rel="noopener">
+                {m.cerezBag}
               </a>
             ) : (
               p

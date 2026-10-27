@@ -64,9 +64,9 @@ const kayitlar = [
     <SiirSahnesi siir={siir} etiket={`${duyguAdi(d, dil)} · ${sira} / ${tum.length}`} oncelik sizes="(min-width: 64rem) 52vw, 100vw" />
 
     <article class="sayfa siir tek">
-      {kayitlar.length > 0 && <Sesler kayitlar={kayitlar} />}
+      {kayitlar.length > 0 && <Sesler kayitlar={kayitlar} siir={siir.id} />}
       <p class="ipucu" id="ipucu" aria-hidden="true">{m.siir.hepsiIcin}</p>
-      <SiirGovde siir={siir} id="govde" acilis="hemen" />
+      <SiirGovde siir={siir} id="govde" acilis="hemen" data-siir={siir.id} />
       <p class="imza-satiri">— {SITE.sair}</p>
       {m.genel.siirlerTurkce && <p class="dil-notu">{m.genel.siirlerTurkce}</p>}
 
@@ -124,6 +124,10 @@ const kayitlar = [
 
   const govde = document.getElementById('govde');
   const ipucu = document.getElementById('ipucu');
+  // Kazanım rozetleri: şiirin sayfasında birkaç saniye kalan okumuş sayılır (src/scripts/rozetler.ts)
+  window.setTimeout(() => {
+    if (govde?.dataset.siir) document.dispatchEvent(new CustomEvent('rozet', { detail: { tur: 'okuma', id: govde.dataset.siir } }));
+  }, 5000);
   let sayac: number | undefined;
 
   function ipucunuZamanla() {

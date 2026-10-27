@@ -1,9 +1,9 @@
 ---
-// Bumba ortak e-posta listesine katılma formu (Bumba Genel Standartlar §6).
+// Bumba ortak e-posta listesine katılma formu (Bumba Genel Standartlar §1, §6).
 // Çift onayı, rıza kaydını, onay/çıkış e-postalarını ve bot korumasını ortak servis yapar; burada yalnız form var.
-// Alt bilgide yalnız adres ve "Katıl" durur; Katıl'a basınca açılan pencerede kısa aydınlatma özeti, önceden
-// işaretsiz rıza kutusu ve asıl gönderme düğmesi var. JavaScript yoksa pencerenin içeriği formun altında açık durur;
-// form servise gider ve sonuç #liste-tamam / #liste-hata ile bu sayfaya döner.
+// Alt bilgide yalnız adres ve "Katıl" durur. Katıl'a basınca açılan pencerede ortak aydınlatma metni gösterilir
+// (bumbagroup.com/api/liste/aydinlatma); rıza yalnız "Kabul ediyorum" düğmesiyle verilir (riza=on). JavaScript yoksa
+// <noscript> içindeki onay kutusu devreye girer, form servise gider ve sonuç #liste-tamam / #liste-hata ile döner.
 import { SITE } from '../data/site';
 import { dilBul, metin } from '../i18n';
 
@@ -11,46 +11,52 @@ const dil = dilBul(Astro.url);
 const m = metin(dil).liste;
 const donus = new URL(Astro.url.pathname, Astro.site).href;
 const aydinlatma = dil === 'en' ? 'https://bumbagroup.com/liste/aydinlatma?dil=en' : 'https://bumbagroup.com/liste/aydinlatma';
+const aydinlatmaJson = `https://bumbagroup.com/api/liste/aydinlatma?dil=${dil}`;
 const [rizaOnce, rizaSonra] = m.riza.split('{aydinlatma}');
-const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, hatalar: m.hatalar };
+const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, kabul: m.kabul, yuklenemedi: m.yuklenemedi, hatalar: m.hatalar };
 ---
 
 <section class="liste-kutusu" id="liste" aria-labelledby="liste-baslik">
   <h2 id="liste-baslik" class="liste-baslik">{m.baslik}</h2>
-  <form class="liste-formu" action="https://bumbagroup.com/api/liste/katil" method="post" data-metin={JSON.stringify(yazilar)}>
+  <form class="liste-formu" id="liste-form" action="https://bumbagroup.com/api/liste/katil" method="post" data-aydinlatma={aydinlatmaJson} data-metin={JSON.stringify(yazilar)}>
     <input type="hidden" name="site" value={SITE.liste} />
     <input type="hidden" name="dil" value={dil} />
     <input type="hidden" name="donus" value={donus} />
     <input type="hidden" name="kaynak" value={donus} />
+    <input class="bot-tuzagi" type="text" name="web_sitesi" tabindex="-1" autocomplete="off" aria-hidden="true" />
     <div class="liste-satir">
       <label class="gorunmez" for="liste-eposta">{m.eposta}</label>
       <input id="liste-eposta" type="email" name="eposta" required autocomplete="email" placeholder={m.eposta} />
-      <button class="dugme liste-ac" type="button" aria-haspopup="dialog">{m.katil}</button>
+      <button class="dugme" type="submit" id="liste-katil">{m.katil}</button>
     </div>
-    <dialog class="liste-onay" aria-labelledby="liste-onay-baslik">
-      <h3 id="liste-onay-baslik">{m.onayBaslik}</h3>
-      <p>{m.onayMetni}</p>
+    <noscript>
       <label class="liste-riza">
         <input type="checkbox" name="riza" value="on" required />
         <span>{rizaOnce}<a href={aydinlatma} rel="noopener">{m.aydinlatma}</a>{rizaSonra}</span>
       </label>
-      <div class="liste-onay-dugmeler">
-        <button class="dugme liste-vazgec" type="button">{m.vazgec}</button>
-        <button class="dugme vurgulu" type="submit">{m.katil}</button>
+    </noscript>
+    <dialog class="liste-pencere" id="liste-pencere" aria-labelledby="liste-pencere-baslik">
+      <h3 id="liste-pencere-baslik"></h3>
+      <div class="liste-metin" id="liste-metin" tabindex="0"><p>{m.yukleniyor}</p></div>
+      <a class="liste-tam" href={aydinlatma} target="_blank" rel="noopener">{m.tamMetin}</a>
+      <div class="liste-pencere-dugmeler">
+        <button class="dugme" type="button" id="liste-vazgec">{m.vazgec}</button>
+        <button class="dugme vurgulu" type="submit" id="liste-kabul" name="riza" value="on" disabled>{m.kabul}</button>
       </div>
     </dialog>
-    <input class="bot-tuzagi" type="text" name="web_sitesi" tabindex="-1" autocomplete="off" aria-hidden="true" />
-    <p class="liste-durum" role="status" aria-live="polite"></p>
+    <p class="liste-durum" id="liste-sonuc" role="status" aria-live="polite"></p>
   </form>
 </section>
 
 <script>
   const form = document.querySelector<HTMLFormElement>('.liste-formu');
-  const durum = form?.querySelector<HTMLElement>('.liste-durum');
-  const eposta = form?.querySelector<HTMLInputElement>('input[type="email"]');
-  const ac = form?.querySelector<HTMLButtonElement>('.liste-ac');
-  const onay = form?.querySelector<HTMLDialogElement>('.liste-onay');
+  const durum = document.getElementById('liste-sonuc');
+  const pencere = document.getElementById('liste-pencere') as HTMLDialogElement | null;
+  const baslik = document.getElementById('liste-pencere-baslik');
+  const metinKutusu = document.getElementById('liste-metin');
+  const kabul = document.getElementById('liste-kabul') as HTMLButtonElement | null;
   const M = JSON.parse(form?.dataset.metin ?? '{}');
+  let metinGeldi = false;
 
   function goster(metin: string, iyi: boolean) {
     if (!durum) return;
@@ -62,31 +68,60 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
   if (location.hash === '#liste-tamam') goster(M.tamam, true);
   else if (location.hash === '#liste-hata') goster(M.hatalar.hata, false);
 
-  // Katıl: adres geçerliyse onay penceresi açılır; rıza orada, önceden işaretsiz kutuyla verilir
-  function pencereyiAc() {
-    if (!eposta?.reportValidity()) return;
-    onay?.showModal();
+  // Ortak aydınlatma metni ilk açılışta gelir; HTML olarak değil, textContent ile yazılır
+  async function metniGetir() {
+    if (metinGeldi || !form || !metinKutusu) return;
+    try {
+      const y = await fetch(form.dataset.aydinlatma ?? '', { headers: { Accept: 'application/json' } });
+      if (!y.ok) throw new Error(String(y.status));
+      const v = (await y.json()) as { baslik?: string; giris?: string; bolumler?: { baslik?: string; metin?: string }[] };
+      if (baslik) baslik.textContent = v.baslik ?? '';
+      const parcalar: HTMLElement[] = [];
+      if (v.giris) {
+        const p = document.createElement('p');
+        p.textContent = v.giris;
+        parcalar.push(p);
+      }
+      for (const b of v.bolumler ?? []) {
+        const h = document.createElement('h4');
+        h.textContent = b.baslik ?? '';
+        const p = document.createElement('p');
+        p.textContent = b.metin ?? '';
+        parcalar.push(h, p);
+      }
+      metinKutusu.replaceChildren(...parcalar);
+      metinGeldi = true;
+      if (kabul) kabul.disabled = false;
+    } catch {
+      const p = document.createElement('p');
+      p.textContent = M.yuklenemedi;
+      metinKutusu.replaceChildren(p);
+      if (kabul) kabul.disabled = true;
+    }
   }
-  ac?.addEventListener('click', pencereyiAc);
-  // Adres kutusunda Enter da pencereyi açar (form doğrudan gönderilmez)
-  eposta?.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter') return;
-    e.preventDefault();
-    pencereyiAc();
-  });
-  onay?.querySelector('.liste-vazgec')?.addEventListener('click', () => onay.close());
-  onay?.addEventListener('click', (e) => {
-    if (e.target === onay) onay.close();
+
+  document.getElementById('liste-vazgec')?.addEventListener('click', () => pencere?.close());
+  pencere?.addEventListener('click', (e) => {
+    if (e.target === pencere) pencere.close();
   });
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const dugme = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-    const veri = Object.fromEntries(new FormData(form).entries());
+    const gonderen = (e as SubmitEvent).submitter;
+    // "Katıl": adres geçerliyse pencere açılır; form ancak "Kabul ediyorum"la gönderilir
+    if (gonderen?.id !== 'liste-kabul') {
+      if (!form.reportValidity()) return;
+      pencere?.showModal();
+      void metniGetir();
+      return;
+    }
+    const veri: Record<string, string> = {};
+    new FormData(form).forEach((v, k) => (veri[k] = String(v)));
+    veri.riza = 'on';
     delete veri.donus;
-    if (dugme) {
-      dugme.disabled = true;
-      dugme.textContent = M.gonderiliyor;
+    if (kabul) {
+      kabul.disabled = true;
+      kabul.textContent = M.gonderiliyor;
     }
     try {
       const yanit = await fetch(form.action, {
@@ -105,23 +140,23 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
     } catch {
       goster(M.hatalar.hata, false);
     } finally {
-      onay?.close();
-      if (dugme) {
-        dugme.disabled = false;
-        dugme.textContent = M.katil;
+      pencere?.close();
+      if (kabul) {
+        kabul.disabled = !metinGeldi;
+        kabul.textContent = M.kabul;
       }
     }
   });
 </script>
 
 <style>
-  /* Masaüstünde başlık ve form yan yana, tek satır; dar ekranda başlık üstte */
+  /* Çerçevesiz: başlık ve form yan yana, dar ekranda başlık üstte */
   .liste-kutusu {
     margin: 0;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem 1.25rem;
   }
   .liste-baslik {
@@ -167,9 +202,10 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
       width: auto;
     }
   }
-  /* Onay penceresi */
-  .liste-onay {
-    width: min(30rem, calc(100vw - 2rem));
+  /* Katıl penceresi: telefonda ekrana sığar, metin kayar */
+  .liste-pencere {
+    width: min(32rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
     padding: 1.6rem clamp(1.25rem, 4vw, 2rem) 1.5rem;
     border: 1px solid var(--cizgi);
     border-radius: 4px;
@@ -177,22 +213,49 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
     color: var(--yazi);
     font-size: 0.95rem;
   }
-  .liste-onay::backdrop {
+  .liste-pencere[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .liste-pencere::backdrop {
     background: rgba(0, 0, 0, 0.72);
   }
-  .liste-onay h3 {
+  .liste-pencere h3 {
     margin: 0 0 0.75rem;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
-  .liste-onay p {
-    margin: 0;
+  .liste-metin {
+    overflow-y: auto;
+    min-height: 4rem;
     color: var(--soluk);
+  }
+  .liste-metin :global(h4) {
+    margin: 1rem 0 0.25rem;
+    font-family: var(--etiket);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--yazi);
+  }
+  .liste-metin :global(p) {
+    margin: 0;
+  }
+  .liste-tam {
+    margin-top: 1rem;
+    color: var(--yazi);
+  }
+  .liste-pencere-dugmeler {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.2rem;
   }
   .liste-riza {
     display: flex;
     gap: 0.6rem;
     align-items: flex-start;
-    margin-top: 1.1rem;
+    margin-top: 0.9rem;
   }
   .liste-riza input {
     margin-top: 0.3rem;
@@ -200,29 +263,6 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, katil: m.katil, 
   }
   .liste-riza a {
     color: var(--yazi);
-  }
-  .liste-onay-dugmeler {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    margin-top: 1.4rem;
-  }
-  /* JavaScript yoksa pencere açılamaz: içeriği formun altında açık durur, gönderme düğmesi oradadır */
-  :global(html:not(.js)) .liste-onay {
-    display: block;
-    position: static;
-    width: auto;
-    margin: 0.9rem 0 0;
-    padding: 0;
-    border: 0;
-    background: none;
-    font-size: inherit;
-  }
-  :global(html:not(.js)) .liste-onay h3,
-  :global(html:not(.js)) .liste-ac,
-  :global(html:not(.js)) .liste-vazgec {
-    display: none;
   }
   .bot-tuzagi {
     position: absolute;
