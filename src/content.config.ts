@@ -15,7 +15,7 @@ const siirler = defineCollection({
       .optional(),
     /** Şairin yazdığı hâliyle yer. */
     yer: z.string().optional(),
-    /** "Aynı yerden" bağlantısı için ortak ad (ör. Antigoni → Burgazada). */
+    /** "Aynı yerden" bağlantısı için ortak ad (ör. "Feneryolu, ev" → Feneryolu). */
     yerGrubu: z.string().optional(),
     /** İlki şiirin ana duygusudur, rengini o belirler. */
     duygular: z.array(z.enum(DUYGU_SLUGLARI)).min(1),

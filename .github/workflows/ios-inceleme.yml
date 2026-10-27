@@ -3,19 +3,21 @@ name: iOS inceleme
 # Elle tetiklenir: App Store incelemesindeki gönderimin ve öğelerinin durumunu yazar (scripts/uygulama/inceleme.py).
 # "yeniden-gonder" seçilirse reddedilen öğeyi çözüldü sayar ve gönderimi yeniden incelemeye yollar
 # (App Review'un bilgi isteğine cevap yazıldıktan sonra "Resubmit to App Review" düğmesinin yaptığı iş).
+# "yapi-degistir" incelemedeki gönderimi geri çeker, sürüme en son işlenmiş yapıyı bağlar ve yeniden gönderir
+# (inceleme sırası baştan başlar; yalnız sahibin isteğiyle).
 on:
   workflow_dispatch:
     inputs:
       islem:
         description: Ne yapılsın
         type: choice
-        options: [durum, yeniden-gonder]
+        options: [durum, yeniden-gonder, yapi-degistir]
         default: durum
 
 jobs:
   inceleme:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     env:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
@@ -27,6 +29,8 @@ jobs:
       - run: |
           if [ "$ISLEM" = "yeniden-gonder" ]; then
             python3 scripts/uygulama/inceleme.py gonder
+          elif [ "$ISLEM" = "yapi-degistir" ]; then
+            python3 scripts/uygulama/inceleme.py yapi
           else
             python3 scripts/uygulama/inceleme.py
           fi

@@ -1,7 +1,6 @@
 ---
 tarih: "2011-10-24"
-yer: "Antigoni"
-yerGrubu: "Burgazada"
+yer: "Burgazada"
 duygular: ["ayrilik"]
 ortam: "deniz"
 foto: "burgazada-aksam"

@@ -28,8 +28,9 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
 ## Bu projeye özel kararlar ve sapmalar
 
 - **Mahlas "Eylül Bitse"** (27 Ekim 2026, sahibinin bildirdiği; önceki geçici imza "Antigoni" idi): tek yerden
-  `src/data/site.ts` → `SITE.sair`; kart ve kitap betiklerinde `SAIR`. "Antigoni" yalnız yer adı olarak kalır
-  (Burgazada'nın eski adı, 24.10.2011 şiirinin yeri).
+  `src/data/site.ts` → `SITE.sair`; kart ve kitap betiklerinde `SAIR`. Sitede "Antigoni" görünmez: 24.10.2011
+  şiirinin yeri "Burgazada" yazılır, adresi `/siir/2011-10-24-burgazada/` (eski `…-antigoni` adresleri ve paylaşım
+  görselleri `nginx.conf`'ta 301 ile yönlenir). Yalnız şiirin kendi dizesinde ("Antigoni’de yemek yiyen bir kedi") geçer.
 - Şiirlerin tüm hakları saklıdır; lisans yok. Şiirler çevrilmez: İngilizce sayfalarda Türkçe kalır, `lang="tr"`.
 - "sevgimiz percinlensin-aşkmetni.txt" şiir değildir, sitede yayımlanmaz.
 - Şiirler listesinde (Bütün şiirler, Harita, Zaman) sesli okuması olan şiirin adının yanında hoparlör işareti var
@@ -126,7 +127,8 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   Kurulum, mağaza metinleri, ekran görüntüleri: `uygulama/README.md`, `uygulama/magaza/`.
   Uygulama açıkken ekran kararmaz (`isIdleTimerDisabled`, `SceneDelegate.swift`; 18 Ekim 2026).
   App Store kimliği (Apple ID) **6824072247**; mağaza durumu `ios-durum.yml` ile okunur, inceleme gönderimi
-  `ios-inceleme.yml` ile okunur ve bilgi isteğine cevaptan sonra yeniden yollanır, mağaza bilgileri
+  `ios-inceleme.yml` ile okunur, bilgi isteğine cevaptan sonra yeniden yollanır ve ("yapi-degistir") incelemedeki
+  sürümün yapısı en son yüklenen yapıyla değiştirilip yeniden gönderilir (inceleme sırası baştan başlar), mağaza bilgileri
   `ios-magaza.yml` ile yazılır (`scripts/uygulama/magaza.py`, metinler `uygulama/magaza/metinler.json`). Sitede alt bilginin sağında,
   Bumba rozetinin yanında "App Store'dan indir" bağlantısı ve iPhone Safari'de uygulama şeridi (`apple-itunes-app`)
   var; uygulama App Store'da yayına girince `src/data/uygulama.ts` → `APP_STORE.yayinda: true` ile açılır

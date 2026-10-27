@@ -21,7 +21,7 @@ export const HARITA_YERLERI: Record<string, HaritaYeri> = {
   Karga: { enlem: 40.9874, boylam: 29.0291, yon: 'sag', etiket: 'Karga', etiketY: -6 },
   Moda: { enlem: 40.98, boylam: 29.026, yon: 'sol' },
   Feneryolu: { enlem: 40.9795, boylam: 29.0535, yon: 'sag', etiketY: 30 },
-  Burgazada: { enlem: 40.88, boylam: 29.067, yon: 'sol', etiket: 'Burgazada · Antigoni' },
+  Burgazada: { enlem: 40.88, boylam: 29.067, yon: 'sol', etiket: 'Burgazada' },
   Büyükada: { enlem: 40.858, boylam: 29.12, yon: 'sol' },
 };
 

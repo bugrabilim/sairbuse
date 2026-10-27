@@ -65,7 +65,7 @@ collections:
         name: yerGrubu
         widget: string
         required: false
-        hint: Farklı adlarla anılan aynı yer için ortak ad (ör. "Antigoni" yazıldıysa "Burgazada"). Haritadaki yerler src/data/yerler.ts dosyasında.
+        hint: Farklı adlarla anılan aynı yer için ortak ad (ör. "Feneryolu, ev" yazıldıysa "Feneryolu"). Haritadaki yerler src/data/yerler.ts dosyasında.
       - label: Duygular
         name: duygular
         widget: select

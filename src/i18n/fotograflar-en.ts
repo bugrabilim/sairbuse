@@ -35,5 +35,5 @@ export const FOTO_EN: Record<string, string> = {
   'sayfa-harita': 'Istanbul and the Bosphorus from space',
   'sayfa-zaman': 'Nusretiye Mosque and the clock tower in Tophane, 1862',
   'sayfa-siirler': 'A city ferry at Kadıköy Pier',
-  'sayfa-hakkinda': 'Burgazada, once called Antigoni',
+  'sayfa-hakkinda': 'Burgazada',
 };
