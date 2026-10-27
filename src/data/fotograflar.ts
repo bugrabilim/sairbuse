@@ -315,7 +315,7 @@ export const FOTOGRAFLAR: Fotograf[] = [
   },
   {
     id: "sayfa-hakkinda",
-    aciklama: "Burgazada, eski adıyla Antigoni",
+    aciklama: "Burgazada",
     yazar: "Darwinek",
     lisans: "CC BY-SA 3.0",
     lisansUrl: "https://creativecommons.org/licenses/by-sa/3.0",

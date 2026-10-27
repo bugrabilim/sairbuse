@@ -135,7 +135,7 @@ export const DUYGULAR: Duygu[] = [
     isik: ['#e2d2f6', '#9c70d8'],
     golge: '#160a25',
     misra: ['Parmaklarım var, mor mosmor'],
-    kaynak: '2011-10-24-antigoni',
+    kaynak: '2011-10-24-burgazada',
   },
   {
     slug: 'ozgurluk',
