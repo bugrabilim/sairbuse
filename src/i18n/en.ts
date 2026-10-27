@@ -8,7 +8,7 @@ export const en: Metin = {
     aciklama:
       'It was meant to be a book of poems, but it was never published. Poems written between 2008 and 2021 on the ferries, islands and streets of Istanbul, to be read by emotion, place and time.',
     ozet:
-      'Duyguların Peşinde (In Pursuit of Emotions) is the home of 30 poems signed Antigoni. They were written between 2008 and 2021 in Istanbul (Moda, Kalkedon, Cihangir, the Princes’ Islands, the Eminönü ferry), in İzmir, in Söğüt near Marmaris and in Paris, and can be read by emotion, place and time. The poems are in Turkish.',
+      'Duyguların Peşinde (In Pursuit of Emotions) is the home of 30 poems signed Eylül Bitse. They were written between 2008 and 2021 in Istanbul (Moda, Kalkedon, Cihangir, the Princes’ Islands, the Eminönü ferry), in İzmir, in Söğüt near Marmaris and in Paris, and can be read by emotion, place and time. The poems are in Turkish.',
   },
   ust: {
     icerigeGec: 'Skip to content',
@@ -76,8 +76,8 @@ export const en: Metin = {
   },
   siir: {
     hepsiIcin: 'Tap the poem to see it all',
-    aciklama: (misra: string, imza: string) => `A poem in Turkish by Antigoni: “${misra}”${imza ? ` (${imza})` : ''}.`,
-    baslikEki: ' · poem by Antigoni',
+    aciklama: (misra: string, imza: string) => `A poem in Turkish by Eylül Bitse: “${misra}”${imza ? ` (${imza})` : ''}.`,
+    baslikEki: ' · poem by Eylül Bitse',
     bastanOku: 'Read from the start',
     misraKarti: 'Verse card',
     paylas: 'Share',
@@ -195,7 +195,7 @@ export const en: Metin = {
   hakkinda: {
     baslik: 'About',
     guncelleme: (t: string) => `Last updated: ${t}`,
-    aciklama: 'The home of an unpublished book of poems signed Antigoni: who wrote it, where the colours come from, the photographs and the rights.',
+    aciklama: 'The home of an unpublished book of poems signed Eylül Bitse: who wrote it, where the colours come from, the photographs and the rights.',
     giris1:
       'These poems were written between 2008 and 2021: in Moda, in Kalkedon, in Cihangir, on the islands, on the Eminönü ferry, under a plum tree, in a crowded café, at home. They were meant to be a book. It was never published.',
     giris2: 'The first poem of the book seems to have known:',
@@ -205,13 +205,11 @@ export const en: Metin = {
     renklerGiris: 'Each emotion takes its colour from the poems themselves.',
     imza: 'Signature',
     imzaMetni: (sair: string) => `The poems are signed ${sair}.`,
-    antigoni: 'Antigoni is the old name of Burgazada, one of the Princes’ Islands; {siir} was written there.',
-    antigoniBag: 'one of the poems',
     fotograflar: 'Photographs',
     fotograflariGor: 'Photographs and credits',
     gizlilikGor: 'Privacy and cookies',
     fotoMetni:
-      'Every poem opens with a photograph of the place where it was written. All the photographs are real: taken by other people and shared under free licences on Wikimedia Commons. On this site they were turned black and white and tinted in the colour of the poem’s emotion. For a few poems with no known place, the photograph shows an image from the poem instead. The photographs at the top of the pages came the same way: a ferry in Kadıköy, Istanbul from space, the clock tower in Tophane in 1862, two cups of coffee and Burgazada, where the name Antigoni comes from.',
+      'Every poem opens with a photograph of the place where it was written. All the photographs are real: taken by other people and shared under free licences on Wikimedia Commons. On this site they were turned black and white and tinted in the colour of the poem’s emotion. For a few poems with no known place, the photograph shows an image from the poem instead. The photographs at the top of the pages came the same way: a ferry in Kadıköy, Istanbul from space, the clock tower in Tophane in 1862, two cups of coffee and Burgazada, once called Antigoni.',
     sayfasi: (ad: string) => `${ad} page`,
     haklar: 'Rights',
     haklarMetni:
@@ -223,11 +221,11 @@ export const en: Metin = {
       {
         soru: 'What is Duyguların Peşinde?',
         cevap:
-          'Duyguların Peşinde (In Pursuit of Emotions) is the home of 30 poems signed Antigoni, written between 2008 and 2021. They were meant to be a book that was never published; here they are read by emotion, place and time.',
+          'Duyguların Peşinde (In Pursuit of Emotions) is the home of 30 poems signed Eylül Bitse, written between 2008 and 2021. They were meant to be a book that was never published; here they are read by emotion, place and time.',
       },
       {
         soru: 'Who wrote the poems?',
-        cevap: 'The poems are signed Antigoni, the old name of Burgazada, one of the Princes’ Islands off Istanbul, where one of them was written.',
+        cevap: 'The poems are signed Eylül Bitse.',
       },
       {
         soru: 'Where were the poems written?',

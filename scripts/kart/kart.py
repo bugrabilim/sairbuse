@@ -19,7 +19,7 @@ CIKTI = KOK / 'kart-cikti'
 FONT = KOK / 'node_modules' / '@fontsource'
 ADRES = 'https://duygularinpesinde.bumba.tr/?utm_source=kart'  # Umami'de kart okutuşları ayrı görünsün diye
 EN_MM, BOY_MM, PAY_MM = 55, 85, 3  # kesim ölçüsü ve her kenardaki kesim payı
-SAIR = 'Antigoni'
+SAIR = 'Eylül Bitse'
 KUNYE = '2008–2021'
 SAMAN, MUREKKEP, SARI = '#efe6cf', '#1c1915', '#ebcb52'
 # Duygu renkleri (aşk, özlem, hüzün, yalnızlık, ayrılık, karanlık, özgürlük), kitabın kapağındaki gibi

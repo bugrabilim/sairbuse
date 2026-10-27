@@ -268,7 +268,7 @@ Kargayla
 - [x] Her şiire 1–2 duygu etiketi (§1.1'deki öneriler; şair değiştirebilir)
 - [x] Yayından çıkacaklar: aşk metni çıkarıldı, `bus.txt` yayında.
 - [ ] Tarihsiz üç şiire tarih ve yer (biliniyorsa)
-- [x] Mahlas: *Antigoni* (öneri, `src/data/site.ts`). "Hakkında" metni yazıldı. Lisans: tüm hakları saklıdır.
+- [x] Mahlas: *Eylül Bitse* (27 Ekim 2026; önce geçici olarak *Antigoni*, `src/data/site.ts`). "Hakkında" metni yazıldı. Lisans: tüm hakları saklıdır.
 - [x] Alt alan adı: `duygularinpesinde.bumba.tr`
 
 ### Faz 1 — İlk yayın (MVP)
@@ -354,7 +354,7 @@ Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", 
 
 | Soru | Karar |
 |---|---|
-| Şair adı | *Antigoni* (şimdilik böyle kalıyor). Burgazada'nın eski adı, "İçimdeki savaş" orada yazıldı. Değiştirmek için `src/data/site.ts` dosyasında tek satır. |
+| Şair adı | Mahlas *Eylül Bitse* (27 Ekim 2026). Önceki geçici imza *Antigoni* (Burgazada'nın eski adı) idi. Değiştirmek için `src/data/site.ts` dosyasında tek satır. |
 | Başlıklar | Ad, tarih, yer. Adı olmayan şiirde başlık yerine şairin kendi "tarih – yer" imzası duruyor. |
 | Yayından çıkacaklar | Aşk metni çıkarıldı. `bus.txt` yayında. |
 | Adres | `duygularinpesinde.bumba.tr` |

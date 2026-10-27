@@ -1,6 +1,6 @@
 # Duyguların Peşinde — master dosya
 
-Antigoni imzalı, basılamamış bir şiir kitabının sitesi: 30 şiir; duygu, yer ve zaman üzerinden okunuyor.
+Eylül Bitse imzalı, basılamamış bir şiir kitabının sitesi: 30 şiir; duygu, yer ve zaman üzerinden okunuyor.
 Canlı adres: https://duygularinpesinde.bumba.tr · Bumba Life ürünü (Bumba Group).
 Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: @README.md
 
@@ -27,6 +27,9 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
 
 ## Bu projeye özel kararlar ve sapmalar
 
+- **Mahlas "Eylül Bitse"** (27 Ekim 2026, sahibinin bildirdiği; önceki geçici imza "Antigoni" idi): tek yerden
+  `src/data/site.ts` → `SITE.sair`; kart ve kitap betiklerinde `SAIR`. "Antigoni" yalnız yer adı olarak kalır
+  (Burgazada'nın eski adı, 24.10.2011 şiirinin yeri).
 - Şiirlerin tüm hakları saklıdır; lisans yok. Şiirler çevrilmez: İngilizce sayfalarda Türkçe kalır, `lang="tr"`.
 - "sevgimiz percinlensin-aşkmetni.txt" şiir değildir, sitede yayımlanmaz.
 - Şiirler listesinde (Bütün şiirler, Harita, Zaman) sesli okuması olan şiirin adının yanında hoparlör işareti var
@@ -45,7 +48,7 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
 - **Alt bilgi** (Standartlar §1; 27 Ekim 2026'da 12 Ekim'deki tek satır düzeninin yerine geçti): solda çerçevesiz
   e-posta listesi (başlık, adres, Katıl), sağda "App Store'dan indir" (yayına girince) ve Bumba Life rozeti; altında
-  tek satır telif ("© 2008'den itibaren Antigoni. Şiirlerin tüm hakları saklıdır."; bitiş yılı yazılmaz),
+  tek satır telif ("© 2008'den itibaren Eylül Bitse. Şiirlerin tüm hakları saklıdır."; bitiş yılı yazılmaz),
   "Gizlilik" bağlantısı ve "Çerez tercihleri" düğmesi. Telefonda alt alta. Uygulamada liste yerine siteyi Safari'de
   açan bağlantı, çerez düğmesi yok. Görünür son güncelleme tarihi Hakkında'nın sonunda (derleme günü); makineler için
   JSON-LD `dateModified` ve llms.txt.
@@ -162,29 +165,29 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
 
 ## SEO / GEO kaydı
 
-**Hedef sorgular:** "Duyguların Peşinde", "Antigoni şiirleri", "İstanbul şiirleri", "Moda şiiri", "Kadıköy
-şiiri", "vapur şiiri", "aşk şiiri", "özlem şiiri", "hüzünlü şiirler", "ayrılık şiiri", "Burgazada Antigoni",
+**Hedef sorgular:** "Duyguların Peşinde", "Eylül Bitse şiirleri", "İstanbul şiirleri", "Moda şiiri", "Kadıköy
+şiiri", "vapur şiiri", "aşk şiiri", "özlem şiiri", "hüzünlü şiirler", "ayrılık şiiri", "Burgazada şiiri",
 "Turkish poems Istanbul".
 
 **Sayfa başlıkları ve açıklamaları** (kaynak: `src/i18n/*.ts`; İngilizce başlıklarda "(In Pursuit of Emotions)"
-eki, şiirlerde "· poem by Antigoni"):
+eki, şiirlerde "· poem by Eylül Bitse"):
 
 | Sayfa | TR başlık / açıklama | EN başlık / açıklama |
 |---|---|---|
 | Ana sayfa | Duyguların Peşinde / `site.aciklama` | Duyguların Peşinde — In Pursuit of Emotions / `site.aciklama` |
 | Bütün şiirler | Bütün şiirler / "30 şiir, yazıldıkları sırayla." | All poems / "30 poems in the order they were written. The poems are in Turkish." |
-| Şiir | ad ya da ilk mısra… / "ilk mısra — tarih – yer" | … · poem by Antigoni / "A poem in Turkish by Antigoni: “…” (tarih – yer)." |
+| Şiir | ad ya da ilk mısra… / "ilk mısra — tarih – yer" | … · poem by Eylül Bitse / "A poem in Turkish by Eylül Bitse: “…” (tarih – yer)." |
 | Duygu | Aşk… / "Aşk üzerine N şiir. Rengi pembe; …" | Love… / "N poems of love. Its colour is pink, …" |
 | Yer | Moda… / "Moda'da yazılmış N şiir." | Moda… / "N poems written in Moda." |
 | Harita | Harita / "Şiirlerin yazıldığı yerler: …" | Map / "Where the poems were written: …" |
 | Zaman | Zaman / "2008–2021 arasında yazılmış N tarihli şiir." | Time / "N dated poems written between 2008 and 2021." |
 | Fal | Şiir falı / "Bir niyet tut: …" | Poem fortune / "Make a wish: …" |
-| Hakkında | Hakkında / "Antigoni imzalı, basılamamış …" | About / "The home of an unpublished book of poems …" |
+| Hakkında | Hakkında / "Eylül Bitse imzalı, basılamamış …" | About / "The home of an unpublished book of poems …" |
 | Arama | Arama / "Şiirlerde, duygularda ve yerlerde ara." | Search / "Search the poems, emotions and places." |
 | Gizlilik | Gizlilik ve çerezler / KVKK özeti | Privacy and cookies / KVKK özeti |
 
 **Şemalar (JSON-LD, `src/lib/sema.ts`):** her sayfada Organization (parentOrganization: Bumba Group),
-WebSite (SearchAction → arama sayfası), Person (Antigoni); alt sayfalarda BreadcrumbList; şiirde
+WebSite (SearchAction → arama sayfası), Person (Eylül Bitse); alt sayfalarda BreadcrumbList; şiirde
 CreativeWork (genre Şiir/Poetry, author, dateCreated, locationCreated, copyrightNotice); duygu, yer ve bütün
 şiirler sayfalarında CollectionPage; Hakkında'da FAQPage ("Sık sorulanlar" penceresindekiyle aynı); ana
 sayfada WebPage. Sosyal hesap yok, `sameAs` yok.

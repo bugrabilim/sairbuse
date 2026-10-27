@@ -125,7 +125,7 @@ Rakıyla
 - Dosyanın adı şiirin adresi olur: `sari.md` dosyası `/siir/sari/` adresinde yayınlanır.
 - Yeni bir yer haritada görünsün isterseniz konumunu `src/data/yerler.ts` dosyasına ekleyin; o yerin varsayılan fotoğrafı `src/data/fotograflar.ts` → `YER_FOTOGRAFLARI`.
 
-Şairin imzası (şu an *Antigoni*) `src/data/site.ts` dosyasında tek satırda tanımlı.
+Şairin imzası (mahlas *Eylül Bitse*) `src/data/site.ts` dosyasında tek satırda tanımlı.
 
 ## Yerelde çalıştırmak
 
@@ -180,6 +180,6 @@ python3 scripts/harita.py <klasör>/simplified_land_polygons.shp --genis   # Par
 
 ## Haklar
 
-© 2008–2026 Antigoni. Bu depodaki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz.
+© 2008–2026 Eylül Bitse. Bu depodaki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz.
 
 `src/assets/foto/` klasöründeki fotoğraflar bu kapsamda değildir; her biri `src/data/fotograflar.ts`'de adı geçen fotoğrafçıya aittir ve kendi lisansıyla (CC BY, CC BY-SA ya da CC0) kullanılmaktadır.

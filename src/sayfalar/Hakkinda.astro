@@ -16,7 +16,6 @@ const M = metin(dil);
 const m = M.hakkinda;
 const tum = await tumSiirler();
 const acilis = tum.find((s) => s.id === '2011-07-18-moda');
-const antigoni = tum.find((s) => s.id === '2011-10-24-antigoni');
 const renkler = DUYGULAR.map((d) => ({ d, kaynak: tum.find((s) => s.id === d.kaynak) }));
 // Her fotoğraf ve onu kullanan şiirler
 const fotolar = FOTOGRAFLAR.map((f) => ({ f, siirler: tum.filter((s) => siirFotografi(s)?.id === f.id) })).filter(
@@ -27,7 +26,6 @@ function sayfasi(yol: string) {
   const anahtar = (Object.keys(SAYFALAR) as SayfaAdi[]).find((k) => SAYFALAR[k].tr === yol);
   return anahtar ? { ad: M.sayfaAdlari[anahtar], yol: SAYFALAR[anahtar][dil] } : undefined;
 }
-const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
 ---
 
 <Temel
@@ -67,16 +65,7 @@ const [antigoniOnce, antigoniSonra] = m.antigoni.split('{siir}');
     </ul>
 
     <h2>{m.imza}</h2>
-    <p>
-      {m.imzaMetni(SITE.sair)}{' '}
-      {
-        SITE.sair === 'Antigoni' && antigoni && (
-          <>
-            {antigoniOnce}<a href={siirYolu(antigoni, dil)}>{m.antigoniBag}</a>{antigoniSonra}
-          </>
-        )
-      }
-    </p>
+    <p>{m.imzaMetni(SITE.sair)}</p>
 
     <p class="pencere-dugmeleri">
       <button class="dugme vurgulu" type="button" id="fotograflar" data-pencere="foto-pencere" aria-haspopup="dialog">{m.fotograflariGor}</button>

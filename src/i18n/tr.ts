@@ -18,7 +18,7 @@ export const tr = {
     aciklama:
       'Bir şiir kitabı olacaktı, basılamadı. 2008–2021 arasında İstanbul’un vapurlarında, adalarında, sokaklarında yazılmış şiirler; duygu, yer ve zaman üzerinden okunmak için.',
     ozet:
-      'Duyguların Peşinde, Antigoni imzalı 30 şiirin sitesi. Şiirler 2008–2021 arasında İstanbul’da (Moda, Kalkedon, Cihangir, adalar, Eminönü vapuru), İzmir’de, Marmaris Söğüt’te ve Paris’te yazıldı; duygu, yer ve zaman üzerinden okunuyor.',
+      'Duyguların Peşinde, Eylül Bitse imzalı 30 şiirin sitesi. Şiirler 2008–2021 arasında İstanbul’da (Moda, Kalkedon, Cihangir, adalar, Eminönü vapuru), İzmir’de, Marmaris Söğüt’te ve Paris’te yazıldı; duygu, yer ve zaman üzerinden okunuyor.',
   },
   ust: {
     icerigeGec: 'İçeriğe geç',
@@ -206,7 +206,7 @@ export const tr = {
     baslik: 'Hakkında',
     // Sitenin son güncellemesi (derleme günü); GEO için içerikte görünür (Standartlar §2)
     guncelleme: (t: string) => `Son güncelleme: ${t}`,
-    aciklama: 'Antigoni imzalı, basılamamış bir şiir kitabının sitesi: kim yazdı, renkler nereden geliyor, fotoğraflar ve haklar.',
+    aciklama: 'Eylül Bitse imzalı, basılamamış bir şiir kitabının sitesi: kim yazdı, renkler nereden geliyor, fotoğraflar ve haklar.',
     giris1:
       'Bu şiirler 2008’den 2021’e kadar yazıldı: Moda’da, Kalkedon’da, Cihangir’de, adalarda, Eminönü vapurunda, bir erik ağacının altında, bir kafenin kalabalığında, evde. Bir kitap olmaları gerekiyordu. Basılamadılar.',
     giris2: 'Kitabın ilk şiiri bunu biliyormuş gibi:',
@@ -216,13 +216,11 @@ export const tr = {
     renklerGiris: 'Her duygunun rengi şiirlerin içinden alındı.',
     imza: 'İmza',
     imzaMetni: (sair: string) => `Şiirler ${sair} imzasını taşıyor.`,
-    antigoni: 'Antigoni, Burgazada’nın eski adı; {siir} orada yazıldı.',
-    antigoniBag: 'şiirlerden biri',
     fotograflar: 'Fotoğraflar',
     fotograflariGor: 'Fotoğraflar ve künyeleri',
     gizlilikGor: 'Gizlilik ve çerezler',
     fotoMetni:
-      'Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi gerçek; başka insanların çekip Wikimedia Commons’ta özgür lisansla paylaştığı fotoğraflar. Sitede siyah beyaza çevrilip şiirin duygusunun rengine boyandılar. Yeri belli olmayan birkaç şiirde fotoğraf yeri değil, şiirdeki bir imgeyi gösteriyor. Sayfaların başındaki fotoğraflar da aynı yoldan geldi: Kadıköy’de bir vapur, uzaydan İstanbul, 1862’de Tophane’deki saat kulesi, iki fincan kahve ve Antigoni adının geldiği Burgazada.',
+      'Her şiir yazıldığı yerin fotoğrafıyla açılıyor. Fotoğrafların hepsi gerçek; başka insanların çekip Wikimedia Commons’ta özgür lisansla paylaştığı fotoğraflar. Sitede siyah beyaza çevrilip şiirin duygusunun rengine boyandılar. Yeri belli olmayan birkaç şiirde fotoğraf yeri değil, şiirdeki bir imgeyi gösteriyor. Sayfaların başındaki fotoğraflar da aynı yoldan geldi: Kadıköy’de bir vapur, uzaydan İstanbul, 1862’de Tophane’deki saat kulesi, iki fincan kahve ve eski adı Antigoni olan Burgazada.',
     sayfasi: (ad: string) => `${ad} sayfası`,
     haklar: 'Haklar',
     haklarMetni:
@@ -234,11 +232,11 @@ export const tr = {
       {
         soru: 'Duyguların Peşinde nedir?',
         cevap:
-          'Antigoni imzalı, 2008–2021 arasında yazılmış 30 şiirin sitesi. Bir kitap olacaktı, basılamadı; burada şiirler duygu, yer ve zaman üzerinden okunuyor.',
+          'Eylül Bitse imzalı, 2008–2021 arasında yazılmış 30 şiirin sitesi. Bir kitap olacaktı, basılamadı; burada şiirler duygu, yer ve zaman üzerinden okunuyor.',
       },
       {
         soru: 'Şiirleri kim yazdı?',
-        cevap: 'Şiirler Antigoni imzasını taşıyor. Antigoni, Burgazada’nın eski adı; şiirlerden biri orada yazıldı.',
+        cevap: 'Şiirler Eylül Bitse imzasını taşıyor.',
       },
       {
         soru: 'Şiirler nerede yazıldı?',
