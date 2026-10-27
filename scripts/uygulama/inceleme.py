@@ -7,6 +7,8 @@ reddedilen öğeyi çözüldü olarak işaretler ve gönderimi yeniden yollar (A
 Çalıştırma (GitHub Actions, "iOS inceleme"): ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8 ortamda.
   python3 scripts/uygulama/inceleme.py            → yalnız durum
   python3 scripts/uygulama/inceleme.py gonder     → reddedilen öğeleri çöz ve yeniden gönder
+  python3 scripts/uygulama/inceleme.py yapi       → incelemede bekleyen gönderimi geri çek, sürüme işlenmiş en son
+                                                   yapıyı bağla ve yeniden incelemeye gönder (inceleme sırası baştan)
 """
 import json
 import os
@@ -69,13 +71,71 @@ def durum_yaz(uygulama):
             yaz(f"  öğe {o['id']}: {o['attributes'].get('state')}")
 
 
+def yapi_degistir(uygulama):
+    """İncelemedeki sürümün yapısını en son işlenmiş yapıyla değiştirip yeniden gönderir."""
+    surumler = api('GET', f'/v1/apps/{uygulama}/appStoreVersions?filter[platform]=IOS'
+                   '&filter[appStoreState]=WAITING_FOR_REVIEW,IN_REVIEW,READY_FOR_REVIEW,PREPARE_FOR_SUBMISSION,'
+                   'DEVELOPER_REJECTED,REJECTED,METADATA_REJECTED&include=build&limit=5')
+    if not surumler['data']:
+        sys.exit('Yayımlanmamış bir sürüm bulunamadı.')
+    surum = surumler['data'][0]
+    sa = surum['attributes']
+    eski = (surum.get('relationships', {}).get('build', {}).get('data') or {}).get('id')
+    yapilar = api('GET', f'/v1/builds?filter[app]={uygulama}&filter[processingState]=VALID'
+                  f"&filter[preReleaseVersion.version]={sa['versionString']}&sort=-uploadedDate&limit=1")['data']
+    if not yapilar:
+        sys.exit('İşlenmiş (VALID) yapı yok; Apple yüklenen yapıyı işlerken birkaç dakika sonra yeniden deneyin.')
+    yeni = yapilar[0]
+    yaz(f"Sürüm {sa['versionString']} ({sa['appStoreState']}); bağlı yapı {eski or '—'}, "
+        f"en son yapı {yeni['attributes']['version']} ({yeni['id']})")
+    if yeni['id'] == eski:
+        yaz('Sürüme zaten en son yapı bağlı; değişiklik yok.')
+        return
+    # İncelemede bekleyen gönderimi geri çek
+    for g in gonderimler(uygulama):
+        if g['attributes'].get('state') in ('WAITING_FOR_REVIEW', 'IN_REVIEW', 'UNRESOLVED_ISSUES'):
+            api('PATCH', f"/v1/reviewSubmissions/{g['id']}",
+                {'data': {'type': 'reviewSubmissions', 'id': g['id'], 'attributes': {'canceled': True}}})
+            yaz(f"Gönderim {g['id']} geri çekiliyor…")
+            for _ in range(36):
+                time.sleep(5)
+                d = api('GET', f"/v1/reviewSubmissions/{g['id']}")['data']['attributes'].get('state')
+                if d not in ('CANCELING', 'WAITING_FOR_REVIEW', 'IN_REVIEW'):
+                    break
+            yaz(f"Gönderim {g['id']}: {d}")
+    api('PATCH', f"/v1/appStoreVersions/{surum['id']}/relationships/build",
+        {'data': {'type': 'builds', 'id': yeni['id']}})
+    yaz(f"Sürüme yapı {yeni['attributes']['version']} bağlandı.")
+    taslak = [g for g in gonderimler(uygulama) if g['attributes'].get('state') == 'READY_FOR_REVIEW']
+    if taslak:
+        gid = taslak[0]['id']
+    else:
+        gid = api('POST', '/v1/reviewSubmissions', {'data': {
+            'type': 'reviewSubmissions', 'attributes': {'platform': 'IOS'},
+            'relationships': {'app': {'data': {'type': 'apps', 'id': uygulama}}}}})['data']['id']
+    if not any((o.get('relationships', {}).get('appStoreVersion', {}).get('data') or {}).get('id') == surum['id']
+               for o in ogeler(gid)):
+        api('POST', '/v1/reviewSubmissionItems', {'data': {'type': 'reviewSubmissionItems', 'relationships': {
+            'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': gid}},
+            'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': surum['id']}}}}})
+    api('PATCH', f'/v1/reviewSubmissions/{gid}',
+        {'data': {'type': 'reviewSubmissions', 'id': gid, 'attributes': {'submitted': True}}})
+    yaz(f'Gönderim {gid} incelemeye yollandı.')
+
+
 def main():
-    gonder = len(sys.argv) > 1 and sys.argv[1] == 'gonder'
+    islem = sys.argv[1] if len(sys.argv) > 1 else ''
+    gonder = islem == 'gonder'
     uygulamalar = api('GET', f'/v1/apps?filter[bundleId]={PAKET}')['data']
     if not uygulamalar:
         sys.exit('Bu paket kimliğiyle uygulama bulunamadı.')
     uygulama = uygulamalar[0]['id']
     durum_yaz(uygulama)
+
+    if islem == 'yapi':
+        yapi_degistir(uygulama)
+        yaz('— Sonra —')
+        durum_yaz(uygulama)
 
     if gonder:
         acik = [g for g in gonderimler(uygulama) if g['attributes'].get('state') == 'UNRESOLVED_ISSUES']
