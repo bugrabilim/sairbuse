@@ -203,8 +203,9 @@ CreativeWork (genre Şiir/Poetry, author, dateCreated, locationCreated, copyrigh
 sayfada WebPage. Sosyal hesap yok, `sameAs` yok.
 
 **Kararlar:**
-- `sitemap-index.xml` (@astrojs/sitemap): iki dil, her adreste `hreflang` tr/en/x-default; 404, 500 ve
-  `/admin` haritada yok. robots.txt'de `Sitemap:` satırı var.
+- `sitemap.xml` (@astrojs/sitemap dizini; derlemede `sitemap-index.xml`'in aynısı olarak da yazılır, `astro.config.mjs`
+  → `sitemap-xml`): iki dil, her adreste `hreflang` tr/en/x-default; 404, 500, `/cek/` ve `/admin` haritada yok.
+  robots.txt'deki `Sitemap:` satırı tam adresi gösterir: https://duygularinpesinde.bumba.tr/sitemap.xml (8 Kasım 2026).
 - robots.txt: herkes açık (`/admin/` hariç). Yapay zekâ arama ve kullanıcı adına getiren botlar açık
   (OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User). Şiirlerin
   hakları saklı olduğu için yalnız model eğitimi botları kapalı (GPTBot, ClaudeBot, Google-Extended,
