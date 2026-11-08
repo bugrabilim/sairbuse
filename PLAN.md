@@ -318,7 +318,7 @@ Kargayla
 
 ### Faz 3.5 — Mobil uygulama
 - [x] iPhone uygulaması (Capacitor, çevrimdışı, Günün şiiri bildirimi, iOS paylaşım ekranı); simülatör derlemesi CI'da (17 Ekim 2026)
-- [ ] App Store: TestFlight tamam; sürüm 1.0 (yapı 9) 18 Ekim 2026'da incelemeye gönderildi, onay ve yayın bekleniyor
+- [x] App Store: sürüm 1.0 (yapı 11, "Eylül Bitse") 3 Kasım 2026'da onaylandı ve yayında; sitede "App Store'dan indir" bağlantısı ve Safari uygulama şeridi 4 Kasım 2026'da açıldı
 - [x] Android uygulaması (Capacitor, aynı uygulama kipi); APK ve emülatör denemesi CI'da (18 Ekim 2026)
 - [ ] Google Play: Play Console hesabı, imza anahtarı, kapalı test, yayın
 

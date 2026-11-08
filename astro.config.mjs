@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { copyFile } from 'node:fs/promises';
 import { karsilik } from './src/i18n/index.ts';
 
 const SITE = 'https://duygularinpesinde.bumba.tr';
@@ -26,5 +27,15 @@ export default defineConfig({
         return oge;
       },
     }),
+    // Standartlar §2: sitemap'in adı sitemap.xml olsun. @astrojs/sitemap dizini sitemap-index.xml adıyla yazar;
+    // aynısı sitemap.xml olarak da konur (eski adres Search Console'da kayıtlı olabilir, o da kalır).
+    {
+      name: 'sitemap-xml',
+      hooks: {
+        'astro:build:done': async ({ dir }) => {
+          await copyFile(new URL('sitemap-index.xml', dir), new URL('sitemap.xml', dir));
+        },
+      },
+    },
   ],
 });

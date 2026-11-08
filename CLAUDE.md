@@ -131,8 +131,13 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   sürümün yapısı en son yüklenen yapıyla değiştirilip yeniden gönderilir (inceleme sırası baştan başlar), mağaza bilgileri
   `ios-magaza.yml` ile yazılır (`scripts/uygulama/magaza.py`, metinler `uygulama/magaza/metinler.json`). Sitede alt bilginin sağında,
   Bumba rozetinin yanında "App Store'dan indir" bağlantısı ve iPhone Safari'de uygulama şeridi (`apple-itunes-app`)
-  var; uygulama App Store'da yayına girince `src/data/uygulama.ts` → `APP_STORE.yayinda: true` ile açılır
-  (yayında olmayan uygulamanın sayfası açılmadığı için o zamana dek kapalı). Uygulamanın içinde gösterilmez.
+  var (`src/data/uygulama.ts` → `APP_STORE.yayinda: true`; 4 Kasım 2026'da sahibinin onayıyla açıldı). Uygulamanın
+  içinde gösterilmez. Sürüm 1.0 (yapı 11) 3 Kasım 2026'da onaylandı ve App Store'da yayında; düzeltmeler uygulamaya
+  ancak yeni sürümle gider. Yayındaki sürümün mağaza açıklaması değişmez: 1.0'ın açıklama ve telifinde eski imza
+  "Antigoni" kaldığı için 1.0.1 açıldı (4 Kasım 2026). Yeni sürüm: `project.pbxproj` → `MARKETING_VERSION` (Android
+  `versionName`/`versionCode`) artırılır, `ios-yayin.yml` yapıyı yükler, `ios-magaza.yml` düzenlenebilir sürüm yoksa
+  o numarayla yenisini açıp metinleri ("Yenilikler" dahil, `metinler.json` → `yenilikler`) ve yapıyı bağlar,
+  `ios-inceleme.yml` → `yapi-degistir` incelemeye gönderir.
 - **Android uygulaması** (18 Ekim 2026, sahibinin isteği): iOS'la aynı site ve aynı uygulama kipi, `uygulama/android/`
   (Capacitor 8, paket `tr.bumba.duygularinpesinde`, yalnız dikey). `/siir/x/` → `siir/x/index.html` eşlemesi
   `MainActivity.java` → `DizinYonlendirici` (istek Capacitor'a gitmeden adres dosya adına çevrilir). Ekran açık kalır
@@ -198,8 +203,9 @@ CreativeWork (genre Şiir/Poetry, author, dateCreated, locationCreated, copyrigh
 sayfada WebPage. Sosyal hesap yok, `sameAs` yok.
 
 **Kararlar:**
-- `sitemap-index.xml` (@astrojs/sitemap): iki dil, her adreste `hreflang` tr/en/x-default; 404, 500 ve
-  `/admin` haritada yok. robots.txt'de `Sitemap:` satırı var.
+- `sitemap.xml` (@astrojs/sitemap dizini; derlemede `sitemap-index.xml`'in aynısı olarak da yazılır, `astro.config.mjs`
+  → `sitemap-xml`): iki dil, her adreste `hreflang` tr/en/x-default; 404, 500, `/cek/` ve `/admin` haritada yok.
+  robots.txt'deki `Sitemap:` satırı tam adresi gösterir: https://duygularinpesinde.bumba.tr/sitemap.xml (8 Kasım 2026).
 - robots.txt: herkes açık (`/admin/` hariç). Yapay zekâ arama ve kullanıcı adına getiren botlar açık
   (OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User). Şiirlerin
   hakları saklı olduğu için yalnız model eğitimi botları kapalı (GPTBot, ClaudeBot, Google-Extended,
