@@ -29,6 +29,7 @@ export const en: Metin = {
     gizlilik: 'Privacy',
     rozetBaslik: 'Bumba Life, part of Bumba Group',
     rozetAlt: 'A Bumba Life product',
+    sosyal: 'Bumba Group on social media',
     uygulama: 'Get the iPhone app',
     cerez: 'Cookie preferences',
   },
@@ -296,7 +297,7 @@ export const en: Metin = {
     bolumler: [
       {
         baslik: 'Data controller',
-        metin: 'The data controller for this site is Bumba Teknoloji Limited Şirketi (Ataşehir, Istanbul). For questions and requests under Turkey’s data protection law (KVKK), write to {eposta}.',
+        metin: 'The data controller for this site is Bumba Teknoloji Limited Şirketi: Quick Tower, E-5 Yanyolu, Umut Sk. D:10-12, 34752 İçerenköy-Ataşehir/Istanbul, Turkey; telephone +90 546 237 13 55. For questions and requests under Turkey’s data protection law (KVKK), write to {eposta}.',
       },
       {
         baslik: 'In short',

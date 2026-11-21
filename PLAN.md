@@ -261,13 +261,13 @@ Kargayla
 
 ## 7. Yol haritası
 
+> Açık kalan işler artık bu listede değil, [`BEKLEYENLER.md`](BEKLEYENLER.md)'de (Standartlar "Bekleyen işler dosyası", 22 Kasım 2026).
+
 ### Faz 0 — Hazırlık (şair ve editör)
 - [x] Son hâller: "Sarı" için docx'teki hâl kullanıldı. *(Karantina 2 hâlâ bulunamadı.)*
-- [ ] Yazım düzeltmelerini onaylamak (§8)
 - [x] Başlıklar: ad, tarih ve yer. Adı olmayan şiirlerde başlık yerine "tarih – yer" duruyor, listelerde ilk mısra kullanılıyor.
 - [x] Her şiire 1–2 duygu etiketi (§1.1'deki öneriler; şair değiştirebilir)
 - [x] Yayından çıkacaklar: aşk metni çıkarıldı, `bus.txt` yayında.
-- [ ] Tarihsiz üç şiire tarih ve yer (biliniyorsa)
 - [x] Mahlas: *Eylül Bitse* (27 Ekim 2026; önce geçici olarak *Antigoni*, `src/data/site.ts`). "Hakkında" metni yazıldı. Lisans: tüm hakları saklıdır.
 - [x] Alt alan adı: `duygularinpesinde.bumba.tr`
 
@@ -294,10 +294,8 @@ Kargayla
 - [x] Sveltia CMS paneli `/admin/` (GitHub erişim anahtarıyla giriş)
 
 ### Faz 2.5 — Atmosfer (öneri, §10)
-- [ ] ~~Mum ışığı modu~~ (denendi, sahibi gereksiz buldu; Ekim 2026'da kaldırıldı)
+- ~~Mum ışığı modu~~ (denendi, sahibi gereksiz buldu; Ekim 2026'da kaldırıldı)
 - [x] Duygunun makamında fon müziği (varsayılan kapalı; `scripts/muzik.py` ile üretilmiş taksimler, Ekim 2026)
-- [ ] Şairin ya da bir insanın sesiyle kayıtlar: 30 şiirden 3'ü hazır *(yapay ses denendi, düz okuduğu için kaldırıldı; §10.4)*
-- [ ] Yağmurlu cam, vapur salınımı gibi küçük dokunuşlar
 
 ### Faz 2.6 — Yeni tasarım: "Vapur" (§11)
 - [x] Tasarım araştırması, dört yön, şairin seçimi: B "Vapur"
@@ -307,23 +305,20 @@ Kargayla
 - [x] Yer sayfaları (`/yer/…`)
 - [x] Mısra kartı ve paylaşım önizlemeleri şiirin fotoğrafıyla
 - [x] Logo "Damla" (12 Ekim 2026): Peşinde'nin i noktası bir gözyaşı; üst şerit, simgeler, paylaşım görselleri, mısra kartı, kitabın kapağı ve başlık sayfası
-- [ ] Şairin kendi fotoğrafları gelirse Commons fotoğraflarının yerine konması
 
 ### Faz 3 — Okurla bağ (isteğe bağlı)
-- [ ] ~~Okurun bir şiire renk ya da kelime bırakması~~ (sahibi istemedi, Ekim 2026: site statik kalır)
+- ~~Okurun bir şiire renk ya da kelime bırakması~~ (sahibi istemedi, Ekim 2026: site statik kalır)
 - [x] E-posta listesi (Bumba ortak liste servisi)
 - [x] Bumba Genel Standartlar 3.2: TR/EN, açık/koyu tema, arama, SEO/GEO, llms.txt, HSTS/CSP, gizlilik (CLAUDE.md)
 - [x] Bumba Genel Standartlar 5.5 (27 Ekim 2026): çerez bandı, Umami yalnız izinle, Katıl penceresi, 18 kazanım rozeti (yalnız uygulamada); alt bilgi ve koyu tema sahibinin kararıyla önceki gibi
-- [ ] Instagram hesabı ve mısra kartlarıyla düzenli paylaşım
 
 ### Faz 3.5 — Mobil uygulama
 - [x] iPhone uygulaması (Capacitor, çevrimdışı, Günün şiiri bildirimi, iOS paylaşım ekranı); simülatör derlemesi CI'da (17 Ekim 2026)
 - [x] App Store: sürüm 1.0 (yapı 11, "Eylül Bitse") 3 Kasım 2026'da onaylandı ve yayında; sitede "App Store'dan indir" bağlantısı ve Safari uygulama şeridi 4 Kasım 2026'da açıldı
 - [x] Android uygulaması (Capacitor, aynı uygulama kipi); APK ve emülatör denemesi CI'da (18 Ekim 2026)
-- [ ] Google Play: Play Console hesabı, imza anahtarı, kapalı test, yayın
 
 ### Faz 4 — Belki bir gün kitap
-- [ ] Basılı kitap, A5 (sahibinin seçimi, Ekim 2026): saman kâğıt, siyah beyaz fotoğraflar, renkli kapak; baskı dosyaları sitenin dışında üretilir, sitede yayımlanmaz. Seçimler yapıldı (Moda kapağı, ön kapağın içi boş, künye arka kapağın içinde, her şiirde fotoğraf ve başlık, içindekiler var, yıl ayracı yok, arka kapakta QR; sığan şiir fotoğrafıyla aynı sayfada, sığmayan karşısında, çok uzun olan iki sütun; künyeler tek sayfa; sesli şiirlerde "Sesli dinle" + QR kod); son hâl 9 Ekim 2026'da onaylandı (48 sayfa); `scripts/kitap/` ile üretiliyor, matbaa seçimi bekleniyor.
+- [x] Basılı kitap, A5 (sahibinin seçimi, Ekim 2026): saman kâğıt, siyah beyaz fotoğraflar, renkli kapak; baskı dosyaları sitenin dışında üretilir, sitede yayımlanmaz. Seçimler yapıldı (Moda kapağı, ön kapağın içi boş, künye arka kapağın içinde, her şiirde fotoğraf ve başlık, içindekiler var, yıl ayracı yok, arka kapakta QR; sığan şiir fotoğrafıyla aynı sayfada, sığmayan karşısında, çok uzun olan iki sütun; künyeler tek sayfa; sesli şiirlerde "Sesli dinle" + QR kod); son hâl 9 Ekim 2026'da onaylandı (48 sayfa); `scripts/kitap/` ile üretiliyor, matbaa seçimi [`BEKLEYENLER.md`](BEKLEYENLER.md)'de.
 
 ---
 

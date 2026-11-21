@@ -7,12 +7,18 @@ import ListeFormu from './ListeFormu.astro';
 import { tumSiirler } from '../lib/siirler';
 import { dilBul, metin, sayfaYolu } from '../i18n';
 import { MAGAZA_GORUNUR, SITE_KOK, UYGULAMA, appStoreAdresi } from '../data/uygulama';
+import { BUMBA_SOSYAL } from '../data/sosyal';
 
 const dil = dilBul(Astro.url);
 const m = metin(dil).alt;
 const mu = metin(dil).uygulama;
 const tum = await tumSiirler();
 const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(new Date().getFullYear());
+// Bumba Life rozeti her dilde kendi dosyası, bağlantısı ve genişliğiyle (Standartlar madde 1)
+const rozet =
+  dil === 'en'
+    ? { href: 'https://bumbagroup.com/en/life', dosya: 'life-en', genislik: 170 }
+    : { href: 'https://bumbagroup.com/life', dosya: 'life', genislik: 164 };
 ---
 
 <footer class="alt">
@@ -31,10 +37,22 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
     <div class="alt-sag">
       {/* App Store bağlantısı uygulama mağazada yayına girince görünür (src/data/uygulama.ts → APP_STORE) */}
       {MAGAZA_GORUNUR && <a class="magaza" href={appStoreAdresi(dil)} rel="noopener">{m.uygulama}</a>}
+      {/* Bumba Group'un sosyal hesapları: düz bağlantı, betik ya da piksel yok; ikonlar sitenin renginde */}
+      <ul class="sosyal" aria-label={m.sosyal}>
+        {
+          BUMBA_SOSYAL.map((h) => (
+            <li>
+              <a href={h.href} rel="noopener noreferrer" target="_blank" aria-label={`${h.ad}: Bumba Group`} title={h.ad}>
+                <svg viewBox={h.viewBox} width="16" height="16" aria-hidden="true" focusable="false" fill="currentColor" set:html={h.svg} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
       {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}
-      <a class="bumba-imza" href="https://bumbagroup.com/life" rel="noopener" title={m.rozetBaslik}>
-        <img class="rozet-acik" src="https://bumbagroup.com/rozet/life.svg" width="164" height="28" alt={m.rozetAlt} loading="lazy" />
-        <img class="rozet-koyu" src="https://bumbagroup.com/rozet/life-koyu.svg" width="164" height="28" alt={m.rozetAlt} loading="lazy" />
+      <a class="bumba-imza" href={rozet.href} rel="noopener" title={m.rozetBaslik}>
+        <img class="rozet-acik" src={`https://bumbagroup.com/rozet/${rozet.dosya}.svg`} width={rozet.genislik} height="28" alt={m.rozetAlt} loading="lazy" />
+        <img class="rozet-koyu" src={`https://bumbagroup.com/rozet/${rozet.dosya}-koyu.svg`} width={rozet.genislik} height="28" alt={m.rozetAlt} loading="lazy" />
       </a>
     </div>
   </div>
@@ -106,6 +124,24 @@ const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(
     font-size: 1.1rem;
     color: var(--yazi) !important;
     text-decoration: none;
+  }
+  .sosyal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sosyal a {
+    display: inline-flex;
+    padding: 0.45rem;
+    border-radius: 999px;
+    line-height: 0;
+  }
+  .sosyal a:focus-visible {
+    outline: 2px solid var(--yazi);
+    outline-offset: 1px;
   }
   .bumba-imza {
     display: inline-flex;

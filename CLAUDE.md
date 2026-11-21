@@ -2,7 +2,8 @@
 
 Eylül Bitse imzalı, basılamamış bir şiir kitabının sitesi: 30 şiir; duygu, yer ve zaman üzerinden okunuyor.
 Canlı adres: https://duygularinpesinde.bumba.tr · Bumba Life ürünü (Bumba Group).
-Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: @README.md
+Ayrıntılı plan ve tasarım geçmişi: `PLAN.md` · kurulum ve içerik ekleme: `README.md` (ikisi de gerektiğinde okunur; her oturumda
+yüklenmez, Standartlar madde 12'deki 15 bin token sınırı) · bekleyen işler: [`BEKLEYENLER.md`](BEKLEYENLER.md).
 
 ## Proje
 
@@ -19,11 +20,13 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 # Genel Standartlar
 
 Bu proje Bumba Genel Standartlar'a tabidir. Metin tek yerde durur: https://bumbagroup.com/standartlar.md
-(düz metin). Her oturumun başında oku (`curl -s https://bumbagroup.com/standartlar.md` ya da web getirme
-aracı) ve ona göre çalış; metni bu dosyaya kopyalama. Okunamazsa uydurma, sahibine bildir.
-Uygulanan sürüm: 5.5 (25 Ekim 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
+(düz metin). Kademeli oku ("Sürüm kuralı"): oturum başında başlık ve bölüm başlıkları, sürüm değiştiyse
+"Sürüm notları", işin dokunduğu bölüm işten önce, emin değilsen tamamı. Metni bu dosyaya kopyalama.
+Okunamazsa uydurma, sahibine bildir.
+Uygulanan sürüm: 5.28 (20 Kasım 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
 Sunucuya basmanın (izlenen dala birleştirme ya da push, Coolify yayını) zamanı her seferinde sahibine sorulur.
 Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahmini süre ve kullanımla sahibine sorulur.
+Hitap: konuşmada sahibe "patron" denir.
 
 ## Bu projeye özel kararlar ve sapmalar
 
@@ -40,8 +43,7 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   dosyalar `public/ses/<şiir>.mp3`, düzey −18 LUFS'e eşitlenir; okuma sürerken ortam sesi ve fon müziği kısılır.
   9 Ekim 2026: üç şiirin kaydı var (2017-05-24-altunizade, 2019-12-21-feneryolu, 2020-07-18-moda).
 - **Varsayılan tema koyu (gece)** (sahibinin kararı, 8 Ekim 2026; 27 Ekim 2026'da yinelendi): Standartlar §3'teki
-  "ilk açılışta sistem tercihi" bu projede uygulanmaz, istisnanın standarda eklenmesi ana altyapı oturumundan
-  istendi. Açık tema (gündüz) yalnız düğmeyle seçilir; seçim `localStorage` `tema-secimi` anahtarında hatırlanır.
+  "ilk açılışta sistem tercihi" bu projede uygulanmaz; istisna standartta (5.6). Açık tema (gündüz) yalnız düğmeyle seçilir; seçim `localStorage` `tema-secimi` anahtarında hatırlanır.
   Eski `tema` anahtarı (sistem tercihini yazmış olabilir) okunmaz.
   Sayfalar `Cache-Control: no-cache` ile gider ki eski HTML tarayıcıda takılı kalmasın.
 - Şiir sayfasında şiir **harf harf yazılarak** açılır (satır satır değil); hız duyguya göre.
@@ -49,10 +51,11 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
 - Ana sayfa vitrininin (hero) tamamı tıklanır ve o mısranın şiirine gider (18 Ekim 2026; sitede ve uygulamada).
   Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
 - **Alt bilgi masaüstünde tek satır** (sahibinin kararı, 12 Ekim 2026; 27 Ekim 2026'da yinelendi, Standartlar §1'deki
-  "solda liste, sağda imza" düzeni bu projede uygulanmaz, istisnanın standarda eklenmesi ana altyapı oturumundan
-  istendi): solda telif ("© 2008'den itibaren Eylül Bitse. Şiirlerin tüm hakları saklıdır."; bitiş yılı yazılmaz) ve
+  "solda liste, sağda imza" düzeni bu projede uygulanmaz; istisna standartta, 5.6): solda telif ("© 2008'den itibaren Eylül Bitse. Şiirlerin tüm hakları saklıdır."; bitiş yılı yazılmaz) ve
   altında küçük "Gizlilik" bağlantısı ile "Çerez tercihleri" düğmesi (§9, §14), ortada e-posta listesi (başlık, adres,
-  Katıl), sağda "App Store'dan indir" (yayına girince) ve Bumba Life rozeti. Orta genişlikte iki satır, telefonda alt
+  Katıl), sağda "App Store'dan indir" (yayına girince), Bumba Group'un sosyal hesapları (düz bağlantı, sitenin
+  renginde ikon; `src/data/sosyal.ts`, 22 Kasım 2026, pazarlama turu K20) ve Bumba Life rozeti (İngilizce sayfada
+  `life-en.svg`, bağlantı `/en/life`, genişlik 170; Standartlar 5.27). Orta genişlikte iki satır, telefonda alt
   alta. Uygulamada liste yerine siteyi Safari'de açan bağlantı, çerez düğmesi yok. Görünür son güncelleme tarihi
   Hakkında'nın sonunda (derleme günü); makineler için JSON-LD `dateModified` ve llms.txt.
 - **E-posta listesi Katıl penceresi** (Standartlar §6): Katıl'a basınca pencere açılır, aydınlatma metni ortak
@@ -62,7 +65,8 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
 - **Çerez bandı** (Standartlar §14): ilk ziyarette altta Kabul et, Reddet, Tercihler (eşit). Umami "İstatistik"
   grubunda, yalnız izinle yüklenir; seçim `bumba-cerez` anahtarında (politika sürümü `src/data/cerez.ts`).
   Politika merkezde (bumbagroup.com/cerez-politikasi). Uygulamada bant yok (sayaç da yok). `CerezBandi.astro`.
-- **Kazanım rozetleri yalnız telefon uygulamasında** (Standartlar §13; sahibinin kararı, 27 Ekim 2026: sitede yok).
+- **Kazanım rozetleri yalnız telefon uygulamasında** (Standartlar §13; sahibinin rozet onayı ve kararı, 27 Ekim 2026:
+  yalnız uygulamada, sitede yok).
   Sitede `/rozetler/` sayfası üretilmez, menüde yok, rozet verisi sayfaya konmaz (`UYGULAMA` ile). 18 rozet (`src/data/rozetler.ts`, adlar ve koşullar
   sözlükte), hesap `src/scripts/rozetler.ts`. Veri yalnız telefonda (`localStorage` `rozetler`: rozet kimliği,
   kazanma günü, okunan/dinlenen şiir kimlikleri, eylemler, seri); sunucuya gitmez. İlk kazanımda kısa bildirim ve
@@ -144,6 +148,9 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   (`FLAG_KEEP_SCREEN_ON`). Tam saatli alarm izni kaldırıldı (Play politikası; Günün şiiri yaklaşık 09.00).
   `npm run uygulama:android`; denetim `.github/workflows/android.yml` (APK + emülatörde deneme, her PR). Google Play
   yayını için Play Console hesabı ve imza anahtarı gerekiyor (`uygulama/README.md`).
+- **Mağaza hesapları** (Standartlar "Sabit bilgiler", 8 Kasım 2026): Apple Developer hesabı var; Google Play için
+  D-U-N-S bekleniyor, hesap açılana kadar Android uygulaması gönderilemez. Derleme, yükleme ve başvuru: Standartlar
+  "Mobil yayın (iOS ve Android)"; başvurudan önce kontrol listesi sahibine raporlanır.
 
 ## Sunucu ve yayın
 
@@ -200,7 +207,8 @@ eki, şiirlerde "· poem by Eylül Bitse"):
 WebSite (SearchAction → arama sayfası), Person (Eylül Bitse); alt sayfalarda BreadcrumbList; şiirde
 CreativeWork (genre Şiir/Poetry, author, dateCreated, locationCreated, copyrightNotice); duygu, yer ve bütün
 şiirler sayfalarında CollectionPage; Hakkında'da FAQPage ("Sık sorulanlar" penceresindekiyle aynı); ana
-sayfada WebPage. Sosyal hesap yok, `sameAs` yok.
+sayfada WebPage. Ürünün ve şairin sosyal hesabı yok; Bumba Group'un hesapları (altbilgidekiyle aynı,
+`src/data/sosyal.ts`) Organization → parentOrganization'da `sameAs` (22 Kasım 2026).
 
 **Kararlar:**
 - `sitemap.xml` (@astrojs/sitemap dizini; derlemede `sitemap-index.xml`'in aynısı olarak da yazılır, `astro.config.mjs`
@@ -210,6 +218,8 @@ sayfada WebPage. Sosyal hesap yok, `sameAs` yok.
   (OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User). Şiirlerin
   hakları saklı olduğu için yalnız model eğitimi botları kapalı (GPTBot, ClaudeBot, Google-Extended,
   Applebot-Extended, CCBot, Meta-ExternalAgent); bu, yapay zekâ aramalarında görünürlüğü etkilemez.
+  Meta-ExternalAgent Meta'nın eğitim ve ürün dizini tarayıcısıdır; kullanıcı adına getiren Meta-ExternalFetcher
+  engellenmez (22 Kasım 2026 kontrolü).
 - `/llms.txt` derlemede üretilir (`src/pages/llms.txt.ts`): iki dilde özet, sayfalar, duygular, yerler, şiirler.
 - Ana sayfanın başında sitenin kısa özeti (`site.ozet`), Hakkında'da soru-cevap blokları (Sık sorulanlar
   penceresi). Son güncelleme tarihi (derleme günü) WebSite şemasında `dateModified`, llms.txt'de ve Hakkında'nın

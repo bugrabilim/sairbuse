@@ -40,6 +40,7 @@ export const tr = {
     gizlilik: 'Gizlilik',
     rozetBaslik: 'Bumba Life, bir Bumba Group kolu',
     rozetAlt: 'Bir Bumba Life ürünü',
+    sosyal: 'Bumba Group sosyal medyada',
     uygulama: "App Store'dan indir",
     cerez: 'Çerez tercihleri',
   },
@@ -310,7 +311,7 @@ export const tr = {
     bolumler: [
       {
         baslik: 'Veri sorumlusu',
-        metin: 'Bu sitenin veri sorumlusu Bumba Teknoloji Limited Şirketi’dir (Ataşehir / İstanbul). Sorularınız ve KVKK kapsamındaki başvurularınız için: {eposta}.',
+        metin: 'Bu sitenin veri sorumlusu Bumba Teknoloji Limited Şirketi’dir: Quick Tower, E-5 Yanyolu, Umut Sk. D:10-12, 34752 İçerenköy-Ataşehir/İstanbul; telefon +90 546 237 13 55. Sorularınız ve KVKK kapsamındaki başvurularınız için: {eposta}.',
       },
       {
         baslik: 'Kısaca',
