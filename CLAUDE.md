@@ -108,6 +108,9 @@ Hitap: konuşmada sahibe "patron" denir.
   `src/data/logo.ts`. Tek başına damla küçük işarettir: koyu karede sarı damla (`favicon.svg`, uygulama
   simgeleri; üretimi `node scripts/simgeler.mjs`). Üst şeritte, paylaşım görsellerinde, mısra kartında, kitabın
   kapağında ve başlık sayfasında; kitabın sırtında yok (yedi renk noktası kalır).
+  **Ürün marka kiti** kökte `marka/` (`kit.json`, logo yatay ve dikey, açık ve koyu; işaret, simgeler, paylaşım
+  görseli; MARKA §4, 22 Kasım 2026): bumbagroup.com/marka/duygularin-pesinde oradan toplar. Logo, renk ya da yazı
+  tipi değişirse aynı commit'te `npm run build && node scripts/marka.mjs` ile yenilenir.
 - **Okur notu yok** (9 Ekim 2026): okur şiire renk ya da kelime bırakmaz, şair onay vermez, şair için giriş/şifre
   yok. Site statik kalır; sunucu tarafı eklenmez.
 - **Kitap (basılı, A5) siteye konmaz:** saman kâğıt, iç sayfalar tek renk (siyah), yalnız kapak renkli. Sahibinin

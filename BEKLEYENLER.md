@@ -33,12 +33,7 @@ Duyguların Peşinde'nin sonraya kalan bütün işleri burada (Standartlar "Bekl
   `yapi-degistir`). Yayındaki 1.0'ın açıklamasında eski imza "Antigoni" duruyor (4 Kasım)
 - Paylaş düğmesi şiir dışındaki içerik sayfalarında da (duygu, yer, bütün şiirler, harita, zaman, fal, Hakkında;
   Standartlar madde 15, pazarlama turu A5). Kanal sorusunun cevabını bekliyor (22 Kasım)
-- Ürün marka kiti: kökte `marka/` (`kit.json`, logo, simge, paylaşım görseli; yalnız sitede bugün kullanılan).
-  Pazarlamanın kararı (DENETIM K45, MARKA §4). Sıra Soylus, İlandan Önce ve Spora Başla'dan sonra; alan ve dosya
-  adlarını anlatan MARKA §4 metnini bekliyor (22 Kasım)
 - Yağmurlu cam, vapur salınımı gibi küçük dokunuşlar (PLAN.md §10.3; öneri, sahibinin onayıyla)
 
 ## Başkasında
-- Ana altyapı: MARKA §4 "Ürün marka kitleri" metni (kit.json alanları, dosya adları); bu oturum
-  `bugrabilim/bumbamarka`'yı okuyamıyor (22 Kasım)
 - Ana altyapı (3D): bumbagroup.com'daki "Kuruluş 2023" 2008'e düzeltilecek (22 Kasım)
