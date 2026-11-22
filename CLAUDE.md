@@ -34,6 +34,8 @@ Hitap: konuşmada sahibe "patron" denir.
   `src/data/site.ts` → `SITE.sair`; kart ve kitap betiklerinde `SAIR`. Sitede "Antigoni" görünmez: 24.10.2011
   şiirinin yeri "Burgazada" yazılır, adresi `/siir/2011-10-24-burgazada/` (eski `…-antigoni` adresleri ve paylaşım
   görselleri `nginx.conf`'ta 301 ile yönlenir). Yalnız şiirin kendi dizesinde ("Antigoni’de yemek yiyen bir kedi") geçer.
+- **Kuruluş yılı 2008** (sahibinin kararı, 22 Kasım 2026, ana altyapı oturumu aracılığıyla): `SITE.kurulus`;
+  Hakkında'nın sonunda, JSON-LD `foundingDate` ve llms.txt'de.
 - Şiirlerin tüm hakları saklıdır; lisans yok. Şiirler çevrilmez: İngilizce sayfalarda Türkçe kalır, `lang="tr"`.
 - "sevgimiz percinlensin-aşkmetni.txt" şiir değildir, sitede yayımlanmaz.
 - Şiirler listesinde (Bütün şiirler, Harita, Zaman) sesli okuması olan şiirin adının yanında hoparlör işareti var

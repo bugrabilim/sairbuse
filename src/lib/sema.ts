@@ -21,6 +21,7 @@ export function ortakSema(dil: Dil): Sema[] {
       url: tam(sayfaYolu('ana', dil)),
       logo: tam('/icon-512.png'),
       email: 'bilgi@bumbagroup.com',
+      foundingDate: SITE.kurulus,
       // Ürünün kendi sosyal hesabı yok; çatı markanın hesapları altbilgidekiyle aynı (GEO: marka bilgileri her yerde aynı)
       parentOrganization: {
         '@type': 'Organization',

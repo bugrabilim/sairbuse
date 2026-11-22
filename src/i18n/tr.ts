@@ -206,6 +206,7 @@ export const tr = {
   hakkinda: {
     baslik: 'Hakkında',
     // Sitenin son güncellemesi (derleme günü); GEO için içerikte görünür (Standartlar §2)
+    kurulus: (y: string) => `Kuruluş: ${y}`,
     guncelleme: (t: string) => `Son güncelleme: ${t}`,
     aciklama: 'Eylül Bitse imzalı, basılamamış bir şiir kitabının sitesi: kim yazdı, renkler nereden geliyor, fotoğraflar ve haklar.',
     giris1:

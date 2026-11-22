@@ -195,6 +195,7 @@ export const en: Metin = {
   },
   hakkinda: {
     baslik: 'About',
+    kurulus: (y: string) => `Founded: ${y}`,
     guncelleme: (t: string) => `Last updated: ${t}`,
     aciklama: 'The home of an unpublished book of poems signed Eylül Bitse: who wrote it, where the colours come from, the photographs and the rights.',
     giris1:

@@ -154,6 +154,7 @@ function sayfasi(yol: string) {
       </dl>
     </dialog>
     <p class="site-guncelleme">
+      {m.kurulus(SITE.kurulus)} ·
       <time datetime={new Date().toISOString().slice(0, 10)}>{m.guncelleme(new Date().toLocaleDateString(YEREL[dil], { day: 'numeric', month: 'long', year: 'numeric' }))}</time>
     </p>
   </article>
