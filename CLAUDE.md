@@ -25,7 +25,7 @@ Bu proje Bumba Genel Standartlar'a tabidir. Metin tek yerde durur: https://bumba
 Okunamazsa uydurma, sahibine bildir.
 Uygulanan sürüm: 5.32 (22 Kasım 2026; 5.29–5.32 ana altyapı oturumunun özetinden, canlı metin yayımlanana dek). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
 Sunucuya basmanın (izlenen dala birleştirme ya da push, Coolify yayını) zamanı her seferinde sahibine sorulur.
-Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahmini süre ve kullanımla sahibine sorulur.
+Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce sayı, model, efor, süre ve kullanım tahminiyle sahibine ayrı bir soruyla sorulur, açık onay beklenir; cevapsız soru onay değildir.
 Hitap: konuşmada sahibe "patron" denir.
 Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişiklik gerekirse o deponun oturumuna mesajla istenir.
 
