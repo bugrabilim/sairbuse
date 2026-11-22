@@ -23,10 +23,11 @@ Bu proje Bumba Genel Standartlar'a tabidir. Metin tek yerde durur: https://bumba
 (düz metin). Kademeli oku ("Sürüm kuralı"): oturum başında başlık ve bölüm başlıkları, sürüm değiştiyse
 "Sürüm notları", işin dokunduğu bölüm işten önce, emin değilsen tamamı. Metni bu dosyaya kopyalama.
 Okunamazsa uydurma, sahibine bildir.
-Uygulanan sürüm: 5.28 (20 Kasım 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
+Uygulanan sürüm: 5.32 (22 Kasım 2026; 5.29–5.32 ana altyapı oturumunun özetinden, canlı metin yayımlanana dek). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
 Sunucuya basmanın (izlenen dala birleştirme ya da push, Coolify yayını) zamanı her seferinde sahibine sorulur.
 Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahmini süre ve kullanımla sahibine sorulur.
 Hitap: konuşmada sahibe "patron" denir.
+Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişiklik gerekirse o deponun oturumuna mesajla istenir.
 
 ## Bu projeye özel kararlar ve sapmalar
 
