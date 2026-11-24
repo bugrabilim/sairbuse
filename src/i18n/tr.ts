@@ -229,6 +229,7 @@ export const tr = {
       'Bu sitedeki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz. Bir şiiri sevdiysen bağlantısını paylaşabilirsin.',
     fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri “Fotoğraflar ve künyeleri” penceresinde adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
     sesHaklar: 'Ortam sesleri de bu kapsamda değil. Hepsi gerçek saha kaydı: Hollanda Ses ve Görüntü Enstitüsü’nün (Beeld en Geluid) arşivinden, Wikimedia Commons’ta CC BY-SA 3.0 ile paylaşılmış. Sitede kesilip ses düzeyleri eşitlendi. Fon müzikleri bu site için makamlarına göre üretildi; çalgı sesleri FluidR3_GM ses kütüphanesinden (MIT lisanslı).',
+    yaziHaklar: 'Yazı tipleri: başlıklarda Cormorant Garamond, logoda Fraunces, şiirlerde Newsreader, etiketlerde Inter. Hepsi sitenin kendi sunucusundan yükleniyor ve SIL Open Font License 1.1 ile kullanılıyor:',
     sssBaslik: 'Sık sorulanlar',
     sss: [
       {

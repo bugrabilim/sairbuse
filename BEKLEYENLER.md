@@ -13,6 +13,9 @@ Duyguların Peşinde'nin sonraya kalan bütün işleri burada (Standartlar "Bekl
   menüsünü, yoksa WhatsApp, X, Facebook, LinkedIn, Telegram, Bluesky, e-posta ve bağlantı kopyalamayı istiyor.
   Sitede sahibinin kararıyla (Ekim 2026) yalnız bağlantı, Facebook, Instagram, WhatsApp, SMS, LinkedIn var ve
   "başka kanal eklenmez". Kalsın mı, standarda mı geçilsin?
+- Logo yazısı (24 Kasım): başlıklar Cormorant Garamond'a geçti. Logo ("Damla", 12 Ekim kararı) Fraunces 300'de
+  bırakıldı; damlanın yeri o yazının i noktasına göre ölçülü. Logo da Cormorant Garamond'a geçsin mi? Basılı kitap
+  ve armağan kartı da Fraunces'la; onlar da değişsin mi?
 - "Antigoni’de yemek yiyen bir kedi" dizesi (24.10.2011 Burgazada şiiri): mahlas değişince olduğu gibi bırakıldı;
   dokunulmasın mı? (27 Ekim)
 - 23.06.2009 Cihangir şiirindeki "Uların içi kanlanıyor": hangi kelime kastedildi? (Ekim 2026, PLAN.md §8)

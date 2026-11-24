@@ -39,7 +39,9 @@
   --ton-alt: #c9b79a;
   --ton-golge: #15110c;
 
-  --serif-baslik: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  /* Başlıklar Cormorant Garamond (sahibinin kararı, 24 Kasım 2026); logo yazısı Fraunces 300 kalır */
+  --serif-baslik: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+  --serif-logo: 'Fraunces', 'Iowan Old Style', Georgia, serif;
   --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
   --etiket: 'Inter', 'Segoe UI', system-ui, sans-serif;
   --olcu: 34rem;
@@ -202,7 +204,7 @@ h3 {
 
 /* Logo "Damla": Fraunces 300; adın tek noktası, Peşinde'nin i'si, bir gözyaşı damlası */
 .logo {
-  font-family: var(--serif-baslik);
+  font-family: var(--serif-logo);
   font-weight: 300;
   font-size: 1.5rem;
   line-height: 1.2;

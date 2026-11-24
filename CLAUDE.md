@@ -109,6 +109,10 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
   `src/data/logo.ts`. Tek başına damla küçük işarettir: koyu karede sarı damla (`favicon.svg`, uygulama
   simgeleri; üretimi `node scripts/simgeler.mjs`). Üst şeritte, paylaşım görsellerinde, mısra kartında, kitabın
   kapağında ve başlık sayfasında; kitabın sırtında yok (yedi renk noktası kalır).
+  **Başlık yazı tipi Cormorant Garamond** (sahibinin kararı, 24 Kasım 2026, ana altyapı oturumu aracılığıyla; ürüne
+  özgü): `--serif-baslik`, paylaşım görselleri ve mısra kartı. Logo yazısı Fraunces 300'de kaldı (`--serif-logo`;
+  logonun da değişip değişmeyeceği sahibine soruldu, BEKLEYENLER.md). Metin Newsreader, etiketler Inter. Hepsi
+  @fontsource ile sitenin sunucusundan; lisans Hakkında → Haklar'da bağlantıyla.
   **Ürün marka kiti** kökte `marka/` (`kit.json`, logo yatay ve dikey, açık ve koyu; işaret, simgeler, paylaşım
   görseli; MARKA §4, 22 Kasım 2026): bumbagroup.com/marka/duygularin-pesinde oradan toplar. Logo, renk ya da yazı
   tipi değişirse aynı commit'te `npm run build && node scripts/marka.mjs` ile yenilenir.

@@ -124,14 +124,26 @@
   ],
   "yaziTipleri": [
     {
-      "ad": "Fraunces",
+      "ad": "Cormorant Garamond",
       "rol": {
-        "tr": "logo ve başlıklar",
-        "en": "logo and headings"
+        "tr": "başlıklar (sahibinin kararı, 24 Kasım 2026)",
+        "en": "headings"
       },
       "agirliklar": [
-        300,
-        400
+        400,
+        500
+      ],
+      "lisans": "SIL Open Font License 1.1",
+      "kaynak": "https://fonts.google.com/specimen/Cormorant+Garamond"
+    },
+    {
+      "ad": "Fraunces",
+      "rol": {
+        "tr": "logo yazısı",
+        "en": "logo lettering"
+      },
+      "agirliklar": [
+        300
       ],
       "lisans": "SIL Open Font License 1.1",
       "kaynak": "https://fonts.google.com/specimen/Fraunces"
@@ -176,5 +188,5 @@
     "tr": "Logo yazıdır: Fraunces 300, sitedeki yazının satori ile yola çevrilmiş hâli; Peşinde'nin i'sinin noktası yerine damla (src/data/logo.ts). Yeniden çizilmedi. Açık zemin sürümünde yazı mürekkep, damla #735c00; koyu zemin sürümünde yazı #f1eadf, damla #ebcb52. Sitede damla sayfanın duygusunun renginde olur, kitte varsayılan sarı. logo-dikey sitenin paylaşım görselindeki iki satırlı hâl. İşaret tek başına damla: koyu karede sarı damla (sitenin favicon.svg'si); kendisi koyu bir kare olduğu için ayrı isaret-koyu.svg yok. ikon.svg favicon.svg, ikon-512.png sitenin icon-512.png'si, ikon-180.png apple-touch-icon.png. paylasim.png ve paylasim-en.png sitenin og/site.jpg ve og/en/site.jpg görselleri (PNG'ye çevrildi; fotoğraf Wikimedia Commons, künyesi görselin üstünde). Üretim: npm run build && node scripts/marka.mjs.",
     "en": "The logo is a wordmark: Fraunces 300, the site's own lettering converted to paths with satori; the dot of the i in Peşinde is replaced by a teardrop (src/data/logo.ts). Nothing was redrawn. On light backgrounds the lettering is ink and the drop #735c00; on dark backgrounds the lettering is #f1eadf and the drop #ebcb52. On the site the drop takes the colour of the page's emotion; the kit uses the default yellow. logo-dikey is the two-line version from the site's share image. The mark is the drop alone: a yellow drop on a dark square (the site's favicon.svg); as it is itself a dark square there is no separate isaret-koyu.svg. ikon.svg is favicon.svg, ikon-512.png the site's icon-512.png, ikon-180.png its apple-touch-icon.png. paylasim.png and paylasim-en.png are the site's og/site.jpg and og/en/site.jpg (converted to PNG; photograph from Wikimedia Commons, credited on the image). Generated with: npm run build && node scripts/marka.mjs."
   },
-  "guncelleme": "2026-11-22"
+  "guncelleme": "2026-11-24"
 }

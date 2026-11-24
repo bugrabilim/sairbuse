@@ -218,6 +218,7 @@ export const en: Metin = {
       'All rights to the poems and texts on this site are reserved. They may not be reproduced, copied or published elsewhere without permission. If you love a poem, share its link.',
     fotoHaklar: 'The photographs are not covered by this; each belongs to the photographer named in “Photographs and credits” and is used under its own licence.',
     sesHaklar: 'Nor are the ambient sounds. They are real field recordings from the archive of the Netherlands Institute for Sound and Vision (Beeld en Geluid), shared on Wikimedia Commons under CC BY-SA 3.0. On this site they were trimmed and their levels evened out. The background music was made for this site in each emotion’s makam; the instrument sounds come from the FluidR3_GM sound library (MIT licence).',
+    yaziHaklar: 'Typefaces: Cormorant Garamond for headings, Fraunces for the logo, Newsreader for the poems and Inter for labels. All are served from this site and used under the SIL Open Font License 1.1:',
     sssBaslik: 'Questions',
     sss: [
       {
