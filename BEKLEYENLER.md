@@ -9,9 +9,6 @@ Duyguların Peşinde'nin sonraya kalan bütün işleri burada (Standartlar "Bekl
 - Uygulama 1.0.1 mobil derlemesi (`ios-yayin.yml`, macOS, yaklaşık 15 dakika; Standartlar 5.35 "Mobil yayın"): PR #48
   birleşince çalıştırılsın mı? Sonraki adımlar (`ios-magaza.yml`, `ios-inceleme.yml`) derleme değil, ayrıca sorulmaz;
   başvurudan önce kontrol listesi raporlanır. (25 Kasım)
-- "Antigoni’de yemek yiyen bir kedi" dizesi (24.10.2011 Burgazada şiiri): mahlas değişince olduğu gibi bırakıldı;
-  dokunulmasın mı? (27 Ekim)
-- 23.06.2009 Cihangir şiirindeki "Uların içi kanlanıyor": hangi kelime kastedildi? (Ekim 2026, PLAN.md §8)
 
 ## Sahipte
 - Search Console ve Bing Webmaster: https://duygularinpesinde.bumba.tr/sitemap.xml eklenmesi (8 Kasım)

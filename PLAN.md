@@ -339,7 +339,7 @@ Kargayla
 | Dize başı büyük harf | "Dizeler büyük harfle başlar." kuralı 10 şiirde 97 dizeye uygulandı. Noktalamayla başlayan devam dizelerine (…orada., -bırakmam seni-) dokunulmadı. |
 | Karantina Günleri 1 | Bitişik yazılmış dizeler kelimelerine ayrıldı ("Bugün sıradan bir gün her gün gibi"). Bitişik yazım bilinçli bir üsluptuysa söyleyin, geri alınır. |
 
-**Açık kalan tek nokta:** 23.06.2009 Cihangir şiirindeki "**Uların** içi kanlanıyor" dizesi. Hangi kelimenin kastedildiği anlaşılamadı, olduğu gibi bırakıldı.
+23.06.2009 Cihangir şiirindeki "**Uların** içi kanlanıyor" dizesi yazıldığı gibi kalır (sahibinin kararı, 25 Kasım 2026).
 
 Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", "Karanlık-sürekli") şairin noktalama üslubu sayıldı ve korundu.
 
@@ -360,7 +360,7 @@ Kısa çizgiyle yapılan duraklamalar ("Ölmek-ne berbat", "Bulutlu-yağmurlu", 
 | Logo | "Damla" (12 Ekim 2026): Fraunces 300 yazı; Peşinde'nin i noktası, sayfanın duygusunun renginde bir gözyaşı damlası. Küçük işaret: koyu karede sarı damla. Dört seçenek arasından seçildi (Damla, Yedi dize, Ş, Halka). |
 | Tasarım | B "Vapur": yer fotoğrafları (§11). Varsayılan koyu; açık tema düğmesi var (Standartlar §3'e projeye özel istisna, sahibinin kararı). Arayüz Türkçe ve İngilizce; şiirler Türkçe. |
 | Fotoğraflar | Gerçek fotoğraflar, Wikimedia Commons'tan özgür lisanslı; fotoğrafçı adı ve lisans her şiirde ve Hakkında sayfasında. |
-| Yazım | TDK'ya göre düzeltildi (§8). Açık kalan tek nokta: "Uların". |
+| Yazım | TDK'ya göre düzeltildi (§8). "Uların" yazıldığı gibi kalır (25 Kasım 2026). |
 
 ---
 
