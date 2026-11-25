@@ -27,7 +27,7 @@ uygulamaya ancak yeni bir sürümle gelir (aşağıdaki yayın iş akışını y
 
 ## Denetim
 
-Her PR'da `iOS` iş akışı (`.github/workflows/ios.yml`) uygulamayı simülatör için derler, simülatörde açar ve
+Elle başlatılan `iOS` iş akışı (`.github/workflows/ios.yml`; her çalıştırma sahibine sorulur, Standartlar "Mobil yayın") uygulamayı simülatör için derler, simülatörde açar ve
 ekran görüntüsünü indirilebilir çıktı olarak bırakır (Actions → iOS → `ios-simulator-ekran`).
 
 ## İlk kurulum (bir kez, App Store hesabının sahibi yapar)
@@ -94,7 +94,7 @@ Aynı site Android'de de uygulamanın içinde (`uygulama/android/`, Capacitor 8,
 - Simgeler (uyarlanabilir simge: koyu zeminde sarı damla) ve açılış görselleri `node scripts/simgeler.mjs` ile üretilir.
 - Günün şiiri bildirimi yaklaşık 09.00'da gelir: Google Play tam saatli alarm iznini yalnız alarm ve takvim uygulamalarına
   verdiği için o izin manifestten çıkarıldı.
-- Denetim: her PR'da **Android** iş akışı (`.github/workflows/android.yml`) hata ayıklama APK'sını derler, emülatörde açar ve
+- Denetim: elle başlatılan **Android** iş akışı (`.github/workflows/android.yml`; her çalıştırma sahibine sorulur) hata ayıklama APK'sını derler, emülatörde açar ve
   `scripts/uygulama/android-dene.mjs` ile ana sayfayı, şiir sayfasını, 404'ü ve ortam sesini dener. APK (`android-apk`) bir
   Android telefona kurulup denenebilir ("bilinmeyen kaynaklardan yükleme" izniyle); ekran görüntüleri `android-emulator-ekran`.
 

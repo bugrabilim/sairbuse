@@ -23,9 +23,17 @@ Bu proje Bumba Genel Standartlar'a tabidir. Metin tek yerde durur: https://bumba
 (düz metin). Kademeli oku ("Sürüm kuralı"): oturum başında başlık ve bölüm başlıkları, sürüm değiştiyse
 "Sürüm notları", işin dokunduğu bölüm işten önce, emin değilsen tamamı. Metni bu dosyaya kopyalama.
 Okunamazsa uydurma, sahibine bildir.
-Uygulanan sürüm: 5.32 (22 Kasım 2026; 5.29–5.32 ana altyapı oturumunun özetinden, canlı metin yayımlanana dek). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
+Uygulanan sürüm: 5.41 (25 Kasım 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
 Sunucuya basmanın (izlenen dala birleştirme ya da push, Coolify yayını) zamanı her seferinde sahibine sorulur.
-Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce sayı, model, efor, süre ve kullanım tahminiyle sahibine ayrı bir soruyla sorulur, açık onay beklenir; cevapsız soru onay değildir.
+Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce plan (sayı, her ajanın işi, model, efor, süre,
+kullanım) sahibine mesajda gösterilir, sonra ayrı bir soruyla sorulur, açık onay beklenir; cevapsız soru onay
+değildir. Sahip plan istediyse yalnız plan gösterilir: soru sorulmaz, ajan başlamaz, sahip "başla" deyince başlar.
+Bir kez verilen onay plandaki bütün ajanları kapsar. Ajan her zaman iş akışı (Workflow) olarak çalışır, tek ajan
+bile; iş akışının adı işi anlatır.
+Soru ekranı sahip cevap verene ya da kapatana kadar açık kalır: soru metinde de yazılır; ekran gelen bir mesajla
+kapanırsa soru hemen yeniden sorulur, sahip kapattıysa 1 saat sonra ("Soru ekranı").
+Mobil derleme (GitHub Actions'ta iOS ve Android, simülatör dahil) yalnız elle başlar; her çalıştırma için iş, makine
+türü ve tahmini dakikayla sahibine ayrı bir soruyla sorulur (mobil uygulaması olan projede).
 Hitap: konuşmada sahibe "patron" denir.
 Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişiklik gerekirse o deponun oturumuna mesajla istenir.
 
@@ -110,8 +118,7 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
   simgeleri; üretimi `node scripts/simgeler.mjs`). Üst şeritte, paylaşım görsellerinde, mısra kartında, kitabın
   kapağında ve başlık sayfasında; kitabın sırtında yok (yedi renk noktası kalır).
   **Başlık yazı tipi Cormorant Garamond** (sahibinin kararı, 24 Kasım 2026, ana altyapı oturumu aracılığıyla; ürüne
-  özgü): `--serif-baslik`, paylaşım görselleri ve mısra kartı. Logo yazısı Fraunces 300'de kaldı (`--serif-logo`;
-  logonun da değişip değişmeyeceği sahibine soruldu, BEKLEYENLER.md). Metin Newsreader, etiketler Inter. Hepsi
+  özgü): `--serif-baslik`, paylaşım görselleri ve mısra kartı. Logo yazısı Fraunces 300'de kalır (`--serif-logo`; Standartlar 5.35, madde 11: marka öğeleri marka kitinden gelir, yazı tipiyle değişmez). Metin Newsreader, etiketler Inter. Hepsi
   @fontsource ile sitenin sunucusundan; lisans Hakkında → Haklar'da bağlantıyla.
   **Ürün marka kiti** kökte `marka/` (`kit.json`, logo yatay ve dikey, açık ve koyu; işaret, simgeler, paylaşım
   görseli; MARKA §4, 22 Kasım 2026): bumbagroup.com/marka/duygularin-pesinde oradan toplar. Logo, renk ya da yazı
@@ -134,7 +141,7 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
   Uygulamada: sayaç ve çerez bandı yok (veri toplanmaz), e-posta listesi siteyi Safari'de açar, paylaşım iOS'un kendi paylaşım
   ekranıyla (sitedeki kanal menüsü kuralının uygulamadaki istisnası), menüde "Günün şiiri" yerel bildirimi
   (09.00, telefonda zamanlanır, sunucu yok). Yeni şiir ya da düzeltme uygulamaya ancak yeni sürümle gelir.
-  Denetim: `.github/workflows/ios.yml` (simülatör derlemesi, her PR). Yayın: `ios-yayin.yml` elle tetiklenir;
+  Denetim: `.github/workflows/ios.yml` (simülatör derlemesi; 5.35'ten beri yalnız elle, her çalıştırma sahibine sorulur, macOS). Yayın: `ios-yayin.yml` elle tetiklenir;
   Saat Tarih'teki gibi bulut imzalama (sertifika ya da .p12 yok; imzasız arşiv, `-exportArchive
   -allowProvisioningUpdates`, `uygulama/ios/ExportOptions.plist`). Sırlar `ASC_KEY_ID`, `ASC_ISSUER_ID`,
   `ASC_KEY_P8` GitHub'da (değerleri hiçbir yere yazılmaz).
@@ -156,7 +163,7 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
   (Capacitor 8, paket `tr.bumba.duygularinpesinde`, yalnız dikey). `/siir/x/` → `siir/x/index.html` eşlemesi
   `MainActivity.java` → `DizinYonlendirici` (istek Capacitor'a gitmeden adres dosya adına çevrilir). Ekran açık kalır
   (`FLAG_KEEP_SCREEN_ON`). Tam saatli alarm izni kaldırıldı (Play politikası; Günün şiiri yaklaşık 09.00).
-  `npm run uygulama:android`; denetim `.github/workflows/android.yml` (APK + emülatörde deneme, her PR). Google Play
+  `npm run uygulama:android`; denetim `.github/workflows/android.yml` (APK + emülatörde deneme; yalnız elle, her çalıştırma sahibine sorulur, Linux). Google Play
   yayını için Play Console hesabı ve imza anahtarı gerekiyor (`uygulama/README.md`).
 - **Mağaza hesapları** (Standartlar "Sabit bilgiler", 8 Kasım 2026): Apple Developer hesabı var; Google Play için
   D-U-N-S bekleniyor, hesap açılana kadar Android uygulaması gönderilemez. Derleme, yükleme ve başvuru: Standartlar

@@ -3,18 +3,8 @@ name: Android
 # Android uygulamasının derlendiğini ve çalıştığını denetler: site uygulama kipinde derlenir, Android projesine
 # kopyalanır, hata ayıklama APK'sı üretilir; emülatörde açılıp WebView'de ana sayfa, şiir sayfası (dizin yönlendirici),
 # 404 ve ortam sesi denenir (scripts/uygulama/android-dene.*). APK ve ekran görüntüleri indirilebilir çıktı.
+# Mobil derleme yalnız elle başlar, her çalıştırma sahibine sorulur (Standartlar 5.35, "Mobil yayın").
 on:
-  pull_request:
-    paths:
-      - 'src/**'
-      - 'public/**'
-      - 'uygulama/android/**'
-      - 'capacitor.config.ts'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'scripts/uygulama/**'
-      - 'scripts/simgeler.mjs'
-      - '.github/workflows/android.yml'
   workflow_dispatch:
 
 jobs:
