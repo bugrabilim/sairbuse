@@ -4,8 +4,8 @@ Duyguların Peşinde'nin sonraya kalan bütün işleri burada (Standartlar "Bekl
 
 ## Sahibe sorular
 - Yayın: [PR #48](https://github.com/bugrabilim/sairbuse/pull/48) (sitemap.xml, 21 Kasım turu, kuruluş 2008, marka kiti,
-  Cormorant Garamond başlıklar, uygulama 1.0.1 hazırlığı, Standartlar 5.41) ne zaman canlıya alınsın? (8 Kasım; 25 Kasım'da
-  yeniden soruldu)
+  Cormorant Garamond başlıklar, paylaş standarda geçti, telif "© 1998 Bumba Group", uygulama 1.0.1 hazırlığı, Standartlar
+  5.41) ne zaman canlıya alınsın? (8 Kasım; 25 Kasım'da sahibi "daha sonra" dedi, zamanı bekleniyor)
 - Uygulama 1.0.1 mobil derlemesi (`ios-yayin.yml`, macOS, yaklaşık 15 dakika; Standartlar 5.35 "Mobil yayın"): PR #48
   birleşince çalıştırılsın mı? Sonraki adımlar (`ios-magaza.yml`, `ios-inceleme.yml`) derleme değil, ayrıca sorulmaz;
   başvurudan önce kontrol listesi raporlanır. (25 Kasım)
