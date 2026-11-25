@@ -62,7 +62,7 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
 - Ana sayfa vitrininin (hero) tamamı tıklanır ve o mısranın şiirine gider (18 Ekim 2026; sitede ve uygulamada).
   Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
 - **Alt bilgi masaüstünde tek satır** (sahibinin kararı, 12 Ekim 2026; 27 Ekim 2026'da yinelendi, Standartlar §1'deki
-  "solda liste, sağda imza" düzeni bu projede uygulanmaz; istisna standartta, 5.6): solda telif ("© 2008'den itibaren Eylül Bitse. Şiirlerin tüm hakları saklıdır."; bitiş yılı yazılmaz) ve
+  "solda liste, sağda imza" düzeni bu projede uygulanmaz; istisna standartta, 5.6): solda telif ("© 1998 Bumba Group · Şiirler © 2008'den itibaren Eylül Bitse, tüm hakları saklıdır."; İngilizcede "© 1998 Bumba Group · Poems © Eylül Bitse, since 2008. All rights reserved."; Standartlar 5.35 madde 1 ile şiirlerin hakkı birlikte, sahibinin kararı 25 Kasım 2026; bitiş yılı yazılmaz) ve
   altında küçük "Gizlilik" bağlantısı ile "Çerez tercihleri" düğmesi (§9, §14), ortada e-posta listesi (başlık, adres,
   Katıl), sağda "App Store'dan indir" (yayına girince), Bumba Group'un sosyal hesapları (düz bağlantı, sitenin
   renginde ikon; `src/data/sosyal.ts`, 22 Kasım 2026, pazarlama turu K20) ve Bumba Life rozeti (İngilizce sayfada
@@ -87,9 +87,14 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
 - Hakkında'da "Fotoğraflar", "Gizlilik ve çerezler", "Haklar" ve "Sık sorulanlar" düğmeyle açılan pencerelerde
   (`#fotograflar`, `#gizlilik`, `#haklar`, `#sorular` adresleri pencereyi açar; JS yoksa içerik sayfada açık).
   `/gizlilik/` sayfası da durur (KVKK bağlantıları için), metin tek yerden: `GizlilikMetni.astro`.
-- Şiir paylaşımı kendi menüsüyle: bağlantıyı kopyala, Facebook, Instagram (altında küçük not: bağlantı
-  kopyalanır), WhatsApp, SMS, LinkedIn. Başka kanal eklenmez. Telefonda paylaş ve ortam sesi menüleri ekranın
-  altından açılır (sayfa yana taşmaz).
+- **Paylaş düğmesi** (Standartlar madde 15; sahibinin kararı, 25 Kasım 2026: Ekim'deki "kendi kanal listesi" kalktı,
+  standarda geçildi): tek bileşen `PaylasMenusu.astro`. Telefonda ve destekleyen tarayıcıda cihazın kendi paylaşım
+  menüsü (`navigator.share`: başlık, sayfanın açıklaması, canonical adres); uygulamada telefonun paylaşım ekranı.
+  Yoksa küçük menü, bu sırayla: WhatsApp, X, Facebook, LinkedIn, Telegram, Bluesky, e-posta, bağlantıyı kopyala
+  ("Kopyalandı"). Düz bağlantılar, sosyal ağ betiği yok. Herkese açık içerik sayfalarında: şiir, duygu, yer, bütün
+  şiirler, harita, zaman, fal, Hakkında (başlığın altında) ve ana sayfa (başlık görünmediği için sonda). Arama,
+  gizlilik, `/cek/`, 404 ve 500'de yok. Menü üst katmanda (popover) açılır; telefonda ekranın altından (sayfa yana
+  taşmaz). Umami `paylas` olayı `kanal` ile (`cihaz`, `whatsapp`, `x`, …, `kopyala`).
 - Ortam sesi **varsayılan açık, %10 düzeyde** (9 Ekim 2026): her şiirin kendi sesi var (şiir dosyasında
   `ortam:`; yoksa ana duygunun sesi, `DUYGU_ORTAMI`), duygu sayfasında duygunun sesi. Tarayıcı kuralı gereği ilk
   dokunuşta başlar. Menüde kapalı, "şiirin sesi" ve genel sesler (deniz, yağmur, vapur, gece, kafe, şehir,
@@ -139,7 +144,7 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
   derlenmiş hâli uygulamanın içinde (çevrimdışı). Paket kimliği `tr.bumba.duygularinpesinde`, yalnız iPhone,
   dikey. `npm run uygulama` (PUBLIC_UYGULAMA=1 → `dist-uygulama/` → `cap sync ios`); iOS projesi `uygulama/ios/`.
   Uygulamada: sayaç ve çerez bandı yok (veri toplanmaz), e-posta listesi siteyi Safari'de açar, paylaşım iOS'un kendi paylaşım
-  ekranıyla (sitedeki kanal menüsü kuralının uygulamadaki istisnası), menüde "Günün şiiri" yerel bildirimi
+  ekranıyla, menüde "Günün şiiri" yerel bildirimi
   (09.00, telefonda zamanlanır, sunucu yok). Yeni şiir ya da düzeltme uygulamaya ancak yeni sürümle gelir.
   Denetim: `.github/workflows/ios.yml` (simülatör derlemesi; 5.35'ten beri yalnız elle, her çalıştırma sahibine sorulur, macOS). Yayın: `ios-yayin.yml` elle tetiklenir;
   Saat Tarih'teki gibi bulut imzalama (sertifika ya da .p12 yok; imzasız arşiv, `-exportArchive

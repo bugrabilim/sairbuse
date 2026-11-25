@@ -35,7 +35,7 @@ function sayfasi(yol: string) {
   sema={[sssSema(m.sss)]}
   kirinti={[{ ad: m.baslik, yol: sayfaYolu('hakkinda', dil) }]}
 >
-  <SayfaSahnesi foto="sayfa-hakkinda" duygu="karanlik" etiket={SITE.ad} baslik={m.baslik} />
+  <SayfaSahnesi foto="sayfa-hakkinda" duygu="karanlik" etiket={SITE.ad} baslik={m.baslik} paylas={{ baslik: `${m.baslik} · ${SITE.ad}`, aciklama: m.aciklama }} />
   <article class="sayfa hakkinda">
     <p>{m.giris1}</p>
     <p>{m.giris2}</p>

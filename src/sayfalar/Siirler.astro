@@ -1,5 +1,6 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import { SITE } from '../data/site';
 import SiirListesi from '../components/SiirListesi.astro';
 import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import { DUYGULAR, duyguAdi } from '../data/duygular';
@@ -17,7 +18,7 @@ const tum = await tumSiirler();
   sema={[koleksiyonSema(m.siirler.baslik, sayfaYolu('siirler', dil), tum, dil)]}
   kirinti={[{ ad: m.siirler.baslik, yol: sayfaYolu('siirler', dil) }]}
 >
-  <SayfaSahnesi foto="sayfa-siirler" duygu="ozgurluk" etiket={siirSayisi(tum.length, dil)} baslik={m.siirler.baslik}>
+  <SayfaSahnesi foto="sayfa-siirler" duygu="ozgurluk" etiket={siirSayisi(tum.length, dil)} baslik={m.siirler.baslik} paylas={{ baslik: `${m.siirler.baslik} · ${SITE.ad}`, aciklama: m.siirler.aciklama(tum.length) }}>
     {m.siirler.giris} {m.genel.siirlerTurkce}
   </SayfaSahnesi>
   <section class="sayfa">

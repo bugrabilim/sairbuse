@@ -724,6 +724,21 @@ body:not(.sahneli) main {
   border-bottom: 1px solid var(--cizgi);
 }
 
+/* Paylaş düğmesinin yeri (Standartlar madde 15): başlığın altında; ana sayfada başlık görünmediği için sonda */
+.sahne-paylas {
+  margin: -0.4rem 0 0.6rem;
+}
+.yer-arac {
+  border: 0;
+  margin-top: 1rem;
+}
+.ana-paylas {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem auto 0;
+  padding: 0 1.25rem;
+}
+
 .durum {
   color: var(--soluk);
   font-size: 0.95rem;

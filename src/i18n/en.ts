@@ -24,7 +24,7 @@ export const en: Metin = {
     altMenu: 'Footer menu',
     ozet: (n: number) => `${n} poems, to be read by emotion, place and time.`,
     ilkSiir: 'First poem:',
-    telif: (yil: string, sair: string) => `© ${sair}, since ${yil}. All rights to the poems reserved.`,
+    telif: (yil: string, sair: string) => `© 1998 Bumba Group · Poems © ${sair}, since ${yil}. All rights reserved.`,
     haklar: 'Rights',
     gizlilik: 'Privacy',
     rozetBaslik: 'Bumba Life, part of Bumba Group',
@@ -95,10 +95,10 @@ export const en: Metin = {
   },
   paylas: {
     paylas: 'Share',
+    menu: 'Sharing options',
     link: 'Copy link',
-    kopyalandi: 'Link copied.',
-    instagramKisa: 'Copies the link for you to paste in Instagram',
-    instagramNot: 'Link copied; paste it into your Instagram story or a message. You can also make a verse card for your story.',
+    eposta: 'Email',
+    kopyalandi: 'Copied',
   },
   kart: {
     baslik: 'Verse card',

@@ -2,6 +2,7 @@
 // Şiir dışı sayfaların (şiirler, harita, zaman, fal, hakkında, 404) fotoğraflı başı.
 // Fotoğraf src/data/fotograflar.ts'den; renk verilirse o duygunun renginde, yoksa sepya.
 import Foto from './Foto.astro';
+import PaylasMenusu from './PaylasMenusu.astro';
 import { duygu as duyguBul, type DuyguSlug } from '../data/duygular';
 import { fotoAciklama, fotograf, kunye } from '../lib/foto';
 import { dilBul } from '../i18n';
@@ -12,9 +13,11 @@ interface Props {
   etiket: string;
   baslik: string;
   sinif?: string;
+  /** Herkese açık içerik sayfasında Paylaş düğmesi başlığın altında (Standartlar madde 15) */
+  paylas?: { baslik: string; aciklama?: string };
 }
 
-const { foto: id, duygu, etiket, baslik, sinif } = Astro.props;
+const { foto: id, duygu, etiket, baslik, sinif, paylas } = Astro.props;
 const f = fotograf(id);
 const dil = dilBul(Astro.url);
 const d = duygu ? duyguBul(duygu) : undefined;
@@ -26,6 +29,13 @@ const giris = Astro.slots.has('default');
   <div class="sahne-ic">
     <p class="etiket">{etiket}</p>
     <h1 class="sayfa-baslik">{baslik}</h1>
+    {
+      paylas && (
+        <div class="sahne-paylas">
+          <PaylasMenusu baslik={paylas.baslik} aciklama={paylas.aciklama} />
+        </div>
+      )
+    }
     {
       giris && (
         <div class="giris-metni">

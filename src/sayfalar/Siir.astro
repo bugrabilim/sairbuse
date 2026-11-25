@@ -73,7 +73,7 @@ const kayitlar = [
       <div class="arac">
         <button class="dugme" type="button" id="bastan-oku">{m.siir.bastanOku}</button>
         <button class="dugme" type="button" id="kart-dugme" aria-pressed="false">{m.siir.misraKarti}</button>
-        <PaylasMenusu baslik={sayfaBasligi} />
+        <PaylasMenusu baslik={`${sayfaBasligi} — ${SITE.sair}`} aciklama={aciklama} />
         <OrtamSesi varsayilan={siir.data.ortam ?? DUYGU_ORTAMI[d.slug]} duygu={d.slug} />
         <button class="dugme vurgulu" type="button" id="kart-olustur" hidden>{m.siir.kartOlustur}</button>
       </div>

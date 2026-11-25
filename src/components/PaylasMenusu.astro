@@ -1,55 +1,62 @@
 ---
-// Şiir sayfasının paylaşma menüsü: tarayıcının paylaşım penceresi yerine sitenin kendi kısa listesi.
-// Bağlantı kopyalama, Facebook, Instagram, WhatsApp, SMS ve LinkedIn. Instagram'ın web paylaşım adresi
-// olmadığı için bağlantı kopyalanır ve Instagram açılır.
+// Tek "Paylaş" düğmesi (Standartlar madde 15; sahibinin kararı, 25 Kasım 2026: sitenin eski kanal listesi yerine
+// standart). Telefonda ve destekleyen tarayıcıda cihazın kendi paylaşım menüsü (navigator.share: başlık, kısa açıklama,
+// adres); uygulamada telefonun paylaşım ekranı (Capacitor). Desteklenmezse küçük menü, sırası dilden bağımsız:
+// WhatsApp, X, Facebook, LinkedIn, Telegram, Bluesky, e-posta, bağlantıyı kopyala. Hepsi düz bağlantı: tıklanana kadar
+// hiçbir sosyal ağa istek gitmez. Paylaşılan adres canonical adres (izleme parametresi yok).
+// Menü sayfanın fotoğraflı başında da durabildiği için (overflow: hidden) üst katmanda (popover) açılır.
 import { dilBul, metin } from '../i18n';
 
 interface Props {
   baslik: string;
+  aciklama?: string;
 }
-const { baslik } = Astro.props;
+const { baslik, aciklama = '' } = Astro.props;
 const dil = dilBul(Astro.url);
 const m = metin(dil).paylas;
 const adres = new URL(Astro.url.pathname, Astro.site).href;
 const u = encodeURIComponent(adres);
-const metinli = encodeURIComponent(`${baslik} — ${adres}`);
+const b = encodeURIComponent(baslik);
+const metinli = encodeURIComponent(`${baslik} ${adres}`);
+const govde = encodeURIComponent(`${aciklama ? `${aciklama}\n\n` : ''}${adres}`);
+const kimlik = `paylas-${Math.random().toString(36).slice(2, 8)}`;
+
 const kanallar = [
-  { ad: 'facebook', etiket: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
   { ad: 'whatsapp', etiket: 'WhatsApp', href: `https://wa.me/?text=${metinli}` },
-  { ad: 'sms', etiket: 'SMS', href: `sms:?&body=${metinli}` },
+  { ad: 'x', etiket: 'X', href: `https://x.com/intent/post?url=${u}&text=${b}` },
+  { ad: 'facebook', etiket: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
   { ad: 'linkedin', etiket: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}` },
+  { ad: 'telegram', etiket: 'Telegram', href: `https://t.me/share/url?url=${u}&text=${b}` },
+  { ad: 'bluesky', etiket: 'Bluesky', href: `https://bsky.app/intent/compose?text=${metinli}` },
+  { ad: 'eposta', etiket: m.eposta, href: `mailto:?subject=${b}&body=${govde}` },
 ];
 ---
 
-<div class="paylas-kutusu">
-  <button class="dugme" type="button" id="paylas" aria-expanded="false" aria-controls="paylas-menusu">{m.paylas}</button>
-  <div class="paylas-menusu" id="paylas-menusu" hidden data-adres={adres} data-baslik={baslik} data-kopyalandi={m.kopyalandi} data-instagram={m.instagramNot}>
-    <button type="button" class="paylas-secenek" data-kanal="link">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" /><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /></svg>
-      {m.link}
-    </button>
-    <button type="button" class="paylas-secenek" data-kanal="instagram">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="0.6" /></svg>
-      <span class="secenek-metin">Instagram<small>{m.instagramKisa}</small></span>
-    </button>
+<div class="paylas-kutusu" data-paylas data-adres={adres} data-baslik={baslik} data-aciklama={aciklama} data-kopyalandi={m.kopyalandi}>
+  <button class="dugme paylas-dugme" type="button" aria-expanded="false" aria-controls={kimlik} title={m.paylas}>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4" /><path d="M6 11H5v9h14v-9h-1" /></svg>
+    <span>{m.paylas}</span>
+  </button>
+  <span class="paylas-durum" role="status" aria-live="polite"></span>
+  <div class="paylas-menusu" id={kimlik} role="group" aria-label={m.menu} hidden>
     {
       kanallar.map((k) => (
-        <a class="paylas-secenek" href={k.href} data-kanal={k.ad} target={k.ad === 'sms' ? undefined : '_blank'} rel="noopener">
-          {k.ad === 'facebook' && (
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M14 8h2.5V4.5H14A3.5 3.5 0 0 0 10.5 8v2.5H8V14h2.5v6H14v-6h2.5l.5-3.5h-3V8.5a.5.5 0 0 1 .5-.5Z" />
-            </svg>
-          )}
+        <a class="paylas-secenek" href={k.href} data-kanal={k.ad} target={k.ad === 'eposta' ? undefined : '_blank'} rel="noopener noreferrer">
           {k.ad === 'whatsapp' && (
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 20l1.2-3.6A8 8 0 1 1 8 19z" />
               <path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-2-2l.8-1-1-2z" />
             </svg>
           )}
-          {k.ad === 'sms' && (
+          {k.ad === 'x' && (
             <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 5h16v11H9l-5 4z" />
-              <path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01" />
+              <path d="M4.5 4h4L19.5 20h-4z" />
+              <path d="M19.5 4l-6.4 7.3M4.5 20l6.4-7.3" />
+            </svg>
+          )}
+          {k.ad === 'facebook' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14 8h2.5V4.5H14A3.5 3.5 0 0 0 10.5 8v2.5H8V14h2.5v6H14v-6h2.5l.5-3.5h-3V8.5a.5.5 0 0 1 .5-.5Z" />
             </svg>
           )}
           {k.ad === 'linkedin' && (
@@ -58,99 +65,187 @@ const kanallar = [
               <path d="M8 10.5V16M8 8v.01M11.5 16v-5.5M11.5 13a2.5 2.5 0 0 1 5 0V16" />
             </svg>
           )}
+          {k.ad === 'telegram' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.5 4.5L3.5 11l5.5 2 2 6 3-4 4.5 3.5z" />
+              <path d="M9 13l11.5-8.5" />
+            </svg>
+          )}
+          {k.ad === 'bluesky' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 11C10.6 8.2 7 5 5 5c-1.2 0-1.5 1-1.5 2.3 0 1.4.7 4.3 2.4 4.8 1.4.4 3.1 0 3.1 0s-3 .9-2.1 2.8c.9 1.8 3 1.6 5.1-1.7 2.1 3.3 4.2 3.5 5.1 1.7.9-1.9-2.1-2.8-2.1-2.8s1.7.4 3.1 0c1.7-.5 2.4-3.4 2.4-4.8C20.5 6 20.2 5 19 5c-2 0-5.6 3.2-7 6Z" />
+            </svg>
+          )}
+          {k.ad === 'eposta' && (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3.5" y="5.5" width="17" height="13" rx="2" />
+              <path d="M4 7l8 6 8-6" />
+            </svg>
+          )}
           {k.etiket}
         </a>
       ))
     }
+    <button type="button" class="paylas-secenek" data-kanal="kopyala">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" /><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /></svg>
+      {m.link}
+    </button>
   </div>
 </div>
 
 <script>
   import { yerelUygulama } from '../data/uygulama';
 
-  const dugme = document.getElementById('paylas') as HTMLButtonElement | null;
-  const menu = document.getElementById('paylas-menusu');
-  const durum = document.getElementById('durum');
+  const ustKatman = typeof HTMLElement !== 'undefined' && 'showPopover' in HTMLElement.prototype;
 
-  /** Menü ekrandan taşmasın: geniş ekranda sağa taşarsa sola kayar (telefonda alttan açılır, CSS) */
-  function sigdir(el: HTMLElement) {
-    el.style.left = '';
-    if (getComputedStyle(el).position !== 'absolute') return;
-    const r = el.getBoundingClientRect();
-    const tasma = r.right - (document.documentElement.clientWidth - 12);
-    if (tasma > 0) el.style.left = `${-tasma}px`;
+  function olay(kanal: string) {
+    window.bumbaOlay?.('paylas', { kanal });
+    document.dispatchEvent(new CustomEvent('rozet', { detail: { tur: 'paylas' } }));
   }
 
-  function ac(acik: boolean) {
-    if (!menu || !dugme) return;
-    menu.hidden = !acik;
-    dugme.setAttribute('aria-expanded', String(acik));
-    if (acik) sigdir(menu);
-    if (acik) menu.querySelector<HTMLElement>('.paylas-secenek')?.focus();
-  }
-  dugme?.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    // iOS uygulamasında telefonun kendi paylaşım ekranı açılır
-    if (yerelUygulama()) {
-      const { Share } = await import('@capacitor/share');
-      await Share.share({ title: menu?.dataset.baslik, url: menu?.dataset.adres }).catch(() => {});
-      return;
-    }
-    ac(menu?.hidden === true);
-  });
-  document.addEventListener('click', (e) => {
-    if (menu && !menu.hidden && !menu.contains(e.target as Node)) ac(false);
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menu && !menu.hidden) {
-      ac(false);
-      dugme?.focus();
-    }
-  });
+  document.querySelectorAll<HTMLElement>('[data-paylas]').forEach((kutu) => {
+    const dugme = kutu.querySelector<HTMLButtonElement>('.paylas-dugme')!;
+    const menu = kutu.querySelector<HTMLElement>('.paylas-menusu')!;
+    const durum = kutu.querySelector<HTMLElement>('.paylas-durum')!;
+    const { adres = location.href, baslik = document.title, aciklama = '', kopyalandi = '' } = kutu.dataset;
+    let sure: number | undefined;
 
-  async function kopyala(): Promise<boolean> {
-    try {
-      await navigator.clipboard.writeText(menu?.dataset.adres ?? location.href);
-      return true;
-    } catch {
-      return false;
-    }
-  }
+    if (ustKatman) menu.setAttribute('popover', 'manual');
 
-  menu?.querySelectorAll<HTMLElement>('[data-kanal]').forEach((s) =>
-    s.addEventListener('click', async (e) => {
-      const kanal = s.dataset.kanal ?? '';
-      window.bumbaOlay?.('paylas', { kanal });
-      document.dispatchEvent(new CustomEvent('rozet', { detail: { tur: 'paylas' } }));
-      if (kanal === 'link') {
-        const tamam = await kopyala();
-        if (durum) durum.textContent = tamam ? (menu.dataset.kopyalandi ?? '') : (menu.dataset.adres ?? '');
-        ac(false);
-      } else if (kanal === 'instagram') {
-        e.preventDefault();
-        await kopyala();
-        if (durum) durum.textContent = menu.dataset.instagram ?? '';
-        window.open('https://www.instagram.com/', '_blank', 'noopener');
-        ac(false);
-      } else {
-        ac(false);
+    /** Geniş ekranda düğmenin altında açılır, ekrandan taşmaz; telefonda ekranın altından (CSS) */
+    function yerlestir() {
+      menu.style.top = menu.style.left = '';
+      if (matchMedia('(max-width: 40rem)').matches) return;
+      const r = dugme.getBoundingClientRect();
+      const g = menu.offsetWidth;
+      const h = menu.offsetHeight;
+      const en = document.documentElement.clientWidth;
+      const boy = document.documentElement.clientHeight;
+      const ust = r.bottom + 4 + h > boy - 8 && r.top - 4 - h > 8 ? r.top - 4 - h : r.bottom + 4;
+      menu.style.top = `${Math.round(ust)}px`;
+      menu.style.left = `${Math.round(Math.max(8, Math.min(r.left, en - g - 8)))}px`;
+    }
+
+    function ac(acik: boolean, odakDon = false) {
+      if (acik === !menu.hidden) return;
+      menu.hidden = !acik;
+      if (ustKatman) acik ? menu.showPopover() : menu.hidePopover();
+      dugme.setAttribute('aria-expanded', String(acik));
+      if (acik) {
+        yerlestir();
+        menu.querySelector<HTMLElement>('.paylas-secenek')?.focus();
+      } else if (odakDon) dugme.focus();
+    }
+
+    function bildir(s: string) {
+      durum.textContent = s;
+      clearTimeout(sure);
+      sure = window.setTimeout(() => (durum.textContent = ''), 4000);
+    }
+
+    dugme.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (!menu.hidden) return ac(false);
+      // Uygulamada telefonun kendi paylaşım ekranı
+      if (yerelUygulama()) {
+        const { Share } = await import('@capacitor/share');
+        await Share.share({ title: baslik, text: aciklama || undefined, url: adres }).catch(() => {});
+        olay('cihaz');
+        return;
       }
-    }),
-  );
+      // Telefonda ve destekleyen tarayıcıda cihazın kendi paylaşım menüsü; vazgeçilirse bir şey olmaz
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: baslik, text: aciklama || undefined, url: adres });
+          olay('cihaz');
+          return;
+        } catch (hata) {
+          if ((hata as DOMException)?.name === 'AbortError') return;
+        }
+      }
+      ac(true);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!menu.hidden && !kutu.contains(e.target as Node)) ac(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.hidden) ac(false, true);
+    });
+    addEventListener('resize', () => !menu.hidden && yerlestir());
+    addEventListener('scroll', () => !menu.hidden && yerlestir(), { passive: true });
+    // Menüden klavyeyle çıkılınca kapanır
+    menu.addEventListener('focusout', (e) => {
+      const yeni = e.relatedTarget as Node | null;
+      if (yeni && !kutu.contains(yeni)) ac(false);
+    });
+
+    menu.querySelectorAll<HTMLElement>('[data-kanal]').forEach((s) =>
+      s.addEventListener('click', async () => {
+        const kanal = s.dataset.kanal ?? '';
+        olay(kanal);
+        if (kanal === 'kopyala') {
+          let tamam = true;
+          try {
+            await navigator.clipboard.writeText(adres);
+          } catch {
+            tamam = false;
+          }
+          ac(false, true);
+          bildir(tamam ? kopyalandi : adres);
+        } else {
+          ac(false);
+        }
+      }),
+    );
+  });
 </script>
 
 <style>
   .paylas-kutusu {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .paylas-dugme {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .paylas-dugme svg,
+  .paylas-secenek svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .paylas-dugme svg {
+    width: 14px;
+    height: 14px;
+  }
+  .paylas-durum {
+    font-family: var(--etiket);
+    font-size: 0.8rem;
+    color: inherit;
+    opacity: 0.85;
+  }
+  .paylas-durum:empty {
+    display: none;
   }
   .paylas-menusu {
-    position: absolute;
-    z-index: 15;
-    top: calc(100% + 0.25rem);
-    left: 0;
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    z-index: 60;
     min-width: 13rem;
     display: grid;
     padding: 0.4rem;
+    color: var(--yazi);
     background: var(--zemin-2);
     border: 1px solid var(--cizgi);
     border-radius: 6px;
@@ -165,7 +260,7 @@ const kanallar = [
     align-items: center;
     gap: 0.75rem;
     width: 100%;
-    padding: 0.6rem 0.7rem;
+    padding: 0.55rem 0.7rem;
     border: 0;
     border-radius: 4px;
     background: transparent;
@@ -182,35 +277,15 @@ const kanallar = [
   .paylas-secenek:focus-visible {
     background: color-mix(in srgb, var(--vurgu) 14%, transparent);
   }
-  .secenek-metin {
-    display: grid;
-    gap: 0.1rem;
-  }
-  .secenek-metin small {
-    font-size: 0.72rem;
-    font-weight: 400;
-    color: var(--soluk);
-  }
   /* Telefonda menü ekranın altından açılır; sayfa sağa taşmaz */
   @media (max-width: 40rem) {
     .paylas-menusu {
-      position: fixed;
       top: auto;
       left: 0.75rem;
       right: 0.75rem;
       bottom: calc(0.75rem + env(safe-area-inset-bottom));
-      z-index: 60;
+      width: auto;
       min-width: 0;
     }
-  }
-  .paylas-secenek svg {
-    width: 18px;
-    height: 18px;
-    flex: none;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
 </style>

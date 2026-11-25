@@ -35,7 +35,8 @@ export const tr = {
     ozet: (n: number) => `${n} şiir; duygu, yer ve zaman üzerinden okunmak için.`,
     ilkSiir: 'İlk şiir:',
     // Telif ilk şiirin yılından başlar; bitiş yılı yazılmaz
-    telif: (yil: string, sair: string) => `© ${yildan(yil)} itibaren ${sair}. Şiirlerin tüm hakları saklıdır.`,
+    // Standartlar madde 1 ("© 1998 Bumba Group") ve şiirlerin hakkı şairde: ikisi birlikte (sahibinin kararı, 25 Kasım 2026)
+    telif: (yil: string, sair: string) => `© 1998 Bumba Group · Şiirler © ${yildan(yil)} itibaren ${sair}, tüm hakları saklıdır.`,
     haklar: 'Haklar',
     gizlilik: 'Gizlilik',
     rozetBaslik: 'Bumba Life, bir Bumba Group kolu',
@@ -106,10 +107,10 @@ export const tr = {
   },
   paylas: {
     paylas: 'Paylaş',
+    menu: 'Paylaşım seçenekleri',
     link: 'Bağlantıyı kopyala',
-    kopyalandi: 'Bağlantı kopyalandı.',
-    instagramKisa: 'Bağlantı kopyalanır, Instagram’da yapıştırırsın',
-    instagramNot: 'Bağlantı kopyalandı; Instagram’da hikâyene ya da mesajına yapıştırabilirsin. Hikâye için mısra kartı da hazırlayabilirsin.',
+    eposta: 'E-posta',
+    kopyalandi: 'Kopyalandı',
   },
   kart: {
     baslik: 'Mısra kartı',
