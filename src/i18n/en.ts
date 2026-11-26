@@ -24,7 +24,7 @@ export const en: Metin = {
     altMenu: 'Footer menu',
     ozet: (n: number) => `${n} poems, to be read by emotion, place and time.`,
     ilkSiir: 'First poem:',
-    telif: (yil: string, sair: string) => `© 1998 Bumba Group · Poems © ${sair}, since ${yil}. All rights reserved.`,
+    telif: (kurulus: string, yil: string, sair: string) => `© ${kurulus} Bumba Group · Poems © ${sair}, since ${yil}. All rights reserved.`,
     haklar: 'Rights',
     gizlilik: 'Privacy',
     rozetBaslik: 'Bumba Life, part of Bumba Group',
@@ -272,30 +272,18 @@ export const en: Metin = {
   },
   liste: {
     baslik: 'Tell me when a new poem arrives',
-    eposta: 'Your email address',
-    yukleniyor: 'Loading the privacy notice…',
-    yuklenemedi: 'The notice could not be loaded. You can read the full text at the link below.',
-    tamMetin: 'Full text',
-    kabul: 'I agree',
-    vazgec: 'Cancel',
-    riza: 'I have read and accept the {aydinlatma}.',
-    aydinlatma: 'privacy notice',
-    katil: 'Join',
-    gonderiliyor: 'Sending…',
-    tamam: 'We’ve sent you a confirmation email; click the link in it and you’re on the list.',
-    hatalar: {
-      'gecersiz-eposta': 'This email address doesn’t look valid.',
-      'riza-yok': 'Please accept the privacy notice to join.',
-      'cok-fazla-istek': 'Too many attempts. Please try again in a little while.',
-      'gonderim-kapali': 'The list isn’t taking sign-ups right now. Please try again in a little while.',
-      hata: 'Something went wrong. Please try again in a little while.',
-    },
+    etiket: 'Mailing list',
+    yerTutucu: 'Get updates by email',
+    katil: 'Join the mailing list',
+    tamam: 'Your request has been received',
+    gecersiz: 'Enter a valid email address.',
+    gonderilemedi: 'Couldn’t send it, please try again shortly.',
   },
   gizlilik: {
     baslik: 'Privacy and cookies',
     aciklama: 'What data Duyguların Peşinde processes and what it doesn’t: statistics, the mailing list, cookies and your rights.',
     etiket: 'Privacy notice (KVKK)',
-    guncelleme: 'Last updated: 27 October 2026',
+    guncelleme: 'Last updated: 26 November 2026',
     bolumler: [
       {
         baslik: 'Data controller',
@@ -311,7 +299,7 @@ export const en: Metin = {
       },
       {
         baslik: 'Mailing list',
-        metin: 'With the form at the bottom of the pages you can leave your email address to hear about new poems. The list is run by Bumba Group’s shared mailing list service: when you press “Join”, a window shows the privacy notice; your address is sent only if you press “I agree”, and it is added only once you click the link in the confirmation email. Every email has a one-click unsubscribe link. Details: {liste}.',
+        metin: 'With the form at the bottom of the pages you can leave your email address to hear about new poems. The list is run by Bumba Group’s shared mailing list service. Pressing “Join the mailing list” only sends a request; the first email you receive has the confirmation link and all the information (the list’s privacy notice, this privacy notice, the cookie policy and how to unsubscribe). Your address is added only if you click that link; unconfirmed requests are deleted after 7 days. Every email has a one-click unsubscribe link. Details: {liste}.',
       },
       {
         baslik: 'Technical logs',
@@ -327,7 +315,7 @@ export const en: Metin = {
       },
       {
         baslik: 'Content from elsewhere',
-        metin: 'Fonts and photographs are served from the site’s own server. The Bumba badge in the footer and the mailing list’s privacy notice are loaded from bumbagroup.com, so your browser connects to that server.',
+        metin: 'Fonts and photographs are served from the site’s own server. The Bumba badge in the footer is loaded from bumbagroup.com, and the mailing list form sends your address there, so your browser connects to that server.',
       },
       {
         baslik: 'Phone apps',

@@ -1,152 +1,114 @@
 ---
-// Bumba ortak e-posta listesine katılma formu (Bumba Genel Standartlar §1, §6).
-// Çift onayı, rıza kaydını, onay/çıkış e-postalarını ve bot korumasını ortak servis yapar; burada yalnız form var.
-// Alt bilgide yalnız adres ve "Katıl" durur. Katıl'a basınca açılan pencerede ortak aydınlatma metni gösterilir
-// (bumbagroup.com/api/liste/aydinlatma); rıza yalnız "Kabul ediyorum" düğmesiyle verilir (riza=on). JavaScript yoksa
-// <noscript> içindeki onay kutusu devreye girer, form servise gider ve sonuç #liste-tamam / #liste-hata ile döner.
+// Bumba ortak e-posta listesine katılma formu (Bumba Genel Standartlar madde 1 ve 6; 5.43).
+// Form yalnız katılım talebidir: pencere, onay kutusu ve aydınlatma bağlantısı yok, sayfa sunucuyu beklemez.
+// Açık rızayı, onay e-postasını ve bütün bilgilendirme metinlerini ortak servis ilk e-postada verir.
+// Akış: adres geçerliyse istek gider, cevap beklenmeden alanın yerinde "Katılım talebiniz alındı" görünür
+// (10 saniye ya da tıklanana kadar). Hata dönerse yazı kalkar, adres geri yazılır, hata söylenir.
+// JavaScript yoksa form doğrudan gider ve `donus` adresine #liste-tamam ile döner (:target ile aynı yazı).
 import { SITE } from '../data/site';
-import { dilBul, metin } from '../i18n';
+import { dilBul, metin, sayfaYolu } from '../i18n';
 
 const dil = dilBul(Astro.url);
 const m = metin(dil).liste;
 const donus = new URL(Astro.url.pathname, Astro.site).href;
-const aydinlatma = dil === 'en' ? 'https://bumbagroup.com/liste/aydinlatma?dil=en' : 'https://bumbagroup.com/liste/aydinlatma';
-const aydinlatmaJson = `https://bumbagroup.com/api/liste/aydinlatma?dil=${dil}`;
-const [rizaOnce, rizaSonra] = m.riza.split('{aydinlatma}');
-const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, kabul: m.kabul, yuklenemedi: m.yuklenemedi, hatalar: m.hatalar };
+const gizlilik = new URL(sayfaYolu('gizlilik', dil), Astro.site).href;
+const yazilar = { gecersiz: m.gecersiz, gonderilemedi: m.gonderilemedi };
 ---
 
 <section class="liste-kutusu" id="liste" aria-labelledby="liste-baslik">
   <h2 id="liste-baslik" class="liste-baslik">{m.baslik}</h2>
-  <form class="liste-formu" id="liste-form" action="https://bumbagroup.com/api/liste/katil" method="post" data-aydinlatma={aydinlatmaJson} data-metin={JSON.stringify(yazilar)}>
+  <form class="liste-form" id="liste-form" action="https://bumbagroup.com/api/liste/katil" method="post" data-metin={JSON.stringify(yazilar)}>
     <input type="hidden" name="site" value={SITE.liste} />
     <input type="hidden" name="dil" value={dil} />
+    <input type="hidden" name="gizlilik" value={gizlilik} />
     <input type="hidden" name="donus" value={donus} />
     <input type="hidden" name="kaynak" value={donus} />
     <input class="bot-tuzagi" type="text" name="web_sitesi" tabindex="-1" autocomplete="off" aria-hidden="true" />
-    <div class="liste-satir">
-      <label class="gorunmez" for="liste-eposta">{m.eposta}</label>
-      <input id="liste-eposta" type="email" name="eposta" required autocomplete="email" placeholder={m.eposta} />
-      <button class="dugme" type="submit" id="liste-katil">{m.katil}</button>
-    </div>
-    <noscript>
-      <label class="liste-riza">
-        <input type="checkbox" name="riza" value="on" required />
-        <span>{rizaOnce}<a href={aydinlatma} rel="noopener">{m.aydinlatma}</a>{rizaSonra}</span>
-      </label>
-    </noscript>
-    <dialog class="liste-pencere" id="liste-pencere" aria-labelledby="liste-pencere-baslik">
-      <h3 id="liste-pencere-baslik"></h3>
-      <div class="liste-metin" id="liste-metin" tabindex="0"><p>{m.yukleniyor}</p></div>
-      <a class="liste-tam" href={aydinlatma} target="_blank" rel="noopener">{m.tamMetin}</a>
-      <div class="liste-pencere-dugmeler">
-        <button class="dugme" type="button" id="liste-vazgec">{m.vazgec}</button>
-        <button class="dugme vurgulu" type="submit" id="liste-kabul" name="riza" value="on" disabled>{m.kabul}</button>
-      </div>
-    </dialog>
-    <p class="liste-durum" id="liste-sonuc" role="status" aria-live="polite"></p>
+    <label class="gorunmez" for="liste-eposta">{m.etiket}</label>
+    <span class="liste-alan">
+      <input
+        id="liste-eposta"
+        type="email"
+        name="eposta"
+        required
+        maxlength="254"
+        autocomplete="email"
+        inputmode="email"
+        pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}"
+        placeholder={m.yerTutucu}
+      />
+      <span class="liste-tamam" id="liste-tamam" role="status" hidden>{m.tamam}</span>
+    </span>
+    <button class="dugme" type="submit">{m.katil}</button>
+    <span class="liste-hata" id="liste-hata" role="alert"></span>
   </form>
 </section>
 
 <script>
-  const form = document.querySelector<HTMLFormElement>('.liste-formu');
-  const durum = document.getElementById('liste-sonuc');
-  const pencere = document.getElementById('liste-pencere') as HTMLDialogElement | null;
-  const baslik = document.getElementById('liste-pencere-baslik');
-  const metinKutusu = document.getElementById('liste-metin');
-  const kabul = document.getElementById('liste-kabul') as HTMLButtonElement | null;
-  const M = JSON.parse(form?.dataset.metin ?? '{}');
-  let metinGeldi = false;
+  const form = document.getElementById('liste-form') as HTMLFormElement | null;
+  const alan = document.getElementById('liste-eposta') as HTMLInputElement | null;
+  const tamam = document.getElementById('liste-tamam');
+  const hata = document.getElementById('liste-hata');
+  const M = JSON.parse(form?.dataset.metin ?? '{}') as { gecersiz: string; gonderilemedi: string };
+  // Servisle aynı kalıp (madde 6), en çok 254 karakter
+  const KALIP = /^[^\s@<>"',;]+@[^\s@<>"',;]+\.[^\s@<>"',;]{2,}$/;
+  let sure: number | undefined;
 
-  function goster(metin: string, iyi: boolean) {
-    if (!durum) return;
-    durum.textContent = metin;
-    durum.dataset.durum = iyi ? 'tamam' : 'hata';
+  function tamamGizle(odakla = false) {
+    clearTimeout(sure);
+    if (tamam) tamam.hidden = true;
+    form?.classList.remove('gonderildi');
+    if (odakla) alan?.focus();
+  }
+  function tamamGoster() {
+    if (!tamam) return;
+    tamam.hidden = false;
+    form?.classList.add('gonderildi');
+    clearTimeout(sure);
+    sure = window.setTimeout(() => tamamGizle(), 10000);
+  }
+  function hataYaz(s: string) {
+    if (hata) hata.textContent = s;
   }
 
-  // JS'siz gönderimden dönüşte sonucu göster
-  if (location.hash === '#liste-tamam') goster(M.tamam, true);
-  else if (location.hash === '#liste-hata') goster(M.hatalar.hata, false);
+  if (form && alan) {
+    form.noValidate = true;
+    // Betiksiz gönderimden dönüş
+    if (location.hash === '#liste-tamam') tamamGoster();
+    else if (location.hash === '#liste-hata') hataYaz(M.gonderilemedi);
 
-  // Ortak aydınlatma metni ilk açılışta gelir; HTML olarak değil, textContent ile yazılır
-  async function metniGetir() {
-    if (metinGeldi || !form || !metinKutusu) return;
-    try {
-      const y = await fetch(form.dataset.aydinlatma ?? '', { headers: { Accept: 'application/json' } });
-      if (!y.ok) throw new Error(String(y.status));
-      const v = (await y.json()) as { baslik?: string; giris?: string; bolumler?: { baslik?: string; metin?: string }[] };
-      if (baslik) baslik.textContent = v.baslik ?? '';
-      const parcalar: HTMLElement[] = [];
-      if (v.giris) {
-        const p = document.createElement('p');
-        p.textContent = v.giris;
-        parcalar.push(p);
+    tamam?.addEventListener('click', () => tamamGizle(true));
+    alan.addEventListener('input', () => hataYaz(''));
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const adres = alan.value.trim();
+      if (adres.length > 254 || !KALIP.test(adres)) {
+        hataYaz(M.gecersiz);
+        alan.focus();
+        return;
       }
-      for (const b of v.bolumler ?? []) {
-        const h = document.createElement('h4');
-        h.textContent = b.baslik ?? '';
-        const p = document.createElement('p');
-        p.textContent = b.metin ?? '';
-        parcalar.push(h, p);
-      }
-      metinKutusu.replaceChildren(...parcalar);
-      metinGeldi = true;
-      if (kabul) kabul.disabled = false;
-    } catch {
-      const p = document.createElement('p');
-      p.textContent = M.yuklenemedi;
-      metinKutusu.replaceChildren(p);
-      if (kabul) kabul.disabled = true;
-    }
+      alan.value = adres;
+      hataYaz('');
+      const veri = new FormData(form);
+      veri.delete('donus');
+      // Cevap beklenmeden: alan boşalır, yerinde "Katılım talebiniz alındı"
+      alan.value = '';
+      tamamGoster();
+      fetch(form.action, { method: 'POST', body: veri, headers: { Accept: 'application/json' }, keepalive: true })
+        .then((y) => y.json().catch(() => ({ durum: 'hata' })))
+        .catch(() => ({ durum: 'hata' }))
+        .then((sonuc: { durum?: string }) => {
+          if (sonuc.durum === 'tamam') {
+            window.bumbaOlay?.('liste-katil');
+            return;
+          }
+          tamamGizle();
+          alan.value = adres;
+          hataYaz(sonuc.durum === 'gecersiz-eposta' ? M.gecersiz : M.gonderilemedi);
+        });
+    });
   }
-
-  document.getElementById('liste-vazgec')?.addEventListener('click', () => pencere?.close());
-  pencere?.addEventListener('click', (e) => {
-    if (e.target === pencere) pencere.close();
-  });
-
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const gonderen = (e as SubmitEvent).submitter;
-    // "Katıl": adres geçerliyse pencere açılır; form ancak "Kabul ediyorum"la gönderilir
-    if (gonderen?.id !== 'liste-kabul') {
-      if (!form.reportValidity()) return;
-      pencere?.showModal();
-      void metniGetir();
-      return;
-    }
-    const veri: Record<string, string> = {};
-    new FormData(form).forEach((v, k) => (veri[k] = String(v)));
-    veri.riza = 'on';
-    delete veri.donus;
-    if (kabul) {
-      kabul.disabled = true;
-      kabul.textContent = M.gonderiliyor;
-    }
-    try {
-      const yanit = await fetch(form.action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(veri),
-      });
-      const sonuc = await yanit.json().catch(() => ({ durum: 'hata' }));
-      if (sonuc.durum === 'tamam') {
-        goster(M.tamam, true);
-        form.reset();
-        window.bumbaOlay?.('liste-katil');
-      } else {
-        goster(M.hatalar[sonuc.durum] ?? M.hatalar.hata, false);
-      }
-    } catch {
-      goster(M.hatalar.hata, false);
-    } finally {
-      pencere?.close();
-      if (kabul) {
-        kabul.disabled = !metinGeldi;
-        kabul.textContent = M.kabul;
-      }
-    }
-  });
 </script>
 
 <style>
@@ -164,18 +126,26 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, kabul: m.kabul, 
     font-size: 1.15rem;
     color: var(--yazi);
   }
-  /* Genişlik açıkça verilir: alt bilginin ızgarası bu genişliği bilmezse başlığı forma sığdıramaz */
-  .liste-formu {
-    flex: 0 1 17rem;
-    width: 17rem;
-    min-width: 14rem;
-  }
-  .liste-satir {
+  /* Tek satır: alan ve düğme her genişlikte yan yana; dar ekranda alan daralır, düğme yazısı kısalmaz */
+  .liste-form {
+    position: relative;
+    flex: 0 1 25rem;
+    width: 25rem;
+    min-width: 0;
     display: flex;
-    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.75rem;
   }
-  .liste-satir input {
+  .liste-alan {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 6rem;
+    display: flex;
+  }
+  .liste-alan input {
     flex: 1;
+    width: 100%;
     min-width: 0;
     font: inherit;
     color: var(--yazi);
@@ -185,84 +155,72 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, kabul: m.kabul, 
     padding: 0.45rem 0.1rem;
     border-radius: 0;
   }
-  .liste-satir input:focus-visible {
-    outline: none;
-    border-bottom-color: var(--vurgu);
+  .liste-alan input:focus-visible {
+    outline: 2px solid var(--vurgu);
+    outline-offset: 2px;
   }
-  .liste-satir input::placeholder {
+  .liste-alan input::placeholder {
     color: var(--soluk);
   }
-  /* Telefonda alt bilginin geri kalanı gibi sola yaslı, adres kutusu tam genişlikte */
+  .liste-form .dugme {
+    flex: none;
+    white-space: nowrap;
+  }
+  /* "Katılım talebiniz alındı": alanın yerinde, aynı kutuda; koyu temada açık yeşil, açık temada koyu yeşil */
+  .liste-tamam {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 0.1rem;
+    background: var(--zemin);
+    border-bottom: 1px solid currentColor;
+    color: #86efac;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .liste-tamam[hidden] {
+    display: none;
+  }
+  :global([data-theme='gunduz']) .liste-tamam {
+    color: #166534;
+  }
+  /* Betiksiz dönüş: #liste-tamam adresi hedef olunca görünür */
+  .liste-tamam:target {
+    display: flex;
+  }
+  .liste-hata {
+    flex-basis: 100%;
+    font-size: 0.85rem;
+    color: var(--yazi);
+  }
+  .liste-hata:empty {
+    display: none;
+  }
+  .liste-hata:not(:empty) {
+    margin-top: 0.4rem;
+  }
+  .liste-hata:not(:empty)::before {
+    content: '! ';
+    color: var(--vurgu);
+    font-weight: 600;
+  }
   @media (max-width: 40rem) {
-    .liste-kutusu {
-      justify-content: flex-start;
-    }
-    .liste-formu {
+    .liste-form {
       flex-basis: 100%;
       width: auto;
     }
   }
-  /* Katıl penceresi: telefonda ekrana sığar, metin kayar */
-  .liste-pencere {
-    width: min(32rem, calc(100vw - 2rem));
-    max-height: calc(100dvh - 2rem);
-    padding: 1.6rem clamp(1.25rem, 4vw, 2rem) 1.5rem;
-    border: 1px solid var(--cizgi);
-    border-radius: 4px;
-    background: var(--zemin);
-    color: var(--yazi);
-    font-size: 0.95rem;
-  }
-  .liste-pencere[open] {
-    display: flex;
-    flex-direction: column;
-  }
-  .liste-pencere::backdrop {
-    background: rgba(0, 0, 0, 0.72);
-  }
-  .liste-pencere h3 {
-    margin: 0 0 0.75rem;
-    font-size: 1.5rem;
-  }
-  .liste-metin {
-    overflow-y: auto;
-    min-height: 4rem;
-    color: var(--soluk);
-  }
-  .liste-metin :global(h4) {
-    margin: 1rem 0 0.25rem;
-    font-family: var(--etiket);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--yazi);
-  }
-  .liste-metin :global(p) {
-    margin: 0;
-  }
-  .liste-tam {
-    margin-top: 1rem;
-    color: var(--yazi);
-  }
-  .liste-pencere-dugmeler {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    margin-top: 1.2rem;
-  }
-  .liste-riza {
-    display: flex;
-    gap: 0.6rem;
-    align-items: flex-start;
-    margin-top: 0.9rem;
-  }
-  .liste-riza input {
-    margin-top: 0.3rem;
-    accent-color: var(--vurgu);
-  }
-  .liste-riza a {
-    color: var(--yazi);
+  /* Çok dar ekranda alan kısa kalır: yazı alanla düğmenin satırını kaplar (düğme 10 saniye görünmez) */
+  @media (max-width: 30rem) {
+    .liste-alan {
+      position: static;
+    }
+    .liste-tamam {
+      z-index: 1;
+    }
   }
   .bot-tuzagi {
     position: absolute;
@@ -270,16 +228,5 @@ const yazilar = { tamam: m.tamam, gonderiliyor: m.gonderiliyor, kabul: m.kabul, 
     width: 1px;
     height: 1px;
     opacity: 0;
-  }
-  .liste-durum:empty {
-    display: none;
-  }
-  .liste-durum {
-    margin: 0.6rem 0 0;
-    font-style: italic;
-    min-height: 1.2em;
-  }
-  .liste-durum[data-durum='tamam'] {
-    color: var(--yazi);
   }
 </style>

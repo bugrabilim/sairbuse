@@ -23,7 +23,7 @@ Bu proje Bumba Genel Standartlar'a tabidir. Metin tek yerde durur: https://bumba
 (düz metin). Kademeli oku ("Sürüm kuralı"): oturum başında başlık ve bölüm başlıkları, sürüm değiştiyse
 "Sürüm notları", işin dokunduğu bölüm işten önce, emin değilsen tamamı. Metni bu dosyaya kopyalama.
 Okunamazsa uydurma, sahibine bildir.
-Uygulanan sürüm: 5.41 (25 Kasım 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
+Uygulanan sürüm: 5.43 (25 Kasım 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
 Sunucuya basmanın (izlenen dala birleştirme ya da push, Coolify yayını) zamanı her seferinde sahibine sorulur.
 Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce plan (sayı, her ajanın işi, model, efor, süre,
 kullanım) sahibine mesajda gösterilir, sonra ayrı bir soruyla sorulur, açık onay beklenir; cevapsız soru onay
@@ -63,17 +63,19 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
 - Ana sayfa vitrininin (hero) tamamı tıklanır ve o mısranın şiirine gider (18 Ekim 2026; sitede ve uygulamada).
   Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
 - **Alt bilgi masaüstünde tek satır** (sahibinin kararı, 12 Ekim 2026; 27 Ekim 2026'da yinelendi, Standartlar §1'deki
-  "solda liste, sağda imza" düzeni bu projede uygulanmaz; istisna standartta, 5.6): solda telif ("© 1998 Bumba Group · Şiirler © 2008'den itibaren Eylül Bitse, tüm hakları saklıdır."; İngilizcede "© 1998 Bumba Group · Poems © Eylül Bitse, since 2008. All rights reserved."; Standartlar 5.35 madde 1 ile şiirlerin hakkı birlikte, sahibinin kararı 25 Kasım 2026; bitiş yılı yazılmaz) ve
+  "solda liste, sağda imza" düzeni bu projede uygulanmaz; istisna standartta, 5.6): solda telif ("© 2008 Bumba Group · Şiirler © 2008'den itibaren Eylül Bitse, tüm hakları saklıdır."; İngilizcede "© 2008 Bumba Group · Poems © Eylül Bitse, since 2008. All rights reserved."; Bumba Group yılı `SITE.kurulus`, Standartlar 5.42 madde 1; şiirlerin hakkı birlikte, sahibinin kararı 25 Kasım 2026; bitiş yılı yazılmaz) ve
   altında küçük "Gizlilik" bağlantısı ile "Çerez tercihleri" düğmesi (§9, §14), ortada e-posta listesi (başlık, adres,
-  Katıl), sağda "App Store'dan indir" (yayına girince), Bumba Group'un sosyal hesapları (düz bağlantı, sitenin
+  "E-posta listesine katıl"), sağda "App Store'dan indir" (yayına girince), Bumba Group'un sosyal hesapları (düz bağlantı, sitenin
   renginde ikon; `src/data/sosyal.ts`, 22 Kasım 2026, pazarlama turu K20) ve Bumba Life rozeti (İngilizce sayfada
   `life-en.svg`, bağlantı `/en/life`, genişlik 170; Standartlar 5.27). Orta genişlikte iki satır, telefonda alt
   alta. Uygulamada liste yerine siteyi Safari'de açan bağlantı, çerez düğmesi yok. Görünür son güncelleme tarihi
   Hakkında'nın sonunda (derleme günü); makineler için JSON-LD `dateModified` ve llms.txt.
-- **E-posta listesi Katıl penceresi** (Standartlar §6): Katıl'a basınca pencere açılır, aydınlatma metni ortak
-  servisten (`/api/liste/aydinlatma?dil=`) yüklenir, "Tam metin" bağlantısı ve asıl "Kabul ediyorum" düğmesi
-  (metin yüklenene dek kapalı) orada. JavaScript yoksa formun altında işaretsiz rıza kutusu durur, form yine çalışır
-  (`ListeFormu.astro`).
+- **E-posta listesi formu** (Standartlar madde 6, 5.43): tek satır, yalnız katılım talebi. Yer tutucu "Gelişmelerden
+  haberdar olmak için", düğme "E-posta listesine katıl"; adres servisle aynı kalıpla denetlenir, istek cevap beklenmeden
+  gider ve alanın yerinde yeşil "Katılım talebiniz alındı" (10 saniye ya da tıklanana kadar; çok dar ekranda satırı
+  kaplar). Hata dönerse adres geri yazılır. Pencere, onay kutusu, aydınlatma bağlantısı yok; rıza ve bütün metinler
+  ortak servisin ilk e-postasında. `gizlilik` alanı sayfanın dilindeki gizlilik sayfası. Başlık ("Yeni şiir gelince
+  haber ver") sitenin kendi öğesi olarak kalır. JS'siz form `donus` adresine `#liste-tamam` ile döner (`ListeFormu.astro`).
 - **Çerez bandı** (Standartlar §14): ilk ziyarette altta Kabul et, Reddet, Tercihler (eşit). Umami "İstatistik"
   grubunda, yalnız izinle yüklenir; seçim `bumba-cerez` anahtarında (politika sürümü `src/data/cerez.ts`).
   Politika merkezde (bumbagroup.com/cerez-politikasi). Uygulamada bant yok (sayaç da yok). `CerezBandi.astro`.

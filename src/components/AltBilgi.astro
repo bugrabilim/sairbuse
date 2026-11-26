@@ -24,7 +24,7 @@ const rozet =
 <footer class="alt">
   <div class="alt-izgara">
     <div class="alt-sol">
-      <p>{m.telif(ilkYil, SITE.sair)}</p>
+      <p>{m.telif(SITE.kurulus, ilkYil, SITE.sair)}</p>
       <p class="alt-baglar">
         <a href={UYGULAMA ? `${SITE_KOK}${sayfaYolu('gizlilik', dil)}` : sayfaYolu('gizlilik', dil)}>{m.gizlilik}</a>
         {!UYGULAMA && <button class="cerez-ac" type="button">{m.cerez}</button>}
