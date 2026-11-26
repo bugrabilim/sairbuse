@@ -1,60 +1,88 @@
 ---
-// Sitenin alt bilgisi: masaüstünde tek satır. Solda telif (ilk şiirin yılından itibaren, bitiş yılı yok),
-// ortada e-posta listesi, sağda Bumba imzası (sahibinin kararı, standarda projeye özel istisna). Telifin altında
-// gizlilik bağlantısı ve çerez tercihleri (Standartlar §9, §14). Güncelleme tarihi Hakkında'da, JSON-LD ve llms.txt'de.
+// Sitenin alt bilgisi, bütün Bumba sitelerinde aynı iki satır (Standartlar madde 1, 5.44):
+// 1. satır: solda e-posta listesi, ortada Bumba Group'un sosyal hesapları, sağda Bumba Life rozeti.
+// 2. satır: solda telif, sağa yaslı hukuki metinler (standarttaki sırayla) ve "Çerez tercihleri".
+// Telefonda alt alta: liste, sosyal, rozet; sonra telif ve hukuki bağlantılar. Sitenin kendi öğesi
+// ("App Store'dan indir") iki satırın üstünde durur. Güncelleme tarihi Hakkında'da, JSON-LD ve llms.txt'de.
 import { SITE } from '../data/site';
 import ListeFormu from './ListeFormu.astro';
-import { tumSiirler } from '../lib/siirler';
 import { dilBul, metin, sayfaYolu } from '../i18n';
 import { MAGAZA_GORUNUR, SITE_KOK, UYGULAMA, appStoreAdresi } from '../data/uygulama';
 import { BUMBA_SOSYAL } from '../data/sosyal';
+import { cerezPolitikasi } from '../data/cerez';
 
 const dil = dilBul(Astro.url);
 const m = metin(dil).alt;
 const mu = metin(dil).uygulama;
-const tum = await tumSiirler();
-const ilkYil = tum.find((s) => s.data.tarih)?.data.tarih?.slice(0, 4) ?? String(new Date().getFullYear());
 // Bumba Life rozeti her dilde kendi dosyası, bağlantısı ve genişliğiyle (Standartlar madde 1)
 const rozet =
   dil === 'en'
     ? { href: 'https://bumbagroup.com/en/life', dosya: 'life-en', genislik: 170 }
     : { href: 'https://bumbagroup.com/life', dosya: 'life', genislik: 164 };
+// Hukuki bağlantılar, madde 1'deki sırayla; bu sitede geçerli olanlar: gizlilik, liste aydınlatma metni, çerez politikası
+const hukuk = [
+  { ad: m.gizlilik, href: UYGULAMA ? `${SITE_KOK}${sayfaYolu('gizlilik', dil)}` : sayfaYolu('gizlilik', dil) },
+  { ad: m.listeAydinlatma, href: dil === 'en' ? 'https://bumbagroup.com/liste/aydinlatma?dil=en' : 'https://bumbagroup.com/liste/aydinlatma' },
+  { ad: m.cerezPolitikasi, href: cerezPolitikasi(dil) },
+];
 ---
 
 <footer class="alt">
-  <div class="alt-izgara">
-    <div class="alt-sol">
-      <p>{m.telif(SITE.kurulus, ilkYil, SITE.sair)}</p>
-      <p class="alt-baglar">
-        <a href={UYGULAMA ? `${SITE_KOK}${sayfaYolu('gizlilik', dil)}` : sayfaYolu('gizlilik', dil)}>{m.gizlilik}</a>
-        {!UYGULAMA && <button class="cerez-ac" type="button">{m.cerez}</button>}
+  {/* App Store bağlantısı uygulama mağazada yayına girince görünür (src/data/uygulama.ts → APP_STORE) */}
+  {
+    MAGAZA_GORUNUR && (
+      <p class="alt-ust">
+        <a class="magaza" href={appStoreAdresi(dil)} rel="noopener">
+          {m.uygulama}
+        </a>
       </p>
-    </div>
-    <div class="alt-orta">
-      {/* Uygulamada liste formu yok: katılmak için site Safari'de açılır (rıza akışı tek yerde kalır) */}
+    )
+  }
+  <div class="alt-satir alt-bir">
+    <div class="alt-liste">
+      {/* Uygulamada liste formu yok: katılmak için site Safari'de açılır */}
       {UYGULAMA ? <a class="liste-site" href={`${SITE_KOK}${sayfaYolu('ana', dil)}#liste`}>{mu.listeyeKatil}</a> : <ListeFormu />}
     </div>
-    <div class="alt-sag">
-      {/* App Store bağlantısı uygulama mağazada yayına girince görünür (src/data/uygulama.ts → APP_STORE) */}
-      {MAGAZA_GORUNUR && <a class="magaza" href={appStoreAdresi(dil)} rel="noopener">{m.uygulama}</a>}
-      {/* Bumba Group'un sosyal hesapları: düz bağlantı, betik ya da piksel yok; ikonlar sitenin renginde */}
-      <ul class="sosyal" aria-label={m.sosyal}>
-        {
-          BUMBA_SOSYAL.map((h) => (
-            <li>
-              <a href={h.href} rel="noopener noreferrer" target="_blank" aria-label={`${h.ad}: Bumba Group`} title={h.ad}>
-                <svg viewBox={h.viewBox} width="16" height="16" aria-hidden="true" focusable="false" fill="currentColor" set:html={h.svg} />
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-      {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}
-      <a class="bumba-imza" href={rozet.href} rel="noopener" title={m.rozetBaslik}>
-        <img class="rozet-acik" src={`https://bumbagroup.com/rozet/${rozet.dosya}.svg`} width={rozet.genislik} height="28" alt={m.rozetAlt} loading="lazy" />
-        <img class="rozet-koyu" src={`https://bumbagroup.com/rozet/${rozet.dosya}-koyu.svg`} width={rozet.genislik} height="28" alt={m.rozetAlt} loading="lazy" />
-      </a>
-    </div>
+    {/* Bumba Group'un sosyal hesapları: düz bağlantı, betik ya da piksel yok; ikonlar sitenin renginde */}
+    <ul class="sosyal" aria-label={m.sosyal}>
+      {
+        BUMBA_SOSYAL.map((h) => (
+          <li>
+            <a href={h.href} rel="noopener noreferrer" target="_blank" aria-label={`${h.ad}: Bumba Group`} title={h.ad}>
+              <svg viewBox={h.viewBox} width="16" height="16" aria-hidden="true" focusable="false" fill="currentColor" set:html={h.svg} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    {/* Bumba Group imzası (https://bumbagroup.com/marka). Sitenin temasını izler: gece temasında koyu rozet */}
+    <a class="bumba-imza" href={rozet.href} rel="noopener" title={m.rozetBaslik}>
+      <img class="rozet-acik" src={`https://bumbagroup.com/rozet/${rozet.dosya}.svg`} width={rozet.genislik} height="28" alt={m.rozetAlt} loading="lazy" />
+      <img class="rozet-koyu" src={`https://bumbagroup.com/rozet/${rozet.dosya}-koyu.svg`} width={rozet.genislik} height="28" alt={m.rozetAlt} loading="lazy" />
+    </a>
+  </div>
+  <div class="alt-satir alt-iki">
+    <p class="telif">{m.telif(SITE.kurulus)}</p>
+    <ul class="hukuk" aria-label={m.hukuk}>
+      {
+        hukuk.map((h) => (
+          <li>
+            <a href={h.href} rel={h.href.startsWith('http') ? 'noopener' : undefined}>
+              {h.ad}
+            </a>
+          </li>
+        ))
+      }
+      {
+        !UYGULAMA && (
+          <li>
+            <button class="cerez-ac" type="button">
+              {m.cerez}
+            </button>
+          </li>
+        )
+      }
+    </ul>
   </div>
 </footer>
 
@@ -66,27 +94,51 @@ const rozet =
     color: var(--soluk);
     font-size: 0.85rem;
   }
-  /* Tek satır: solda telif, ortada e-posta listesi, sağda imza; yan sütunlar eşit, liste ortada durur */
-  .alt-izgara {
+  .alt-ust,
+  .alt-satir {
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+  .alt-ust {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+  /* 1. satır: liste solda, sosyal ortada, rozet sağda; yan sütunlar eşit, sosyal tam ortada */
+  .alt-bir {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     gap: 1rem 2rem;
     align-items: center;
-    max-width: 80rem;
-    margin: 0 auto;
   }
-  .alt-sol p {
-    margin: 0;
-    text-wrap: balance;
+  .alt-liste {
+    min-width: 0;
   }
-  .alt-baglar {
-    margin-top: 0.35rem !important;
+  .bumba-imza {
+    justify-self: end;
+  }
+  /* 2. satır: telif solda, hukuki bağlantılar sağa yaslı */
+  .alt-iki {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem 1rem;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--cizgi);
   }
-  .alt-baglar a {
-    color: var(--soluk);
+  .telif {
+    margin: 0;
+  }
+  .hukuk {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.3rem 1.1rem;
+    margin: 0 0 0 auto;
+    padding: 0;
+    list-style: none;
   }
   .cerez-ac {
     font: inherit;
@@ -97,17 +149,8 @@ const rozet =
     text-decoration: underline;
     cursor: pointer;
   }
-  .alt-baglar a:hover,
   .cerez-ac:hover {
     color: var(--yazi);
-  }
-  .alt-sag {
-    justify-self: end;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.6rem 1.25rem;
   }
   .magaza {
     text-decoration: none;
@@ -128,6 +171,7 @@ const rozet =
   .sosyal {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.15rem;
     margin: 0;
     padding: 0;
@@ -155,24 +199,37 @@ const rozet =
   :global([data-theme='gunduz']) .rozet-koyu {
     display: none;
   }
-  /* Orta genişlikte iki satır: üstte liste, altta telif ve imza */
+  /* Orta genişlikte liste üstte tam satır; altında sosyal solda, rozet sağda */
   @media (max-width: 72rem) {
-    .alt-izgara {
+    .alt-bir {
       grid-template-columns: minmax(0, 1fr) auto;
     }
-    .alt-orta {
+    .alt-liste {
       grid-column: 1 / -1;
-      order: -1;
+    }
+    .sosyal {
+      justify-content: flex-start;
+      margin-left: -0.45rem;
     }
   }
-  /* Telefonda alt alta: önce liste, sonra telif, en sonda imza */
+  /* Telefonda alt alta: liste, sosyal, rozet; sonra telif ve hukuki bağlantılar */
   @media (max-width: 40rem) {
-    .alt-izgara {
+    .alt-ust {
+      justify-content: flex-start;
+    }
+    .alt-bir {
       grid-template-columns: 1fr;
     }
-    .alt-sag {
+    .bumba-imza {
       justify-self: start;
+    }
+    .alt-iki {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .hukuk {
       justify-content: flex-start;
+      margin-left: 0;
     }
   }
 </style>

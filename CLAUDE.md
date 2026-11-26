@@ -23,7 +23,7 @@ Bu proje Bumba Genel Standartlar'a tabidir. Metin tek yerde durur: https://bumba
 (düz metin). Kademeli oku ("Sürüm kuralı"): oturum başında başlık ve bölüm başlıkları, sürüm değiştiyse
 "Sürüm notları", işin dokunduğu bölüm işten önce, emin değilsen tamamı. Metni bu dosyaya kopyalama.
 Okunamazsa uydurma, sahibine bildir.
-Uygulanan sürüm: 5.43 (25 Kasım 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
+Uygulanan sürüm: 5.44 (26 Kasım 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
 Sunucuya basmanın (izlenen dala birleştirme ya da push, Coolify yayını) zamanı her seferinde sahibine sorulur.
 Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce plan (sayı, her ajanın işi, model, efor, süre,
 kullanım) sahibine mesajda gösterilir, sonra ayrı bir soruyla sorulur, açık onay beklenir; cevapsız soru onay
@@ -62,16 +62,17 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
 - Ana sayfada "Yazıldıkları yerler" ve "ya da niyet tut" satırı yok; duygu şeritleri dar (72rem) kalır.
 - Ana sayfa vitrininin (hero) tamamı tıklanır ve o mısranın şiirine gider (18 Ekim 2026; sitede ve uygulamada).
   Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
-- **Alt bilgi masaüstünde tek satır** (sahibinin kararı, 12 Ekim 2026; 27 Ekim 2026'da yinelendi, Standartlar §1'deki
-  "solda liste, sağda imza" düzeni bu projede uygulanmaz; istisna standartta, 5.6): solda telif ("© 2008 Bumba Group · Şiirler © 2008'den itibaren Eylül Bitse, tüm hakları saklıdır."; İngilizcede "© 2008 Bumba Group · Poems © Eylül Bitse, since 2008. All rights reserved."; Bumba Group yılı `SITE.kurulus`, Standartlar 5.42 madde 1; şiirlerin hakkı birlikte, sahibinin kararı 25 Kasım 2026; bitiş yılı yazılmaz) ve
-  altında küçük "Gizlilik" bağlantısı ile "Çerez tercihleri" düğmesi (§9, §14), ortada e-posta listesi (başlık, adres,
-  "E-posta listesine katıl"), sağda "App Store'dan indir" (yayına girince), Bumba Group'un sosyal hesapları (düz bağlantı, sitenin
-  renginde ikon; `src/data/sosyal.ts`, 22 Kasım 2026, pazarlama turu K20) ve Bumba Life rozeti (İngilizce sayfada
-  `life-en.svg`, bağlantı `/en/life`, genişlik 170; Standartlar 5.27). Orta genişlikte iki satır, telefonda alt
-  alta. Uygulamada liste yerine siteyi Safari'de açan bağlantı, çerez düğmesi yok. Görünür son güncelleme tarihi
-  Hakkında'nın sonunda (derleme günü); makineler için JSON-LD `dateModified` ve llms.txt.
-- **E-posta listesi formu** (Standartlar madde 6, 5.43): tek satır, yalnız katılım talebi. Yer tutucu "Gelişmelerden
-  haberdar olmak için", düğme "E-posta listesine katıl"; adres servisle aynı kalıpla denetlenir, istek cevap beklenmeden
+- **Alt bilgi iki satır** (Standartlar madde 1, 5.44; Ekim'deki tek satırlık istisna kalktı): 1. satırda solda
+  e-posta listesi (başlık "Yeni şiir gelince haber ver", alan, "Katıl"), ortada Bumba Group'un sekiz hesabı (LinkedIn,
+  YouTube, Instagram, Facebook, X, TikTok, Pinterest, Reddit; düz bağlantı, sitenin renginde ikon; `src/data/sosyal.ts`),
+  sağda Bumba Life rozeti (İngilizce sayfada `life-en.svg`, bağlantı `/en/life`, genişlik 170). 2. satırda solda telif
+  ("© 2008 Duyguların Peşinde. Tüm hakları saklıdır." / "All rights reserved."; yıl `SITE.kurulus`), sağa yaslı
+  Gizlilik Politikası, E-posta Listesi Aydınlatma Metni, Çerez Politikası ve "Çerez tercihleri" düğmesi. Sitenin
+  kendi öğesi "App Store'dan indir" iki satırın üstünde. Telefonda alt alta. Uygulamada liste yerine siteyi Safari'de
+  açan bağlantı, çerez düğmesi yok. Görünür son güncelleme tarihi Hakkında'nın sonunda (derleme günü); makineler için
+  JSON-LD `dateModified` ve llms.txt.
+- **E-posta listesi formu** (Standartlar madde 6, 5.43; metinler 5.44): tek satır, yalnız katılım talebi. Yer tutucu
+  "E-posta listesine katılın" / "Join our mailing list", düğme "Katıl" / "Join"; adres servisle aynı kalıpla denetlenir, istek cevap beklenmeden
   gider ve alanın yerinde yeşil "Katılım talebiniz alındı" (10 saniye ya da tıklanana kadar; çok dar ekranda satırı
   kaplar). Hata dönerse adres geri yazılır. Pencere, onay kutusu, aydınlatma bağlantısı yok; rıza ve bütün metinler
   ortak servisin ilk e-postasında. `gizlilik` alanı sayfanın dilindeki gizlilik sayfası. Başlık ("Yeni şiir gelince
