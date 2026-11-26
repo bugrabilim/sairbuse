@@ -1,6 +1,7 @@
 // Sayfaların JSON-LD yapılandırılmış verisi (Bumba Genel Standartlar §2). Her sayfada kuruluş, site ve şair;
 // sayfa türüne göre ek olarak şiir (CreativeWork), koleksiyon, kırıntı yolu ve sık sorulanlar.
 import { SITE } from '../data/site';
+import { BUMBA_SOSYAL } from '../data/sosyal';
 import { metin, sayfaYolu, type Dil } from '../i18n';
 import { ad, ilkMisra, siirYolu, yerGrubu, type Siir } from './siirler';
 import { yerAdi } from '../i18n';
@@ -20,7 +21,14 @@ export function ortakSema(dil: Dil): Sema[] {
       url: tam(sayfaYolu('ana', dil)),
       logo: tam('/icon-512.png'),
       email: 'bilgi@bumbagroup.com',
-      parentOrganization: { '@type': 'Organization', name: 'Bumba Group', url: 'https://bumbagroup.com' },
+      foundingDate: SITE.kurulus,
+      // Ürünün kendi sosyal hesabı yok; çatı markanın hesapları altbilgidekiyle aynı (GEO: marka bilgileri her yerde aynı)
+      parentOrganization: {
+        '@type': 'Organization',
+        name: 'Bumba Group',
+        url: 'https://bumbagroup.com',
+        sameAs: BUMBA_SOSYAL.map((h) => h.href),
+      },
     },
     {
       '@type': 'WebSite',

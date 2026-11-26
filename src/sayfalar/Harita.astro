@@ -1,5 +1,6 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import { SITE } from '../data/site';
 import SiirListesi from '../components/SiirListesi.astro';
 import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import harita from '../data/harita.json';
@@ -57,7 +58,7 @@ const ARA = 16; // aynı yerdeki noktalar arası
 ---
 
 <Temel baslik={m.baslik} aciklama={m.aciklama} sahne kirinti={[{ ad: metin(dil).sayfaAdlari.harita, yol: sayfaYolu('harita', dil) }]}>
-  <SayfaSahnesi foto="sayfa-harita" etiket={m.etiket(haritadakiler.length, istanbulSiirleri)} baslik={m.baslik}>
+  <SayfaSahnesi foto="sayfa-harita" etiket={m.etiket(haritadakiler.length, istanbulSiirleri)} baslik={m.baslik} paylas={{ baslik: `${m.baslik} · ${SITE.ad}`, aciklama: m.aciklama }}>
     {m.giris}
   </SayfaSahnesi>
   <section class="sayfa">

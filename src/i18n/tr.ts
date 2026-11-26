@@ -35,11 +35,13 @@ export const tr = {
     ozet: (n: number) => `${n} şiir; duygu, yer ve zaman üzerinden okunmak için.`,
     ilkSiir: 'İlk şiir:',
     // Telif ilk şiirin yılından başlar; bitiş yılı yazılmaz
-    telif: (yil: string, sair: string) => `© ${yildan(yil)} itibaren ${sair}. Şiirlerin tüm hakları saklıdır.`,
+    // Standartlar madde 1 (5.42: "© <kuruluş yılı> Bumba Group") ve şiirlerin hakkı şairde (sahibinin kararı, 25 Kasım 2026)
+    telif: (kurulus: string, yil: string, sair: string) => `© ${kurulus} Bumba Group · Şiirler © ${yildan(yil)} itibaren ${sair}, tüm hakları saklıdır.`,
     haklar: 'Haklar',
     gizlilik: 'Gizlilik',
     rozetBaslik: 'Bumba Life, bir Bumba Group kolu',
     rozetAlt: 'Bir Bumba Life ürünü',
+    sosyal: 'Bumba Group sosyal medyada',
     uygulama: "App Store'dan indir",
     cerez: 'Çerez tercihleri',
   },
@@ -105,10 +107,10 @@ export const tr = {
   },
   paylas: {
     paylas: 'Paylaş',
+    menu: 'Paylaşım seçenekleri',
     link: 'Bağlantıyı kopyala',
-    kopyalandi: 'Bağlantı kopyalandı.',
-    instagramKisa: 'Bağlantı kopyalanır, Instagram’da yapıştırırsın',
-    instagramNot: 'Bağlantı kopyalandı; Instagram’da hikâyene ya da mesajına yapıştırabilirsin. Hikâye için mısra kartı da hazırlayabilirsin.',
+    eposta: 'E-posta',
+    kopyalandi: 'Kopyalandı',
   },
   kart: {
     baslik: 'Mısra kartı',
@@ -205,6 +207,7 @@ export const tr = {
   hakkinda: {
     baslik: 'Hakkında',
     // Sitenin son güncellemesi (derleme günü); GEO için içerikte görünür (Standartlar §2)
+    kurulus: (y: string) => `Kuruluş: ${y}`,
     guncelleme: (t: string) => `Son güncelleme: ${t}`,
     aciklama: 'Eylül Bitse imzalı, basılamamış bir şiir kitabının sitesi: kim yazdı, renkler nereden geliyor, fotoğraflar ve haklar.',
     giris1:
@@ -227,6 +230,7 @@ export const tr = {
       'Bu sitedeki bütün şiirlerin ve metinlerin tüm hakları saklıdır. İzinsiz çoğaltılamaz, kopyalanıp başka bir yerde yayımlanamaz. Bir şiiri sevdiysen bağlantısını paylaşabilirsin.',
     fotoHaklar: 'Fotoğraflar bu kapsamda değil; her biri “Fotoğraflar ve künyeleri” penceresinde adı geçen fotoğrafçıya ait ve kendi lisansıyla kullanılıyor.',
     sesHaklar: 'Ortam sesleri de bu kapsamda değil. Hepsi gerçek saha kaydı: Hollanda Ses ve Görüntü Enstitüsü’nün (Beeld en Geluid) arşivinden, Wikimedia Commons’ta CC BY-SA 3.0 ile paylaşılmış. Sitede kesilip ses düzeyleri eşitlendi. Fon müzikleri bu site için makamlarına göre üretildi; çalgı sesleri FluidR3_GM ses kütüphanesinden (MIT lisanslı).',
+    yaziHaklar: 'Yazı tipleri: başlıklarda Cormorant Garamond, logoda Fraunces, şiirlerde Newsreader, etiketlerde Inter. Hepsi sitenin kendi sunucusundan yükleniyor ve SIL Open Font License 1.1 ile kullanılıyor:',
     sssBaslik: 'Sık sorulanlar',
     sss: [
       {
@@ -280,37 +284,24 @@ export const tr = {
     listeyeKatil: 'E-posta listesine sitede katılın ↗',
   },
   liste: {
+    // Standartlar 5.43, madde 6: form yalnız katılım talebi; rıza ve bilgilendirme ilk e-postada
     baslik: 'Yeni şiir gelince haber ver',
-    eposta: 'E-posta adresiniz',
-    // Katıl'a basınca açılan pencere: ortak aydınlatma metni bumbagroup.com'dan gelir; rıza "Kabul ediyorum"la
-    yukleniyor: 'Aydınlatma metni yükleniyor…',
-    yuklenemedi: 'Metin yüklenemedi. Tam metni aşağıdaki bağlantıdan okuyabilirsiniz.',
-    tamMetin: 'Tam metin',
-    kabul: 'Kabul ediyorum',
-    vazgec: 'Vazgeç',
-    // JavaScript yoksa pencere açılamaz; onay kutusu formda görünür
-    riza: '{aydinlatma} okudum, kabul ediyorum.',
-    aydinlatma: 'Aydınlatma metnini',
-    katil: 'Katıl',
-    gonderiliyor: 'Gönderiliyor…',
-    tamam: 'Onay e-postası gönderdik; gelen kutunuzdaki bağlantıya tıklayınca listeye katılmış olursunuz.',
-    hatalar: {
-      'gecersiz-eposta': 'Bu e-posta adresi geçerli görünmüyor.',
-      'riza-yok': 'Katılmak için aydınlatma metnini onaylamanız gerekiyor.',
-      'cok-fazla-istek': 'Çok fazla deneme oldu. Biraz sonra tekrar deneyin.',
-      'gonderim-kapali': 'Liste şu an kayıt almıyor. Biraz sonra tekrar deneyin.',
-      hata: 'Bir şeyler ters gitti. Biraz sonra tekrar deneyin.',
-    } as Record<string, string>,
+    etiket: 'E-posta listesi',
+    yerTutucu: 'Gelişmelerden haberdar olmak için',
+    katil: 'E-posta listesine katıl',
+    tamam: 'Katılım talebiniz alındı',
+    gecersiz: 'Geçerli bir e-posta adresi yazın.',
+    gonderilemedi: 'Gönderilemedi, biraz sonra tekrar deneyin.',
   },
   gizlilik: {
     baslik: 'Gizlilik ve çerezler',
     aciklama: 'Duyguların Peşinde hangi verileri işler, hangilerini işlemez: istatistik, e-posta listesi, çerezler ve haklarınız.',
     etiket: 'KVKK aydınlatma metni',
-    guncelleme: 'Son güncelleme: 27 Ekim 2026',
+    guncelleme: 'Son güncelleme: 26 Kasım 2026',
     bolumler: [
       {
         baslik: 'Veri sorumlusu',
-        metin: 'Bu sitenin veri sorumlusu Bumba Teknoloji Limited Şirketi’dir (Ataşehir / İstanbul). Sorularınız ve KVKK kapsamındaki başvurularınız için: {eposta}.',
+        metin: 'Bu sitenin veri sorumlusu Bumba Teknoloji Limited Şirketi’dir: Quick Tower, E-5 Yanyolu, Umut Sk. D:10-12, 34752 İçerenköy-Ataşehir/İstanbul; telefon +90 546 237 13 55. Sorularınız ve KVKK kapsamındaki başvurularınız için: {eposta}.',
       },
       {
         baslik: 'Kısaca',
@@ -322,7 +313,7 @@ export const tr = {
       },
       {
         baslik: 'E-posta listesi',
-        metin: 'Sayfaların altındaki formla yeni şiirlerden haberdar olmak için e-posta adresinizi bırakabilirsiniz. Bu liste Bumba Group’un ortak liste servisiyle yönetilir: “Katıl”a basınca açılan pencerede aydınlatma metnini okuyup “Kabul ediyorum” derseniz adresiniz gönderilir ve ancak gelen onay e-postasındaki bağlantıya tıklarsanız listeye eklenir; her e-postadaki bağlantıyla tek tıkla çıkabilirsiniz. Ayrıntılar: {liste}.',
+        metin: 'Sayfaların altındaki formla yeni şiirlerden haberdar olmak için e-posta adresinizi bırakabilirsiniz. Bu liste Bumba Group’un ortak liste servisiyle yönetilir. “E-posta listesine katıl”a basınca yalnız katılım talebiniz gider; size gelen ilk e-postada onay bağlantısı ve bütün bilgilendirme metinleri (liste aydınlatma metni, bu gizlilik metni, çerez politikası, listeden çıkış) bulunur. Adresiniz ancak o bağlantıya tıklarsanız listeye eklenir; onaylanmayan talep 7 gün sonra silinir. Her e-postadaki bağlantıyla tek tıkla çıkabilirsiniz. Ayrıntılar: {liste}.',
       },
       {
         baslik: 'Teknik kayıtlar',
@@ -338,7 +329,7 @@ export const tr = {
       },
       {
         baslik: 'Dışarıdan gelen içerik',
-        metin: 'Yazı tipleri ve fotoğraflar sitenin kendi sunucusundan gelir. Alt bilgideki Bumba rozeti ve e-posta listesinin aydınlatma metni bumbagroup.com’dan yüklenir; bu sırada tarayıcınız o sunucuya bağlanır.',
+        metin: 'Yazı tipleri ve fotoğraflar sitenin kendi sunucusundan gelir. Alt bilgideki Bumba rozeti bumbagroup.com’dan yüklenir; e-posta listesi formu da adresinizi oraya gönderir. Bu sırada tarayıcınız o sunucuya bağlanır.',
       },
       {
         baslik: 'Telefon uygulaması',

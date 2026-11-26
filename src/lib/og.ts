@@ -21,7 +21,8 @@ const W = 1200;
 const H = 630;
 const YAZI = '#f1eadf';
 const SOLUK = '#c9c0b2';
-const FRAUNCES = 'Fraunces, Fraunces Ext';
+const FRAUNCES = 'Fraunces, Fraunces Ext'; // yalnız logo yazısı
+const CORMORANT = 'Cormorant, Cormorant Ext'; // başlıklar (sahibinin kararı, 24 Kasım 2026)
 const INTER = 'Inter, Inter Ext';
 
 async function yaziTipi(paket: string, dosya: string) {
@@ -30,14 +31,15 @@ async function yaziTipi(paket: string, dosya: string) {
 
 let onbellek: Awaited<ReturnType<typeof yaziTipleriniYukle>> | undefined;
 async function yaziTipleriniYukle() {
-  const liste: { name: string; file: [string, string]; weight: 300 | 600; style: 'normal' | 'italic' }[] = [];
+  const liste: { name: string; file: [string, string]; weight: 300 | 400 | 600; style: 'normal' | 'italic' }[] = [];
   // Türkçe harfler (ş, ğ, İ) latin-ext alt kümesinde; satori aynı adlı dosyalar arasında geçiş yapmadığı
   // için alt kümeler ayrı adlarla yüklenip font-family listesinde yedek olarak verilir.
   for (const [alt, ek] of [['latin', ''], ['latin-ext', ' Ext']]) {
     liste.push(
-      { name: `Fraunces${ek}`, file: ['fraunces', `fraunces-${alt}-300-italic.woff`], weight: 300, style: 'italic' },
       { name: `Fraunces${ek}`, file: ['fraunces', `fraunces-${alt}-300-normal.woff`], weight: 300, style: 'normal' },
       { name: `Inter${ek}`, file: ['inter', `inter-${alt}-600-normal.woff`], weight: 600, style: 'normal' },
+      { name: `Cormorant${ek}`, file: ['cormorant-garamond', `cormorant-garamond-${alt}-400-normal.woff`], weight: 400, style: 'normal' },
+      { name: `Cormorant${ek}`, file: ['cormorant-garamond', `cormorant-garamond-${alt}-400-italic.woff`], weight: 400, style: 'italic' },
     );
   }
   return Promise.all(
@@ -166,8 +168,8 @@ export async function siirGorseli(s: Siir, dil: Dil = 'tr'): Promise<Uint8Array>
             'div',
             {
               display: 'flex',
-              fontFamily: FRAUNCES,
-              fontWeight: 300,
+              fontFamily: CORMORANT,
+              fontWeight: 400,
               fontStyle: b.tur === 'ilk' ? 'italic' : 'normal',
               fontSize: baslikBoyu,
               lineHeight: 1,
@@ -176,7 +178,7 @@ export async function siirGorseli(s: Siir, dil: Dil = 'tr'): Promise<Uint8Array>
             b.baslik,
           ),
           ...(b.alt
-            ? [h('div', { display: 'flex', fontFamily: FRAUNCES, fontStyle: 'italic', fontSize: 30, color: SOLUK, marginTop: 14 }, b.alt)]
+            ? [h('div', { display: 'flex', fontFamily: CORMORANT, fontStyle: 'italic', fontSize: 30, color: SOLUK, marginTop: 14 }, b.alt)]
             : []),
           h(
             'div',
@@ -184,14 +186,14 @@ export async function siirGorseli(s: Siir, dil: Dil = 'tr'): Promise<Uint8Array>
             misralar.map((m, i) =>
               h(
                 'div',
-                { display: 'flex', fontFamily: FRAUNCES, fontStyle: 'italic', fontSize: 36, lineHeight: 1.25 },
+                { display: 'flex', fontFamily: CORMORANT, fontStyle: 'italic', fontSize: 36, lineHeight: 1.25 },
                 devami && i === misralar.length - 1 ? `${m} …` : m,
               ),
             ),
           ),
         ]),
         h('div', { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }, [
-          h('div', { display: 'flex', fontFamily: FRAUNCES, fontStyle: 'italic', fontSize: 30, color: SOLUK }, `— ${SITE.sair}`),
+          h('div', { display: 'flex', fontFamily: CORMORANT, fontStyle: 'italic', fontSize: 30, color: SOLUK }, `— ${SITE.sair}`),
           // Fotoğrafın künyesi (CC lisansları fotoğrafçının adını istiyor)
           ...(foto ? [h('div', { display: 'flex', fontFamily: INTER, fontWeight: 600, fontSize: 14, color: SOLUK }, `${kunye(foto, dil)} · Wikimedia Commons`)] : []),
         ]),
@@ -226,7 +228,7 @@ export async function siteGorseli(acilis?: Siir, dil: Dil = 'tr'): Promise<Uint8
           h('div', { display: 'flex', marginTop: 4 }, [logoSatiri('Peş', 'nde', 112, '#ebcb52', -0.015)]),
           h(
             'div',
-            { display: 'flex', fontFamily: FRAUNCES, fontStyle: 'italic', fontSize: 36, color: SOLUK, marginTop: 22 },
+            { display: 'flex', fontFamily: CORMORANT, fontStyle: 'italic', fontSize: 36, color: SOLUK, marginTop: 22 },
             'Şiir kitabım ağlıyor!',
           ),
         ]),

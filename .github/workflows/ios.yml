@@ -2,17 +2,8 @@ name: iOS
 
 # iOS uygulamasının derlendiğini denetler: site uygulama kipinde derlenir, iOS projesine kopyalanır ve
 # simülatör için imzasız derlenir; sonra simülatörde açılıp ekran görüntüsü alınır (indirilebilir çıktı).
+# Mobil derleme yalnız elle başlar, her çalıştırma sahibine sorulur (Standartlar 5.35, "Mobil yayın").
 on:
-  pull_request:
-    paths:
-      - 'src/**'
-      - 'public/**'
-      - 'uygulama/**'
-      - 'capacitor.config.ts'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'scripts/uygulama/**'
-      - '.github/workflows/ios.yml'
   workflow_dispatch:
 
 jobs:

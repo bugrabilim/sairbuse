@@ -1,4 +1,6 @@
 export const SITE = {
+  // Kuruluş yılı (sahibinin kararı, 22 Kasım 2026): Hakkında, JSON-LD foundingDate ve llms.txt
+  kurulus: '2008',
   /** Yönlendirme yapılmayan asıl adres (canonical, sitemap, Umami data-domains) */
   alan: 'duygularinpesinde.bumba.tr',
   /** istatistik.bumba.tr'deki site kimliği (Bumba Genel Standartlar §9) */

@@ -1,0 +1,192 @@
+{
+  "id": "duygularin-pesinde",
+  "ad": {
+    "tr": "Duyguların Peşinde",
+    "en": "Duyguların Peşinde",
+    "logoda": "Duyguların Peşinde (Peşinde'nin i'sinin noktası bir gözyaşı damlası)",
+    "yanlis": [
+      "Duygularin Pesinde",
+      "Duyguların peşinde",
+      "DUYGULARIN PEŞİNDE"
+    ]
+  },
+  "renkler": [
+    {
+      "ad": "Zemin",
+      "rol": {
+        "tr": "sayfa zemini (açık: gündüz teması, koyu: gece teması, varsayılan)",
+        "en": "page background (light: day theme; dark: night theme, the default)"
+      },
+      "acik": "#f3eee5",
+      "koyu": "#0d0c0b",
+      "css": "--zemin"
+    },
+    {
+      "ad": "Mürekkep",
+      "rol": {
+        "tr": "metin ve logo yazısı (karşıtlık açıkta 15.3:1, koyuda 16.4:1)",
+        "en": "text and logo lettering (contrast 15.3:1 on light, 16.4:1 on dark)"
+      },
+      "acik": "#1c1815",
+      "koyu": "#f1eadf",
+      "css": "--yazi"
+    },
+    {
+      "ad": "Soluk",
+      "rol": {
+        "tr": "ikincil metin (5.5:1, 7.2:1)",
+        "en": "secondary text (5.5:1, 7.2:1)"
+      },
+      "acik": "#675e54",
+      "koyu": "#a49c90",
+      "css": "--soluk"
+    },
+    {
+      "ad": "Damla (hüznün sarısı)",
+      "rol": {
+        "tr": "logodaki damla ve sekme simgesi; duygusuz sayfalarda (5.6:1, 12.3:1)",
+        "en": "the teardrop in the logo and the tab icon; on pages without an emotion (5.6:1, 12.3:1)"
+      },
+      "acik": "#735c00",
+      "koyu": "#ebcb52",
+      "css": "--damla"
+    },
+    {
+      "ad": "Aşk (pembe)",
+      "rol": {
+        "tr": "duygu rengi: o duygunun sayfasında vurgu ve damla, metin olarak da kullanılır; duygu sayfasında değeri --d-gunduz / --d-gece'den gelir",
+        "en": "emotion colour: accent and teardrop on that emotion's pages, also used as text; on the emotion's page its value comes from --d-gunduz / --d-gece"
+      },
+      "acik": "#a3335f",
+      "koyu": "#e891b2",
+      "css": "--vurgu"
+    },
+    {
+      "ad": "Özlem (kayısı)",
+      "rol": {
+        "tr": "duygu rengi: o duygunun sayfasında vurgu ve damla, metin olarak da kullanılır; duygu sayfasında değeri --d-gunduz / --d-gece'den gelir",
+        "en": "emotion colour: accent and teardrop on that emotion's pages, also used as text; on the emotion's page its value comes from --d-gunduz / --d-gece"
+      },
+      "acik": "#9a5114",
+      "koyu": "#f2a766",
+      "css": "--vurgu"
+    },
+    {
+      "ad": "Hüzün (sarı)",
+      "rol": {
+        "tr": "duygu rengi: o duygunun sayfasında vurgu ve damla, metin olarak da kullanılır; duygu sayfasında değeri --d-gunduz / --d-gece'den gelir",
+        "en": "emotion colour: accent and teardrop on that emotion's pages, also used as text; on the emotion's page its value comes from --d-gunduz / --d-gece"
+      },
+      "acik": "#735c00",
+      "koyu": "#ebcb52",
+      "css": "--vurgu"
+    },
+    {
+      "ad": "Yalnızlık (gri)",
+      "rol": {
+        "tr": "duygu rengi: o duygunun sayfasında vurgu ve damla, metin olarak da kullanılır; duygu sayfasında değeri --d-gunduz / --d-gece'den gelir",
+        "en": "emotion colour: accent and teardrop on that emotion's pages, also used as text; on the emotion's page its value comes from --d-gunduz / --d-gece"
+      },
+      "acik": "#545a61",
+      "koyu": "#aab0b7",
+      "css": "--vurgu"
+    },
+    {
+      "ad": "Ayrılık (siyah)",
+      "rol": {
+        "tr": "duygu rengi: o duygunun sayfasında vurgu ve damla, metin olarak da kullanılır; duygu sayfasında değeri --d-gunduz / --d-gece'den gelir",
+        "en": "emotion colour: accent and teardrop on that emotion's pages, also used as text; on the emotion's page its value comes from --d-gunduz / --d-gece"
+      },
+      "acik": "#1a1714",
+      "koyu": "#d8d2c8",
+      "css": "--vurgu"
+    },
+    {
+      "ad": "Karanlık (mor)",
+      "rol": {
+        "tr": "duygu rengi: o duygunun sayfasında vurgu ve damla, metin olarak da kullanılır; duygu sayfasında değeri --d-gunduz / --d-gece'den gelir",
+        "en": "emotion colour: accent and teardrop on that emotion's pages, also used as text; on the emotion's page its value comes from --d-gunduz / --d-gece"
+      },
+      "acik": "#61359a",
+      "koyu": "#b991ea",
+      "css": "--vurgu"
+    },
+    {
+      "ad": "Özgürlük (turuncu)",
+      "rol": {
+        "tr": "duygu rengi: o duygunun sayfasında vurgu ve damla, metin olarak da kullanılır; duygu sayfasında değeri --d-gunduz / --d-gece'den gelir",
+        "en": "emotion colour: accent and teardrop on that emotion's pages, also used as text; on the emotion's page its value comes from --d-gunduz / --d-gece"
+      },
+      "acik": "#a6430c",
+      "koyu": "#f4874f",
+      "css": "--vurgu"
+    }
+  ],
+  "yaziTipleri": [
+    {
+      "ad": "Cormorant Garamond",
+      "rol": {
+        "tr": "başlıklar (sahibinin kararı, 24 Kasım 2026)",
+        "en": "headings"
+      },
+      "agirliklar": [
+        400,
+        500
+      ],
+      "lisans": "SIL Open Font License 1.1",
+      "kaynak": "https://fonts.google.com/specimen/Cormorant+Garamond"
+    },
+    {
+      "ad": "Fraunces",
+      "rol": {
+        "tr": "logo yazısı",
+        "en": "logo lettering"
+      },
+      "agirliklar": [
+        300
+      ],
+      "lisans": "SIL Open Font License 1.1",
+      "kaynak": "https://fonts.google.com/specimen/Fraunces"
+    },
+    {
+      "ad": "Newsreader",
+      "rol": {
+        "tr": "şiirler ve metin",
+        "en": "poems and body text"
+      },
+      "agirliklar": [
+        400
+      ],
+      "lisans": "SIL Open Font License 1.1",
+      "kaynak": "https://fonts.google.com/specimen/Newsreader"
+    },
+    {
+      "ad": "Inter",
+      "rol": {
+        "tr": "küçük etiketler (büyük harf, aralıklı)",
+        "en": "small labels (capitals, letter-spaced)"
+      },
+      "agirliklar": [
+        500,
+        600
+      ],
+      "lisans": "SIL Open Font License 1.1",
+      "kaynak": "https://fonts.google.com/specimen/Inter"
+    }
+  ],
+  "kullanim": {
+    "bosluk": {
+      "tr": "Sitede tanımlı bir boşluk kuralı yok.",
+      "en": "The site defines no clear-space rule."
+    },
+    "enKucuk": {
+      "tr": "Sitede tanımlı bir en küçük boyut yok; logo telefonda 1.3 rem (yaklaşık 21 px) yazılır. Sekme ve uygulama simgesinde yalnız damla kullanılır.",
+      "en": "The site defines no minimum size; on phones the logo is set at 1.3 rem (about 21 px). The tab and app icons use the teardrop alone."
+    }
+  },
+  "notlar": {
+    "tr": "Logo yazıdır: Fraunces 300, sitedeki yazının satori ile yola çevrilmiş hâli; Peşinde'nin i'sinin noktası yerine damla (src/data/logo.ts). Yeniden çizilmedi. Açık zemin sürümünde yazı mürekkep, damla #735c00; koyu zemin sürümünde yazı #f1eadf, damla #ebcb52. Sitede damla sayfanın duygusunun renginde olur, kitte varsayılan sarı. logo-dikey sitenin paylaşım görselindeki iki satırlı hâl. İşaret tek başına damla: koyu karede sarı damla (sitenin favicon.svg'si); kendisi koyu bir kare olduğu için ayrı isaret-koyu.svg yok. ikon.svg favicon.svg, ikon-512.png sitenin icon-512.png'si, ikon-180.png apple-touch-icon.png. paylasim.png ve paylasim-en.png sitenin og/site.jpg ve og/en/site.jpg görselleri (PNG'ye çevrildi; fotoğraf Wikimedia Commons, künyesi görselin üstünde). Üretim: npm run build && node scripts/marka.mjs.",
+    "en": "The logo is a wordmark: Fraunces 300, the site's own lettering converted to paths with satori; the dot of the i in Peşinde is replaced by a teardrop (src/data/logo.ts). Nothing was redrawn. On light backgrounds the lettering is ink and the drop #735c00; on dark backgrounds the lettering is #f1eadf and the drop #ebcb52. On the site the drop takes the colour of the page's emotion; the kit uses the default yellow. logo-dikey is the two-line version from the site's share image. The mark is the drop alone: a yellow drop on a dark square (the site's favicon.svg); as it is itself a dark square there is no separate isaret-koyu.svg. ikon.svg is favicon.svg, ikon-512.png the site's icon-512.png, ikon-180.png its apple-touch-icon.png. paylasim.png and paylasim-en.png are the site's og/site.jpg and og/en/site.jpg (converted to PNG; photograph from Wikimedia Commons, credited on the image). Generated with: npm run build && node scripts/marka.mjs."
+  },
+  "guncelleme": "2026-11-25"
+}

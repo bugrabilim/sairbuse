@@ -2,7 +2,8 @@
 
 Eylül Bitse imzalı, basılamamış bir şiir kitabının sitesi: 30 şiir; duygu, yer ve zaman üzerinden okunuyor.
 Canlı adres: https://duygularinpesinde.bumba.tr · Bumba Life ürünü (Bumba Group).
-Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: @README.md
+Ayrıntılı plan ve tasarım geçmişi: `PLAN.md` · kurulum ve içerik ekleme: `README.md` (ikisi de gerektiğinde okunur; her oturumda
+yüklenmez, Standartlar madde 12'deki 15 bin token sınırı) · bekleyen işler: [`BEKLEYENLER.md`](BEKLEYENLER.md).
 
 ## Proje
 
@@ -19,18 +20,32 @@ Ayrıntılı plan ve tasarım geçmişi: @PLAN.md · kurulum ve içerik ekleme: 
 # Genel Standartlar
 
 Bu proje Bumba Genel Standartlar'a tabidir. Metin tek yerde durur: https://bumbagroup.com/standartlar.md
-(düz metin). Her oturumun başında oku (`curl -s https://bumbagroup.com/standartlar.md` ya da web getirme
-aracı) ve ona göre çalış; metni bu dosyaya kopyalama. Okunamazsa uydurma, sahibine bildir.
-Uygulanan sürüm: 5.5 (25 Ekim 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
+(düz metin). Kademeli oku ("Sürüm kuralı"): oturum başında başlık ve bölüm başlıkları, sürüm değiştiyse
+"Sürüm notları", işin dokunduğu bölüm işten önce, emin değilsen tamamı. Metni bu dosyaya kopyalama.
+Okunamazsa uydurma, sahibine bildir.
+Uygulanan sürüm: 5.43 (25 Kasım 2026). Daha yeni sürüm varsa "Sürüm notları"ndaki farkı uygula, sonra bu satırı güncelle.
 Sunucuya basmanın (izlenen dala birleştirme ya da push, Coolify yayını) zamanı her seferinde sahibine sorulur.
-Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahmini süre ve kullanımla sahibine sorulur.
+Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce plan (sayı, her ajanın işi, model, efor, süre,
+kullanım) sahibine mesajda gösterilir, sonra ayrı bir soruyla sorulur, açık onay beklenir; cevapsız soru onay
+değildir. Sahip plan istediyse yalnız plan gösterilir: soru sorulmaz, ajan başlamaz, sahip "başla" deyince başlar.
+Bir kez verilen onay plandaki bütün ajanları kapsar. Ajan her zaman iş akışı (Workflow) olarak çalışır, tek ajan
+bile; iş akışının adı işi anlatır.
+Soru ekranı sahip cevap verene ya da kapatana kadar açık kalır: soru metinde de yazılır; ekran gelen bir mesajla
+kapanırsa soru hemen yeniden sorulur, sahip kapattıysa 1 saat sonra ("Soru ekranı").
+Mobil derleme (GitHub Actions'ta iOS ve Android, simülatör dahil) yalnız elle başlar; her çalıştırma için iş, makine
+türü ve tahmini dakikayla sahibine ayrı bir soruyla sorulur (mobil uygulaması olan projede).
+Hitap: konuşmada sahibe "patron" denir.
+Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişiklik gerekirse o deponun oturumuna mesajla istenir.
 
 ## Bu projeye özel kararlar ve sapmalar
 
 - **Mahlas "Eylül Bitse"** (27 Ekim 2026, sahibinin bildirdiği; önceki geçici imza "Antigoni" idi): tek yerden
   `src/data/site.ts` → `SITE.sair`; kart ve kitap betiklerinde `SAIR`. Sitede "Antigoni" görünmez: 24.10.2011
   şiirinin yeri "Burgazada" yazılır, adresi `/siir/2011-10-24-burgazada/` (eski `…-antigoni` adresleri ve paylaşım
-  görselleri `nginx.conf`'ta 301 ile yönlenir). Yalnız şiirin kendi dizesinde ("Antigoni’de yemek yiyen bir kedi") geçer.
+  görselleri `nginx.conf`'ta 301 ile yönlenir). Yalnız şiirin kendi dizesinde ("Antigoni’de yemek yiyen bir kedi") geçer; dizeye dokunulmaz (sahibinin kararı, 25 Kasım 2026).
+  23.06.2009 Cihangir şiirindeki "Uların içi kanlanıyor" yazıldığı gibi kalır (sahibinin kararı, 25 Kasım 2026).
+- **Kuruluş yılı 2008** (sahibinin kararı, 22 Kasım 2026, ana altyapı oturumu aracılığıyla): `SITE.kurulus`;
+  Hakkında'nın sonunda, JSON-LD `foundingDate` ve llms.txt'de.
 - Şiirlerin tüm hakları saklıdır; lisans yok. Şiirler çevrilmez: İngilizce sayfalarda Türkçe kalır, `lang="tr"`.
 - "sevgimiz percinlensin-aşkmetni.txt" şiir değildir, sitede yayımlanmaz.
 - Şiirler listesinde (Bütün şiirler, Harita, Zaman) sesli okuması olan şiirin adının yanında hoparlör işareti var
@@ -40,8 +55,7 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   dosyalar `public/ses/<şiir>.mp3`, düzey −18 LUFS'e eşitlenir; okuma sürerken ortam sesi ve fon müziği kısılır.
   9 Ekim 2026: üç şiirin kaydı var (2017-05-24-altunizade, 2019-12-21-feneryolu, 2020-07-18-moda).
 - **Varsayılan tema koyu (gece)** (sahibinin kararı, 8 Ekim 2026; 27 Ekim 2026'da yinelendi): Standartlar §3'teki
-  "ilk açılışta sistem tercihi" bu projede uygulanmaz, istisnanın standarda eklenmesi ana altyapı oturumundan
-  istendi. Açık tema (gündüz) yalnız düğmeyle seçilir; seçim `localStorage` `tema-secimi` anahtarında hatırlanır.
+  "ilk açılışta sistem tercihi" bu projede uygulanmaz; istisna standartta (5.6). Açık tema (gündüz) yalnız düğmeyle seçilir; seçim `localStorage` `tema-secimi` anahtarında hatırlanır.
   Eski `tema` anahtarı (sistem tercihini yazmış olabilir) okunmaz.
   Sayfalar `Cache-Control: no-cache` ile gider ki eski HTML tarayıcıda takılı kalmasın.
 - Şiir sayfasında şiir **harf harf yazılarak** açılır (satır satır değil); hız duyguya göre.
@@ -49,20 +63,24 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
 - Ana sayfa vitrininin (hero) tamamı tıklanır ve o mısranın şiirine gider (18 Ekim 2026; sitede ve uygulamada).
   Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
 - **Alt bilgi masaüstünde tek satır** (sahibinin kararı, 12 Ekim 2026; 27 Ekim 2026'da yinelendi, Standartlar §1'deki
-  "solda liste, sağda imza" düzeni bu projede uygulanmaz, istisnanın standarda eklenmesi ana altyapı oturumundan
-  istendi): solda telif ("© 2008'den itibaren Eylül Bitse. Şiirlerin tüm hakları saklıdır."; bitiş yılı yazılmaz) ve
+  "solda liste, sağda imza" düzeni bu projede uygulanmaz; istisna standartta, 5.6): solda telif ("© 2008 Bumba Group · Şiirler © 2008'den itibaren Eylül Bitse, tüm hakları saklıdır."; İngilizcede "© 2008 Bumba Group · Poems © Eylül Bitse, since 2008. All rights reserved."; Bumba Group yılı `SITE.kurulus`, Standartlar 5.42 madde 1; şiirlerin hakkı birlikte, sahibinin kararı 25 Kasım 2026; bitiş yılı yazılmaz) ve
   altında küçük "Gizlilik" bağlantısı ile "Çerez tercihleri" düğmesi (§9, §14), ortada e-posta listesi (başlık, adres,
-  Katıl), sağda "App Store'dan indir" (yayına girince) ve Bumba Life rozeti. Orta genişlikte iki satır, telefonda alt
+  "E-posta listesine katıl"), sağda "App Store'dan indir" (yayına girince), Bumba Group'un sosyal hesapları (düz bağlantı, sitenin
+  renginde ikon; `src/data/sosyal.ts`, 22 Kasım 2026, pazarlama turu K20) ve Bumba Life rozeti (İngilizce sayfada
+  `life-en.svg`, bağlantı `/en/life`, genişlik 170; Standartlar 5.27). Orta genişlikte iki satır, telefonda alt
   alta. Uygulamada liste yerine siteyi Safari'de açan bağlantı, çerez düğmesi yok. Görünür son güncelleme tarihi
   Hakkında'nın sonunda (derleme günü); makineler için JSON-LD `dateModified` ve llms.txt.
-- **E-posta listesi Katıl penceresi** (Standartlar §6): Katıl'a basınca pencere açılır, aydınlatma metni ortak
-  servisten (`/api/liste/aydinlatma?dil=`) yüklenir, "Tam metin" bağlantısı ve asıl "Kabul ediyorum" düğmesi
-  (metin yüklenene dek kapalı) orada. JavaScript yoksa formun altında işaretsiz rıza kutusu durur, form yine çalışır
-  (`ListeFormu.astro`).
+- **E-posta listesi formu** (Standartlar madde 6, 5.43): tek satır, yalnız katılım talebi. Yer tutucu "Gelişmelerden
+  haberdar olmak için", düğme "E-posta listesine katıl"; adres servisle aynı kalıpla denetlenir, istek cevap beklenmeden
+  gider ve alanın yerinde yeşil "Katılım talebiniz alındı" (10 saniye ya da tıklanana kadar; çok dar ekranda satırı
+  kaplar). Hata dönerse adres geri yazılır. Pencere, onay kutusu, aydınlatma bağlantısı yok; rıza ve bütün metinler
+  ortak servisin ilk e-postasında. `gizlilik` alanı sayfanın dilindeki gizlilik sayfası. Başlık ("Yeni şiir gelince
+  haber ver") sitenin kendi öğesi olarak kalır. JS'siz form `donus` adresine `#liste-tamam` ile döner (`ListeFormu.astro`).
 - **Çerez bandı** (Standartlar §14): ilk ziyarette altta Kabul et, Reddet, Tercihler (eşit). Umami "İstatistik"
   grubunda, yalnız izinle yüklenir; seçim `bumba-cerez` anahtarında (politika sürümü `src/data/cerez.ts`).
   Politika merkezde (bumbagroup.com/cerez-politikasi). Uygulamada bant yok (sayaç da yok). `CerezBandi.astro`.
-- **Kazanım rozetleri yalnız telefon uygulamasında** (Standartlar §13; sahibinin kararı, 27 Ekim 2026: sitede yok).
+- **Kazanım rozetleri yalnız telefon uygulamasında** (Standartlar §13; sahibinin rozet onayı ve kararı, 27 Ekim 2026:
+  yalnız uygulamada, sitede yok).
   Sitede `/rozetler/` sayfası üretilmez, menüde yok, rozet verisi sayfaya konmaz (`UYGULAMA` ile). 18 rozet (`src/data/rozetler.ts`, adlar ve koşullar
   sözlükte), hesap `src/scripts/rozetler.ts`. Veri yalnız telefonda (`localStorage` `rozetler`: rozet kimliği,
   kazanma günü, okunan/dinlenen şiir kimlikleri, eylemler, seri); sunucuya gitmez. İlk kazanımda kısa bildirim ve
@@ -72,9 +90,14 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
 - Hakkında'da "Fotoğraflar", "Gizlilik ve çerezler", "Haklar" ve "Sık sorulanlar" düğmeyle açılan pencerelerde
   (`#fotograflar`, `#gizlilik`, `#haklar`, `#sorular` adresleri pencereyi açar; JS yoksa içerik sayfada açık).
   `/gizlilik/` sayfası da durur (KVKK bağlantıları için), metin tek yerden: `GizlilikMetni.astro`.
-- Şiir paylaşımı kendi menüsüyle: bağlantıyı kopyala, Facebook, Instagram (altında küçük not: bağlantı
-  kopyalanır), WhatsApp, SMS, LinkedIn. Başka kanal eklenmez. Telefonda paylaş ve ortam sesi menüleri ekranın
-  altından açılır (sayfa yana taşmaz).
+- **Paylaş düğmesi** (Standartlar madde 15; sahibinin kararı, 25 Kasım 2026: Ekim'deki "kendi kanal listesi" kalktı,
+  standarda geçildi): tek bileşen `PaylasMenusu.astro`. Telefonda ve destekleyen tarayıcıda cihazın kendi paylaşım
+  menüsü (`navigator.share`: başlık, sayfanın açıklaması, canonical adres); uygulamada telefonun paylaşım ekranı.
+  Yoksa küçük menü, bu sırayla: WhatsApp, X, Facebook, LinkedIn, Telegram, Bluesky, e-posta, bağlantıyı kopyala
+  ("Kopyalandı"). Düz bağlantılar, sosyal ağ betiği yok. Herkese açık içerik sayfalarında: şiir, duygu, yer, bütün
+  şiirler, harita, zaman, fal, Hakkında (başlığın altında) ve ana sayfa (başlık görünmediği için sonda). Arama,
+  gizlilik, `/cek/`, 404 ve 500'de yok. Menü üst katmanda (popover) açılır; telefonda ekranın altından (sayfa yana
+  taşmaz). Umami `paylas` olayı `kanal` ile (`cihaz`, `whatsapp`, `x`, …, `kopyala`).
 - Ortam sesi **varsayılan açık, %10 düzeyde** (9 Ekim 2026): her şiirin kendi sesi var (şiir dosyasında
   `ortam:`; yoksa ana duygunun sesi, `DUYGU_ORTAMI`), duygu sayfasında duygunun sesi. Tarayıcı kuralı gereği ilk
   dokunuşta başlar. Menüde kapalı, "şiirin sesi" ve genel sesler (deniz, yağmur, vapur, gece, kafe, şehir,
@@ -102,6 +125,12 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   `src/data/logo.ts`. Tek başına damla küçük işarettir: koyu karede sarı damla (`favicon.svg`, uygulama
   simgeleri; üretimi `node scripts/simgeler.mjs`). Üst şeritte, paylaşım görsellerinde, mısra kartında, kitabın
   kapağında ve başlık sayfasında; kitabın sırtında yok (yedi renk noktası kalır).
+  **Başlık yazı tipi Cormorant Garamond** (sahibinin kararı, 24 Kasım 2026, ana altyapı oturumu aracılığıyla; ürüne
+  özgü): `--serif-baslik`, paylaşım görselleri ve mısra kartı. Logo yazısı Fraunces 300'de kalır (`--serif-logo`; Standartlar 5.35, madde 11: marka öğeleri marka kitinden gelir, yazı tipiyle değişmez). Metin Newsreader, etiketler Inter. Hepsi
+  @fontsource ile sitenin sunucusundan; lisans Hakkında → Haklar'da bağlantıyla.
+  **Ürün marka kiti** kökte `marka/` (`kit.json`, logo yatay ve dikey, açık ve koyu; işaret, simgeler, paylaşım
+  görseli; MARKA §4, 22 Kasım 2026): bumbagroup.com/marka/duygularin-pesinde oradan toplar. Logo, renk ya da yazı
+  tipi değişirse aynı commit'te `npm run build && node scripts/marka.mjs` ile yenilenir.
 - **Okur notu yok** (9 Ekim 2026): okur şiire renk ya da kelime bırakmaz, şair onay vermez, şair için giriş/şifre
   yok. Site statik kalır; sunucu tarafı eklenmez.
 - **Kitap (basılı, A5) siteye konmaz:** saman kâğıt, iç sayfalar tek renk (siyah), yalnız kapak renkli. Sahibinin
@@ -118,9 +147,9 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   derlenmiş hâli uygulamanın içinde (çevrimdışı). Paket kimliği `tr.bumba.duygularinpesinde`, yalnız iPhone,
   dikey. `npm run uygulama` (PUBLIC_UYGULAMA=1 → `dist-uygulama/` → `cap sync ios`); iOS projesi `uygulama/ios/`.
   Uygulamada: sayaç ve çerez bandı yok (veri toplanmaz), e-posta listesi siteyi Safari'de açar, paylaşım iOS'un kendi paylaşım
-  ekranıyla (sitedeki kanal menüsü kuralının uygulamadaki istisnası), menüde "Günün şiiri" yerel bildirimi
+  ekranıyla, menüde "Günün şiiri" yerel bildirimi
   (09.00, telefonda zamanlanır, sunucu yok). Yeni şiir ya da düzeltme uygulamaya ancak yeni sürümle gelir.
-  Denetim: `.github/workflows/ios.yml` (simülatör derlemesi, her PR). Yayın: `ios-yayin.yml` elle tetiklenir;
+  Denetim: `.github/workflows/ios.yml` (simülatör derlemesi; 5.35'ten beri yalnız elle, her çalıştırma sahibine sorulur, macOS). Yayın: `ios-yayin.yml` elle tetiklenir;
   Saat Tarih'teki gibi bulut imzalama (sertifika ya da .p12 yok; imzasız arşiv, `-exportArchive
   -allowProvisioningUpdates`, `uygulama/ios/ExportOptions.plist`). Sırlar `ASC_KEY_ID`, `ASC_ISSUER_ID`,
   `ASC_KEY_P8` GitHub'da (değerleri hiçbir yere yazılmaz).
@@ -131,14 +160,22 @@ Ajan (alt ajan, iş akışı) gerekmedikçe kullanılmaz; kullanmadan önce tahm
   sürümün yapısı en son yüklenen yapıyla değiştirilip yeniden gönderilir (inceleme sırası baştan başlar), mağaza bilgileri
   `ios-magaza.yml` ile yazılır (`scripts/uygulama/magaza.py`, metinler `uygulama/magaza/metinler.json`). Sitede alt bilginin sağında,
   Bumba rozetinin yanında "App Store'dan indir" bağlantısı ve iPhone Safari'de uygulama şeridi (`apple-itunes-app`)
-  var; uygulama App Store'da yayına girince `src/data/uygulama.ts` → `APP_STORE.yayinda: true` ile açılır
-  (yayında olmayan uygulamanın sayfası açılmadığı için o zamana dek kapalı). Uygulamanın içinde gösterilmez.
+  var (`src/data/uygulama.ts` → `APP_STORE.yayinda: true`; 4 Kasım 2026'da sahibinin onayıyla açıldı). Uygulamanın
+  içinde gösterilmez. Sürüm 1.0 (yapı 11) 3 Kasım 2026'da onaylandı ve App Store'da yayında; düzeltmeler uygulamaya
+  ancak yeni sürümle gider. Yayındaki sürümün mağaza açıklaması değişmez: 1.0'ın açıklama ve telifinde eski imza
+  "Antigoni" kaldığı için 1.0.1 açıldı (4 Kasım 2026). Yeni sürüm: `project.pbxproj` → `MARKETING_VERSION` (Android
+  `versionName`/`versionCode`) artırılır, `ios-yayin.yml` yapıyı yükler, `ios-magaza.yml` düzenlenebilir sürüm yoksa
+  o numarayla yenisini açıp metinleri ("Yenilikler" dahil, `metinler.json` → `yenilikler`) ve yapıyı bağlar,
+  `ios-inceleme.yml` → `yapi-degistir` incelemeye gönderir.
 - **Android uygulaması** (18 Ekim 2026, sahibinin isteği): iOS'la aynı site ve aynı uygulama kipi, `uygulama/android/`
   (Capacitor 8, paket `tr.bumba.duygularinpesinde`, yalnız dikey). `/siir/x/` → `siir/x/index.html` eşlemesi
   `MainActivity.java` → `DizinYonlendirici` (istek Capacitor'a gitmeden adres dosya adına çevrilir). Ekran açık kalır
   (`FLAG_KEEP_SCREEN_ON`). Tam saatli alarm izni kaldırıldı (Play politikası; Günün şiiri yaklaşık 09.00).
-  `npm run uygulama:android`; denetim `.github/workflows/android.yml` (APK + emülatörde deneme, her PR). Google Play
+  `npm run uygulama:android`; denetim `.github/workflows/android.yml` (APK + emülatörde deneme; yalnız elle, her çalıştırma sahibine sorulur, Linux). Google Play
   yayını için Play Console hesabı ve imza anahtarı gerekiyor (`uygulama/README.md`).
+- **Mağaza hesapları** (Standartlar "Sabit bilgiler", 8 Kasım 2026): Apple Developer hesabı var; Google Play için
+  D-U-N-S bekleniyor, hesap açılana kadar Android uygulaması gönderilemez. Derleme, yükleme ve başvuru: Standartlar
+  "Mobil yayın (iOS ve Android)"; başvurudan önce kontrol listesi sahibine raporlanır.
 
 ## Sunucu ve yayın
 
@@ -195,15 +232,19 @@ eki, şiirlerde "· poem by Eylül Bitse"):
 WebSite (SearchAction → arama sayfası), Person (Eylül Bitse); alt sayfalarda BreadcrumbList; şiirde
 CreativeWork (genre Şiir/Poetry, author, dateCreated, locationCreated, copyrightNotice); duygu, yer ve bütün
 şiirler sayfalarında CollectionPage; Hakkında'da FAQPage ("Sık sorulanlar" penceresindekiyle aynı); ana
-sayfada WebPage. Sosyal hesap yok, `sameAs` yok.
+sayfada WebPage. Ürünün ve şairin sosyal hesabı yok; Bumba Group'un hesapları (altbilgidekiyle aynı,
+`src/data/sosyal.ts`) Organization → parentOrganization'da `sameAs` (22 Kasım 2026).
 
 **Kararlar:**
-- `sitemap-index.xml` (@astrojs/sitemap): iki dil, her adreste `hreflang` tr/en/x-default; 404, 500 ve
-  `/admin` haritada yok. robots.txt'de `Sitemap:` satırı var.
+- `sitemap.xml` (@astrojs/sitemap dizini; derlemede `sitemap-index.xml`'in aynısı olarak da yazılır, `astro.config.mjs`
+  → `sitemap-xml`): iki dil, her adreste `hreflang` tr/en/x-default; 404, 500, `/cek/` ve `/admin` haritada yok.
+  robots.txt'deki `Sitemap:` satırı tam adresi gösterir: https://duygularinpesinde.bumba.tr/sitemap.xml (8 Kasım 2026).
 - robots.txt: herkes açık (`/admin/` hariç). Yapay zekâ arama ve kullanıcı adına getiren botlar açık
   (OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User). Şiirlerin
   hakları saklı olduğu için yalnız model eğitimi botları kapalı (GPTBot, ClaudeBot, Google-Extended,
   Applebot-Extended, CCBot, Meta-ExternalAgent); bu, yapay zekâ aramalarında görünürlüğü etkilemez.
+  Meta-ExternalAgent Meta'nın eğitim ve ürün dizini tarayıcısıdır; kullanıcı adına getiren Meta-ExternalFetcher
+  engellenmez (22 Kasım 2026 kontrolü).
 - `/llms.txt` derlemede üretilir (`src/pages/llms.txt.ts`): iki dilde özet, sayfalar, duygular, yerler, şiirler.
 - Ana sayfanın başında sitenin kısa özeti (`site.ozet`), Hakkında'da soru-cevap blokları (Sık sorulanlar
   penceresi). Son güncelleme tarihi (derleme günü) WebSite şemasında `dateModified`, llms.txt'de ve Hakkında'nın

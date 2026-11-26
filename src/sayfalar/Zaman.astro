@@ -1,5 +1,6 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import { SITE } from '../data/site';
 import SayfaSahnesi from '../components/SayfaSahnesi.astro';
 import SiirListesi from '../components/SiirListesi.astro';
 import { ad, anaDuygu, basliksiz, gunAy, imza, siirYolu, tumSiirler, yerGrubu, yil } from '../lib/siirler';
@@ -45,7 +46,7 @@ const kesismeler = [...gunler.entries()]
 ---
 
 <Temel baslik={m.baslik} aciklama={m.aciklama(ilkYil, sonYil, tarihli.length)} sahne kirinti={[{ ad: metin(dil).sayfaAdlari.zaman, yol: sayfaYolu('zaman', dil) }]}>
-  <SayfaSahnesi foto="sayfa-zaman" duygu="ayrilik" etiket={`${ilkYil} – ${sonYil}`} baslik={m.baslik}>
+  <SayfaSahnesi foto="sayfa-zaman" duygu="ayrilik" etiket={`${ilkYil} – ${sonYil}`} baslik={m.baslik} paylas={{ baslik: `${m.baslik} · ${SITE.ad}`, aciklama: m.aciklama(ilkYil, sonYil, tarihli.length) }}>
     {m.giris(sonYil - ilkYil, tarihli.length)}
   </SayfaSahnesi>
   <section class="sayfa">

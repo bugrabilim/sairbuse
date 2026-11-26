@@ -1,5 +1,6 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import PaylasMenusu from '../components/PaylasMenusu.astro';
 import SiirFotosu from '../components/SiirFotosu.astro';
 import { DUYGULAR, duyguAdi, duyguIlgi, renkAdi, type Duygu } from '../data/duygular';
 import { dilBul, duyguYolu, metin, siirSayisi, yerAdi, yerde } from '../i18n';
@@ -305,6 +306,7 @@ const takvim = tum
     </ul>
   </section>
 
+  <div class="ana-paylas"><PaylasMenusu baslik={SITE.ad} aciklama={m.site.aciklama} /></div>
 </Temel>
 
 <script is:inline define:vars={{ takvim, ozel: m.ozelGunler, bugunMetin }}>

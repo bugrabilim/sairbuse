@@ -213,7 +213,8 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
     const tumMetin = satirlar.join(' ') + (veri.baslik ?? '') + (veri.sair ?? '') + (veri.site ?? '');
     const [img] = await Promise.all([
       veri.foto ? fotoYukle(veri.foto) : Promise.resolve(null),
-      document.fonts.load('italic 300 80px "Fraunces"', tumMetin),
+      document.fonts.load('italic 400 80px "Cormorant Garamond"', tumMetin),
+      document.fonts.load('400 80px "Cormorant Garamond"', tumMetin),
       document.fonts.load('300 80px "Fraunces"', tumMetin),
       document.fonts.load('600 30px "Inter"', `${veri.imza} ${veri.adres} ${veri.duygu} ${veri.site}`),
     ]);
@@ -253,7 +254,7 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
     let boyut = 92;
     let satir: string[] = [];
     for (; boyut >= 44; boyut -= 4) {
-      x.font = `italic 300 ${boyut}px "Fraunces"`;
+      x.font = `italic 400 ${boyut}px "Cormorant Garamond"`;
       satir = sar(x, satirlar, genislik);
       // önce küçülterek sığdırmayı dene; mısrayı bölmek son çare
       const bolunmedi = satir.length === satirlar.length || boyut <= 56;
@@ -265,12 +266,12 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
     let y = H - 330 - blok + boyut;
     if (veri.baslik) {
       x.fillStyle = renk;
-      x.font = '300 52px "Fraunces"';
+      x.font = '400 52px "Cormorant Garamond"';
       x.fillText(veri.baslik, SOL, y - boyut + 52);
       y += baslikYuk;
     }
     x.fillStyle = YAZI;
-    x.font = `italic 300 ${boyut}px "Fraunces"`;
+    x.font = `italic 400 ${boyut}px "Cormorant Garamond"`;
     for (const s of satir) {
       x.fillText(s, SOL, y);
       y += aralik;
@@ -280,7 +281,7 @@ const kartFotosu = foto ? await getImage({ src: gorsel(foto), width: 1080, forma
     x.font = '600 26px "Inter"';
     x.fillText(veri.imza ?? '', SOL, H - 230);
     x.fillStyle = YAZI;
-    x.font = 'italic 300 56px "Fraunces"';
+    x.font = 'italic 400 56px "Cormorant Garamond"';
     x.fillText(veri.sair ?? '', SOL, H - 165);
     x.fillStyle = SOLUK;
     x.font = '600 24px "Inter"';

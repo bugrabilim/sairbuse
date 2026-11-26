@@ -1,5 +1,7 @@
 ---
 import Temel from '../layouts/Temel.astro';
+import PaylasMenusu from '../components/PaylasMenusu.astro';
+import { SITE } from '../data/site';
 import SiirSahnesi from '../components/SiirSahnesi.astro';
 import SiirFotosu from '../components/SiirFotosu.astro';
 import SiirGovde from '../components/SiirGovde.astro';
@@ -40,6 +42,7 @@ const n = y.siirler.length;
       <p class="etiket">{m.yer.etiket}{UZAK_YERLER[y.ad] ? ` · ${yerAdi(UZAK_YERLER[y.ad], dil)}` : ''} · {siirSayisi(n, dil)}{aralik ? ` · ${aralik}` : ''}</p>
       <h1 class="yer-ad">{yAd}</h1>
       <p class="siir-alt">{m.yer.alt(burada, n)} {m.genel.siirlerTurkce}</p>
+      <div class="arac yer-arac"><PaylasMenusu baslik={`${yAd} · ${SITE.ad}`} aciklama={m.yer.aciklama(burada, n)} /></div>
     </div>
     {
       foto && (

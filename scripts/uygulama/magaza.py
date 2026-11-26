@@ -88,7 +88,16 @@ print('Uygulama', UYG, uygulama['attributes']['name'])
 
 surumler = api('GET', f'/v1/apps/{UYG}/appStoreVersions?filter[platform]=IOS')['data']
 duzenlenir = ['PREPARE_FOR_SUBMISSION', 'DEVELOPER_REJECTED', 'REJECTED', 'METADATA_REJECTED']
-surum = next(s for s in surumler if s['attributes']['appStoreState'] in duzenlenir)
+# Yayındaki sürümün metinleri değişmez: düzenlenebilir sürüm yoksa Xcode projesindeki MARKETING_VERSION ile yenisi açılır
+GUNCELLEME = any(s['attributes']['appStoreState'] in ('READY_FOR_DISTRIBUTION', 'READY_FOR_SALE') for s in surumler)
+surum = next((s for s in surumler if s['attributes']['appStoreState'] in duzenlenir), None)
+if surum is None:
+    proje = (KOK / 'uygulama/ios/App/App.xcodeproj/project.pbxproj').read_text()
+    yeni = re.search(r'MARKETING_VERSION = ([0-9.]+);', proje).group(1)
+    surum = api('POST', '/v1/appStoreVersions', {'data': {'type': 'appStoreVersions',
+        'attributes': {'platform': 'IOS', 'versionString': yeni},
+        'relationships': {'app': {'data': {'type': 'apps', 'id': UYG}}}}})['data']
+    print('Yeni sürüm açıldı:', yeni)
 SURUM = surum['id']
 print('Sürüm', surum['attributes']['versionString'], surum['attributes']['appStoreState'])
 
@@ -167,6 +176,8 @@ def _():
         m = METIN['diller'][dil]
         oz = {'description': m['aciklama'], 'keywords': m['anahtar'], 'promotionalText': m['tanitim'],
               'supportUrl': m['destek'], 'marketingUrl': m['pazarlama']}
+        if GUNCELLEME:  # güncellemelerde "Yenilikler" zorunlu
+            oz['whatsNew'] = m['yenilikler']
         for yer in yerler:
             if yer in var:
                 api('PATCH', f'/v1/appStoreVersionLocalizations/{var[yer]["id"]}', nesne('appStoreVersionLocalizations', var[yer]['id'], oz))
@@ -259,7 +270,8 @@ def _():
 
 @bolum('Yapı: en son işlenmiş yapı sürüme bağlandı')
 def _():
-    yapilar = api('GET', f'/v1/builds?filter[app]={UYG}&filter[processingState]=VALID&sort=-uploadedDate&limit=1')['data']
+    yapilar = api('GET', f'/v1/builds?filter[app]={UYG}&filter[processingState]=VALID'
+                  f"&filter[preReleaseVersion.version]={surum['attributes']['versionString']}&sort=-uploadedDate&limit=1")['data']
     if not yapilar:
         raise RuntimeError('işlenmiş yapı yok')
     y = yapilar[0]

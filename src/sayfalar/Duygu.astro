@@ -4,6 +4,8 @@ import SiirSahnesi from '../components/SiirSahnesi.astro';
 import SiirFotosu from '../components/SiirFotosu.astro';
 import SiirGovde from '../components/SiirGovde.astro';
 import OrtamSesi from '../components/OrtamSesi.astro';
+import PaylasMenusu from '../components/PaylasMenusu.astro';
+import { SITE } from '../data/site';
 import { DUYGULAR, duyguAdi, renkAdi, type Duygu } from '../data/duygular';
 import { dilBul, duyguYolu, kucuk, metin } from '../i18n';
 import { koleksiyonSema } from '../lib/sema';
@@ -46,7 +48,10 @@ const acilisFotosu = siirFotografi(acilis);
         </p>
         {kaynak && <cite><a href={siirYolu(kaynak, dil)}>{imza(kaynak, dil)}</a></cite>}
       </blockquote>
-      <div class="arac duygu-arac"><OrtamSesi varsayilan={DUYGU_ORTAMI[d.slug]} duygu={d.slug} tur="duygu" /></div>
+      <div class="arac duygu-arac">
+        <PaylasMenusu baslik={`${dAd} · ${SITE.ad}`} aciklama={m.duygu.aciklama(dAd, siirler.length, renkAdi(d, dil), d.misra.join(' / '))} />
+        <OrtamSesi varsayilan={DUYGU_ORTAMI[d.slug]} duygu={d.slug} tur="duygu" />
+      </div>
     </div>
     {
       acilisFotosu && (

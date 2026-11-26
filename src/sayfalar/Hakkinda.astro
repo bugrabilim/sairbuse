@@ -35,7 +35,7 @@ function sayfasi(yol: string) {
   sema={[sssSema(m.sss)]}
   kirinti={[{ ad: m.baslik, yol: sayfaYolu('hakkinda', dil) }]}
 >
-  <SayfaSahnesi foto="sayfa-hakkinda" duygu="karanlik" etiket={SITE.ad} baslik={m.baslik} />
+  <SayfaSahnesi foto="sayfa-hakkinda" duygu="karanlik" etiket={SITE.ad} baslik={m.baslik} paylas={{ baslik: `${m.baslik} · ${SITE.ad}`, aciklama: m.aciklama }} />
   <article class="sayfa hakkinda">
     <p>{m.giris1}</p>
     <p>{m.giris2}</p>
@@ -123,6 +123,7 @@ function sayfasi(yol: string) {
       <p>{m.haklarMetni}</p>
       <p>{m.fotoHaklar}</p>
       <p>{m.sesHaklar}</p>
+      <p>{m.yaziHaklar} <a href="https://openfontlicense.org/" rel="noopener">SIL Open Font License 1.1</a>.</p>
       <ul class="kunyeler sesler">
         {
           ORTAM_KAYITLARI.map((k) => (
@@ -154,6 +155,7 @@ function sayfasi(yol: string) {
       </dl>
     </dialog>
     <p class="site-guncelleme">
+      {m.kurulus(SITE.kurulus)} ·
       <time datetime={new Date().toISOString().slice(0, 10)}>{m.guncelleme(new Date().toLocaleDateString(YEREL[dil], { day: 'numeric', month: 'long', year: 'numeric' }))}</time>
     </p>
   </article>
