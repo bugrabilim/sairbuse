@@ -1,17 +1,6 @@
 // Arayüzün Türkçe metinleri. en.ts aynı yapıda olmak zorunda (tür denetimi bunu bekler).
 // Uzun metinlerde (hakkında, gizlilik) bağlantılar {ad} yer tutucularıyla gelir; sayfa bunları doldurur.
 
-/** Yılın ayrılma eki, okunuşuna göre: 2008'den, 2006'dan, 2005'ten, 2010'dan */
-function yildan(yil: string): string {
-  const n = Number(yil);
-  const birler = ['', 'bir', 'iki', 'üç', 'dört', 'beş', 'altı', 'yedi', 'sekiz', 'dokuz'];
-  const onlar = ['', 'on', 'yirmi', 'otuz', 'kırk', 'elli', 'altmış', 'yetmiş', 'seksen', 'doksan'];
-  const son = birler[n % 10] || onlar[Math.floor(n / 10) % 10] || (Math.floor(n / 100) % 10 ? 'yüz' : 'bin');
-  const unluler = son.match(/[aıouöüei]/g) ?? ['e'];
-  const kalin = 'aıou'.includes(unluler[unluler.length - 1]);
-  return `${yil}'${/[çfhkpsşt]$/.test(son) ? 't' : 'd'}${kalin ? 'a' : 'e'}n`;
-}
-
 export const tr = {
   dil: { ad: 'Türkçe', kisa: 'TR', obur: 'English', oburKisa: 'EN', degistir: 'Read in English' },
   site: {
@@ -34,11 +23,14 @@ export const tr = {
     altMenu: 'Alt menü',
     ozet: (n: number) => `${n} şiir; duygu, yer ve zaman üzerinden okunmak için.`,
     ilkSiir: 'İlk şiir:',
-    // Telif ilk şiirin yılından başlar; bitiş yılı yazılmaz
-    // Standartlar madde 1 (5.42: "© <kuruluş yılı> Bumba Group") ve şiirlerin hakkı şairde (sahibinin kararı, 25 Kasım 2026)
-    telif: (kurulus: string, yil: string, sair: string) => `© ${kurulus} Bumba Group · Şiirler © ${yildan(yil)} itibaren ${sair}, tüm hakları saklıdır.`,
+    // Standartlar madde 1 (5.44): "© <kuruluş yılı> <site adı>. Tüm hakları saklıdır."; yıl sabit
+    telif: (kurulus: string) => `© ${kurulus} Duyguların Peşinde. Tüm hakları saklıdır.`,
     haklar: 'Haklar',
-    gizlilik: 'Gizlilik',
+    // 2. satırdaki hukuki bağlantılar, standarttaki sırayla (madde 1)
+    hukuk: 'Hukuki metinler',
+    gizlilik: 'Gizlilik Politikası',
+    listeAydinlatma: 'E-posta Listesi Aydınlatma Metni',
+    cerezPolitikasi: 'Çerez Politikası',
     rozetBaslik: 'Bumba Life, bir Bumba Group kolu',
     rozetAlt: 'Bir Bumba Life ürünü',
     sosyal: 'Bumba Group sosyal medyada',
@@ -284,11 +276,11 @@ export const tr = {
     listeyeKatil: 'E-posta listesine sitede katılın ↗',
   },
   liste: {
-    // Standartlar 5.43, madde 6: form yalnız katılım talebi; rıza ve bilgilendirme ilk e-postada
+    // Standartlar madde 6 (5.43, metinler 5.44): form yalnız katılım talebi; rıza ve bilgilendirme ilk e-postada
     baslik: 'Yeni şiir gelince haber ver',
     etiket: 'E-posta listesi',
-    yerTutucu: 'Gelişmelerden haberdar olmak için',
-    katil: 'E-posta listesine katıl',
+    yerTutucu: 'E-posta listesine katılın',
+    katil: 'Katıl',
     tamam: 'Katılım talebiniz alındı',
     gecersiz: 'Geçerli bir e-posta adresi yazın.',
     gonderilemedi: 'Gönderilemedi, biraz sonra tekrar deneyin.',
@@ -313,7 +305,7 @@ export const tr = {
       },
       {
         baslik: 'E-posta listesi',
-        metin: 'Sayfaların altındaki formla yeni şiirlerden haberdar olmak için e-posta adresinizi bırakabilirsiniz. Bu liste Bumba Group’un ortak liste servisiyle yönetilir. “E-posta listesine katıl”a basınca yalnız katılım talebiniz gider; size gelen ilk e-postada onay bağlantısı ve bütün bilgilendirme metinleri (liste aydınlatma metni, bu gizlilik metni, çerez politikası, listeden çıkış) bulunur. Adresiniz ancak o bağlantıya tıklarsanız listeye eklenir; onaylanmayan talep 7 gün sonra silinir. Her e-postadaki bağlantıyla tek tıkla çıkabilirsiniz. Ayrıntılar: {liste}.',
+        metin: 'Sayfaların altındaki formla yeni şiirlerden haberdar olmak için e-posta adresinizi bırakabilirsiniz. Bu liste Bumba Group’un ortak liste servisiyle yönetilir. “Katıl”a basınca yalnız katılım talebiniz gider; size gelen ilk e-postada onay bağlantısı ve bütün bilgilendirme metinleri (liste aydınlatma metni, bu gizlilik metni, çerez politikası, listeden çıkış) bulunur. Adresiniz ancak o bağlantıya tıklarsanız listeye eklenir; onaylanmayan talep 7 gün sonra silinir. Her e-postadaki bağlantıyla tek tıkla çıkabilirsiniz. Ayrıntılar: {liste}.',
       },
       {
         baslik: 'Teknik kayıtlar',

@@ -24,7 +24,7 @@ Plan, şiir envanteri ve yol haritası: [PLAN.md](PLAN.md)
 | `/hakkinda/` | Kitabın hikâyesi, renklerin şiirlerdeki kaynağı, imza; fotoğraf künyeleri, gizlilik, haklar ve sık sorulanlar düğmeyle açılan pencerelerde. |
 | `/admin/` | Şiir paneli: kod bilmeden şiir ekleme ve düzenleme (aşağıda). |
 
-Alt bilgi masaüstünde tek satırdır: solda telif (altında Gizlilik bağlantısı ve "Çerez tercihleri"), ortada e-posta listesi, sağda "App Store'dan indir", Bumba Group'un sosyal hesapları ve Bumba Life rozeti (İngilizce sayfalarda İngilizce rozet). Listeye katılmak isteyen adresini yazıp "E-posta listesine katıl"a basar; alanın yerinde "Katılım talebiniz alındı" görünür. Onay bağlantısı ve bütün bilgilendirme metinleri ortak servisin gönderdiği ilk e-postadadır (pencere ve onay kutusu yok).
+Alt bilgi iki satırdır (Bumba Genel Standartlar madde 1): üstte solda e-posta listesi, ortada Bumba Group'un sosyal hesapları, sağda Bumba Life rozeti (İngilizce sayfalarda İngilizce rozet); altta solda telif, sağda hukuki metinlerin bağlantıları ve "Çerez tercihleri". "App Store'dan indir" bunların üstündedir. Listeye katılmak isteyen adresini yazıp "Katıl"a basar; alanın yerinde "Katılım talebiniz alındı" görünür. Onay bağlantısı ve bütün bilgilendirme metinleri ortak servisin gönderdiği ilk e-postadadır (pencere ve onay kutusu yok).
 
 İlk ziyarette altta çerez bandı çıkar (Kabul et, Reddet, Tercihler). Ziyaretçi sayacı (Umami) yalnız istatistiğe izin verilirse yüklenir; politika https://bumbagroup.com/cerez-politikasi.
 
