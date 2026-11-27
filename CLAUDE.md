@@ -62,7 +62,8 @@ Yazılan depolar (5.32): yalnız `bugrabilim/sairbuse`. Başka depoda değişikl
 - Ana sayfada "Yazıldıkları yerler" ve "ya da niyet tut" satırı yok; duygu şeritleri dar (72rem) kalır.
 - Ana sayfa vitrininin (hero) tamamı tıklanır ve o mısranın şiirine gider (18 Ekim 2026; sitede ve uygulamada).
   Fotoğraf künyesi ve Durdur düğmesi kendi işini yapar.
-- **Alt bilgi iki satır** (Standartlar madde 1, 5.44; Ekim'deki tek satırlık istisna kalktı): 1. satırda solda
+- **Alt bilgi iki satır** (Standartlar madde 1, 5.44; Ekim'deki tek satırlık istisna ve 25 Kasım'daki "Şiirler ©
+  Eylül Bitse" telifi kalktı, sahibinin onayı 27 Kasım 2026): 1. satırda solda
   e-posta listesi (başlık "Yeni şiir gelince haber ver", alan, "Katıl"), ortada Bumba Group'un sekiz hesabı (LinkedIn,
   YouTube, Instagram, Facebook, X, TikTok, Pinterest, Reddit; düz bağlantı, sitenin renginde ikon; `src/data/sosyal.ts`),
   sağda Bumba Life rozeti (İngilizce sayfada `life-en.svg`, bağlantı `/en/life`, genişlik 170). 2. satırda solda telif

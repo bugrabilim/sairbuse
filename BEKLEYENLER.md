@@ -3,10 +3,6 @@
 Duyguların Peşinde'nin sonraya kalan bütün işleri burada (Standartlar "Bekleyen işler dosyası"). Biten iş silinir.
 
 ## Sahibe sorular
-- Eski kurallar (Standartlar 5.44 adıyla kaldırıyor): alt bilginin tek satırlık düzeni (12 Ekim kararı) iki satıra
-  geçsin mi; telifteki "Şiirler © 2008'den itibaren Eylül Bitse" (25 Kasım kararı) yerine "© 2008 Duyguların Peşinde.
-  Tüm hakları saklıdır." yazılsın mı? (26 Kasım)
-- Yayın: 5.44 değişiklikleri (iki satırlı alt bilgi, telif, liste formu metinleri) ne zaman canlıya alınsın? (26 Kasım)
 - Uygulama 1.0.1 mobil derlemesi (`ios-yayin.yml`, macOS, yaklaşık 15 dakika) çalıştırılsın mı? (25 Kasım)
 
 ## Sahipte
